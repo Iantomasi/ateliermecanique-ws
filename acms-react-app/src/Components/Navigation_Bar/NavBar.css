@@ -1,0 +1,46 @@
+
+
+  header {
+    background-color: white;
+    
+  }
+  
+  header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em;
+  }
+  
+  nav .left-links,
+  nav .right-links {
+    display: flex;
+  }
+  
+  nav .left-links {
+    justify-content: center;
+    flex-grow: 1;
+  }
+  
+  nav .right-links {
+    justify-content: flex-end;
+  }
+  
+  nav a {
+    text-decoration: none;
+    color: #333;
+    padding: 0.5em 1em;
+  }
+
+  
+
+nav .signup-button {
+    background-color: rgb(245, 208, 0);
+    border: none;
+    padding: 10px 30px;
+    cursor: pointer;
+    border-radius: 10px;
+    font-weight: bold;
+    margin-left: 0px
+    ;
+  }
