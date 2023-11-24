@@ -56,4 +56,10 @@ main {
     font-weight: bold;
     display: inline-block;
     margin-left: 200px;
+    transition: transform 0.3s ease;
+  }
+
+  
+  button:hover {
+    transform: scale(1.1);
   }
