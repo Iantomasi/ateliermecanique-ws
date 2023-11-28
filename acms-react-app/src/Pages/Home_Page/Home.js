@@ -1,11 +1,11 @@
 import React from 'react';
-import NavBar from '../Navigation_Bar/NavBar.js'
-import Footer from '../Footer/Footer.js'
+import NavBar from '../../Components/Navigation_Bars/Not_Logged_In/NavBar.js';
+import Footer from '../../Components/Footer/Footer.js';
 import './Home.css';
 
 function Home() {
     return (
-      <div className="Home">
+      <div>
        <NavBar/>
         <main>
         <section class="hero">

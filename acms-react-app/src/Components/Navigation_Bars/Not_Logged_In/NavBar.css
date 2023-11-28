@@ -48,3 +48,10 @@ nav .signup-button {
   nav .signup-button:hover {
     transform: scale(1.1); 
   }
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: black;
+  margin-top: 5px; /* Adjust as needed */
+}

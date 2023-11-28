@@ -1,0 +1,78 @@
+
+.login-form {
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto;
+    padding-bottom: 100px;
+    height: fit-content;
+
+}
+
+h1{
+    text-align: center;
+}
+
+
+input[type='email'],
+input[type='password'],
+button[type='submit'] {
+    width: 20%;
+    padding: 12px;
+    margin-bottom: 10px; /* Adjusted spacing between form elements */
+    border-radius: 5px;
+    width: 100%;
+}
+
+input[type='email'],
+input[type='password'] {
+    border: 1px solid #ffffff;
+    background-color: #f0f0f0;
+    font-size: 14px;
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+
+input[type='email']:focus,
+input[type='password']:focus {
+    outline: none;
+    border-color: #555;
+}
+
+button[type='submit'] {
+    background-color: lightgray;
+    color: #000;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+    font-weight: normal;
+    margin-left: 0;
+    margin-top: 20px;
+    padding: 20px;
+    width: 526px;
+}
+
+button[type='submit']:hover {
+    background-color: #777;
+}
+
+.or-login-with {
+    text-align: center;
+    margin-bottom: 6.9%;
+}
+
+.login-icons {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+.login-icon-button {
+    border: 1px solid black; /* Add a 1px black border */
+    background: none;
+    cursor: pointer;
+    padding: 10px;
+    font-size: 40px;
+    margin-left: 20px;
+    border-radius: 5%;
+    width: 200px;
+}
