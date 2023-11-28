@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Default Spring Profile
 server:
   error:
@@ -35,3 +36,20 @@ spring:
 server.port: 8080
 
 spring.datasource.hikari.initializationFailTimeout: 60000
+=======
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          auth0:
+            client-id: 6Jr0D9vvxC4IqXRaT9mErfzOyAaegV8B
+            client-secret: Pu3y7x_QNuTjmRENIMxwAkpGs-5Cy4xC4jpTkM_2b12nauA48M5cc9Yi0HRsbTC7
+            scope:
+              - openid
+              - profile
+              - email
+        provider:
+          auth0:
+            issuer-uri: https://dev-6ian5186m83xcq23.us.auth0.com/
+>>>>>>> 37411ae (Working on signup)
