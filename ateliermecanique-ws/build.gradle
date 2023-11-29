@@ -47,12 +47,25 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.security:spring-security-oauth2-client:6.2.0'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+<<<<<<< HEAD
 >>>>>>> 37411ae (Working on signup)
+=======
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+>>>>>>> 02f7ffa (Added docker setup and trying to display home page with it)
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+<<<<<<< HEAD
 
+=======
+    implementation 'org.springframework.security:spring-security-oauth2-jose'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.0.4.RELEASE'
+    runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly 'mysql:mysql-connector-java'
+    testImplementation 'org.springframework.security:spring-security-test'
+>>>>>>> 02f7ffa (Added docker setup and trying to display home page with it)
 }
 
 tasks.named('test') {

@@ -1,11 +1,11 @@
 package com.champlain.ateliermecaniquews.authenticationsubdomain.datalayer;
 
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import jakarta.persistence.Entity;
+
 import jakarta.persistence.*;
-import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
 @Entity
