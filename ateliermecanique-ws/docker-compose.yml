@@ -1,12 +1,22 @@
+<<<<<<< HEAD
 services:
   ateliermecanique:
     build: .
     hostname: ateliermecanique
+=======
+version: '3.8'
+
+services:
+  ateliermecaniquews:
+    build: .
+    hostname: ateliermecaniquews
+>>>>>>> 02f7ffa (Added docker setup and trying to display home page with it)
     ports:
       - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
+<<<<<<< HEAD
       mysql1:
         condition: service_healthy
 
@@ -36,3 +46,32 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+=======
+      mysql:
+        condition: service_healthy
+
+
+
+
+  mysql:
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3307:3306" # Corrected port mapping
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=acmsdb
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=rootpassword          # Password for the non-root user
+    volumes:
+      - mysql-data:/var/lib/mysql        # Persist database between container restarts
+      - ./init.d:/docker-entrypoint-initdb.d # SQL scripts to run on database initialization
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mysql-data: # Defines the volume for persisting database
+>>>>>>> 02f7ffa (Added docker setup and trying to display home page with it)

@@ -1,11 +1,19 @@
+<<<<<<< HEAD
 # Default Spring Profile
 server:
   error:
     include-message: always
+=======
+server:
+  error:
+    include-message: always
+  port: 8080
+>>>>>>> 02f7ffa (Added docker setup and trying to display home page with it)
 
 logging:
   level:
     root: INFO
+<<<<<<< HEAD
     com.champlain: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
@@ -27,11 +35,32 @@ spring:
     activate:
       on-profile: docker
 
+=======
+    com.champlain.ateliermecaniquews: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+spring:
+  profiles:
+    active: docker
+  datasource:
+    url: jdbc:mysql://mysql:3306/acmsdb
+    username: root
+    password: rootpassword
+    hikari:
+      initializationFailTimeout: 60000
+  jpa:
+    hibernate:
+      ddl-auto: none
+>>>>>>> 02f7ffa (Added docker setup and trying to display home page with it)
   sql:
     init:
       platform: mysql
       mode: always
 
+<<<<<<< HEAD
 server.port: 8080
 
 spring.datasource.hikari.initializationFailTimeout: 60000
+=======
+>>>>>>> 02f7ffa (Added docker setup and trying to display home page with it)
