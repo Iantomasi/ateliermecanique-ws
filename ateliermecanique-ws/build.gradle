@@ -31,41 +31,32 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-<<<<<<< HEAD
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
-    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}",
-            "org.projectlombok:lombok:${lombokVersion}",
-            "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
-    testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
-
-    implementation 'mysql:mysql-connector-java:8.0.33'
-
-
-=======
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.security:spring-security-oauth2-client:6.2.0'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-<<<<<<< HEAD
->>>>>>> 37411ae (Working on signup)
-=======
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
->>>>>>> 02f7ffa (Added docker setup and trying to display home page with it)
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-<<<<<<< HEAD
-
-=======
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.security:spring-security-oauth2-jose'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.0.4.RELEASE'
+    implementation 'mysql:mysql-connector-java:8.0.33'
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+
+    compileOnly 'org.projectlombok:lombok'
+
     runtimeOnly 'org.postgresql:postgresql'
     runtimeOnly 'mysql:mysql-connector-java'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
->>>>>>> 02f7ffa (Added docker setup and trying to display home page with it)
+    testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
 }
 
 tasks.named('test') {
