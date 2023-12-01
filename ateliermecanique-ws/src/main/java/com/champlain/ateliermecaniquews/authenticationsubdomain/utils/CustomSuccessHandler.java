@@ -33,8 +33,8 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
             String username = userDetails.getAttribute("email") !=null?userDetails.getAttribute("email"):userDetails.getAttribute("login")+"@gmail.com" ;
             if(userRepo.findByEmail(username) == null) {
                 RegisterDTO user = new RegisterDTO();
-                user.setEmail_id(username);
-                user.setName(userDetails.getAttribute("email") !=null?userDetails.getAttribute("email"):userDetails.getAttribute("login"));
+                user.setEmail(username);
+                user.setUsername(userDetails.getAttribute("email") !=null?userDetails.getAttribute("email"):userDetails.getAttribute("login"));
                 user.setPassword(("Dummy"));
                 user.setRole("USER");
                 userService.saveNewUser(user);

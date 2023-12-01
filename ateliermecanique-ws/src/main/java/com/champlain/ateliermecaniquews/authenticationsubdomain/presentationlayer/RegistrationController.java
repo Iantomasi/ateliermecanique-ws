@@ -20,14 +20,14 @@ public class RegistrationController {
         this.userService = userService;
     }
 
-    @ModelAttribute("user")
+    @ModelAttribute("customer")
     public RegisterDTO userRegistrationDto() {
         return new RegisterDTO();
     }
 
     @GetMapping
     public String showRegistrationForm() {
-        return "register";
+        return "signup";
     }
 
     @PostMapping

@@ -3,25 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <title>Car Service Landing Page</title>
-    <link rel="stylesheet" th:href="@{static/css/ecp.css}" />
+    <link rel="stylesheet" href="/css/ecp.css" />
   </head>
   <body>
-    <header>
-      <nav>
-
+  <header>
+    <nav>
+      <div class="nav-wrapper">
         <div class="left-links">
           <a href="#">About</a>
           <a href="#">Services</a>
           <a href="#">Contact</a>
         </div>
+      </div>
 
-        <div class="right-links">
-          <a href="#">Login</a>
+      <div class="right-links">
+        <a href="#" class="login-button">Login</a>
+        <button class="signup-button">Sign up</button>
+      </div>
+    </nav>
+  </header>
 
-          <button class="signup-button">Sign up</button>
-        </div>
-      </nav>
-    </header>
 
     <main>
       <section class="hero">
@@ -32,16 +33,12 @@
         <!-- Assuming you have an image with the car and mechanic -->
         <div class="hero-image">
           <!-- Image of the car and mechanic goes here -->
-          <img src="../static/images/car-repair.png" alt="Car Service" />
+          <img src="/images/car-repair.png" alt="Car Service" />
         </div>
       </section>
       <div class="reviews-container">
         <section class="review">
-          <img
-            src="../static/images/man1.jpg"
-            alt="Profile Picture of John Serna"
-            class="profile-picture"
-          />
+          <img src="/images/man1.jpg" alt="Profile Picture of John Serna" class="profile-picture" />
           <div class="review-content">
             <h3 class="reviewer-name">John Serna</h3>
             <p class="review-date">2 days ago</p>
@@ -56,11 +53,7 @@
           </div>
         </section>
         <section class="review">
-          <img
-            src="../static/images/woman1.jpg"
-            alt="Profile Picture of Sofia"
-            class="profile-picture"
-          />
+          <img src="/images/woman1.jpg" alt="Profile Picture of Sofia" class="profile-picture" />
           <div class="review-content">
             <h3 class="reviewer-name">Sofia</h3>
             <p class="review-date">2 days ago</p>
@@ -75,11 +68,7 @@
           </div>
         </section>
         <section class="review">
-          <img
-            src="../static/images/man2.webp"
-            alt="Profile Picture of Anandarensyah"
-            class="profile-picture"
-          />
+          <img src="/images/man2.webp" alt="Profile Picture of Anandarensyah" class="profile-picture" />
           <div class="review-content">
             <h3 class="reviewer-name">Anandarensyah</h3>
             <p class="review-date">2 days ago</p>

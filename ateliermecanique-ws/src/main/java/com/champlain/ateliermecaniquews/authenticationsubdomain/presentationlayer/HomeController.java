@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 
 @Controller
@@ -29,9 +28,9 @@ public class HomeController {
         if (principal instanceof UserDetails) {
             UserDetails userDetails = (UserDetails) principal;
             com.champlain.ateliermecaniquews.authenticationsubdomain.datalayer.User user = userRepo.findByEmail(userDetails.getUsername());
-            model.addAttribute("userDetails", user.getName());
+            model.addAttribute("userDetails", user.getUsername());
         } else {
-            // This means the user is anonymous (not logged in)
+
             model.addAttribute("userDetails", "Guest");
         }
 

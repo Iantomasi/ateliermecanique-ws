@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign Up Page</title>
-  <link rel="stylesheet" href="/css/signup.css"> <!-- Make sure this link refers to the updated CSS -->
+  <link rel="stylesheet" href="/static/css/signup.css"> <!-- Make sure this link refers to the updated CSS -->
 </head>
 <body>
 
@@ -31,16 +31,16 @@
     <h1>Let's Register To Get Started!</h1>
     <form th:action="@{/registration}" method="post" th:object="${customer}">
 
-      <input id= "firstName" type="text" name="firstName" placeholder="First Name" th:field="*{firstName}" required>
-      <input id="lastName" type="text" name="lastName" placeholder="Last Name" th:field="*{lastName}"required>
+      <input id= "firstName" type="text" name="firstName" placeholder="First Name" th:field="@{firstName}" required>
+      <input id="lastName" type="text" name="lastName" placeholder="Last Name" th:field="@{lastName}"required>
 
       <input id="username" type="text" name="username" placeholder="Username" th:field="*{username}" required autofocus="autofocus">
 
-      <input type="email" name="email" placeholder="Email" th:field="*{email}" required>
+      <input type="email" name="email" placeholder="Email" th:field="@{email}" required>
 
-      <input type="email" name="phoneNumber" placeholder="Phone Number" th:field="*{phoneNumber}"required>
+      <input type="email" name="phoneNumber" placeholder="Phone Number" th:field="@{phoneNumber}"required>
 
-      <input type="password" name="password" placeholder="Password" th:field="*{password}"required>
+      <input type="password" name="password" placeholder="Password" th:field="@{password}"required>
 
       <input type="password" name="confirm-password" placeholder="Confirm password" required>
 
