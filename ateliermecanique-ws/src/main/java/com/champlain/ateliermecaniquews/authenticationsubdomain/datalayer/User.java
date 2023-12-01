@@ -19,7 +19,7 @@ import lombok.*;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Embedded
@@ -28,13 +28,14 @@ public class User {
     private String lastname;
     private String username;
     private String email;
+    @Column(name = "phone_number")
     private String phoneNumber;
 
     private String password;
 
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_role", joinColumns = @JoinColumn(name = "cust_id", referencedColumnName = "id"),
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "cust_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id") )
     Set<Role> roles = new HashSet<Role>();
 
