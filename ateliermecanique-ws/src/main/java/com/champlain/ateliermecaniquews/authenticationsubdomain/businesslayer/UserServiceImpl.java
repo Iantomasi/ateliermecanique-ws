@@ -38,8 +38,8 @@ public class UserServiceImpl implements UserService {
         Role role = roleRepository.findByRole("CUSTOMER"); //save new accounts as customer accounts
 
         User user = new User();
-        user.setEmail(registerDTO.getEmail_id());
-        user.setName(registerDTO.getName());
+        user.setEmail(registerDTO.getEmail());
+        user.setUsername(registerDTO.getUsername());
         user.setPassword(bCryptPasswordEncoder.encode(registerDTO.getPassword()));
         user.setRole(role);
 

@@ -55,9 +55,11 @@ public class SpringSecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/", "/css/**", "/js/**", "/images/**").permitAll() // Permit all requests to the root, CSS, JS, and images
+                        .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/registration/**").permitAll() // Permit all requests to the root, CSS, JS, and images
                         .anyRequest().authenticated() // All other requests should be authenticated
                 )
+
+
                 .formLogin(form -> form
                         .loginPage("/login")
                         .permitAll()
