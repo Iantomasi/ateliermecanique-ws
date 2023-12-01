@@ -1,9 +1,6 @@
 package com.champlain.ateliermecaniquews.authenticationsubdomain.businesslayer;
 
-import com.champlain.ateliermecaniquews.authenticationsubdomain.datalayer.Role;
-import com.champlain.ateliermecaniquews.authenticationsubdomain.datalayer.RoleRepository;
-import com.champlain.ateliermecaniquews.authenticationsubdomain.datalayer.User;
-import com.champlain.ateliermecaniquews.authenticationsubdomain.datalayer.UserRepository;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.datalayer.*;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.RegisterDTO;
 
 
@@ -38,7 +35,11 @@ public class UserServiceImpl implements UserService {
         Role role = roleRepository.findByRole("CUSTOMER"); //save new accounts as customer accounts
 
         User user = new User();
+        user.setUserIdentifier(new UserIdentifier());
+        user.setFirstname(registerDTO.getFirstName());
+        user.setLastname(registerDTO.getLastName());
         user.setEmail(registerDTO.getEmail());
+        user.setPhoneNumber(registerDTO.getPhoneNumber());
         user.setUsername(registerDTO.getUsername());
         user.setPassword(bCryptPasswordEncoder.encode(registerDTO.getPassword()));
         user.setRole(role);

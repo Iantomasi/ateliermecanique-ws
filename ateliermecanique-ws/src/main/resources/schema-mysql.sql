@@ -1,15 +1,14 @@
 USE `ateliermecanique-db`;
 
 create table if not exists customers(
-                            id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                            customer_id VARCHAR(36),
-
-    customer_first_name VARCHAR(36),
-    customer_last_name VARCHAR(36),
-    customer_username VARCHAR(36),
-    customer_email VARCHAR(36),
-    customer_phone_number VARCHAR(36),
-    customer_password CHAR(60) -- for BCrypt hashing
+                                        id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                        customer_id VARCHAR(36),
+    firstname VARCHAR(36),
+    lastname VARCHAR(36),
+    username VARCHAR(36),
+    email VARCHAR(36),
+    phone_number VARCHAR(36),
+    password CHAR(60) -- for BCrypt hashing
 );
 
 -- CREATE TABLE IF NOT EXISTS users (
@@ -28,10 +27,10 @@ CREATE TABLE IF NOT EXISTS roles (
 
 -- Users_roles join table
 CREATE TABLE IF NOT EXISTS users_roles (
-                                           user_id INT NOT NULL,
+                                           customer_id INT NOT NULL,
                                            role_id INT NOT NULL,
-                                           PRIMARY KEY (user_id, role_id),
-    FOREIGN KEY (user_id) REFERENCES users (id),
+                                           PRIMARY KEY (customer_id, role_id),
+    FOREIGN KEY (customer_id) REFERENCES customers (id),
     FOREIGN KEY (role_id) REFERENCES roles (id)
     );
 
