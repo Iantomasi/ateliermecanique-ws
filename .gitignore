@@ -105,4 +105,8 @@ dist
 .fusebox/
 
 # DynamoDB Local files
+<<<<<<< HEAD
 .dynamodb/
+=======
+.dynamodb/
+>>>>>>> 0c4fa7a (Added react scripts)
