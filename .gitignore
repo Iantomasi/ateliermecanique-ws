@@ -37,6 +37,10 @@ jspm_packages/
 *.iml
 *.iws
 
+
+# Data folder
+/data/
+
 # VSCode specific files
 .vscode/
 
