@@ -32,7 +32,7 @@
     <form th:action="@{/registration}" method="post" th:object="${customer}">
 
       <input id= "firstName" type="text" name="firstName" placeholder="First Name" th:field="*{firstName}" required>
-      <input id="lastName" type="text" name="lastName" placeholder="Last Name" th:field="*{lastName}"required>
+      <input id="lastName" type="text" name="lastName" placeholder="Last Name" th:field="*{lastName}" required>
 
       <input id="username" type="text" name="username" placeholder="Username" th:field="*{username}" required autofocus="autofocus">
 
