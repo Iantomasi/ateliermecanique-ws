@@ -1,0 +1,5 @@
+# Ignore .idea folders
+**/.idea/
+
+# Ignore build directories
+**/build/
