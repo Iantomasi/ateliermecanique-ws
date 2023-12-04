@@ -53,9 +53,10 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'com.h2database:h2'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
     testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
 }
