@@ -27,7 +27,6 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        String redirectUrl = null;
         if(authentication.getPrincipal() instanceof DefaultOAuth2User) {
             DefaultOAuth2User  userDetails = (DefaultOAuth2User ) authentication.getPrincipal();
             String username = userDetails.getAttribute("email") !=null?userDetails.getAttribute("email"):userDetails.getAttribute("login")+"@gmail.com" ;
@@ -39,8 +38,6 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
                 user.setRole("USER");
                 userService.saveNewUser(user);
             }
-        }  redirectUrl = "/dashboard";
-        new DefaultRedirectStrategy().sendRedirect(request, response, redirectUrl);
-
+        }
     }
 }
