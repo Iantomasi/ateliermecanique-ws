@@ -25,13 +25,13 @@ services:
     healthcheck:
       test:
         [
-            "CMD",
-            "mysqladmin",
-            "ping",
-            "-uuser",
-            "-ppwd",
-            "-h",
-            "localhost",
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-uuser",
+          "-ppwd",
+          "-h",
+          "localhost",
         ]
       interval: 10s
       timeout: 5s

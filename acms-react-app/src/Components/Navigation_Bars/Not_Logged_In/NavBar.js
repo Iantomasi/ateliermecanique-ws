@@ -1,8 +1,17 @@
 import React from 'react';
 import './NavBar.css';
 import { Link } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
+
 
 function Navbar() {
+    const navigate = useNavigate();
+
+    const navigateToSignup = () => {
+        navigate('/signup');
+    };
+
+
   return (
     <header>
       <nav className="navbar-container">
@@ -16,7 +25,7 @@ function Navbar() {
         {/* Right-aligned links */}
         <div className="right-links">
           <Link to="/login">Login</Link>
-          <button className="signup-button">Sign up</button>
+          <button className="signup-button" onClick={navigateToSignup}>Sign up</button>
         </div>
       </nav>
       <div className="divider"></div>
