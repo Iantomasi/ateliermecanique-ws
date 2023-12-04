@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.2.0'
     id 'io.spring.dependency-management' version '1.1.4'
     id 'io.freefair.lombok' version '6.6.1'
+    id 'jacoco'
 
 }
 
@@ -43,7 +44,6 @@ dependencies {
 
     compileOnly 'org.projectlombok:lombok'
 
-    runtimeOnly 'org.postgresql:postgresql'
     runtimeOnly 'mysql:mysql-connector-java'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -55,10 +55,45 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'com.h2database:h2'
     testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
 }
 
-tasks.named('test') {
+
+jacoco {
+    toolVersion = "0.8.10"
+}
+
+jacocoTestReport {
+    dependsOn test
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    "com/petclinic/visits/visitsservicenew/VisitsServiceNewApplication.class"
+            ])
+        }))
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.90
+            }
+        }
+    }
+}
+
+test.finalizedBy jacocoTestReport
+check.dependsOn jacocoTestCoverageVerification
+
+
+test {
+    jvmArgs '--enable-preview'
     useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
