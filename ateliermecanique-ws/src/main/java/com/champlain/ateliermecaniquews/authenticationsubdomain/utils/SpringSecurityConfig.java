@@ -55,19 +55,20 @@ public class SpringSecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/registration/**").permitAll() // Permit all requests to the root, CSS, JS, and images
-                        .anyRequest().authenticated() // All other requests should be authenticated
+                        .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/registration/**").permitAll()
+                        .requestMatchers("/api/v1/customers").permitAll()
+                        .anyRequest().authenticated()
                 )
 
 
                 .formLogin(form -> form
                         .loginPage("/login")
                         .permitAll()
-                        .defaultSuccessUrl("/", true) // Redirect to the root URL after login
+                        .defaultSuccessUrl("/", true)
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/") // Redirect to the root URL after logout
+                        .logoutSuccessUrl("/")
                         .permitAll()
                 );
 

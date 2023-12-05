@@ -2,6 +2,8 @@ package com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.pre
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.champlain.ateliermecaniquews.authenticationsubdomain.businesslayer.UserService;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.utils.SpringSecurityConfig;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.businesslayer.CustomerAccountService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +13,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -25,15 +30,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(CustomerAccountController.class)
 @ExtendWith(MockitoExtension.class)
+@Import(SpringSecurityConfig.class) //Import the SecurityConfiguration class to use for auth
 class CustomerAccountControllerUnitTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
+    private UserService userService;
+
+    @MockBean
+    private AuthenticationSuccessHandler authenticationSuccessHandler;
+
+    @MockBean
     private CustomerAccountService customerAccountService;
 
     @Test
+    @WithMockUser //used to mock a user to go around SpringSecurityConfig file in auth
     public void getAllCustomerAccountsTest() throws Exception {
 
         CustomerAccountResponseModel responseModel = CustomerAccountResponseModel.builder()
