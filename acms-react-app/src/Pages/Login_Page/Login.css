@@ -1,3 +1,4 @@
+/* Other styles remain unchanged */
 
 .login-form {
     text-align: center;
@@ -5,26 +6,23 @@
     margin: 0 auto;
     padding-bottom: 100px;
     height: fit-content;
-
 }
 
-h1{
+h1 {
     text-align: center;
 }
 
-
-input[type='email'],
-input[type='password'],
-button[type='submit'] {
-    width: 20%;
-    padding: 12px;
-    margin-bottom: 10px; /* Adjusted spacing between form elements */
-    border-radius: 5px;
+.emailInput,
+.passwordInput,
+.logInButton {
     width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 5px;
 }
 
-input[type='email'],
-input[type='password'] {
+.emailInput,
+.passwordInput {
     border: 1px solid #ffffff;
     background-color: #f0f0f0;
     font-size: 14px;
@@ -32,13 +30,13 @@ input[type='password'] {
     padding-bottom: 25px;
 }
 
-input[type='email']:focus,
-input[type='password']:focus {
+.emailInput:focus,
+.passwordInput:focus {
     outline: none;
     border-color: #555;
 }
 
-button[type='submit'] {
+.logInButton {
     background-color: lightgray;
     color: #000;
     border: none;
@@ -49,10 +47,10 @@ button[type='submit'] {
     margin-left: 0;
     margin-top: 20px;
     padding: 20px;
-    width: 526px;
+    width: 100%;
 }
 
-button[type='submit']:hover {
+.logInButton:hover {
     background-color: #777;
 }
 
@@ -66,8 +64,9 @@ button[type='submit']:hover {
     justify-content: center;
     margin-top: 10px;
 }
+
 .login-icon-button {
-    border: 1px solid black; /* Add a 1px black border */
+    border: 1px solid black;
     background: none;
     cursor: pointer;
     padding: 10px;

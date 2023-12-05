@@ -1,0 +1,150 @@
+    .mechanic-display{
+        margin-left: 5%;
+        margin-top: 1%;
+    }
+
+    .top-of-table {
+        display: flex;
+        width: fit-content;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+       
+      }
+
+    .Search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-right: 0;
+    margin-left: 17vh;
+    height: 4vh;
+    }
+
+    .Search-box input.Search-box {
+    /* Your existing styles for input */
+    width: calc(100% - 30px); /* Adjust based on icon size and padding */
+    }
+
+    .Search-box .search-icon {
+    position: absolute;
+    right: 10px; 
+    font-size: 20px; 
+    color: #ccc; 
+    cursor: pointer;
+    }
+
+    .top-of-table p {
+        font-size: 2em; 
+        flex-grow: 1;
+        margin: 0;
+        margin-left: 60vh;
+        justify-self: center;
+        font-weight: bold;
+      }
+
+
+    .add-button {
+        background-color: #82858a;
+        color: white;
+        border: none;
+        padding: 10px 30px;
+        cursor: pointer;
+        border-radius: 10px;
+        font-weight: bold;
+        transition: transform 0.3s ease;
+        margin-left: 20px;
+      }
+    
+    .add-button:hover {
+        transform: scale(1.1); 
+      }
+
+    .customer-table {
+        text-align: center;
+        background-color: #D9D9D9;
+        width: 85%;
+        height: 500px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        margin-top: 1%;
+        margin-bottom: 5%;    
+      }
+      
+      
+      .table-content {
+        width: 100%;
+        overflow-y: scroll;
+      }
+
+      
+    thead{
+        background-color: white;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+    th{
+        width: 100%;
+        padding-top: 2%;
+        padding-bottom: 2%;
+    }
+
+    .customer-table .top-of-table {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        background-color: #D9D9D9;
+      }
+
+
+      table {
+        width: 100%;
+        min-height: 70vh;
+        border-collapse: collapse;
+        
+      }
+      
+      th {
+        width: calc(100% / 5); /* 5 columns, equally distributed */
+      }
+      
+      tr{
+        height: 50px;
+      }
+
+    .customer-stamp{
+        margin-bottom: 5%;
+    }
+
+
+    @media screen and (max-width: 768px) {
+        .mechanic-display {
+            margin-left: 2%;
+            margin-top: 1%;
+        }
+    
+        .top-of-table {
+            padding: 5px;
+        }
+    
+        .Search-box {
+            margin-left: 5%;
+        }
+    
+        .top-of-table p {
+            font-size: 1.5em;
+            margin-left: 10%;
+        }
+    
+        .add-button {
+            padding: 8px 20px;
+            margin-left: 10px;
+        }
+    
+        /* Adjust other styles as needed for smaller screens */
+    }

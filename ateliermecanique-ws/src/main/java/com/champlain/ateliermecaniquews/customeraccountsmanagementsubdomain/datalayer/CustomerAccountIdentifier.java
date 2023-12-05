@@ -7,15 +7,15 @@ import java.util.UUID;
 @Embeddable
 public class CustomerAccountIdentifier {
 
-    private String customerAccountId;
+    private String customerId;
 
 
    public CustomerAccountIdentifier(){
-        this.customerAccountId = UUID.randomUUID().toString();
+        this.customerId = UUID.randomUUID().toString();
     }
 
-    public String getCustomerAccountId() {
-        return customerAccountId;
+    public String getCustomerId() {
+        return customerId;
     }
 
     //test

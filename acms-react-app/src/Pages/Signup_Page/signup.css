@@ -1,189 +1,87 @@
-/* Basic reset */
-html, body {
-    height: 100%;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Header */
-.topnav {
-    overflow: hidden;
-    background-color: #f8f8f8;
-    display: flex; /* Use flexbox for positioning */
-    justify-content: space-between; /* This will space out the flex items */
-    align-items: center; /* This will vertically center align the items */
-}
-.topnav a {
-    color: #333;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    font-size: 17px;
-}
-
-.topnav a:hover {
-    background-color: #ddd;
-    color: black;
-}
-.topnav a.active {
-    background-color: #04AA6D;
-    color: white;
-}
-
-.topnav-centered {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.topnav-centered a {
-    float: none;
-    display: inline-block;
-    padding: 10px;
-}
-
-.topnav-right {
-    display: flex;
-}
-@media screen and (max-width: 600px) {
-    .topnav, .topnav-right, .topnav-centered {
-        flex-direction: column; /* Stack the items vertically on small screens */
-    }
-
-    .topnav a, .topnav-right a {
-        text-align: left; /* Align text to the left on small screens */
-        padding: 10px; /* Adjust padding as needed */
-    }
-
-    .topnav-centered a {
-        text-align: center; /* Center text for centered links on small screens */
-    }
-}
-/* Signup button specific styles */
-.signup-button {
-    background-color: yellow;
-    border: none;
-    padding: 0.5em 1em;
-    cursor: pointer;
-    border-radius: 4px;
-    font-weight: bold;
-}
-/* Main content */
-main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Center vertically */
-    align-items: center; /* Center horizontally */
-    padding: 1rem;
-}
-
-/* Form and content area */
-.registration-form {
-    width: 100%;
-    max-width: 600px; /* Match the max-width of .topnav-centered if necessary */
-    margin: auto; /* Center within the main */
-    text-align: center; /* Center text inside the form */
-}
-
-.registration-form h1 {
-    font-size: 2.5em;
-    margin-bottom: 0.5em;
-}
-
-.registration-form form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5em;
-}
-
 /* Form input fields styling */
-input[type="text"],
-input[type="email"],
-input[type="password"] {
+.input-field {
     width: 100%;
     height: 3em;
-    padding: 2em;
-    margin: 1em 0;
-    border: 1px solid #ccc;
+    padding: 12px;
+    margin-bottom: 10px;
     border-radius: 5px;
-    background: #F7F8F9;
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
-
+    border: 1px solid #ffffff;
+    background-color: #f0f0f0;
+    font-size: 14px;
+    padding-top: 25px;
+    padding-bottom: 25px;
 }
 
+.input-field:focus {
+    outline: none;
+    border-color: #555;
+}
 
-#register {
-    width: 100%; /* Changed from 103% to 100% to match other input fields */
-    padding: 1em;
-    margin-top: 1em;
+.subButton {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background-color: lightgray;
+    color: #000;
     border: none;
-    border-radius: 5px;
-    background-color: #888;
-    color: white;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+    font-weight: normal;
+    margin-left: 0;
+}
+/* Other styling */
+.login-form {
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto;
+    padding-bottom: 100px;
+    height: fit-content;
 }
 
-#register:hover {
-    background-color: #666;
-}
-.registration-form input {
-    padding: 0.5em;
-    margin-bottom: 0.5em;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-
-.registration-form .social-login {
-    display: flex;
-    justify-content: center; /* Center social login buttons horizontally */
-    gap: 10px; /* Add space between buttons */
-    flex-wrap: wrap; /* Wrap onto new lines if space runs out */
-}
-
-.registration-form .social-login button {
-    background-color: #e7e7e7;
-    border: none;
-    padding: 0.5em 1em;
-    margin: 0.5em;
-    cursor: pointer;
-}
-
-.registration-form .social-login p {
-    margin-bottom: 0.5em;
-}
-
-/* Footer */
-footer {
-    background-color: #333;
-    color: #fff;
-    padding: 1em 0;
+h1 {
     text-align: center;
 }
 
-footer nav {
+input[type='email'],
+input[type='password'] {
+    border: 1px solid #ffffff;
+    background-color: #f0f0f0;
+    font-size: 14px;
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+
+input[type='email']:focus,
+input[type='password']:focus {
+    outline: none;
+    border-color: #555;
+}
+
+
+
+.subButton:hover {
+    background-color: #777;
+}
+
+.or-login-with {
+    text-align: center;
+    margin-bottom: 6.9%;
+}
+
+.login-icons {
     display: flex;
     justify-content: center;
-    padding-bottom: 1em;
+    margin-top: 10px;
 }
 
-footer a {
-    color: #fff;
-    text-decoration: none;
-    padding: 0.5em;
-    margin: 0 0.5em;
+.login-icon-button {
+    border: 1px solid black;
+    background: none;
+    cursor: pointer;
+    padding: 10px;
+    font-size: 40px;
+    margin-left: 20px;
+    border-radius: 5%;
+    width: 200px;
 }
-
-footer p {
-    font-size: 0.8em;
-    margin: 0.5em 0;
-}
-
-
-
-

@@ -1,6 +1,6 @@
 
 
-  header {
+header {
     background-color: white;
     
   }
@@ -36,22 +36,29 @@
     padding: 0.5em 1em;
   }
 
-  
+  .middle-links {
+    display: flex;
+    align-items: center;
+    }
 
-nav .signup-button {
-    background-color: rgb(245, 208, 0);
-    border: none;
-    padding: 10px 30px;
-    cursor: pointer;
-    border-radius: 10px;
-    font-weight: bold;
-    margin-left: 0px;
-    transition: transform 0.3s ease;
-  }
+    .logo-container {
+        margin-right: 0; 
+    }
 
-  nav .signup-button:hover {
-    transform: scale(1.1); 
-  }
+    .links-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .user-profile {
+        display: flex;
+        align-items: center;
+      }
+      
+      .user-image {
+        margin-left: 10px; /* Adjust as needed */
+      }
+
 
 .divider {
   width: 100%;
@@ -59,3 +66,4 @@ nav .signup-button {
   background-color: black;
   margin-top: 5px; /* Adjust as needed */
 }
+
