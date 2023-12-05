@@ -4,14 +4,30 @@ import { faFacebook, faGoogle, faApple } from '@fortawesome/free-brands-svg-icon
 import NavBar from '../../Components/Navigation_Bars/Not_Logged_In/NavBar.js';
 import Footer from '../../Components/Footer/Footer.js';
 import './Login.css';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
+    
+    
+    const navigate = useNavigate()
+
+    
+    const login = () => {
+        navigate('/admin');
+    };
+
+    //THIS IS JUST FOR NOW
+    function handleSubmit(event) {
+        event.preventDefault();
+            login();
+    }
+
     return (
         <div>
             <NavBar />
             <h1>Welcome Back!</h1>
             
-            <form className="login-form">
+            <form className="login-form" onSubmit={handleSubmit}>
                 <input className="emailInput" type='email' placeholder='Enter your email' name='email' /><br/>
                 <input className="passwordInput" type='password' placeholder='Enter your password' name='password' /><br/>
                 <a className="passwordLink" href='#'>Forgot Password?</a><br/>
@@ -34,7 +50,7 @@ function Login() {
             
             <Footer />
         </div>
-    );
+    )
 }
 
 export default Login;

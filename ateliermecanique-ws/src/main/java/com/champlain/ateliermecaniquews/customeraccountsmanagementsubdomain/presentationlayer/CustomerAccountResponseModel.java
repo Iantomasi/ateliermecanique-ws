@@ -10,9 +10,9 @@ import lombok.Value;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CustomerAccountResponseModel {
 
-    private String customerAccountId;
-    private String customerFirstName;
-    private String customerLastName;
-    private String customerEmail;
-    private String customerPhoneNumber;
+    private String customerId;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String phoneNumber;
 }

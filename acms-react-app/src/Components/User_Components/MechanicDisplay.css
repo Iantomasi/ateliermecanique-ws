@@ -1,0 +1,28 @@
+.display {
+    display: flex;
+    align-items: center;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .user-image img {
+    width: 50px;
+    height: auto; 
+    margin-right: 10px;
+  }
+  
+  .details {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .name {
+    font-weight: bold;
+  }
+  .role{
+    font-weight: lighter;
+  }
+  
