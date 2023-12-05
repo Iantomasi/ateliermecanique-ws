@@ -29,6 +29,7 @@
 //
 //    @Autowired
 //    private AuthenticationSuccessHandler successHandler;
+
 //
 //    @Bean
 //    public BCryptPasswordEncoder passwordEncoder() {
@@ -49,7 +50,6 @@
 //
 //
 //
-//<<<<<<< HEAD
 //
 //    @Bean
 //    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -74,29 +74,5 @@
 //                );
 //
 //        return http.build();
-    }
-=======
-//
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http
-//                .csrf(csrf -> csrf.disable())
-//                .authorizeHttpRequests((authorize) -> authorize
-//                        .requestMatchers("/","/login", "/signup").permitAll() // Permit all requests to the root, CSS, JS, and images
-//                        .anyRequest().authenticated() // All other requests should be authenticated
-//                )
-//
-//                .formLogin(form -> form
-//                        .loginPage("/login")
-//                        .permitAll()
-//                        .defaultSuccessUrl("/", true) // Redirect to the root URL after login
-//                )
-//                .logout(logout -> logout
-//                        .logoutUrl("/logout")
-//                        .logoutSuccessUrl("/") // Redirect to the root URL after logout
-//                        .permitAll()
-//                );
-//
-//        return http.build();
-//    }
-// }
+    //}
+

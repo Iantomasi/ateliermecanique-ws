@@ -15,8 +15,13 @@ function Navbar() {
   return (
     <header>
       <nav className="navbar-container">
-        {/* Left-aligned links */}
+
         <div className="left-links">
+        <img src="logo.svg" alt="app logo"/>
+          <h1>atelier mecanique</h1>
+        </div>
+        {/* Middle-aligned links */}
+        <div className="middle-links">
           <a href="#">About</a>
           <a href="#">Services</a>
           <a href="#">Contact</a>

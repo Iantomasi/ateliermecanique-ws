@@ -15,21 +15,21 @@ public class CustomerAccount {
     @Embedded
     private CustomerAccountIdentifier customerAccountIdentifier;
 
-    private String customerFirstName;
-    private String customerLastName;
-    private String customerEmail;
-    private String customerPhoneNumber;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String phoneNumber;
 
-    private String customerPassword;
+    private String password;
 
-    CustomerAccount(){this.customerAccountIdentifier = new CustomerAccountIdentifier();}
+    public CustomerAccount(){this.customerAccountIdentifier = new CustomerAccountIdentifier();}
 
     public CustomerAccount(String customerFirstName, String customerLastName, String customerEmail, String customerPhoneNumber, String customerPassword) {
         this.customerAccountIdentifier = new CustomerAccountIdentifier();
-        this.customerFirstName = customerFirstName;
-        this.customerLastName = customerLastName;
-        this.customerEmail = customerEmail;
-        this.customerPhoneNumber = customerPhoneNumber;
-        this.customerPassword = customerPassword;
+        this.firstName = customerFirstName;
+        this.lastName = customerLastName;
+        this.email = customerEmail;
+        this.phoneNumber = customerPhoneNumber;
+        this.password = customerPassword;
     }
 }

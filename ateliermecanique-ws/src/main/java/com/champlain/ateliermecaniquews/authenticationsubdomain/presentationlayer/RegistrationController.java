@@ -12,7 +12,8 @@
 //
 //
 //@Controller
-//@RequestMapping("/registration")
+//@RequestMapping("api/v1/registration")
+
 //public class RegistrationController {
 //
 //    private UserService userService;

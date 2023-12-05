@@ -1,0 +1,16 @@
+h2{
+    font-size: 3em;
+    margin-bottom: 2%;
+}
+
+.HomeOption{
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
+    margin: 10px; /* Adjust margins as needed for spacing */
+  }
+  
+ .HomeOption img {
+    max-width: 100%;
+    height: auto;
+  }

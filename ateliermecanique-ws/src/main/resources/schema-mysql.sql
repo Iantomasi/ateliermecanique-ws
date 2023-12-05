@@ -3,8 +3,8 @@ USE `ateliermecanique-db`;
 create table if not exists customers(
                                         id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                         customer_id VARCHAR(36),
-    firstname VARCHAR(36),
-    lastname VARCHAR(36),
+    first_name VARCHAR(36),
+    last_name VARCHAR(36),
     username VARCHAR(36),
     email VARCHAR(36),
     phone_number VARCHAR(36),

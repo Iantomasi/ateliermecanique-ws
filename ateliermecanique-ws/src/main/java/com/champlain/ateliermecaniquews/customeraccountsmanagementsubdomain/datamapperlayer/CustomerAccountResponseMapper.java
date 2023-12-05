@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface CustomerAccountResponseMapper {
 
-    @Mapping(expression = "java(customerAccount.getCustomerAccountIdentifier().getCustomerAccountId())", target = "customerAccountId")
+    @Mapping(expression = "java(customerAccount.getCustomerAccountIdentifier().getCustomerId())", target = "customerId")
     CustomerAccountResponseModel entityToResponseModel(CustomerAccount customerAccount);
     List<CustomerAccountResponseModel> entityToResponseModelList(List<CustomerAccount> customerAccounts);
 
