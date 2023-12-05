@@ -1,6 +1,7 @@
 package com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer;
 
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.businesslayer.CustomerAccountService;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,13 +10,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/customers")
+@AllArgsConstructor
 public class CustomerAccountController {
 
-    private CustomerAccountService customerAccountService;
-
-    public CustomerAccountController(CustomerAccountService customerAccountService) {
-        this.customerAccountService = customerAccountService;
-    }
+    final private CustomerAccountService customerAccountService;
 
     @GetMapping()
     public List<CustomerAccountResponseModel> getAllCustomerAccounts(){
