@@ -42,11 +42,11 @@ class CustomerAccountServiceImplTest {
         when(customerAccountRepository.findAll()).thenReturn(customerAccounts);
 
         CustomerAccountResponseModel responseModel = CustomerAccountResponseModel.builder()
-                .customerAccountId("1")
-                .customerFirstName("John")
-                .customerLastName("Doe")
-                .customerEmail("john@example.com")
-                .customerPhoneNumber("1234567890")
+                .customerId("1")
+                .firstName("John")
+                .lastName("Doe")
+                .email("john@example.com")
+                .phoneNumber("1234567890")
                 .build();
         List<CustomerAccountResponseModel> responseModels = Collections.singletonList(responseModel);
 
@@ -57,7 +57,7 @@ class CustomerAccountServiceImplTest {
         assertNotNull(result);
         assertFalse(result.isEmpty());
         assertEquals(responseModels.size(), result.size());
-        assertEquals(responseModels.get(0).getCustomerAccountId(), result.get(0).getCustomerAccountId());
+        assertEquals(responseModels.get(0).getCustomerId(), result.get(0).getCustomerId());
 
         verify(customerAccountRepository, times(1)).findAll();
         verify(customerAccountResponseMapper, times(1)).entityToResponseModelList(customerAccounts);
