@@ -2,10 +2,7 @@ package com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.pre
 
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.businesslayer.CustomerAccountService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,6 +17,11 @@ public class CustomerAccountController {
     @GetMapping()
     public List<CustomerAccountResponseModel> getAllCustomerAccounts(){
         return customerAccountService.getAllCustomerAccounts();
+    }
+
+    @GetMapping("/{customerId}")
+    public CustomerAccountResponseModel getCustomerAccountByCustomerId(@PathVariable String customerId){
+        return customerAccountService.getCustomerAccountById(customerId);
     }
 
 }
