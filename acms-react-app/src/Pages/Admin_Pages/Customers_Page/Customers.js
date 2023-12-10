@@ -1,8 +1,9 @@
 import React, { useState , useEffect} from 'react';
+import { Link } from 'react-router-dom';
 import Navbar from '../../../Components/Navigation_Bars/Logged_In/NavBar.js';
 import Footer from '../../../Components/Footer/Footer.js';
 import MechanicDisplay from '../../../Components/User_Components/MechanicDisplay.js';
-import CustomerBlock from '../../../Components/User_Components/CustomerBlock.js';
+import CustomerBlock from '../CustomerDetails_Page/CustomerBlock.js';
 import './Customers.css';
 import axios from 'axios';
 
@@ -18,6 +19,7 @@ function Customers() {
     function getCustomers(){
         axios.get("http://localhost:8080/api/v1/customers")
         .then(res=>{
+            console.log('API response:', res); // Add this line
             if(res.status === 200){
                 setCustomers(res.data);
             }
@@ -45,17 +47,20 @@ function Customers() {
                 <div className="table-content">
                     <table>
                         <thead>
+                            <tr>
                             <th>ID</th>
                             <th>FIRST NAME</th>
                             <th>LAST NAME</th>
                             <th>EMAIL</th>
                             <th>PHONE NUMBER</th>
+                            </tr>
                         </thead>
+
                         <tbody>
-                            {customers.flatMap((customer)=>(
-                                <CustomerBlock key={customer.customerId} customer={{id : customer.customerId, firstName : customer.firstName, lastName : customer.lastName, email : customer.email, phoneNumber : customer.phoneNumber}}/>
-                            ))}
-                        </tbody>
+                        {customers.map((customer) => (
+                         <CustomerBlock key={customer.customerId} customer={customer} />
+                         ))}
+                    </tbody>
                     </table>
                 </div>
             </div>
