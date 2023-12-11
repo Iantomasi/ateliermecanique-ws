@@ -5,6 +5,7 @@ import Home from './Pages/Home_Page/Home'
 import Signup from './Pages/Signup_Page/Signup'
 import Admin from './Pages/Admin_Pages/Admin';
 import Customers from './Pages/Admin_Pages/Customers_Page/Customers';
+import CustomerDetails from './Pages/Admin_Pages/CustomerDetails_Page/CustomerDetails';
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,11 @@ const router = createBrowserRouter([
       {
         path : "/admin/customers",
         element: <Customers/>
+      }
+      ,
+      {
+        path: "/admin/customers/:customerId",
+        element: <CustomerDetails />,
       }
       
   ]

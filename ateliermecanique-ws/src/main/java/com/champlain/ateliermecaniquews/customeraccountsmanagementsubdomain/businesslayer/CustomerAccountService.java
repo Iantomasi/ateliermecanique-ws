@@ -9,6 +9,7 @@ public interface CustomerAccountService {
 
     //Admin permissions
     List<CustomerAccountResponseModel> getAllCustomerAccounts();
+    CustomerAccountResponseModel getCustomerAccountById(String customerId);
 
 
 

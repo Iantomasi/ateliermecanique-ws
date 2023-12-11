@@ -25,4 +25,9 @@ public class CustomerAccountServiceImpl implements CustomerAccountService{
     public List<CustomerAccountResponseModel> getAllCustomerAccounts() {
         return customerAccountResponseMapper.entityToResponseModelList(customerAccountRepository.findAll());
     }
+
+    @Override
+    public CustomerAccountResponseModel getCustomerAccountById(String customerId) {
+        return customerAccountResponseMapper.entityToResponseModel(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId));
+    }
 }
