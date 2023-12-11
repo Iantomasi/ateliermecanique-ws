@@ -63,5 +63,49 @@ class CustomerAccountServiceImplTest {
         verify(customerAccountResponseMapper, times(1)).entityToResponseModelList(customerAccounts);
     }
 
+    @Test
+    void getCustomerByCustomerIdTest() {
+        String customerId = "1";
+        CustomerAccount customerAccount = new CustomerAccount("Jane", "Doe", "jane@example.com", "1234567890", "testPassword");
+
+        when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId)).thenReturn(customerAccount);
+
+        CustomerAccountResponseModel responseModel = CustomerAccountResponseModel.builder()
+                .customerId(customerId)
+                .firstName("Jane")
+                .lastName("Doe")
+                .email("jane@example.com")
+                .phoneNumber("1234567890")
+                .build();
+
+        when(customerAccountResponseMapper.entityToResponseModel(customerAccount)).thenReturn(responseModel);
+
+        CustomerAccountResponseModel result = customerAccountService.getCustomerAccountById(customerId);
+
+        assertNotNull(result);
+        assertEquals(customerId, result.getCustomerId());
+        assertEquals("Jane", result.getFirstName());
+        assertEquals("Doe", result.getLastName());
+        assertEquals("jane@example.com", result.getEmail());
+        assertEquals("1234567890", result.getPhoneNumber());
+
+        verify(customerAccountRepository, times(1)).findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
+        verify(customerAccountResponseMapper, times(1)).entityToResponseModel(customerAccount);
+    }
+
+    @Test
+    void getCustomerByNonExistentCustomerIdTest() {
+        String nonExistentCustomerId = "notARealId";
+
+        when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(nonExistentCustomerId)).thenReturn(null);
+
+        // Assuming the service method returns null or throws an exception for a non-existent customer
+        CustomerAccountResponseModel result = customerAccountService.getCustomerAccountById(nonExistentCustomerId);
+
+        assertNull(result);
+
+        verify(customerAccountRepository, times(1)).findCustomerAccountByCustomerAccountIdentifier_CustomerId(nonExistentCustomerId);
+    }
+
 
 }

@@ -2,10 +2,12 @@ import Navbar from '../../../Components/Navigation_Bars/Logged_In/NavBar.js';
 import Footer from '../../../Components/Footer/Footer.js';
 import MechanicDisplay from '../../../Components/User_Components/MechanicDisplay.js';
 
-
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import './CustomerDetails.css';
+import Sidebar from '../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
+
 
 
 function CustomerDetails() {
@@ -28,28 +30,41 @@ function CustomerDetails() {
     return <div>Loading...</div>;
   }
 
+
   return (
-    <div>
+    <div className="customer-details-page">
       <Navbar/>
-      <div className="content">
-        <aside className="mechanic-display">
+      <div className="customer-details-content">
+        <aside className="customer-details-mechanic-display">
           <MechanicDisplay/>
-          {/* Add sidebar content here */}
+          <Sidebar/>
         </aside>
-        <div className="gear-icon-container">
-          <img src="gear-machine-isolated-icon-vector.jpg" alt="Gear machine icon" />
-        </div>        <main className="main-content">
-          <form className="user-details-form">
-            {/* Replace these with actual form inputs */}
-            <input className="input-field" value={customerDetails.firstName} readOnly />
-            <input className="input-field" value={customerDetails.lastName} readOnly />
-            <input className="input-field" value={customerDetails.email} readOnly />
-            <input className="input-field" value={customerDetails.phoneNumber} readOnly />
-            <button className="save-button">Save</button>
-          </form>
+        <main className="customer-details-main">
+          <div className="customer-details-top-of-table">
+            <p>CUSTOMER ACCOUNT DETAILS</p>
+          </div>
+          <div className="customer-details-form-container">
+            <form className="user-details-form">
+              <label>First Name</label>
+              <input className="input-field" value={customerDetails.firstName} readOnly />
+
+              <label>Last Name</label>
+              <input className="input-field" value={customerDetails.lastName} readOnly />
+
+              <label>Email Address</label>
+              <input className="input-field" value={customerDetails.email} readOnly />
+
+              <label>Phone Number</label>
+              <input className="input-field" value={customerDetails.phoneNumber} readOnly />
+
+              <button className="save-button">Save</button>
+            </form>
+          </div>
+          <div className="customer-details-car-image-container">
+            <img src="/happy-young-man-and-car.png" alt="Happy Man Car" />
+          </div>
         </main>
       </div>
-      <img src="happy-young-man-and-car - Copy.png" alt="Happy Man Car" />
       <Footer/>
     </div>
   );

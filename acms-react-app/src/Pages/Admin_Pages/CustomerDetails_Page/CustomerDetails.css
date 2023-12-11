@@ -1,67 +1,69 @@
-/* Set up a flex container for the entire page */
-.content {
-    display: flex;
-  }
-  
-  /* Sidebar styling */
-  .mechanic-display {
-    /* Adjust width as per your design */
-    width: 250px; 
-    /* Set the background color as per your design */
-    background-color: #f4f4f4; 
-    /* Other styles such as padding, margin, border, etc. */
-    padding: 20px;
-  }
-  
-  /* Main content styling */
-  .main-content {
-    flex-grow: 1;
-    padding: 20px;
-    /* Other styles such as margin and background color */
-  }
+.customer-details-content {
+  display: flex;
+}
 
-    
-  .gear-icon-container {
-    text-align: center; /* Example to center the image */
-  }
-  
-  
-  
-  /* User details form styling */
-  .user-details-form {
-    /* Add a shadow, padding, margin, and set a max-width as per your design */
-    background: #fff;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    padding: 20px;
-    border-radius: 10px;
-    margin-left: 20px; /* Adjust based on your layout */
-    max-width: 500px; /* Adjust based on your layout */
-  }
-  
-  /* Input field styling */
-  .input-field {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  /* Button styling */
-  .save-button {
-    background-color: #0044cc; /* Your primary color */
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  /* Footer styling */
-  footer {
-    background-color: #333; /* Your footer color */
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-  }
-  
+.customer-details-mechanic-display {
+  width: 275px; 
+  flex-shrink: 0; 
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.customer-details-main {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+.customer-details-top-of-table p {
+  font-size: 2em;
+  margin-top: 10px; 
+  margin-bottom: 0;  
+  text-align: center;
+  font-weight: bold;
+}
+
+
+.customer-details-form-container {
+  background: #f4f4f4;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 10px; 
+  position: relative;
+}
+
+.customer-details-car-image-container {
+  text-align: left;
+  margin-top: 20px; 
+}
+
+.customer-details-car-image-container img {
+  width: 375px; 
+  height: auto;
+}
+
+.user-details-form {
+  position: relative; 
+}
+
+.user-details-form .input-field {
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
+.user-details-form label {
+  color: #333;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.customer-details-save-button-container {
+  text-align: right;
+  position: absolute; 
+  bottom: 0px; 
+  right: 20px;
+}

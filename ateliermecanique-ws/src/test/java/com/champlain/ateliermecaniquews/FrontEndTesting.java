@@ -10,20 +10,25 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 
 @SpringBootTest
 public class FrontEndTesting {
 
     @BeforeEach()
-    void setUp() {
-        WebDriverManager.chromedriver().setup();
-        Configuration.browser = "chrome";
+    void setUp() {          // comment out the driver you don't use before testing
+
+        //WebDriverManager.chromedriver().setup();
+        //Configuration.browser = "chrome";
+
+        WebDriverManager.firefoxdriver().setup();
+        Configuration.browser = "firefox";
     }
 
     @Test
     public void getAllCustomers() {
-        open("http://localhost:3001/");
+        open("http://localhost:3000/");
         $("a[href='/login']").click();
         sleep(1000);
         $("button[value='Login']").click();
@@ -36,6 +41,22 @@ public class FrontEndTesting {
         SelenideElement firstCustomer = links.get(0);
         firstCustomer.shouldHave(text("b7024d89-1a5e-4517-3gba-05178u7ar260"));
         sleep(1000);
+    }
+
+    @Test
+    public void getCustomerAccountById() {
+        open("http://localhost:3000/");
+        $("a[href='/login']").click();
+        sleep(1000);
+        $("button[value='Login']").click();
+        sleep(1000);
+        $("div[class='HomeOption']").click();
+        sleep(1000);
+
+        String accountId = "b7024d89-1a5e-4517-3gba-05178u7ar260";
+        SelenideElement accountLink = $$("td").findBy(text(accountId));
+        accountLink.shouldBe(visible).click();
+        $("p").shouldHave(text("CUSTOMER ACCOUNT DETAILS"));
     }
 }
 

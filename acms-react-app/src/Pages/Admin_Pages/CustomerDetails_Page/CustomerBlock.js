@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const CustomerBlock = ({ customer }) => {
-  console.log(customer); // This will output the customer object to the console
+  console.log(customer); 
   return (
     <tr>
      <td>

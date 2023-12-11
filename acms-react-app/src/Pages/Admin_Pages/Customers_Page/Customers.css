@@ -22,8 +22,7 @@
     }
 
     .Search-box input.Search-box {
-    /* Your existing styles for input */
-    width: calc(100% - 30px); /* Adjust based on icon size and padding */
+    width: calc(100% - 30px); 
     }
 
     .Search-box .search-icon {
@@ -146,5 +145,4 @@
             margin-left: 10px;
         }
     
-        /* Adjust other styles as needed for smaller screens */
     }
