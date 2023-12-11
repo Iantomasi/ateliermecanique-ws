@@ -12,7 +12,12 @@ import Sidebar from '../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
 
 function CustomerDetails() {
   const { customerId } = useParams();
-  const [customerDetails, setCustomerDetails] = useState(null);
+  const [customerDetails, setCustomerDetails] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: ''
+  });
 
   useEffect(() => {
     axios.get(`http://localhost:8080/api/v1/customers/${customerId}`)
@@ -26,48 +31,80 @@ function CustomerDetails() {
       });
   }, [customerId]);
 
-  if (!customerDetails) {
-    return <div>Loading...</div>;
+  function handleInputChange(event) {
+    const { name, value } = event.target;
+    setCustomerDetails(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
   }
 
+  function updateCustomer(event) {
+    event.preventDefault();
+  
+    const formData = new FormData(event.target);
+    const updatedCustomer = {
+      firstName: formData.get('firstName'),
+      lastName: formData.get('lastName'),
+      email: formData.get('email'),
+      phoneNumber: formData.get('phoneNumber')
+    };
+  
+    axios.put(`http://localhost:8080/api/v1/customers/${customerId}`, updatedCustomer)
+      .then(res => {
+        if (res.status === 200) {
+          console.log("Customer has been successfully updated!");
+          setCustomerDetails(res.data);
+          alert("Customer has been updated!")
+        }
+      })
+      .catch(err => {
+        console.error("Error updating customer:", err);
+      });
+  }
 
   return (
     <div className="customer-details-page">
-      <Navbar/>
+      <Navbar />
       <div className="customer-details-content">
         <aside className="customer-details-mechanic-display">
-          <MechanicDisplay/>
-          <Sidebar/>
+          <MechanicDisplay />
+          <Sidebar />
         </aside>
         <main className="customer-details-main">
           <div className="customer-details-top-of-table">
             <p>CUSTOMER ACCOUNT DETAILS</p>
           </div>
-          <div className="customer-details-form-container">
-            <form className="user-details-form">
-              <label>First Name</label>
-              <input className="input-field" value={customerDetails.firstName} readOnly />
-
-              <label>Last Name</label>
-              <input className="input-field" value={customerDetails.lastName} readOnly />
-
-              <label>Email Address</label>
-              <input className="input-field" value={customerDetails.email} readOnly />
-
-              <label>Phone Number</label>
-              <input className="input-field" value={customerDetails.phoneNumber} readOnly />
-
-              <button className="save-button">Save</button>
-            </form>
-          </div>
+          {customerDetails && (
+            <div className="customer-details-form-container">
+              <form className="user-details-form" onSubmit={updateCustomer}>
+                <label>First Name</label>
+                <input className="input-field" name="firstName" value={customerDetails.firstName} onChange={handleInputChange} type="text" required />
+  
+                <label>Last Name</label>
+                <input className="input-field" name="lastName" value={customerDetails.lastName} onChange={handleInputChange} type="text" required />
+  
+                <label>Email Address</label>
+                <input className="input-field" name="email" value={customerDetails.email} onChange={handleInputChange} type="email" required />
+  
+                <label>Phone Number</label>
+                <input className="input-field" name="phoneNumber" value={customerDetails.phoneNumber} onChange={handleInputChange} type="text" required />
+  
+                <button className="save-button" type="submit">
+                  Save
+                </button>
+              </form>
+            </div>
+          )}
           <div className="customer-details-car-image-container">
             <img src="/happy-young-man-and-car.png" alt="Happy Man Car" />
           </div>
         </main>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
+  
 }
 
 export default CustomerDetails;
