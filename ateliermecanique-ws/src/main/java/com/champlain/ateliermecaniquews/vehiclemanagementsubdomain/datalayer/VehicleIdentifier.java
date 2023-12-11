@@ -1,5 +1,6 @@
 package com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 import java.util.UUID;

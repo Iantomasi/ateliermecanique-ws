@@ -12,6 +12,9 @@ import java.util.List;
 public interface VehicleResponseMapper {
 
     @Mapping(expression = "java(vehicle.getVehicleIdentifier().getVehicleId())", target = "vehicleId")
+    @Mapping(target = "customerId", source = "vehicle.customerId")
+    @Mapping(target = "transmission_type", source = "vehicle.transmission_type")
+
     VehicleResponseModel entityToResponseModel(Vehicle vehicle);
 
     List<VehicleResponseModel> entityToResponseModelList(List<Vehicle> vehicles);

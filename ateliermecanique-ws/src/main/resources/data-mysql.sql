@@ -40,13 +40,13 @@ VALUES ('yzab8cd5-3e6f-8796-2abi-96330c6bw164', 'Mason', 'Rodriguez', 'masrod','
 
 
 --   VEHICLES
-INSERT INTO vehicles (vehicle_id, customer_id, make, model, year, transmissionType, mileage)
-VALUES ('132b41b2-2bec-4b98-b08d-c7c0e03fe33e', 'lmno8p45-3q6r-8791-2abc-96325t5ar159', 'Chevrolet', 'Cruze', '2016', 'Manual', '50000');
+INSERT INTO vehicles (vehicle_id, customer_id, make, model, year, transmission_type, mileage)
+VALUES ('132b41b2-2bec-4b98-b08d-c7c0e03fe33e', 'lmno8p45-3q6r-8791-2abc-96325t5ar159', 'Chevrolet', 'Cruze', '2016', 'MANUAL', '50000');
 
 -- Vehichle 2
-INSERT INTO vehicles (vehicle_id, customer_id, make, model, year, transmissionType, mileage)
-VALUES ('0f8c5e36-9e94-4c6d-921d-29d7e2e923b5', 'tuvw8x45-3y6z-8794-2abf-96328w6bu162', 'Chevrolet', 'Cruze', '2015', 'Manual', '35000');
+INSERT INTO vehicles (vehicle_id, customer_id, make, model, year, transmission_type, mileage)
+VALUES ('0f8c5e36-9e94-4c6d-921d-29d7e2e923b5', 'tuvw8x45-3y6z-8794-2abf-96328w6bu162', 'Chevrolet', 'Cruze', '2015', 'MANUAL', '35000');
 
 -- Vehicle 3
-INSERT INTO vehicles (vehicle_id, customer_id, make, model, year, transmissionType, mileage)
-VALUES ('01aa1f26-9f9b-438e-8346-572c83c2f181', 'mnop8q45-3r6s-8792-2abd-96326u6bs160', 'Ford', 'Focus', '2011', 'Automatic', '15000');
+INSERT INTO vehicles (vehicle_id, customer_id, make, model, year, transmission_type, mileage)
+VALUES ('01aa1f26-9f9b-438e-8346-572c83c2f181', 'mnop8q45-3r6s-8792-2abd-96326u6bs160', 'Ford', 'Focus', '2011', 'AUTOMATIC', '15000');

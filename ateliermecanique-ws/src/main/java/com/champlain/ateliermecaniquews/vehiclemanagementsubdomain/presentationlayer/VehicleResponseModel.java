@@ -16,6 +16,6 @@ public class VehicleResponseModel {
     private String make;
     private String model;
     private String year;
-    private TransmissionType transmissionType;
+    private TransmissionType transmission_type;
     private String mileage;
 }
