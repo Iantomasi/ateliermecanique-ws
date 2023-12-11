@@ -19,11 +19,11 @@ public class FrontEndTesting {
     @BeforeEach()
     void setUp() {          // comment out the driver you don't use before testing
 
-        //WebDriverManager.chromedriver().setup();
-        //Configuration.browser = "chrome";
+        WebDriverManager.chromedriver().setup();
+        Configuration.browser = "chrome";
 
-        WebDriverManager.firefoxdriver().setup();
-        Configuration.browser = "firefox";
+//        WebDriverManager.firefoxdriver().setup();
+//        Configuration.browser = "firefox";
     }
 
     @Test
@@ -58,5 +58,33 @@ public class FrontEndTesting {
         accountLink.shouldBe(visible).click();
         $("p").shouldHave(text("CUSTOMER ACCOUNT DETAILS"));
     }
+
+    @Test
+    public void updateCustomerById() {
+        open("http://localhost:3000/");
+        $("a[href='/login']").click();
+        sleep(1000);
+        $("button[value='Login']").click();
+        sleep(1000);
+        $("div[class='HomeOption']").click();
+        sleep(1000);
+
+        String accountId = "b7024d89-1a5e-4517-3gba-05178u7ar260";
+        SelenideElement accountLink = $$("td").findBy(text(accountId));
+        accountLink.shouldBe(visible).click();
+        $("p").shouldHave(text("CUSTOMER ACCOUNT DETAILS"));
+
+        // Fill the form with new data
+        $("input[name='firstName']").setValue("Jeff");
+        $("input[name='lastName']").setValue("Doe");
+        $("input[name='email']").setValue("john@example.com");
+        $("input[name='phoneNumber']").setValue("123456789");
+        $("button[type='submit']").click();
+
+        open("http://localhost:3000/admin/customers");
+        SelenideElement secondTd = $$("td").get(1);
+        secondTd.shouldHave(text("Jeff"));
+    }
+
 }
 

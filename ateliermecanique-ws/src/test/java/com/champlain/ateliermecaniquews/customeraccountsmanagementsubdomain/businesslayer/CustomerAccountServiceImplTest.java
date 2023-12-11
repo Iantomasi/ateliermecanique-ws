@@ -3,6 +3,7 @@ package com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.bus
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccount;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountRepository;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datamapperlayer.CustomerAccountResponseMapper;
+import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountRequestModel;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountResponseModel;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -105,6 +106,74 @@ class CustomerAccountServiceImplTest {
         assertNull(result);
 
         verify(customerAccountRepository, times(1)).findCustomerAccountByCustomerAccountIdentifier_CustomerId(nonExistentCustomerId);
+    }
+
+    @Test
+    void testUpdateCustomerById_WhenAccountExists_ThenReturnUpdatedResponseModel() {
+        // Mock data
+        String customerId = "b7024d89-1a5e-4517-3gba-05178u7ar260";
+        CustomerAccountRequestModel requestModel = CustomerAccountRequestModel.builder()
+                .firstName("JONNY")
+                .lastName("DoEEE")
+                .email("JONNYDoEEE@example.com")
+                .phoneNumber("6789998212")
+                .build();
+
+        CustomerAccount existingAccount = new CustomerAccount();
+        existingAccount.setFirstName("John");
+        existingAccount.setLastName("Doe");
+        existingAccount.setEmail("johndoe@example.com");
+        existingAccount.setPhoneNumber("123456789");
+
+        // Mock behavior of repository and mapper
+        when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId))
+                .thenReturn(existingAccount);
+
+        when(customerAccountRepository.save(existingAccount)).thenReturn(existingAccount); // Return the same account for simplicity
+
+        CustomerAccountResponseModel updatedResponseMock = CustomerAccountResponseModel.builder()
+                .customerId(customerId)
+                .firstName("JONNY")
+                .lastName("DoEEE")
+                .email("JONNYDoEEE@example.com")
+                .phoneNumber("6789998212")
+                .build();
+
+        when(customerAccountResponseMapper.entityToResponseModel(existingAccount)).thenReturn(updatedResponseMock);
+
+        // Invoke the method
+        CustomerAccountResponseModel updatedResponse = customerAccountService.updateCustomerById(customerId, requestModel);
+
+        // Verify
+        assertNotNull(updatedResponse);
+        assertEquals("JONNY", updatedResponse.getFirstName());
+        assertEquals("DoEEE", updatedResponse.getLastName());
+        assertEquals("JONNYDoEEE@example.com", updatedResponse.getEmail());
+        assertEquals("6789998212", updatedResponse.getPhoneNumber());
+
+        verify(customerAccountRepository).findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
+        verify(customerAccountRepository).save(existingAccount);
+        verify(customerAccountResponseMapper).entityToResponseModel(existingAccount);
+    }
+
+    @Test
+    void testUpdateCustomerById_WhenAccountNotExists_ThenReturnNull() {
+        // Mock data
+        String nonExistingCustomerId = "nonExistingId";
+        CustomerAccountRequestModel requestModel = CustomerAccountRequestModel.builder()
+                .firstName("JONNY")
+                .lastName("DoEEE")
+                .email("JONNYDoEEE@example.com")
+                .phoneNumber("6789998212")
+                .build();
+
+        when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(nonExistingCustomerId)).thenReturn(null);
+
+        // Invoke the method
+        CustomerAccountResponseModel updatedResponse = customerAccountService.updateCustomerById(nonExistingCustomerId, requestModel);
+
+        // Verify
+        assertNull(updatedResponse);
     }
 
 

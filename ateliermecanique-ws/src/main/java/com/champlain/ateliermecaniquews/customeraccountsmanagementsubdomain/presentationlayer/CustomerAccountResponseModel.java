@@ -1,9 +1,6 @@
 package com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 
 @Value
 @Builder

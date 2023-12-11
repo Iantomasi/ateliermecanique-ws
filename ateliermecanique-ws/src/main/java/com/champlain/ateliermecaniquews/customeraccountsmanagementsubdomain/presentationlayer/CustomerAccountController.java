@@ -29,7 +29,17 @@ public class CustomerAccountController {
     public ResponseEntity<CustomerAccountResponseModel> getCustomerAccountById(@PathVariable String customerId) {
         CustomerAccountResponseModel response = customerAccountService.getCustomerAccountById(customerId);
         if (response == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();        }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{customerId}")
+    public ResponseEntity<CustomerAccountResponseModel> updateCustomerById(@PathVariable String customerId,@RequestBody CustomerAccountRequestModel accountRequestModel){
+        CustomerAccountResponseModel response = customerAccountService.updateCustomerById(customerId,accountRequestModel);
+        if (response == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         return ResponseEntity.ok(response);
     }
 
