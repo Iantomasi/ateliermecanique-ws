@@ -63,6 +63,9 @@ function CustomerDetails() {
       });
   }
 
+  if (!customerDetails) {
+    return <div>Loading...</div>;
+  }
   return (
     <div className="customer-details-page">
       <Navbar />
