@@ -26,45 +26,56 @@ function CustomerVehicles() {
     }, [customerId]);
 
     return (
-        <>
+        <div>
             <Navbar />
-            <div className="customer-details-content">
+            <div className="vehicle-details-content">
                 <aside className="customer-details-mechanic-display">
                     <MechanicDisplay />
                     <Sidebar />
                 </aside>
                 <div className="vehicle-table">
-                    <h2>Vehicle List</h2>
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>Vehicle ID</th>
-                            <th>Customer ID</th>
-                            <th>Make</th>
-                            <th>Model</th>
-                            <th>Year</th>
-                            <th>Transmission Type</th>
-                            <th>Mileage</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {vehicles.map((vehicle) => (
-                            <tr key={vehicle.vehicle_id}>
-                                <td>{vehicle.vehicle_id}</td>
-                                <td>{vehicle.customer_id}</td>
-                                <td>{vehicle.make}</td>
-                                <td>{vehicle.model}</td>
-                                <td>{vehicle.year}</td>
-                                <td>{vehicle.transmission_type}</td>
-                                <td>{vehicle.mileage}</td>
-                            </tr>
-                        ))}
-                        </tbody>
-                    </table>
+                    <div className="vehicle-top-of-table">
+                        <p>Vehicle List</p>
+                        <div className="Search-box">
+                            <input className="Search-box" type="text" placeholder="Search..."/>
+                            <span className="search-icon">&#128269;</span>
+                        </div>
+                        <button className="add-button">Add+</button>
+
+                    </div>
+                    <div className="vehicle-table-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                <th>Vehicle ID</th>
+                                <th>Customer ID</th>
+                                <th>Make</th>
+                                <th>Model</th>
+                                <th>Year</th>
+                                <th>Transmission</th>
+                                <th>Mileage</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                            {vehicles.map((vehicle) => (
+                                <tr key={vehicle.vehicleId}>
+                                    <td>{vehicle.vehicleId}</td>
+                                    <td>{vehicle.customerId}</td>
+                                    <td>{vehicle.make}</td>
+                                    <td>{vehicle.model}</td>
+                                    <td>{vehicle.year}</td>
+                                    <td>{vehicle.transmission_type}</td>
+                                    <td>{vehicle.mileage}</td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <Footer />
-        </>
+        </div>
     );
 }
 
