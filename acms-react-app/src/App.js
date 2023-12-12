@@ -39,7 +39,7 @@ const router = createBrowserRouter([
         element: <CustomerDetails />,
       },
       {
-        path: "/admin/customers/customerId/vehicles",
+        path: "/admin/customers/:customerId/vehicles",
         element: <CustomerVehicles />,
       }
       
