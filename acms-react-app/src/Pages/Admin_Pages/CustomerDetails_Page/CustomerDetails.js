@@ -71,8 +71,8 @@ function CustomerDetails() {
       <Navbar />
       <div className="customer-details-content">
         <aside className="customer-details-mechanic-display">
-          <MechanicDisplay />
-          <Sidebar />
+          <MechanicDisplay/>
+          <Sidebar customerId={customerId} />
         </aside>
         <main className="customer-details-main">
           <div className="customer-details-top-of-table">

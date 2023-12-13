@@ -1,4 +1,4 @@
-USE `ateliermecanique-db`;
+USE `testdb`;
 
 create table if not exists customers(
                                         id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -35,16 +35,16 @@ CREATE TABLE IF NOT EXISTS users_roles (
     );
 
 create table if not exists vehicles(
-                                        id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                        vehicle_id VARCHAR(36),
-                                        customer_id VARCHAR(36),
+                                       id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                       vehicle_id VARCHAR(36),
+    customer_id VARCHAR(36),
 
     make VARCHAR(255),
     model VARCHAR(255),
     year VARCHAR(5),
     transmission_type VARCHAR(15),
     mileage VARCHAR(10)
-);
+    );
 
 
 create table if not exists appointments(

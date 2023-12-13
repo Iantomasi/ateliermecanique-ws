@@ -68,7 +68,6 @@ public class FrontEndTesting {
         sleep(1000);
         $("div[class='HomeOption']").click();
         sleep(1000);
-
         String accountId = "b7024d89-1a5e-4517-3gba-05178u7ar260";
         SelenideElement accountLink = $$("td").findBy(text(accountId));
         accountLink.shouldBe(visible).click();
@@ -85,6 +84,15 @@ public class FrontEndTesting {
         SelenideElement secondTd = $$("td").get(1);
         secondTd.shouldHave(text("Jeff"));
     }
+        public void getVehiclesForCustomer() {
+        String customerId = "lmno8p45-3q6r-8791-2abc-96325t5ar159";
+        SelenideElement customerLink = $$("td").findBy(text(customerId));
+        customerLink.shouldBe(visible).click();
+        $("p").shouldHave(text("CUSTOMER ACCOUNT DETAILS"));
 
+        SelenideElement vehiclesLink = $$("a[class*='sidebar-link']").findBy(text("Vehicle List"));
+        vehiclesLink.shouldBe(visible).click();
+        $("p").shouldHave(text("VEHICLE LIST"));
+    }
 }
 
