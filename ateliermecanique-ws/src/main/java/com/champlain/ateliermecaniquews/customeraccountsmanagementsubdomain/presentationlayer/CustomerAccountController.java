@@ -43,4 +43,10 @@ public class CustomerAccountController {
         return ResponseEntity.ok(response);
     }
 
+    @DeleteMapping("/{customerId}")
+    public ResponseEntity<Void> deleteCustomerById(@PathVariable String customerId){
+        customerAccountService.deleteCustomerById(customerId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 }

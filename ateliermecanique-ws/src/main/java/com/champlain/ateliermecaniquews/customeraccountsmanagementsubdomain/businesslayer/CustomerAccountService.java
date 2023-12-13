@@ -12,6 +12,6 @@ public interface CustomerAccountService {
     List<CustomerAccountResponseModel> getAllCustomerAccounts();
     CustomerAccountResponseModel getCustomerAccountById(String customerId);
     CustomerAccountResponseModel updateCustomerById(String customerId, CustomerAccountRequestModel customerAccountRequestModel);
-
+    void deleteCustomerById(String customerId);
 
 }

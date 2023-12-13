@@ -42,12 +42,12 @@ class VehicleServiceImplTest {
     @Test
     void whenNoVehiclesForCustomer_thenReturnEmptyList() {
         String customerId = "someCustomerId";
-        when(vehicleRepository.findByCustomerId(customerId)).thenReturn(Collections.emptyList());
+        when(vehicleRepository.findAllByCustomerId(customerId)).thenReturn(Collections.emptyList());
 
         List<VehicleResponseModel> result = vehicleService.getAllVehiclesForCustomer(customerId);
 
         assertTrue(result.isEmpty());
-        verify(vehicleRepository).findByCustomerId(customerId);
+        verify(vehicleRepository).findAllByCustomerId(customerId);
         verify(vehicleResponseMapper, never()).entityToResponseModelList(any());
     }
 
@@ -69,7 +69,7 @@ class VehicleServiceImplTest {
                 "100000"
         );
 
-        when(vehicleRepository.findByCustomerId(customerId)).thenReturn(vehicles);
+        when(vehicleRepository.findAllByCustomerId(customerId)).thenReturn(vehicles);
         when(vehicleResponseMapper.entityToResponseModelList(vehicles)).thenReturn(Arrays.asList(responseModel));
 
         // Act
@@ -79,7 +79,7 @@ class VehicleServiceImplTest {
         assertFalse(result.isEmpty());
         assertEquals(1, result.size());
         assertEquals("Honda", result.get(0).getMake());
-        verify(vehicleRepository).findByCustomerId(customerId);
+        verify(vehicleRepository).findAllByCustomerId(customerId);
         verify(vehicleResponseMapper).entityToResponseModelList(vehicles);
     }
 
@@ -87,13 +87,13 @@ class VehicleServiceImplTest {
     void whenMapperReturnsNull_thenLogWarning() {
         String customerId = "testCustomerId";
         List<Vehicle> vehicles = Arrays.asList(new Vehicle());
-        when(vehicleRepository.findByCustomerId(customerId)).thenReturn(vehicles);
+        when(vehicleRepository.findAllByCustomerId(customerId)).thenReturn(vehicles);
         when(vehicleResponseMapper.entityToResponseModelList(vehicles)).thenReturn(null);
 
         List<VehicleResponseModel> result = vehicleService.getAllVehiclesForCustomer(customerId);
 
         assertNull(result);
-        verify(vehicleRepository).findByCustomerId(customerId);
+        verify(vehicleRepository).findAllByCustomerId(customerId);
         verify(vehicleResponseMapper).entityToResponseModelList(vehicles);
     }
 
@@ -101,13 +101,13 @@ class VehicleServiceImplTest {
     void whenMapperReturnsEmptyList_thenLogWarning() {
         String customerId = "testCustomerId";
         List<Vehicle> vehicles = Arrays.asList(new Vehicle());
-        when(vehicleRepository.findByCustomerId(customerId)).thenReturn(vehicles);
+        when(vehicleRepository.findAllByCustomerId(customerId)).thenReturn(vehicles);
         when(vehicleResponseMapper.entityToResponseModelList(vehicles)).thenReturn(Collections.emptyList());
 
         List<VehicleResponseModel> result = vehicleService.getAllVehiclesForCustomer(customerId);
 
         assertTrue(result.isEmpty());
-        verify(vehicleRepository).findByCustomerId(customerId);
+        verify(vehicleRepository).findAllByCustomerId(customerId);
         verify(vehicleResponseMapper).entityToResponseModelList(vehicles);
     }
 
@@ -124,17 +124,36 @@ class VehicleServiceImplTest {
                 TransmissionType.AUTOMATIC,
                 "100000"
         );
-        when(vehicleRepository.findByCustomerId(customerId)).thenReturn(vehicles);
+        when(vehicleRepository.findAllByCustomerId(customerId)).thenReturn(vehicles);
         when(vehicleResponseMapper.entityToResponseModelList(vehicles)).thenReturn(Arrays.asList(responseModel));
 
         List<VehicleResponseModel> result = vehicleService.getAllVehiclesForCustomer(customerId);
 
         assertFalse(result.isEmpty());
         assertEquals(1, result.size());
-        verify(vehicleRepository).findByCustomerId(customerId);
+        verify(vehicleRepository).findAllByCustomerId(customerId);
         verify(vehicleResponseMapper).entityToResponseModelList(vehicles);
     }
 
+    @Test
+    void deleteAllVehiclesByCustomerId_shouldDeleteAllVehicles() {
+        // Arrange
+        String customerId = "testCustomerId";
+
+        List<Vehicle> vehicles = Arrays.asList(
+                new Vehicle(),
+                new Vehicle(),
+                new Vehicle()
+        );
+
+        when(vehicleRepository.findAllByCustomerId(customerId)).thenReturn(vehicles);
+
+        // Act
+        vehicleService.deleteAllVehiclesByCustomerId(customerId);
+
+        // Assert
+        verify(vehicleRepository, times(3)).delete(any(Vehicle.class));
+    }
 
 
 

@@ -6,6 +6,7 @@ import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.data
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datamapperlayer.CustomerAccountResponseMapper;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountRequestModel;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountResponseModel;
+import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.businesslayer.VehicleService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +17,9 @@ import java.util.List;
 public class CustomerAccountServiceImpl implements CustomerAccountService{
 
     final private CustomerAccountRepository customerAccountRepository;
+    final private VehicleService vehicleService;
     final private CustomerAccountResponseMapper customerAccountResponseMapper;
     final private CustomerAccountRequestMapper customerAccountRequestMapper;
-
 
     @Override
     public List<CustomerAccountResponseModel> getAllCustomerAccounts() {
@@ -56,6 +57,19 @@ public class CustomerAccountServiceImpl implements CustomerAccountService{
         } else {
             // Handle the case when the account is not found
             return null; // or throw an exception, log, etc. based on your logic
+        }
+    }
+
+    @Override
+    public void deleteCustomerById(String customerId) {
+        CustomerAccount account = customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
+
+        if (account != null){
+            customerAccountRepository.delete(account);
+            vehicleService.deleteAllVehiclesByCustomerId(customerId);
+        }
+        else{
+            //throw exception
         }
     }
 

@@ -29,7 +29,7 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public List<VehicleResponseModel> getAllVehiclesForCustomer(String customerId) {
-        List<Vehicle> vehicles = vehicleRepository.findByCustomerId(customerId);
+        List<Vehicle> vehicles = vehicleRepository.findAllByCustomerId(customerId);
         log.info("Fetching vehicles for customer ID: {}", customerId);
 
 
@@ -57,6 +57,12 @@ public class VehicleServiceImpl implements VehicleService {
         }
 
         return vehicleResponseModels;
+    }
+
+    @Override
+    public void deleteAllVehiclesByCustomerId(String customerId) {
+        List<Vehicle> vehicles = vehicleRepository.findAllByCustomerId(customerId);
+        vehicles.forEach(vehicle -> { vehicleRepository.delete(vehicle);});
     }
 
 }

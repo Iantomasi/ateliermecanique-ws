@@ -5,6 +5,7 @@ import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.data
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datamapperlayer.CustomerAccountResponseMapper;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountRequestModel;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountResponseModel;
+import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.businesslayer.VehicleService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,6 +35,10 @@ class CustomerAccountServiceImplTest {
 
     @InjectMocks
     private CustomerAccountServiceImpl customerAccountService;
+
+    @Mock
+    private VehicleService vehicleService;
+
 
     @Test
     void getAllCustomerAccountsTest() {
@@ -176,5 +181,35 @@ class CustomerAccountServiceImplTest {
         assertNull(updatedResponse);
     }
 
+    @Test
+    void deleteCustomerById_WhenAccountExists_ShouldDeleteAccountAndVehicles() {
+        // Arrange
+        String customerId = "testCustomerId";
+        CustomerAccount customerAccount = new CustomerAccount();
+        when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId)).thenReturn(customerAccount);
+
+        // Act
+        customerAccountService.deleteCustomerById(customerId);
+
+        // Assert
+        verify(customerAccountRepository).findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
+        verify(customerAccountRepository).delete(customerAccount);
+        verify(vehicleService).deleteAllVehiclesByCustomerId(customerId);
+    }
+
+    @Test
+    void deleteCustomerById_WhenAccountNotExists_ShouldNotDelete() {
+        // Arrange
+        String customerId = "nonExistingCustomerId";
+        when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId)).thenReturn(null);
+
+        // Act
+        customerAccountService.deleteCustomerById(customerId);
+
+        // Assert
+        verify(customerAccountRepository).findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
+        verify(customerAccountRepository, never()).delete(any());
+        verify(vehicleService, never()).deleteAllVehiclesByCustomerId(any());
+    }
 
 }
