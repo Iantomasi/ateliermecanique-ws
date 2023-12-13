@@ -8,7 +8,7 @@ import lombok.Value;
 
 @Value
 @Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class VehicleResponseModel {
 
     private String vehicleId;
