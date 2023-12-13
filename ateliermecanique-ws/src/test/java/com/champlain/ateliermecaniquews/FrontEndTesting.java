@@ -84,7 +84,15 @@ public class FrontEndTesting {
         SelenideElement secondTd = $$("td").get(1);
         secondTd.shouldHave(text("Jeff"));
     }
-        public void getVehiclesForCustomer() {
+    @Test
+    public void getVehiclesForCustomer() {
+        open("http://localhost:3000/");
+        $("a[href='/login']").click();
+        sleep(1000);
+        $("button[value='Login']").click();
+        sleep(1000);
+        $("div[class='HomeOption']").click();
+        sleep(1000);
         String customerId = "lmno8p45-3q6r-8791-2abc-96325t5ar159";
         SelenideElement customerLink = $$("td").findBy(text(customerId));
         customerLink.shouldBe(visible).click();
@@ -93,6 +101,33 @@ public class FrontEndTesting {
         SelenideElement vehiclesLink = $$("a[class*='sidebar-link']").findBy(text("Vehicle List"));
         vehiclesLink.shouldBe(visible).click();
         $("p").shouldHave(text("VEHICLE LIST"));
+    }
+
+    @Test
+    public void deleteCustomer(){
+        open("http://localhost:3000/");
+        $("a[href='/login']").click();
+        sleep(1000);
+        $("button[value='Login']").click();
+        sleep(1000);
+        $("div[class='HomeOption']").click();
+        sleep(1000);
+        String accountId = "b7024d89-1a5e-4517-3gba-05178u7ar260";
+        SelenideElement accountLink = $$("td").findBy(text(accountId));
+        accountLink.shouldBe(visible).click();
+        $("p").shouldHave(text("CUSTOMER ACCOUNT DETAILS"));
+
+        $(".delete-button").click();
+
+
+        $$(".confirmation-box button").findBy(text("Yes")).click();
+
+
+        sleep(1000); // Add a sleep if needed to wait for the alert to appear
+        switchTo().alert().accept();
+
+    
+        $("p").shouldHave(text("CUSTOMER ACCOUNTS"));
     }
 }
 

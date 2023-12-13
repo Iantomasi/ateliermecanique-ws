@@ -7,6 +7,5 @@ import java.util.List;
 public interface VehicleService {
 
     List<VehicleResponseModel> getAllVehiclesForCustomer(String customerId);
-
-
+    void deleteAllVehiclesByCustomerId(String customerId);
 }

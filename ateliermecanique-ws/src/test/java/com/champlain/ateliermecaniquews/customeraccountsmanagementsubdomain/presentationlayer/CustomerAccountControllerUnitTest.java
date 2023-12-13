@@ -16,7 +16,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,7 @@ class CustomerAccountControllerUnitTest {
 
     @MockBean
     private CustomerAccountService customerAccountService;
+
 
 
     @Test
@@ -120,6 +123,57 @@ class CustomerAccountControllerUnitTest {
         // Act & Assert
         mockMvc.perform(get("/api/v1/customers/{customerId}", invalidCustomerId))
                 .andExpect(status().isNotFound());
+    }
+
+
+    @Test
+    void updateCustomerById_validId_shouldSucceed() {
+        // Arrange
+        CustomerAccountService accountService = mock(CustomerAccountService.class);
+        CustomerAccountController accountController = new CustomerAccountController(accountService);
+        String customerId = "validId";
+        CustomerAccountRequestModel requestModel = CustomerAccountRequestModel.builder()
+                .firstName("Jane")
+                .lastName("Doe")
+                .email("jane@example.com")
+                .phoneNumber("9876543210")
+                .build();
+        CustomerAccountResponseModel expectedResponse = CustomerAccountResponseModel.builder()
+                .customerId(customerId)
+                .firstName("Jane")
+                .lastName("Doe")
+                .email("jane@example.com")
+                .phoneNumber("9876543210")
+                .build();
+        when(accountService.updateCustomerById(customerId, requestModel)).thenReturn(expectedResponse);
+
+        // Act
+        ResponseEntity<CustomerAccountResponseModel> responseEntity = accountController.updateCustomerById(customerId, requestModel);
+
+        // Assert
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(expectedResponse, responseEntity.getBody());
+    }
+
+    @Test
+    void updateCustomerById_invalidId_shouldReturnNotFound() {
+        // Arrange
+        CustomerAccountService accountService = mock(CustomerAccountService.class);
+        CustomerAccountController accountController = new CustomerAccountController(accountService);
+        String invalidId = "invalidId";
+        CustomerAccountRequestModel requestModel = CustomerAccountRequestModel.builder()
+                .firstName("Jane")
+                .lastName("Doe")
+                .email("jane@example.com")
+                .phoneNumber("9876543210")
+                .build();
+        when(accountService.updateCustomerById(invalidId, requestModel)).thenReturn(null);
+
+        // Act
+        ResponseEntity<CustomerAccountResponseModel> responseEntity = accountController.updateCustomerById(invalidId, requestModel);
+
+        // Assert
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     }
 
 
