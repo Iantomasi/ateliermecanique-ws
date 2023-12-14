@@ -7,5 +7,11 @@ import java.util.List;
 public interface VehicleService {
 
     List<VehicleResponseModel> getAllVehiclesForCustomer(String customerId);
+
+    VehicleResponseModel getVehicleByVehicleId(String customerId, String vehicleId);
+
+
+
+
     void deleteAllVehiclesByCustomerId(String customerId);
 }

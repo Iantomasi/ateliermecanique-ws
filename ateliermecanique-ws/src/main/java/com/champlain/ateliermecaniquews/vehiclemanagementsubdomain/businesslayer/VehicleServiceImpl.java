@@ -60,6 +60,24 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
+    public VehicleResponseModel getVehicleByVehicleId(String customerId, String vehicleId) {
+
+        Vehicle foundVehicle = vehicleRepository.findByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId);
+
+        // Check if the vehicle is null
+        if (foundVehicle == null) {
+            log.warn("No vehicle found for customer ID: {} and vehicle ID: {} (vehicle is null)", customerId, vehicleId);
+            return null;
+        }
+
+        return vehicleResponseMapper.entityToResponseModel(foundVehicle);
+
+    }
+
+
+
+
+    @Override
     public void deleteAllVehiclesByCustomerId(String customerId) {
         List<Vehicle> vehicles = vehicleRepository.findAllByCustomerId(customerId);
         vehicles.forEach(vehicle -> { vehicleRepository.delete(vehicle);});

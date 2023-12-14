@@ -27,4 +27,13 @@ public class VehicleController {
         return ResponseEntity.ok(vehicles);
     }
 
+    @GetMapping("/customers/{customerId}/vehicles/{vehicleId}")
+    public ResponseEntity<VehicleResponseModel> getVehicleByVehicleId(@PathVariable String customerId, @PathVariable String vehicleId) {
+        VehicleResponseModel vehicle = vehicleService.getVehicleByVehicleId(customerId, vehicleId);
+        if (vehicle == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(vehicle);
+    }
+
 }
