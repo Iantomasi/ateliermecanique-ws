@@ -50,17 +50,12 @@ function CustomerVehicles() {
                             <input className="Search-box" type="text" placeholder="Search..."/>
                             <span className="search-icon">&#128269;</span>
                         </div>
-<<<<<<< HEAD
-                        <button className="add-button">Add+</button>
-=======
                         <button
                             className="add-button"
                             onClick={() => handleCustomerClick(customerId)}
-                        >
-                            Add+
+                        >Add+
                         </button>
 
->>>>>>> 9fd953b (Working on front end)
                     </div>
                     <div className="vehicle-table-content">
                         <table>
