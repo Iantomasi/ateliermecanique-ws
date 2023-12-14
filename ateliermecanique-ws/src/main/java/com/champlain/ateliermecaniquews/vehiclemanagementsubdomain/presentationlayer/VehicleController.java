@@ -27,7 +27,6 @@ public class VehicleController {
         return ResponseEntity.ok(vehicles);
     }
 
-<<<<<<< HEAD
     @GetMapping("/customers/{customerId}/vehicles/{vehicleId}")
     public ResponseEntity<VehicleResponseModel> getVehicleByVehicleId(@PathVariable String customerId, @PathVariable String vehicleId) {
         VehicleResponseModel vehicle = vehicleService.getVehicleByVehicleId(customerId, vehicleId);
@@ -37,14 +36,19 @@ public class VehicleController {
         return ResponseEntity.ok(vehicle);
     }
 
-    @PutMapping("/customers/{customerId}/vehicles/{vehicleId}")
+    @PutMapping(value = "/customers/{customerId}/vehicles/{vehicleId}", consumes = "application/json")
     public ResponseEntity<VehicleResponseModel> updateVehicleByVehicleId(@RequestBody VehicleRequestModel vehicleRequestModel, @PathVariable String customerId, @PathVariable String vehicleId) {
         VehicleResponseModel vehicle = vehicleService.updateVehicleByVehicleId(vehicleRequestModel, customerId, vehicleId);
-=======
+        if (vehicle == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(vehicle);
+    }
+
+
     @PostMapping(value = "/customers/{customerId}/vehicles", consumes = "application/json")
     public ResponseEntity<VehicleResponseModel> addVehicleToCustomer(@PathVariable String customerId, @RequestBody VehicleRequestModel vehicleRequestModel) {
         VehicleResponseModel vehicle = vehicleService.addVehicleToCustomer(customerId, vehicleRequestModel);
->>>>>>> fb03916 (Back end working)
         if (vehicle == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

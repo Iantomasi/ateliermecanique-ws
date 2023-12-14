@@ -1,11 +1,8 @@
 package com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.businesslayer;
 
-<<<<<<< HEAD
-import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.TransmissionType;
-=======
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccount;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountRepository;
->>>>>>> fb03916 (Back end working)
+import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.TransmissionType;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.Vehicle;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.VehicleIdentifier;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.VehicleRepository;
@@ -14,7 +11,6 @@ import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datamapperlay
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.presentationlayer.VehicleRequestModel;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.presentationlayer.VehicleResponseModel;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -72,7 +68,6 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-<<<<<<< HEAD
     public VehicleResponseModel getVehicleByVehicleId(String customerId, String vehicleId) {
 
         Vehicle foundVehicle = vehicleRepository.findByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId);
@@ -87,38 +82,62 @@ public class VehicleServiceImpl implements VehicleService {
 
     }
 
+//    @Override
+//    public VehicleResponseModel updateVehicleByVehicleId(VehicleRequestModel vehicleRequestModel, String customerId, String vehicleId) {
+//        Vehicle vehicleToUpdate = vehicleRepository.findByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId);
+//
+//        if (vehicleToUpdate == null) {
+//            return null; // later throw exception
+//        }
+//
+//        // Update vehicle
+//        vehicleToUpdate.setMake(vehicleRequestModel.getMake());
+//        vehicleToUpdate.setModel(vehicleRequestModel.getModel());
+//        vehicleToUpdate.setYear(vehicleRequestModel.getYear());
+//
+//        // Set Transmission Type after checking for null and empty string
+//        if (vehicleRequestModel.getTransmissionType() != null && !vehicleRequestModel.getTransmissionType()) {
+//            try {
+//                String transmissionStr = vehicleRequestModel.getTransmissionType().trim().toUpperCase();
+//                TransmissionType transmissionType = TransmissionType.valueOf(transmissionStr);
+//                vehicleToUpdate.setTransmission_type(transmissionType);
+//            } catch (IllegalArgumentException e) {
+//                return null;
+//            }
+//        }
+//
+//            vehicleToUpdate.setMileage(vehicleRequestModel.getMileage());
+//            Vehicle updatedVehicle = vehicleRepository.save(vehicleToUpdate);
+//            return vehicleResponseMapper.entityToResponseModel(updatedVehicle);
+//        }
+
     @Override
     public VehicleResponseModel updateVehicleByVehicleId(VehicleRequestModel vehicleRequestModel, String customerId, String vehicleId) {
         Vehicle vehicleToUpdate = vehicleRepository.findByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId);
 
         if (vehicleToUpdate == null) {
-            return null; // later throw exception
+            return null; // Later throw exception
         }
 
-        // Update vehicle
+        // Update vehicle details
         vehicleToUpdate.setMake(vehicleRequestModel.getMake());
         vehicleToUpdate.setModel(vehicleRequestModel.getModel());
         vehicleToUpdate.setYear(vehicleRequestModel.getYear());
 
-        // Set Transmission Type after checking for null and empty string
-        if (vehicleRequestModel.getTransmissionType() != null && !vehicleRequestModel.getTransmissionType().isEmpty()) {
-            try {
-                String transmissionStr = vehicleRequestModel.getTransmissionType().trim().toUpperCase();
-                TransmissionType transmissionType = TransmissionType.valueOf(transmissionStr);
-                vehicleToUpdate.setTransmission_type(transmissionType);
-            } catch (IllegalArgumentException e) {
-                return null; // throw exception later
-            }
+        // Check for non-null transmission type and update after converting to enum
+        TransmissionType transmissionType = vehicleRequestModel.getTransmissionType();
+        if (transmissionType != null) {
+            // Assuming the enum is valid and does not need to be converted from a string
+            vehicleToUpdate.setTransmission_type(transmissionType);
         }
 
-            vehicleToUpdate.setMileage(vehicleRequestModel.getMileage());
-            Vehicle updatedVehicle = vehicleRepository.save(vehicleToUpdate);
-            return vehicleResponseMapper.entityToResponseModel(updatedVehicle);
-        }
+        vehicleToUpdate.setMileage(vehicleRequestModel.getMileage());
+        Vehicle updatedVehicle = vehicleRepository.save(vehicleToUpdate);
+        return vehicleResponseMapper.entityToResponseModel(updatedVehicle);
+    }
 
 
     @Override
-=======
     public VehicleResponseModel addVehicleToCustomer(String customerId, VehicleRequestModel vehicleRequestModel) {
         CustomerAccount customerAccount = customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
 
@@ -142,7 +161,6 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
->>>>>>> fb03916 (Back end working)
     public void deleteAllVehiclesByCustomerId(String customerId) {
         List<Vehicle> vehicles = vehicleRepository.findAllByCustomerId(customerId);
         vehicles.forEach(vehicle -> { vehicleRepository.delete(vehicle);});
