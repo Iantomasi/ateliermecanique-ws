@@ -11,7 +11,6 @@ import './AddNewVehicle.css';
 function AddNewVehicle() {
     const {customerId} = useParams();
     const [vehicleDetails, setVehicleDetails] = useState({
-        customerId: '',
         make: '',
         model: '',
         year: '',
@@ -45,7 +44,7 @@ function AddNewVehicle() {
         event.preventDefault();
 
         const newVehicle = {
-            customerId: vehicleDetails.customerId,
+            customerId: customerId,
             make: vehicleDetails.make,
             model: vehicleDetails.model,
             year: vehicleDetails.year,

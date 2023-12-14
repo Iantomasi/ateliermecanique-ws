@@ -6,6 +6,8 @@ import Sidebar from '../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
 import "./CustomerVehicles.css";
 import axios from "axios";
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 
 import CustomerVehicleBlock  from '../CustomerVehicleDetails_Page/CustomerVehicleBlock.js';
 
@@ -13,6 +15,12 @@ import CustomerVehicleBlock  from '../CustomerVehicleDetails_Page/CustomerVehicl
 function CustomerVehicles() {
     const { customerId } = useParams();
     const [vehicles, setVehicles] = useState([]);
+    const navigate = useNavigate();
+
+    const handleCustomerClick = (customerId) => {
+        navigate(`/admin/customers/${customerId}/vehicles/newVehicle`);
+        console.log(customerId);
+    };
 
     useEffect(() => {
         axios.get(`http://localhost:8080/api/v1/customers/${customerId}/vehicles`)
@@ -42,7 +50,17 @@ function CustomerVehicles() {
                             <input className="Search-box" type="text" placeholder="Search..."/>
                             <span className="search-icon">&#128269;</span>
                         </div>
+<<<<<<< HEAD
                         <button className="add-button">Add+</button>
+=======
+                        <button
+                            className="add-button"
+                            onClick={() => handleCustomerClick(customerId)}
+                        >
+                            Add+
+                        </button>
+
+>>>>>>> 9fd953b (Working on front end)
                     </div>
                     <div className="vehicle-table-content">
                         <table>
