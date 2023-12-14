@@ -98,12 +98,9 @@ public class VehicleServiceImpl implements VehicleService {
                 TransmissionType transmissionType = TransmissionType.valueOf(transmissionStr);
                 vehicleToUpdate.setTransmission_type(transmissionType);
             } catch (IllegalArgumentException e) {
-                log.warn("Invalid transmission type: {}", vehicleRequestModel.getTransmissionType());
-                // Optionally handle invalid transmission type, e.g., set to a default or return an error
-            }
+                log.warn("Invalid transmission type: {}", vehicleRequestModel.getTransmissionType());}
         } else {
             log.warn("Transmission type is null or empty for vehicle ID: {}", vehicleId);
-            // Optionally handle null or empty transmission type
         }
 
         vehicleToUpdate.setMileage(vehicleRequestModel.getMileage());
@@ -114,7 +111,7 @@ public class VehicleServiceImpl implements VehicleService {
         return vehicleResponseMapper.entityToResponseModel(updatedVehicle);
     }
 
-    
+
 
     @Override
     public void deleteAllVehiclesByCustomerId(String customerId) {

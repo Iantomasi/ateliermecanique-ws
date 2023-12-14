@@ -9,7 +9,50 @@ import './CustomerVehicleDetails.css';
 
 function CustomerVehicleDetails() {
   const { customerId, vehicleId } = useParams();
-  const [vehicleDetails, setVehicleDetails] = useState(null);
+  const [vehicleDetails, setVehicleDetails] = useState({
+    make: '',
+    model: '',
+    year: '',
+    transmission_type: '',
+    mileage: ''
+  });
+
+  function handleInputChange(event) {
+    const { name, value } = event.target;
+    setVehicleDetails(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  }
+
+  function updateCustomerVehicle(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const updatedCustomerVehicle = {
+      firstName: formData.get('firstName'),
+      make: formData.get('make'),
+      model: formData.get('model'),
+      year: formData.get('year'),
+      transmission_type: formData.get('transmission_type'),
+      mileage: formData.get('mileage')
+      
+    };
+
+    axios.put(`http://localhost:8080/api/v1/customers/${customerId}/vehicles/${vehicleId}`, updatedCustomerVehicle)
+      .then(res => {
+        if (res.status === 200) {
+          console.log("Customer Vehicle has been successfully updated!");
+          setVehicleDetails(res.data);
+          alert("Customer Vehicle has been updated!")
+        }
+      })
+      .catch(err => {
+        console.error("Error updating customer vehicle:", err);
+      });
+  }
+
+
 
   useEffect(() => {
     axios.get(`http://localhost:8080/api/v1/customers/${customerId}/vehicles/${vehicleId}`)
@@ -39,27 +82,28 @@ function CustomerVehicleDetails() {
           <div className="customervehicle-details-top-of-table">
             <p>VEHICLE DETAILS</p>
           </div>
+          {vehicleDetails && (
           <div className="customervehicle-details-form-container">
-            <form className="customervehicle-user-details-form">
+            <form className="customervehicle-user-details-form" onSubmit={updateCustomerVehicle}>
               <label>Make</label>
-              <input className="input-field" value={vehicleDetails.make} readOnly />
-
+              <input className="input-field" name="make" value={vehicleDetails.make} onChange={handleInputChange} type="text" required />
+            
               <label>Model</label>
-              <input className="input-field" value={vehicleDetails.model} readOnly />
+              <input className="input-field" name="model" value={vehicleDetails.model} onChange={handleInputChange} type="text" required />
 
               <label>Year</label>
-              <input className="input-field" value={vehicleDetails.year} readOnly />
+              <input className="input-field" name="year" value={vehicleDetails.year} onChange={handleInputChange} type="text" required />
               
               <label>Transmission</label>
-              <input className="input-field" value={vehicleDetails.transmission_type} readOnly />
+              <input className="input-field" name="transmission_type" value={vehicleDetails.transmission_type} onChange={handleInputChange} type="text" required />
 
               <label>Mileage</label>
-              <input className="input-field" value={vehicleDetails.mileage} readOnly />
+              <input className="input-field" name="mileage" value={vehicleDetails.mileage} onChange={handleInputChange} type="text" required />
 
-              {/* Save button can be removed if not updating vehicle details */}
-              <button className="save-button">Save</button>
+              <button className="save-button" type='submit'>Save</button>
             </form>
           </div>
+          )}
           <div className="customervehicle-details-car-image-container">
             <img src="/yellow-car-sideview-free-vector.jpg" alt="Yellow Car Side" />
           </div>
