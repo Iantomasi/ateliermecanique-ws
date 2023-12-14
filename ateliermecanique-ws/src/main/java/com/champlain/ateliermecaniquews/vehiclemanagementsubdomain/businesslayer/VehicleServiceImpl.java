@@ -1,13 +1,20 @@
 package com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.businesslayer;
 
+<<<<<<< HEAD
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.TransmissionType;
+=======
+import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccount;
+import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountRepository;
+>>>>>>> fb03916 (Back end working)
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.Vehicle;
+import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.VehicleIdentifier;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.VehicleRepository;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datamapperlayer.VehicleRequestMapper;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datamapperlayer.VehicleResponseMapper;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.presentationlayer.VehicleRequestModel;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.presentationlayer.VehicleResponseModel;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -23,10 +30,13 @@ public class VehicleServiceImpl implements VehicleService {
 
     private VehicleRequestMapper vehicleRequestMapper;
 
-    public VehicleServiceImpl(VehicleRepository vehicleRepository, VehicleResponseMapper vehicleResponseMapper, VehicleRequestMapper vehicleRequestMapper) {
+    private CustomerAccountRepository customerAccountRepository;
+
+    public VehicleServiceImpl(VehicleRepository vehicleRepository, VehicleResponseMapper vehicleResponseMapper, VehicleRequestMapper vehicleRequestMapper, CustomerAccountRepository customerAccountRepository) {
         this.vehicleRepository = vehicleRepository;
         this.vehicleResponseMapper = vehicleResponseMapper;
         this.vehicleRequestMapper = vehicleRequestMapper;
+        this.customerAccountRepository = customerAccountRepository;
     }
 
     @Override
@@ -62,6 +72,7 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
+<<<<<<< HEAD
     public VehicleResponseModel getVehicleByVehicleId(String customerId, String vehicleId) {
 
         Vehicle foundVehicle = vehicleRepository.findByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId);
@@ -107,6 +118,31 @@ public class VehicleServiceImpl implements VehicleService {
 
 
     @Override
+=======
+    public VehicleResponseModel addVehicleToCustomer(String customerId, VehicleRequestModel vehicleRequestModel) {
+        CustomerAccount customerAccount = customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
+
+        if(customerAccount == null) {
+            log.warn("Customer account not found for customer ID: {}", customerId);
+            return null;
+        }
+
+        Vehicle newVehicle = new Vehicle();
+        newVehicle.setVehicleIdentifier(new VehicleIdentifier());
+        newVehicle.setCustomerId(vehicleRequestModel.getCustomerId());
+        newVehicle.setMake(vehicleRequestModel.getMake());
+        newVehicle.setModel(vehicleRequestModel.getModel());
+        newVehicle.setYear(vehicleRequestModel.getYear());
+        newVehicle.setTransmission_type(vehicleRequestModel.getTransmissionType());
+        newVehicle.setMileage(vehicleRequestModel.getMileage());
+
+
+        Vehicle savedVehicle = vehicleRepository.save(newVehicle);
+        return vehicleResponseMapper.entityToResponseModel(savedVehicle);
+    }
+
+    @Override
+>>>>>>> fb03916 (Back end working)
     public void deleteAllVehiclesByCustomerId(String customerId) {
         List<Vehicle> vehicles = vehicleRepository.findAllByCustomerId(customerId);
         vehicles.forEach(vehicle -> { vehicleRepository.delete(vehicle);});
