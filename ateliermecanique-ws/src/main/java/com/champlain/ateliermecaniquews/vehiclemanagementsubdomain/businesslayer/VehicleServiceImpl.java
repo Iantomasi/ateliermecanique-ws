@@ -80,13 +80,11 @@ public class VehicleServiceImpl implements VehicleService {
     public VehicleResponseModel updateVehicleByVehicleId(VehicleRequestModel vehicleRequestModel, String customerId, String vehicleId) {
         Vehicle vehicleToUpdate = vehicleRepository.findByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId);
 
-        // Check if the vehicle is null
         if (vehicleToUpdate == null) {
-            log.warn("No vehicle found for customer ID: {} and vehicle ID: {} (vehicle is null)", customerId, vehicleId);
-            return null;
+            return null; // later throw exception
         }
 
-        // Update the vehicle
+        // Update vehicle
         vehicleToUpdate.setMake(vehicleRequestModel.getMake());
         vehicleToUpdate.setModel(vehicleRequestModel.getModel());
         vehicleToUpdate.setYear(vehicleRequestModel.getYear());
@@ -98,19 +96,14 @@ public class VehicleServiceImpl implements VehicleService {
                 TransmissionType transmissionType = TransmissionType.valueOf(transmissionStr);
                 vehicleToUpdate.setTransmission_type(transmissionType);
             } catch (IllegalArgumentException e) {
-                log.warn("Invalid transmission type: {}", vehicleRequestModel.getTransmissionType());}
-        } else {
-            log.warn("Transmission type is null or empty for vehicle ID: {}", vehicleId);
+                return null; // throw exception later
+            }
         }
 
-        vehicleToUpdate.setMileage(vehicleRequestModel.getMileage());
-
-        // Save the updated vehicle
-        Vehicle updatedVehicle = vehicleRepository.save(vehicleToUpdate);
-
-        return vehicleResponseMapper.entityToResponseModel(updatedVehicle);
-    }
-
+            vehicleToUpdate.setMileage(vehicleRequestModel.getMileage());
+            Vehicle updatedVehicle = vehicleRepository.save(vehicleToUpdate);
+            return vehicleResponseMapper.entityToResponseModel(updatedVehicle);
+        }
 
 
     @Override

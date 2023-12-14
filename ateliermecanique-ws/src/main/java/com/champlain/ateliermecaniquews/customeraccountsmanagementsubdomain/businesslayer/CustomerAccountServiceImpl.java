@@ -55,8 +55,8 @@ public class CustomerAccountServiceImpl implements CustomerAccountService{
             // Map and return the response model
             return customerAccountResponseMapper.entityToResponseModel(account);
         } else {
-            // Handle the case when the account is not found
-            return null; // or throw an exception, log, etc. based on your logic
+            //throw exception
+            return null;
         }
     }
 

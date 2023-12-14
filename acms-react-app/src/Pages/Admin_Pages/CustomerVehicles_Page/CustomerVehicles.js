@@ -37,7 +37,7 @@ function CustomerVehicles() {
                 </aside>
                 <div className="vehicle-table">
                     <div className="vehicle-top-of-table">
-                        <p>Vehicle List</p>
+                        <p>VEHICLE LIST</p>
                         <div className="Search-box">
                             <input className="Search-box" type="text" placeholder="Search..."/>
                             <span className="search-icon">&#128269;</span>
@@ -48,13 +48,13 @@ function CustomerVehicles() {
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Vehicle ID</th>
-                                    <th>Customer ID</th>
-                                    <th>Make</th>
-                                    <th>Model</th>
-                                    <th>Year</th>
-                                    <th>Transmission</th>
-                                    <th>Mileage</th>
+                                    <th>VEHICLE ID</th>
+                                    <th>CUSTOMER ID</th>
+                                    <th>MAKE</th>
+                                    <th>MODEL</th>
+                                    <th>YEAR</th>
+                                    <th>TRANSMISSION</th>
+                                    <th>MILEAGE</th>
                                 </tr>
                             </thead>
                             <tbody>

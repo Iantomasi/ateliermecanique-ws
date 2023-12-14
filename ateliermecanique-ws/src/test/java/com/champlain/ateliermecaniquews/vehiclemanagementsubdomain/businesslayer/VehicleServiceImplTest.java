@@ -1,10 +1,12 @@
 package com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.businesslayer;
 
+import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountIdentifier;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.TransmissionType;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.Vehicle;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.VehicleIdentifier;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.VehicleRepository;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datamapperlayer.VehicleResponseMapper;
+import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.presentationlayer.VehicleRequestModel;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.presentationlayer.VehicleResponseModel;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.mockito.InjectMocks;
@@ -55,8 +57,8 @@ class VehicleServiceImplTest {
     void whenRepositoryReturnsVehicles_thenReturnVehicleResponseModelList() {
         // Arrange
         String customerId = "testCustomerId";
-        Vehicle vehicle = new Vehicle(); // You might need to set up this vehicle with required properties
-        vehicle.setVehicleIdentifier(new VehicleIdentifier()); // Assuming VehicleIdentifier is another class you have
+        Vehicle vehicle = new Vehicle();
+        vehicle.setVehicleIdentifier(new VehicleIdentifier());
         List<Vehicle> vehicles = Arrays.asList(vehicle);
 
         VehicleResponseModel responseModel = new VehicleResponseModel(
@@ -155,6 +157,104 @@ class VehicleServiceImplTest {
         verify(vehicleRepository, times(3)).delete(any(Vehicle.class));
     }
 
+
+    @Test
+    void getVehicleById_shouldSucceed() {
+        // Arrange
+        Vehicle vehicle = new Vehicle();
+        String vehicleId = new VehicleIdentifier().toString();
+        String customerId = new CustomerAccountIdentifier().toString();
+        VehicleResponseModel responseModel = new VehicleResponseModel(
+                vehicleId,
+                customerId,
+                "Honda",
+                "Civic",
+                "2023",
+                TransmissionType.AUTOMATIC,
+                "100000"
+        );
+
+        when(vehicleRepository.findByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId)).thenReturn(vehicle);
+        when(vehicleResponseMapper.entityToResponseModel(vehicle)).thenReturn(responseModel);
+
+        VehicleResponseModel result = vehicleService.getVehicleByVehicleId(customerId, vehicleId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals("Honda", result.getMake());
+        verify(vehicleRepository).findByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId);
+        verify(vehicleResponseMapper).entityToResponseModel(vehicle);
+    }
+
+    @Test
+    void getVehicleById_shouldReturnNull_whenVehicleNotFound() {
+        // Arrange
+        String vehicleId = new VehicleIdentifier().toString();
+        String customerId = new CustomerAccountIdentifier().toString();
+
+        // Mock the repository and mapper methods with correct parameters
+        when(vehicleRepository.findByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId)).thenReturn(null);
+
+        // Act
+        VehicleResponseModel result = vehicleService.getVehicleByVehicleId(customerId, vehicleId);
+
+        // Assert
+        assertNull(result);
+        verify(vehicleRepository).findByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId);
+        verify(vehicleResponseMapper, never()).entityToResponseModel(any());
+    }
+
+    @Test
+    void updateVehicle_shouldSucceed() {
+        // Arrange
+        Vehicle vehicle = new Vehicle();
+        String vehicleId = new VehicleIdentifier().toString();
+        String customerId = new CustomerAccountIdentifier().toString();
+        String transmissionTypeAsString = TransmissionType.AUTOMATIC.toString();
+        VehicleRequestModel requestModel = new VehicleRequestModel(
+                customerId,
+                "Honda",
+                "Civic",
+                "2023",
+                transmissionTypeAsString,
+                "100000"
+        );
+
+        when(vehicleRepository.findByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId)).thenReturn(vehicle);
+
+        // Act
+        vehicleService.updateVehicleByVehicleId(requestModel, customerId, vehicleId);
+
+        // Assert
+        verify(vehicleRepository).findByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId);
+        verify(vehicleRepository).save(vehicle);
+    }
+
+    @Test
+    void updateVehicle_shouldReturnNull_whenVehicleNotFound() {
+        // Arrange
+        String vehicleId = new VehicleIdentifier().toString();
+        String customerId = new CustomerAccountIdentifier().toString();
+        String transmissionTypeAsString = TransmissionType.AUTOMATIC.toString();
+        VehicleRequestModel requestModel = new VehicleRequestModel(
+                customerId,
+                "Honda",
+                "Civic",
+                "2023",
+                transmissionTypeAsString,
+                "100000"
+        );
+
+        when(vehicleRepository.findByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId)).thenReturn(null);
+
+        // Act
+        VehicleResponseModel result = vehicleService.updateVehicleByVehicleId(requestModel, customerId, vehicleId);
+
+        // Assert
+        assertNull(result);
+        verify(vehicleRepository).findByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId);
+        verify(vehicleRepository, never()).save(any());
+    }
 
 
 }

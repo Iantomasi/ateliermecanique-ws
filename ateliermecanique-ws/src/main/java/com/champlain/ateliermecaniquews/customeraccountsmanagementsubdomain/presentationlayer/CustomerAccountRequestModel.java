@@ -5,9 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 
+
+//@AllArgsConstructor (access = AccessLevel.PRIVATE)
+
 @Value
 @Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class CustomerAccountRequestModel {
 
     private String firstName;
