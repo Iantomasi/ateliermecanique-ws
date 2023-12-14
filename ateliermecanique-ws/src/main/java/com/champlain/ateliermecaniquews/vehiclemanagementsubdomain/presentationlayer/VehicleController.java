@@ -36,4 +36,13 @@ public class VehicleController {
         return ResponseEntity.ok(vehicle);
     }
 
+    @PutMapping("/customers/{customerId}/vehicles/{vehicleId}")
+    public ResponseEntity<VehicleResponseModel> updateVehicleByVehicleId(@RequestBody VehicleRequestModel vehicleRequestModel, @PathVariable String customerId, @PathVariable String vehicleId) {
+        VehicleResponseModel vehicle = vehicleService.updateVehicleByVehicleId(vehicleRequestModel, customerId, vehicleId);
+        if (vehicle == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(vehicle);
+    }
+
 }

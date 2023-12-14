@@ -16,4 +16,5 @@ public class VehicleIdentifier {
     public String getVehicleId() {
         return vehicleId;
     }
+
 }

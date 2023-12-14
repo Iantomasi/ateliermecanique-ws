@@ -9,6 +9,7 @@ const CustomerVehicleBlock = ({ vehicle, customerId }) => {
           {vehicle.vehicleId}
         </Link>
       </td>
+      <td>{vehicle.customerId}</td>
       <td>{vehicle.make}</td>
       <td>{vehicle.model}</td>
       <td>{vehicle.year}</td>

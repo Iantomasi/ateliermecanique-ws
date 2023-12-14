@@ -18,5 +18,4 @@ public class CustomerAccountIdentifier {
         return customerId;
     }
 
-    //test
 }
