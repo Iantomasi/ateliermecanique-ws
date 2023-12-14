@@ -1,5 +1,6 @@
 package com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.presentationlayer;
 
+import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.TransmissionType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,6 +15,6 @@ public class VehicleRequestModel {
     private String make;
     private String model;
     private String year;
-    private String transmissionType;
+    private TransmissionType transmissionType;
     private String mileage;
 }

@@ -27,4 +27,13 @@ public class VehicleController {
         return ResponseEntity.ok(vehicles);
     }
 
+    @PostMapping(value = "/customers/{customerId}/vehicles", consumes = "application/json")
+    public ResponseEntity<VehicleResponseModel> addVehicleToCustomer(@PathVariable String customerId, @RequestBody VehicleRequestModel vehicleRequestModel) {
+        VehicleResponseModel vehicle = vehicleService.addVehicleToCustomer(customerId, vehicleRequestModel);
+        if (vehicle == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(vehicle);
+    }
+
 }
