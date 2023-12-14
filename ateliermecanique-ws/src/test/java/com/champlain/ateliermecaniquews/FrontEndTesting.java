@@ -129,5 +129,39 @@ public class FrontEndTesting {
     
         $("p").shouldHave(text("CUSTOMER ACCOUNTS"));
     }
+    @Test
+    public void addVehicleToCustomer(){
+        open("http://localhost:3000/");
+        $("a[href='/login']").click();
+        sleep(1000);
+        $("button[value='Login']").click();
+        sleep(1000);
+        $("div[class='HomeOption']").click();
+        sleep(1000);
+        String customerId = "lmno8p45-3q6r-8791-2abc-96325t5ar159";
+        SelenideElement customerLink = $$("td").findBy(text(customerId));
+        customerLink.shouldBe(visible).click();
+        $("p").shouldHave(text("CUSTOMER ACCOUNT DETAILS"));
+
+        SelenideElement vehiclesLink = $$("a[class*='sidebar-link']").findBy(text("Vehicle List"));
+        vehiclesLink.shouldBe(visible).click();
+        $("p").shouldHave(text("VEHICLE LIST"));
+
+        $("button.add-button").click();
+        sleep(1000);
+
+        $("form.vehicle-details-form").shouldBe(visible);
+
+        $("input[name='make']").setValue("Chevrolet");
+        $("input[name='model']").setValue("Cruze");
+        $("input[name='year']").setValue("2016");
+        $("select[name='transmissionType']").selectOption("Manual");
+        $("input[name='mileage']").setValue("50000");
+
+        $("button.save-button").click();
+        sleep(1000);
+
+    }
+
 }
 
