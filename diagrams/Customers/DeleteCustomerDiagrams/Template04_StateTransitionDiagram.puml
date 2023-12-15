@@ -1,24 +1,31 @@
 @startuml
 [*] --> Start: Service called
 
-
-Start --> FetchData: updateCustomerById(customerId, customerData)
+Start --> FetchData: deleteCustomerById(customerId)
 FetchData --> DataRetrieved: Fetch customer by ID
 DataRetrieved --> DataIsNull: Customer data is null
 DataRetrieved --> DataIsNotEmpty: Customer data found
 
 DataIsNull --> EndNoDataFound: Return null or handle error
-DataIsNotEmpty --> UpdateData: Update customer data
+DataIsNotEmpty --> DeleteCustomerData: Delete customer data
 
-UpdateData --> DataUpdated: Data successfully updated
-DataUpdated --> MappingSuccess: Mapping updated data
-DataUpdated --> MappingFailure: Unable to map updated data
+DeleteCustomerData --> CustomerDataDeleted: Customer data successfully deleted
+CustomerDataDeleted --> FetchVehicles: Fetch vehicles related to customer
 
-MappingSuccess --> EndSuccess: Return updated customer data
+FetchVehicles --> DataRetrievedVehicles: Vehicles found
+FetchVehicles --> DataNoVehiclesFound: No vehicles found
+
+DataNoVehiclesFound --> EndSuccess: Return success or confirmation
+DataRetrievedVehicles --> DeleteVehicles: Delete related vehicles
+
+DeleteVehicles --> VehiclesDeleted: Vehicles successfully deleted
+VehiclesDeleted --> EndSuccess: Return success or confirmation
+VehiclesDeleted --> MappingFailure: Unable to delete vehicles
+
 MappingFailure --> EndMappingFailure: Log warning & Return null or handle error
 
 EndNoDataFound --> [*]: Handle null or error case
-EndSuccess --> [*]: Return updated customer data
+EndSuccess --> [*]: Return success or confirmation
 EndMappingFailure --> [*]: Log warning & Return null or handle error
 
 @enduml
