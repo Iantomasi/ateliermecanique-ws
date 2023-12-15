@@ -1,11 +1,7 @@
 package com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.businesslayer;
-
-<<<<<<< HEAD
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountIdentifier;
-=======
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccount;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountRepository;
->>>>>>> 0bbc5e0 (Testing done)
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.TransmissionType;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.Vehicle;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.VehicleIdentifier;
@@ -261,7 +257,7 @@ class VehicleServiceImplTest {
                 "Honda",
                 "Civic",
                 "2023",
-                transmissionTypeAsString,
+                TransmissionType.MANUAL,
                 "100000"
         );
 
@@ -286,7 +282,7 @@ class VehicleServiceImplTest {
                 "Honda",
                 "Civic",
                 "2023",
-                transmissionTypeAsString,
+                TransmissionType.AUTOMATIC,
                 "100000"
         );
 

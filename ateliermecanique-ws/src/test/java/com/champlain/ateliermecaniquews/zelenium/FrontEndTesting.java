@@ -188,8 +188,6 @@ public class FrontEndTesting {
 
         $("p").shouldHave(text("CUSTOMER ACCOUNTS"));
     }
-<<<<<<< HEAD:ateliermecanique-ws/src/test/java/com/champlain/ateliermecaniquews/zelenium/FrontEndTesting.java
-=======
     @Test
     public void addVehicleToCustomer(){
         open("http://localhost:3000/");
@@ -223,7 +221,6 @@ public class FrontEndTesting {
         sleep(1000);
 
     }
->>>>>>> 0bbc5e0 (Testing done):ateliermecanique-ws/src/test/java/com/champlain/ateliermecaniquews/FrontEndTesting.java
 
 }
 

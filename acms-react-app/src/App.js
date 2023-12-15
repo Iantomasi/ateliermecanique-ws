@@ -51,7 +51,7 @@ const router = createBrowserRouter([
         path: "/admin/customers/:customerId/vehicles/newVehicle",
         element: <AddNewVehicle/>,
       }
-  }
+
   ]
   }
 ])

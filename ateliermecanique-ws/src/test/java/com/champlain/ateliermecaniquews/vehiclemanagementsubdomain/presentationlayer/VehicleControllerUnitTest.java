@@ -65,7 +65,6 @@ class VehicleControllerUnitTest {
                 .andExpect(status().isNotFound());
     }
 
-<<<<<<< HEAD
 
     @Test
     void getVehicleById_validId_shouldReturnOk() throws Exception {
@@ -96,7 +95,7 @@ class VehicleControllerUnitTest {
     void updateVehicle_validData_shouldReturnOk() throws Exception {
         String vehicleId = "validVehicleId";
         String customerId = "someCustomerId";
-        VehicleRequestModel vehicleRequestModel = new VehicleRequestModel( customerId, "Ford", "Fiesta", "2021", "AUTOMATIC", "1233211234");
+        VehicleRequestModel vehicleRequestModel = new VehicleRequestModel( customerId, "Ford", "Fiesta", "2021", TransmissionType.AUTOMATIC, "1233211234");
         VehicleResponseModel updatedVehicle = new VehicleResponseModel(vehicleId, customerId, "Ford", "Fiesta", "2021", TransmissionType.AUTOMATIC, "1233211234");
 
         when(vehicleService.updateVehicleByVehicleId(vehicleRequestModel, customerId, vehicleId)).thenReturn(updatedVehicle);
@@ -113,7 +112,7 @@ class VehicleControllerUnitTest {
     void updateVehicle_invalidData_shouldReturnNotFound() throws Exception {
         String vehicleId = "invalidVehicleId";
         String customerId = "someCustomerId";
-        VehicleRequestModel invalidVehicleRequestModel = new VehicleRequestModel(customerId, "UnknownMake", "UnknownModel", "0000", "UNKNOWN", "0000000000");
+        VehicleRequestModel invalidVehicleRequestModel = new VehicleRequestModel(customerId, "UnknownMake", "UnknownModel", "0000", TransmissionType.MANUAL, "0000000000");
 
         when(vehicleService.updateVehicleByVehicleId(invalidVehicleRequestModel, customerId, vehicleId)).thenReturn(null);
 
@@ -123,7 +122,6 @@ class VehicleControllerUnitTest {
                 .andExpect(status().isNotFound());
     }
 
-=======
     @Test
     void addVehicleToCustomer_invalidCustomerId_shouldReturnNotFound() {
         // Arrange
@@ -158,5 +156,4 @@ class VehicleControllerUnitTest {
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(responseModel, responseEntity.getBody());
     }
->>>>>>> 0bbc5e0 (Testing done)
 }
