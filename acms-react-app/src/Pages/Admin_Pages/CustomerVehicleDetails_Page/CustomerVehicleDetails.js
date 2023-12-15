@@ -34,7 +34,7 @@ function CustomerVehicleDetails() {
       make: formData.get('make'),
       model: formData.get('model'),
       year: formData.get('year'),
-      transmission_type: formData.get('transmission_type'),
+      transmissionType: formData.get('transmissionType'),
       mileage: formData.get('mileage')
       
     };
@@ -93,10 +93,14 @@ function CustomerVehicleDetails() {
 
               <label>Year</label>
               <input className="input-field" name="year" value={vehicleDetails.year} onChange={handleInputChange} type="text" required />
-              
-              <label>Transmission</label>
-              <input className="input-field" name="transmission_type" value={vehicleDetails.transmission_type} onChange={handleInputChange} type="text" required />
 
+              <label>Transmission Type</label>
+              <select className="input-field" name="transmissionType"
+                      value={vehicleDetails.transmissionType} onChange={handleInputChange} required>
+                <option value="">Select Transmission Type</option>
+                <option value="AUTOMATIC">Automatic</option>
+                <option value="MANUAL">Manual</option>
+              </select>
               <label>Mileage</label>
               <input className="input-field" name="mileage" value={vehicleDetails.mileage} onChange={handleInputChange} type="text" required />
 

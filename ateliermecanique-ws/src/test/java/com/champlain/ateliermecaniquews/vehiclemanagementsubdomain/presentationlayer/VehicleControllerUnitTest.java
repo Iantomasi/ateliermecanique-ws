@@ -64,7 +64,7 @@ class VehicleControllerUnitTest {
         mockMvc.perform(get("/api/v1/customers/{customerId}/vehicles", customerId))
                 .andExpect(status().isNotFound());
     }
-    
+
 
     @Test
     void getVehicleById_validId_shouldReturnOk() throws Exception {
