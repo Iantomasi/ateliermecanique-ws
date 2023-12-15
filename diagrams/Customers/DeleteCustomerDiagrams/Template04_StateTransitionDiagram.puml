@@ -1,0 +1,24 @@
+@startuml
+[*] --> Start: Service called
+
+
+Start --> FetchData: updateCustomerById(customerId, customerData)
+FetchData --> DataRetrieved: Fetch customer by ID
+DataRetrieved --> DataIsNull: Customer data is null
+DataRetrieved --> DataIsNotEmpty: Customer data found
+
+DataIsNull --> EndNoDataFound: Return null or handle error
+DataIsNotEmpty --> UpdateData: Update customer data
+
+UpdateData --> DataUpdated: Data successfully updated
+DataUpdated --> MappingSuccess: Mapping updated data
+DataUpdated --> MappingFailure: Unable to map updated data
+
+MappingSuccess --> EndSuccess: Return updated customer data
+MappingFailure --> EndMappingFailure: Log warning & Return null or handle error
+
+EndNoDataFound --> [*]: Handle null or error case
+EndSuccess --> [*]: Return updated customer data
+EndMappingFailure --> [*]: Log warning & Return null or handle error
+
+@enduml

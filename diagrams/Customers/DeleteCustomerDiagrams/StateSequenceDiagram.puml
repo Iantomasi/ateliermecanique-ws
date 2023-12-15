@@ -1,0 +1,119 @@
+@startuml
+
+title Delete Customer by ID Sequence Diagram (Admin)
+
+actor Mechanic
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant HomePage as "<<View>>\nHomePage"
+participant CustomersPage as "<<View>>\nCustomersPage"
+participant CustomerDetailsPage as "<<View>>\nCustomerDetailsPage"
+
+participant CustomerAccountController as "<<Controller>>\nCustomerAccountController"
+participant CustomerAccountService as "<<Service>>\nCustomerAccountService"
+participant CustomerAccountRepository as "<<Repository>>\nCustomerAccountRepository"
+participant Database as "<<Database>>\nDatabase"
+participant CustomerAccountResponseMapper as "<<Mapper>>\nCustomerAccountResponseMapper"
+
+Mechanic -> ReactApplication: GET /
+activate ReactApplication
+
+ReactApplication -> HomePage: render()
+activate HomePage
+
+HomePage -> CustomersPage: render()
+activate CustomersPage
+
+CustomersPage -> CustomerAccountController: GET /api/v1/customers
+activate CustomerAccountController
+
+CustomerAccountController -> CustomerAccountService: getCustomerAccounts()
+activate CustomerAccountService
+
+CustomerAccountService -> CustomerAccountRepository: findAll()
+activate CustomerAccountRepository
+
+CustomerAccountRepository -> Database: SELECT * FROM customers
+activate Database
+
+Database --> CustomerAccountService: CustomerAccounts
+
+deactivate CustomerAccountRepository
+deactivate Database
+
+CustomerAccountService -> CustomerAccountResponseMapper: entityListToResponseModel(CustomerAccounts)
+activate CustomerAccountResponseMapper
+
+CustomerAccountResponseMapper --> CustomerAccountService: CustomerAccountsResponseModel
+
+deactivate CustomerAccountResponseMapper
+CustomerAccountService --> CustomerAccountController: CustomerAccountsResponseModel
+
+deactivate CustomerAccountService
+CustomerAccountController --> CustomersPage: CustomerAccountsResponseModel
+
+deactivate CustomerAccountController
+deactivate CustomersPage
+
+Mechanic -> CustomersPage: Clicks on a specific customer
+activate CustomersPage
+
+CustomersPage -> CustomerDetailsPage: render(customerId)
+activate CustomerDetailsPage
+
+CustomerDetailsPage -> CustomerAccountController: GET /api/v1/customers/{customerId}
+activate CustomerAccountController
+
+CustomerAccountController -> CustomerAccountService: getCustomerById(customerId)
+activate CustomerAccountService
+
+CustomerAccountService -> CustomerAccountRepository: findById(customerId)
+activate CustomerAccountRepository
+
+CustomerAccountRepository -> Database: SELECT * FROM customers WHERE id = customerId
+activate Database
+
+Database --> CustomerAccountRepository: CustomerData
+
+deactivate CustomerAccountRepository
+deactivate Database
+
+CustomerAccountService --> CustomerAccountController: CustomerData
+
+deactivate CustomerAccountService
+CustomerAccountController --> CustomerDetailsPage: CustomerData
+
+deactivate CustomerAccountController
+deactivate CustomerDetailsPage
+
+Mechanic -> CustomerDetailsPage: Deletes customer
+activate CustomerDetailsPage
+
+CustomerDetailsPage -> CustomerAccountController: DELETE /api/v1/customers/{customerId}
+activate CustomerAccountController
+
+CustomerAccountController -> CustomerAccountService: deleteCustomerById(customerId)
+activate CustomerAccountService
+
+CustomerAccountService -> CustomerAccountRepository: deleteById(customerId)
+activate CustomerAccountRepository
+
+CustomerAccountRepository -> Database: DELETE FROM customers WHERE id = customerId
+activate Database
+
+Database --> CustomerAccountRepository: DeletionConfirmation
+
+deactivate CustomerAccountRepository
+deactivate Database
+
+CustomerAccountService --> CustomerAccountController: DeletionConfirmation
+
+deactivate CustomerAccountService
+CustomerAccountController --> CustomerDetailsPage: DeletionConfirmation
+
+deactivate CustomerAccountController
+deactivate CustomerDetailsPage
+
+Mechanic <-- CustomerDetailsPage: Customer deleted successfully
+
+@enduml
