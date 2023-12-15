@@ -65,6 +65,7 @@ class VehicleControllerUnitTest {
                 .andExpect(status().isNotFound());
     }
 
+<<<<<<< HEAD
 
     @Test
     void getVehicleById_validId_shouldReturnOk() throws Exception {
@@ -122,6 +123,8 @@ class VehicleControllerUnitTest {
                 .andExpect(status().isNotFound());
     }
 
+=======
+>>>>>>> 0bbc5e0690ad55cfcdba4dc945376bac24b283cb
     @Test
     void addVehicleToCustomer_invalidCustomerId_shouldReturnNotFound() {
         // Arrange

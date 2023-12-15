@@ -8,9 +8,12 @@ import axios from "axios";
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
+<<<<<<< HEAD
 
 import CustomerVehicleBlock  from '../CustomerVehicleDetails_Page/CustomerVehicleBlock.js';
 
+=======
+>>>>>>> 0bbc5e0690ad55cfcdba4dc945376bac24b283cb
 
 function CustomerVehicles() {
     const { customerId } = useParams();
@@ -53,7 +56,12 @@ function CustomerVehicles() {
                         <button
                             className="add-button"
                             onClick={() => handleCustomerClick(customerId)}
+<<<<<<< HEAD
                         >Add+
+=======
+                        >
+                            Add+
+>>>>>>> 0bbc5e0690ad55cfcdba4dc945376bac24b283cb
                         </button>
 
                     </div>

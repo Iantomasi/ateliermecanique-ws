@@ -2,7 +2,10 @@ package com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.businesslaye
 
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccount;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountRepository;
+<<<<<<< HEAD
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.TransmissionType;
+=======
+>>>>>>> 0bbc5e0690ad55cfcdba4dc945376bac24b283cb
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.Vehicle;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.VehicleIdentifier;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.VehicleRepository;
@@ -11,6 +14,7 @@ import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datamapperlay
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.presentationlayer.VehicleRequestModel;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.presentationlayer.VehicleResponseModel;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -68,6 +72,7 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
+<<<<<<< HEAD
     public VehicleResponseModel getVehicleByVehicleId(String customerId, String vehicleId) {
 
         Vehicle foundVehicle = vehicleRepository.findByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId);
@@ -109,6 +114,8 @@ public class VehicleServiceImpl implements VehicleService {
 
 
     @Override
+=======
+>>>>>>> 0bbc5e0690ad55cfcdba4dc945376bac24b283cb
     public VehicleResponseModel addVehicleToCustomer(String customerId, VehicleRequestModel vehicleRequestModel) {
         CustomerAccount customerAccount = customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
 

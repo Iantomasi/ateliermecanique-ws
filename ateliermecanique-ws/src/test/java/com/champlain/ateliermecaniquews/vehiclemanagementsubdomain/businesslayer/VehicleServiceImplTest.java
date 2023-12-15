@@ -1,5 +1,9 @@
 package com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.businesslayer;
+<<<<<<< HEAD
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountIdentifier;
+=======
+
+>>>>>>> 0bbc5e0690ad55cfcdba4dc945376bac24b283cb
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccount;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountRepository;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.TransmissionType;

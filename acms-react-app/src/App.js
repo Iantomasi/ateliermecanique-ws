@@ -7,8 +7,13 @@ import Admin from './Pages/Admin_Pages/Admin';
 import Customers from './Pages/Admin_Pages/Customers_Page/Customers';
 import CustomerDetails from './Pages/Admin_Pages/CustomerDetails_Page/CustomerDetails';
 import CustomerVehicles from './Pages/Admin_Pages/CustomerVehicles_Page/CustomerVehicles';
+<<<<<<< HEAD
 import CustomerVehicleDetails from './Pages/Admin_Pages/CustomerVehicleDetails_Page/CustomerVehicleDetails';
 import AddNewVehicle from './Pages/Admin_Pages/AddNewVehicle_Page/AddNewVehicle';
+=======
+import AddNewVehicle from './Pages/Admin_Pages/AddNewVehicle_Page/AddNewVehicle';
+
+>>>>>>> 0bbc5e0690ad55cfcdba4dc945376bac24b283cb
 const router = createBrowserRouter([
   {
     children  :[
@@ -44,12 +49,17 @@ const router = createBrowserRouter([
         element: <CustomerVehicles />,
       },
       {
+<<<<<<< HEAD
         path: "/admin/customers/:customerId/vehicles/:vehicleId",
         element: <CustomerVehicleDetails />,
       },
       {
         path: "/admin/customers/:customerId/vehicles/newVehicle",
         element: <AddNewVehicle/>,
+=======
+        path: "/admin/customers/:customerId/vehicles/newVehicle",
+        element: <AddNewVehicle />,
+>>>>>>> 0bbc5e0690ad55cfcdba4dc945376bac24b283cb
       }
 
   ]
