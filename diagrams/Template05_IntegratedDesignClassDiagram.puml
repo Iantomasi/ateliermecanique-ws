@@ -1,0 +1,64 @@
+@startuml
+' Define class styles
+skinparam class {
+    BackgroundColor<<entity>> Wheat
+    BackgroundColor<<controller>> LightSkyBlue
+    BackgroundColor<<service>> LightGreen
+    BackgroundColor<<repository>> LightCoral
+    BackgroundColor<<mapper>> Khaki
+}
+
+' CustomerAccountController
+class "<<controller>>\nCustomerAccountController" as controller {
+    - customerAccountService : CustomerAccountService
+    + getAllCustomerAccounts() : List<CustomerAccountResponseModel>
+}
+
+' CustomerAccountService interface
+interface "CustomerAccountService" as service {
+    + getAllCustomerAccounts() : List<CustomerAccountResponseModel>
+}
+
+' CustomerAccountServiceImpl class
+class "<<service>>\nCustomerAccountServiceImpl" as serviceImpl {
+    - customerAccountRepository : CustomerAccountRepository
+    - customerAccountResponseMapper : CustomerAccountResponseMapper
+    - customerAccountRequestMapper : CustomerAccountRequestMapper
+    + getAllCustomerAccounts() : List<CustomerAccountResponseModel>
+}
+serviceImpl .up.|> service
+
+' CustomerAccountRepository interface (assuming existence)
+interface "<<repository>>\nCustomerAccountRepository" as repository {
+    + findAll() : List<CustomerAccount>
+}
+
+' CustomerAccountResponseMapper class (assuming existence)
+class "<<mapper>>\nCustomerAccountResponseMapper" as responseMapper {
+    + entityToResponseModelList(entities : List<CustomerAccount>) : List<CustomerAccountResponseModel>
+}
+
+' CustomerAccount class
+class "<<entity>>\nCustomerAccount" as customerAccount {
+    - id : Integer
+    - customerAccountIdentifier : CustomerAccountIdentifier
+    - customerFirstName : String
+    - customerLastName : String
+    - customerEmail : String
+    - customerPhoneNumber : String
+    - customerPassword : String
+}
+
+' CustomerAccountIdentifier class
+class "CustomerAccountIdentifier" as accountIdentifier {
+    - customerAccountId : String
+    + getCustomerAccountId() : String
+}
+
+' Relationships
+controller --> service : uses
+serviceImpl --> repository : uses
+serviceImpl --> responseMapper : uses
+customerAccount --> accountIdentifier : contains
+
+@enduml
