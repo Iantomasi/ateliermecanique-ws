@@ -27,7 +27,6 @@ public class VehicleController {
         return ResponseEntity.ok(vehicles);
     }
 
-<<<<<<< HEAD
     @GetMapping("/customers/{customerId}/vehicles/{vehicleId}")
     public ResponseEntity<VehicleResponseModel> getVehicleByVehicleId(@PathVariable String customerId, @PathVariable String vehicleId) {
         VehicleResponseModel vehicle = vehicleService.getVehicleByVehicleId(customerId, vehicleId);
@@ -45,10 +44,6 @@ public class VehicleController {
         }
         return ResponseEntity.ok(vehicle);
     }
-
-
-=======
->>>>>>> 0bbc5e0690ad55cfcdba4dc945376bac24b283cb
     @PostMapping(value = "/customers/{customerId}/vehicles", consumes = "application/json")
     public ResponseEntity<VehicleResponseModel> addVehicleToCustomer(@PathVariable String customerId, @RequestBody VehicleRequestModel vehicleRequestModel) {
         VehicleResponseModel vehicle = vehicleService.addVehicleToCustomer(customerId, vehicleRequestModel);
