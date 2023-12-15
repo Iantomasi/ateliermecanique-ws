@@ -235,6 +235,7 @@ public class FrontEndTesting {
         $("div[class='HomeOption']").click();
         Selenide.sleep(1000);
 
+        // ethan customer
         String customerId = "tuvw8x45-3y6z-8794-2abf-96328w6bu162";
         String vehicleIdToDelete = "0f8c5e36-9e94-4c6d-921d-29d7e2e923b5";
 
