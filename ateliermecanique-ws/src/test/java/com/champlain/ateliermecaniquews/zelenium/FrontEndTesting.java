@@ -158,7 +158,8 @@ public class FrontEndTesting {
         $("input[name='make']").setValue("NewMake");
         $("input[name='model']").setValue("NewModel");
         $("input[name='year']").setValue("2023");
-        $("input[name='transmission_type']").setValue("AUTOMATIC");
+
+        $("select[name='transmissionType']").selectOption("Manual");
         $("input[name='mileage']").setValue("1000");
 
         $("button[class='save-button']").click();
