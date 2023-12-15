@@ -12,8 +12,6 @@ public interface VehicleService {
     VehicleResponseModel getVehicleByVehicleId(String customerId, String vehicleId);
     VehicleResponseModel updateVehicleByVehicleId(VehicleRequestModel vehicleRequestModel, String customerId, String vehicleId);
 
-
-
-
+    VehicleResponseModel addVehicleToCustomer(String customerId, VehicleRequestModel vehicleRequestModel);
     void deleteAllVehiclesByCustomerId(String customerId);
 }

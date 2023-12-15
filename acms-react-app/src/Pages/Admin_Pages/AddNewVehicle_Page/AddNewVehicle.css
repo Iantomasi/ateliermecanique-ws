@@ -1,0 +1,48 @@
+.add-vehicle-content{
+    display: flex;
+}
+
+.add-vehicle-main{
+    flex-grow: 1;
+    padding: 20px;
+}
+.add-vehicle-mechanic-display{
+    width: 275px;
+    flex-shrink: 10;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    height: fit-content;
+}
+
+.add-vehicle-top-of-form p{
+    font-size: 2em;
+    margin-top: 10px;
+    margin-bottom: 0;
+    text-align: center;
+    font-weight: bold;
+}
+.add-vehicle-form-container{
+    background: #f4f4f4;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 0px;
+    position: relative;
+}
+
+
+.vehicle-details-form .input-field{
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.vehicle-details-form label{
+    color: #333;
+}
+
+
+

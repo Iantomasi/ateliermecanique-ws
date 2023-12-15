@@ -36,9 +36,17 @@ public class VehicleController {
         return ResponseEntity.ok(vehicle);
     }
 
-    @PutMapping("/customers/{customerId}/vehicles/{vehicleId}")
+    @PutMapping(value = "/customers/{customerId}/vehicles/{vehicleId}", consumes = "application/json")
     public ResponseEntity<VehicleResponseModel> updateVehicleByVehicleId(@RequestBody VehicleRequestModel vehicleRequestModel, @PathVariable String customerId, @PathVariable String vehicleId) {
         VehicleResponseModel vehicle = vehicleService.updateVehicleByVehicleId(vehicleRequestModel, customerId, vehicleId);
+        if (vehicle == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(vehicle);
+    }
+    @PostMapping(value = "/customers/{customerId}/vehicles", consumes = "application/json")
+    public ResponseEntity<VehicleResponseModel> addVehicleToCustomer(@PathVariable String customerId, @RequestBody VehicleRequestModel vehicleRequestModel) {
+        VehicleResponseModel vehicle = vehicleService.addVehicleToCustomer(customerId, vehicleRequestModel);
         if (vehicle == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

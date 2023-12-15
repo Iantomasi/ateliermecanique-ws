@@ -1,6 +1,7 @@
 package com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.businesslayer;
-
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountIdentifier;
+import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccount;
+import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountRepository;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.TransmissionType;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.Vehicle;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.VehicleIdentifier;
@@ -40,6 +41,9 @@ class VehicleServiceImplTest {
 
     @InjectMocks
     private VehicleServiceImpl vehicleService;
+
+    @Mock
+    private CustomerAccountRepository customerAccountRepository;
 
     @Test
     void whenNoVehiclesForCustomer_thenReturnEmptyList() {
@@ -98,6 +102,43 @@ class VehicleServiceImplTest {
         verify(vehicleRepository).findAllByCustomerId(customerId);
         verify(vehicleResponseMapper).entityToResponseModelList(vehicles);
     }
+
+    @Test
+    void whenCustomerNotFound_returnNull() {
+        String customerId = "nonExistingCustomerId";
+        when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId)).thenReturn(null);
+
+        VehicleRequestModel request = new VehicleRequestModel(customerId,"Toyota", "Corolla", "2021", TransmissionType.AUTOMATIC, "50000");
+
+        assertNull(vehicleService.addVehicleToCustomer(customerId, request));
+        verify(customerAccountRepository).findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
+        verify(vehicleRepository, never()).save(any(Vehicle.class));
+    }
+
+    @Test
+    void whenCustomerFound_addVehicleSuccessfully() {
+        String customerId = "existingCustomerId";
+        VehicleRequestModel request = new VehicleRequestModel(customerId, "Honda", "Civic", "2020", TransmissionType.MANUAL, "30000");
+
+        VehicleIdentifier vehicleIdentifier = new VehicleIdentifier(); // Initialize VehicleIdentifier
+        Vehicle newVehicle = new Vehicle();
+        newVehicle.setVehicleIdentifier(vehicleIdentifier); // Set the VehicleIdentifier to the newVehicle
+
+        VehicleResponseModel expectedResponse = new VehicleResponseModel(customerId, vehicleIdentifier.getVehicleId(), "Honda", "Civic", "2020", TransmissionType.MANUAL, "30000"); // Populate with expected data
+
+        when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId)).thenReturn(new CustomerAccount()); // Mock customer account found
+        when(vehicleRepository.save(any(Vehicle.class))).thenReturn(newVehicle);
+        when(vehicleResponseMapper.entityToResponseModel(any(Vehicle.class))).thenReturn(expectedResponse);
+
+        VehicleResponseModel actualResponse = vehicleService.addVehicleToCustomer(customerId, request);
+
+        assertNotNull(actualResponse);
+        assertEquals(expectedResponse, actualResponse); // Verify the response is as expected
+        verify(customerAccountRepository).findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
+        verify(vehicleRepository).save(any(Vehicle.class));
+        verify(vehicleResponseMapper).entityToResponseModel(any(Vehicle.class));
+    }
+
 
     @Test
     void whenMapperReturnsEmptyList_thenLogWarning() {
@@ -216,7 +257,7 @@ class VehicleServiceImplTest {
                 "Honda",
                 "Civic",
                 "2023",
-                transmissionTypeAsString,
+                TransmissionType.MANUAL,
                 "100000"
         );
 
@@ -241,7 +282,7 @@ class VehicleServiceImplTest {
                 "Honda",
                 "Civic",
                 "2023",
-                transmissionTypeAsString,
+                TransmissionType.AUTOMATIC,
                 "100000"
         );
 
