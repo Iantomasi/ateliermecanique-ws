@@ -50,13 +50,11 @@ public class VehicleServiceImpl implements VehicleService {
             log.warn("No vehicles found for customer ID: {} (vehicles list is empty)", customerId);
             return Collections.emptyList();
         } else {
-            // Log the number of vehicles found
             log.info("Number of vehicles found for customer ID {}: {}", customerId, vehicles.size());
         }
 
         List<VehicleResponseModel> vehicleResponseModels = vehicleResponseMapper.entityToResponseModelList(vehicles);
 
-        // Log the results of the mapping
         if (vehicleResponseModels == null) {
             log.warn("VehicleResponseModels is null after mapping");
         } else if (vehicleResponseModels.isEmpty()) {

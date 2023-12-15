@@ -1,0 +1,79 @@
+@startuml
+
+title Get All Vehicles by Customer ID Use Case Sequence Diagram
+
+actor Client as "Client"
+
+participant Dashboard as "<<View>> Dashboard"
+
+participant getAllVehiclesView as "<<View>> getAllVehiclesView"
+
+participant VehicleController as "<<Controller>> VehicleController"
+
+participant VehicleService as "<<Service>> VehicleService"
+
+participant vehicleResponseModels as "vehicleResponseModels: List<VehicleResponseModel>"
+
+participant VehicleRepository as "<<Repository>> VehicleRepository"
+
+participant vehicles as "vehicles: List<Vehicle>"
+
+participant Database as "<<Database>> Database"
+
+participant VehicleResponseMapper as "<<Mapper>> VehicleResponseMapper"
+
+Client -> Dashboard: viewVehicles(customerId)
+activate Dashboard
+Dashboard -> getAllVehiclesView: render()
+activate getAllVehiclesView
+getAllVehiclesView -> VehicleController: GET /customers/{customerId}/vehicles HTTP/1.1
+activate VehicleController
+VehicleController -> VehicleService: getAllVehiclesForCustomer(customerId)
+
+activate VehicleService
+
+VehicleService -> VehicleRepository: findAllByCustomerId(customerId)
+
+activate VehicleRepository
+
+VehicleRepository -> Database: SELECT * FROM vehicles WHERE customerId = {customerId}
+
+activate Database
+
+Database --> VehicleRepository: List<Vehicle>
+
+deactivate Database
+VehicleRepository --> vehicles : List<Vehicle>
+activate vehicles
+vehicles --> VehicleService: vehicles: List<Vehicle>
+
+destroy VehicleRepository
+
+VehicleService -> VehicleResponseMapper: entityToResponseModelList(vehicles)
+
+activate VehicleResponseMapper
+
+VehicleResponseMapper --> vehicleResponseModels: List<VehicleResponseModel>
+destroy vehicles
+
+activate vehicleResponseModels
+
+destroy VehicleResponseMapper
+
+vehicleResponseModels --> VehicleService : vehicleResponseModels: List<VehicleResponseModel>
+
+VehicleService --> VehicleController : vehicleResponseModels: List<VehicleResponseModel>
+
+destroy VehicleService
+
+VehicleController --> getAllVehiclesView : vehicleResponseModels: List<VehicleResponseModel>
+
+destroy vehicleResponseModels
+destroy VehicleController
+
+Client -> getAllVehiclesView: Back()
+
+getAllVehiclesView --> Dashboard: render()
+destroy getAllVehiclesView
+
+@enduml
