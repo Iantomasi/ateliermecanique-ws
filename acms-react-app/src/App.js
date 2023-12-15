@@ -7,7 +7,7 @@ import Admin from './Pages/Admin_Pages/Admin';
 import Customers from './Pages/Admin_Pages/Customers_Page/Customers';
 import CustomerDetails from './Pages/Admin_Pages/CustomerDetails_Page/CustomerDetails';
 import CustomerVehicles from './Pages/Admin_Pages/CustomerVehicles_Page/CustomerVehicles';
-
+import CustomerVehicleDetails from './Pages/Admin_Pages/CustomerVehicleDetails_Page/CustomerVehicleDetails';
 const router = createBrowserRouter([
   {
     children  :[
@@ -41,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: "/admin/customers/:customerId/vehicles",
         element: <CustomerVehicles />,
+      },
+      {
+        path: "/admin/customers/:customerId/vehicles/:vehicleId",
+        element: <CustomerVehicleDetails />,
       }
       
   ]

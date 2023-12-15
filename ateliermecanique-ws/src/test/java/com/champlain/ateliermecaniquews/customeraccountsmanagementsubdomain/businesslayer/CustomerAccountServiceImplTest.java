@@ -105,7 +105,6 @@ class CustomerAccountServiceImplTest {
 
         when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(nonExistentCustomerId)).thenReturn(null);
 
-        // Assuming the service method returns null or throws an exception for a non-existent customer
         CustomerAccountResponseModel result = customerAccountService.getCustomerAccountById(nonExistentCustomerId);
 
         assertNull(result);
@@ -113,10 +112,11 @@ class CustomerAccountServiceImplTest {
         verify(customerAccountRepository, times(1)).findCustomerAccountByCustomerAccountIdentifier_CustomerId(nonExistentCustomerId);
     }
 
+
     @Test
     void testUpdateCustomerById_WhenAccountExists_ThenReturnUpdatedResponseModel() {
-        // Mock data
-        String customerId = "b7024d89-1a5e-4517-3gba-05178u7ar260";
+        // Arrange
+        String customerId = "555";
         CustomerAccountRequestModel requestModel = CustomerAccountRequestModel.builder()
                 .firstName("JONNY")
                 .lastName("DoEEE")
@@ -130,13 +130,12 @@ class CustomerAccountServiceImplTest {
         existingAccount.setEmail("johndoe@example.com");
         existingAccount.setPhoneNumber("123456789");
 
-        // Mock behavior of repository and mapper
         when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId))
                 .thenReturn(existingAccount);
+        when(customerAccountRepository.save(any(CustomerAccount.class)))
+                .thenReturn(existingAccount); // Mock saving the account
 
-        when(customerAccountRepository.save(existingAccount)).thenReturn(existingAccount); // Return the same account for simplicity
-
-        CustomerAccountResponseModel updatedResponseMock = CustomerAccountResponseModel.builder()
+        CustomerAccountResponseModel expectedResponse = CustomerAccountResponseModel.builder()
                 .customerId(customerId)
                 .firstName("JONNY")
                 .lastName("DoEEE")
@@ -144,26 +143,28 @@ class CustomerAccountServiceImplTest {
                 .phoneNumber("6789998212")
                 .build();
 
-        when(customerAccountResponseMapper.entityToResponseModel(existingAccount)).thenReturn(updatedResponseMock);
+        when(customerAccountResponseMapper.entityToResponseModel(any(CustomerAccount.class)))
+                .thenReturn(expectedResponse);
 
-        // Invoke the method
-        CustomerAccountResponseModel updatedResponse = customerAccountService.updateCustomerById(customerId, requestModel);
+        // Act
+        CustomerAccountResponseModel actualResponse = customerAccountService.updateCustomerById(customerId, requestModel);
 
-        // Verify
-        assertNotNull(updatedResponse);
-        assertEquals("JONNY", updatedResponse.getFirstName());
-        assertEquals("DoEEE", updatedResponse.getLastName());
-        assertEquals("JONNYDoEEE@example.com", updatedResponse.getEmail());
-        assertEquals("6789998212", updatedResponse.getPhoneNumber());
+        // Assert
+        assertNotNull(actualResponse);
+        assertEquals(expectedResponse, actualResponse);
 
-        verify(customerAccountRepository).findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
-        verify(customerAccountRepository).save(existingAccount);
-        verify(customerAccountResponseMapper).entityToResponseModel(existingAccount);
+        // Verify the interactions
+        verify(customerAccountRepository).save(argThat(account ->
+                "JONNY".equals(account.getFirstName()) &&
+                        "DoEEE".equals(account.getLastName()) &&
+                        "JONNYDoEEE@example.com".equals(account.getEmail()) &&
+                        "6789998212".equals(account.getPhoneNumber())
+        ));
     }
+
 
     @Test
     void testUpdateCustomerById_WhenAccountNotExists_ThenReturnNull() {
-        // Mock data
         String nonExistingCustomerId = "nonExistingId";
         CustomerAccountRequestModel requestModel = CustomerAccountRequestModel.builder()
                 .firstName("JONNY")
@@ -174,10 +175,8 @@ class CustomerAccountServiceImplTest {
 
         when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(nonExistingCustomerId)).thenReturn(null);
 
-        // Invoke the method
         CustomerAccountResponseModel updatedResponse = customerAccountService.updateCustomerById(nonExistingCustomerId, requestModel);
 
-        // Verify
         assertNull(updatedResponse);
     }
 

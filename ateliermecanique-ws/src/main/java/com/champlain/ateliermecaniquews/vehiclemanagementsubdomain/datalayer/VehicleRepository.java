@@ -11,4 +11,6 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Integer> {
 
     List<Vehicle> findAllByCustomerId(String customerId);
 
+    Vehicle findByCustomerIdAndVehicleIdentifier_VehicleId(String customerId, String vehicleId);
+
 }
