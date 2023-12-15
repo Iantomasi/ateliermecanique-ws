@@ -120,13 +120,13 @@ class VehicleServiceImplTest {
         String customerId = "existingCustomerId";
         VehicleRequestModel request = new VehicleRequestModel(customerId, "Honda", "Civic", "2020", TransmissionType.MANUAL, "30000");
 
-        VehicleIdentifier vehicleIdentifier = new VehicleIdentifier(); // Initialize VehicleIdentifier
+        VehicleIdentifier vehicleIdentifier = new VehicleIdentifier();
         Vehicle newVehicle = new Vehicle();
-        newVehicle.setVehicleIdentifier(vehicleIdentifier); // Set the VehicleIdentifier to the newVehicle
+        newVehicle.setVehicleIdentifier(vehicleIdentifier);
 
         VehicleResponseModel expectedResponse = new VehicleResponseModel(customerId, vehicleIdentifier.getVehicleId(), "Honda", "Civic", "2020", TransmissionType.MANUAL, "30000"); // Populate with expected data
 
-        when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId)).thenReturn(new CustomerAccount()); // Mock customer account found
+        when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId)).thenReturn(new CustomerAccount());
         when(vehicleRepository.save(any(Vehicle.class))).thenReturn(newVehicle);
         when(vehicleResponseMapper.entityToResponseModel(any(Vehicle.class))).thenReturn(expectedResponse);
 
