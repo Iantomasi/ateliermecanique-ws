@@ -6,6 +6,7 @@ import Footer from '../../../Components/Footer/Footer.js';
 import MechanicDisplay from '../../../Components/User_Components/MechanicDisplay.js';
 import Sidebar from '../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
 import './CustomerVehicleDetails.css';
+import { useNavigate} from 'react-router-dom';
 
 function CustomerVehicleDetails() {
   const { customerId, vehicleId } = useParams();
@@ -16,6 +17,21 @@ function CustomerVehicleDetails() {
     transmission_type: '',
     mileage: ''
   });
+
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    axios.get(`http://localhost:8080/api/v1/customers/${customerId}/vehicles/${vehicleId}`)
+      .then(res => {
+        if (res.status === 200) {
+          setVehicleDetails(res.data);
+        }
+      })
+      .catch(error => {
+        console.error("Error fetching vehicle details", error);
+      });
+  }, [customerId, vehicleId]);
 
   function handleInputChange(event) {
     const { name, value } = event.target;
@@ -52,19 +68,29 @@ function CustomerVehicleDetails() {
       });
   }
 
+  function confirmDelete() {
+    setShowConfirmation(true);
+  }
 
+  function cancelDelete() {
+    setShowConfirmation(false);
+  }
 
-  useEffect(() => {
-    axios.get(`http://localhost:8080/api/v1/customers/${customerId}/vehicles/${vehicleId}`)
-      .then(res => {
-        if (res.status === 200) {
-          setVehicleDetails(res.data);
-        }
-      })
-      .catch(error => {
-        console.error("Error fetching vehicle details", error);
-      });
-  }, [customerId, vehicleId]);
+  function executeDelete() {
+    axios.delete(`http://localhost:8080/api/v1/customers/${customerId}/vehicles/${vehicleId}`)
+    .then(res => {
+      if(res.status === 204) {
+        alert("Customer Vehicle has been deleted!")
+        setShowConfirmation(false);
+        navigate(`/admin/customers/${customerId}/vehicles`)
+      }
+    })
+    .catch(err =>{
+      console.error("Error deleting customer:", err);
+      setShowConfirmation(false);
+    })
+  }
+
 
   if (!vehicleDetails) {
     return <div>Loading...</div>;
@@ -105,6 +131,17 @@ function CustomerVehicleDetails() {
               <input className="input-field" name="mileage" value={vehicleDetails.mileage} onChange={handleInputChange} type="text" required />
 
               <button className="save-button" type='submit'>Save</button>
+              
+              <button className="delete-button" onClick={confirmDelete} type="button">Delete</button>
+              {showConfirmation && (
+                  <div className="confirmation-overlay">
+                    <div className="confirmation-box">
+                      <p>Are you sure you want to delete {vehicleDetails.make}?</p>
+                      <button onClick={executeDelete} type='button'>Yes</button>
+                      <button onClick={cancelDelete} type='button'>No</button>
+                    </div>
+                  </div>
+                )}
             </form>
           </div>
           )}
