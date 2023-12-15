@@ -53,4 +53,10 @@ public class VehicleController {
         return ResponseEntity.ok(vehicle);
     }
 
+    @DeleteMapping(value = "/customers/{customerId}/vehicles/{vehicleId}")
+    public ResponseEntity<Void> deleteVehicleById(@PathVariable String customerId, @PathVariable String vehicleId){
+        vehicleService.deleteVehicleById(customerId, vehicleId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 }

@@ -20,11 +20,11 @@ public class FrontEndTesting {
     @BeforeEach()
     void setUp() {          // comment out the driver you don't use before testing
 
-       // WebDriverManager.chromedriver().setup();
-        //Configuration.browser = "chrome";
+       WebDriverManager.chromedriver().setup();
+       Configuration.browser = "chrome";
 
-        WebDriverManager.firefoxdriver().setup();
-        Configuration.browser = "firefox";
+       // WebDriverManager.firefoxdriver().setup();
+        // Configuration.browser = "firefox";
     }
 
     @Test
@@ -222,6 +222,47 @@ public class FrontEndTesting {
         sleep(1000);
 
     }
+
+
+    @Test
+    public void deleteVehicleById() {
+        open("http://localhost:3000/");
+        $("a[href='/login']").click();
+        Selenide.sleep(1000);
+        $("button[value='Login']").click();
+        Selenide.sleep(1000);
+
+        $("div[class='HomeOption']").click();
+        Selenide.sleep(1000);
+
+        // ethan customer
+        String customerId = "tuvw8x45-3y6z-8794-2abf-96328w6bu162";
+        String vehicleIdToDelete = "0f8c5e36-9e94-4c6d-921d-29d7e2e923b5";
+
+        $$("td").findBy(text(customerId)).click();
+        Selenide.sleep(2000);
+
+        $$("a[class*='sidebar-link']").findBy(text("Vehicle List")).click();
+        Selenide.sleep(2000);
+
+
+        SelenideElement vehicleLink = $$("table tbody tr td a").findBy(href(contains(vehicleIdToDelete)));
+        if (vehicleLink.exists()) {
+            vehicleLink.click();
+        } else {
+            throw new NoSuchElementException("Vehicle link not found for ID: " + vehicleIdToDelete);
+        }
+
+        $(".delete-button").click();
+
+        $$(".confirmation-box button").findBy(text("Yes")).click();
+
+        sleep(1000);
+        switchTo().alert().accept();
+
+        $("p").shouldHave(text("VEHICLE LIST"));
+    }
+
 
 }
 

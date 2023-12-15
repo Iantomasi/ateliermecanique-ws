@@ -136,4 +136,16 @@ public class VehicleServiceImpl implements VehicleService {
         vehicles.forEach(vehicle -> { vehicleRepository.delete(vehicle);});
     }
 
+    @Override
+    public void deleteVehicleById(String customerId, String vehicleId) {
+        Vehicle foundVehicle = vehicleRepository.findByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId);
+
+        // Check if the vehicle is null
+        if (foundVehicle == null) {
+            log.warn("Customer vehicle not found");
+        }
+
+        vehicleRepository.delete(foundVehicle);
+    }
+
 }

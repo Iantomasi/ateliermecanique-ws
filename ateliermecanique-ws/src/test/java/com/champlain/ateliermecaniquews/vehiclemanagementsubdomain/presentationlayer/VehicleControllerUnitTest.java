@@ -156,4 +156,34 @@ class VehicleControllerUnitTest {
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(responseModel, responseEntity.getBody());
     }
+
+    @Test
+    void deleteVehicleById_shouldSucceed_whenVehicleFound() {
+        // Arrange
+        VehicleController vehicleController = new VehicleController(vehicleService);
+        String customerId = "existingCustomerId";
+        String vehicleId = "existingVehicleId";
+
+        doNothing().when(vehicleService).deleteVehicleById(customerId, vehicleId);
+
+        // Act
+        vehicleController.deleteVehicleById(customerId, vehicleId);
+
+        // Assert
+        verify(vehicleService).deleteVehicleById(customerId, vehicleId);
+    }
+
+    @Test
+    void deleteVehicleById_shouldFail_whenVehicleNotFound() {
+        // Arrange
+        VehicleController vehicleController = new VehicleController(vehicleService);
+        String customerId = "nonExistingCustomerId";
+        String vehicleId = "nonExistingVehicleId";
+
+        // Assuming your service returns null if vehicle is not found
+        doNothing().when(vehicleService).deleteVehicleById(customerId, vehicleId);
+
+
+    }
+
 }

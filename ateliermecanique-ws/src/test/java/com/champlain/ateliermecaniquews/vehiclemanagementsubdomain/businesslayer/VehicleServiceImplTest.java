@@ -297,5 +297,35 @@ class VehicleServiceImplTest {
         verify(vehicleRepository, never()).save(any());
     }
 
+    @Test
+    void deleteVehicleById_shouldSucceed_whenVehicleFound() {
+        // Arrange
+        String customerId = "existingCustomerId";
+        String vehicleId = "existingVehicleId";
+        Vehicle vehicle = new Vehicle(); // Create a dummy Vehicle instance
+
+        when(vehicleRepository.findByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId)).thenReturn(vehicle);
+
+        // Act
+        vehicleService.deleteVehicleById(customerId, vehicleId);
+
+        // Assert
+        verify(vehicleRepository).findByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId);
+        verify(vehicleRepository).delete(vehicle);
+    }
+
+
+    @Test
+    void deleteVehicleById_shouldFail_whenVehicleNotFound() {
+        // Arrange
+        String customerId = "nonExistingCustomerId";
+        String vehicleId = "nonExistingVehicleId";
+
+        when(vehicleRepository.findByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId)).thenReturn(null);
+
+
+    }
+
+
 
 }
