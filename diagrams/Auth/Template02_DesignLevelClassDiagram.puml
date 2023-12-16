@@ -1,0 +1,56 @@
+
+@startuml
+skinparam class {
+    BackgroundColor<<entity>> Wheat
+    BackgroundColor<<controller>> LightSkyBlue
+    BackgroundColor<<service>> LightGreen
+    BackgroundColor<<repository>> LightCoral
+    BackgroundColor<<mapper>> Khaki
+}
+
+' AuthController for handling authentication endpoints
+class "<<controller>>\nAuthController" as authController {
+    + login(username: String, password: String) : ResponseEntity<TokenResponse>
+    + logout(token: String) : ResponseEntity<String>
+}
+
+' TokenService for managing tokens and authentication
+class "<<service>>\nTokenService" as tokenService {
+    + generateToken(username: String, password: String) : String
+    + validateToken(token: String) : boolean
+    + invalidateToken(token: String) : void
+}
+
+' UserRepository interface for managing user data
+interface "<<repository>>\nUserRepository" as userRepository {
+    + findByUsername(username: String) : User
+    + save(user: User) : User
+    + deleteByUsername(username: String) : void
+}
+
+' User class representing user details
+class "<<entity>>\nUser" as user {
+    - id : Integer
+    - username : String
+    - password : String
+    - roles : List<Role>
+}
+
+' Role enum defining user roles
+enum "<<entity>>\nRole" as role {
+    ADMIN
+    CUSTOMER
+}
+
+' TokenResponse class for representing token information
+class "<<entity>>\nTokenResponse" as tokenResponse {
+    - token : String
+    - expiration : Date
+}
+
+' Relationships
+authController .up.|> tokenService : uses
+tokenService --> userRepository : uses
+userRepository --> user : retrieves/stores
+user .. role : has
+@enduml
