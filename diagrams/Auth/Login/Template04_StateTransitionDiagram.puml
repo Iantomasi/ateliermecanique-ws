@@ -1,0 +1,32 @@
+@startuml
+[*] --> Start: Service called
+
+
+Start --> CheckOAuthToken: Check if OAuth token is provided
+CheckOAuthToken --> TokenProvided: Token exists
+CheckOAuthToken --> NoToken: Token not provided or invalid
+
+TokenProvided --> FetchUserData: Fetch user data from OAuth provider
+FetchUserData --> UserDataFound: User data exists
+
+UserDataFound --> CheckUserExists: Check if user exists in the system
+CheckUserExists --> UserExists: User exists in the system
+CheckUserExists --> UserNotExists: User does not exist in the system
+
+UserExists --> FetchUserDataSystem: Retrieve user data from the system
+FetchUserDataSystem --> UserDataRetrieved: User data retrieved
+
+UserNotExists --> CreateUser: Create a new user in the system
+CreateUser --> UserCreated: New user successfully created
+
+UserDataRetrieved --> [*]: Proceed with user data
+UserCreated --> [*]: Proceed with new user data
+
+NoToken --> [*]: Handle no token or invalid token error
+UserNotExists --> [*]: Handle new user creation error
+UserExists --> [*]: Handle user retrieval error
+UserDataFound --> [*]: Handle data retrieval error
+CheckOAuthToken --> [*]: Handle token check failure
+
+@enduml
+

@@ -1,0 +1,48 @@
+@startuml
+
+actor User
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant HomePage as "<<View>>\nHomePage"
+participant OAuthService as "<<Service>>\nOAuthService"
+participant OAuthProvider as "<<External System>>\nOAuthProvider"
+participant BackendServer as "<<Backend>>\nBackendServer"
+participant LogoutPage as "<<View>>\nLogoutPage"
+
+User -> ReactApplication: Logged in user
+activate ReactApplication
+
+ReactApplication -> HomePage: render()
+activate HomePage
+
+User -> HomePage: Navigates to logout option
+HomePage -> LogoutPage: render()
+activate LogoutPage
+
+User -> LogoutPage: Initiates logout process
+LogoutPage -> OAuthService: initiateLogout()
+activate OAuthService
+
+OAuthService -> OAuthProvider: revokeOAuthToken()
+activate OAuthProvider
+
+OAuthProvider --> OAuthService: Token revoked
+deactivate OAuthProvider
+
+OAuthService -> BackendServer: logout()
+activate BackendServer
+
+BackendServer --> OAuthService: Logout confirmation
+deactivate BackendServer
+
+OAuthService --> LogoutPage: Logout successful
+deactivate OAuthService
+
+LogoutPage -> ReactApplication: Redirect to login page
+deactivate LogoutPage
+
+ReactApplication --> User: Login page rendered
+deactivate ReactApplication
+deactivate HomePage
+
+@enduml

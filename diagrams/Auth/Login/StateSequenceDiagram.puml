@@ -1,0 +1,65 @@
+@startuml
+
+title Login with OAuth Sequence Diagram
+
+actor User
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant LoginPage as "<<View>>\nLoginPage"
+participant OAuthService as "<<Service>>\nOAuthService"
+participant OAuthProvider as "<<External System>>\nOAuthProvider"
+participant BackendServer as "<<Backend>>\nBackendServer"
+participant HomePage as "<<View>>\nHomePage"
+
+User -> ReactApplication: Accesses application
+activate ReactApplication
+
+ReactApplication -> LoginPage: render()
+activate LoginPage
+
+User -> LoginPage: Chooses OAuth login
+LoginPage -> OAuthService: initiateOAuthLogin()
+activate OAuthService
+
+OAuthService -> OAuthProvider: initiateOAuthProcess()
+activate OAuthProvider
+
+OAuthProvider --> OAuthService: OAuth authentication page
+deactivate OAuthProvider
+
+OAuthService -> User: Redirect to OAuth provider's login page
+deactivate OAuthService
+
+User -> OAuthProvider: Enters credentials and authorizes login
+activate OAuthProvider
+
+OAuthProvider --> User: Successful OAuth authentication
+deactivate OAuthProvider
+
+User -> BackendServer: Send OAuth token
+activate BackendServer
+
+BackendServer -> OAuthService: validateOAuthToken()
+activate OAuthService
+
+OAuthService -> OAuthProvider: Validate token with provider
+activate OAuthProvider
+
+OAuthProvider --> OAuthService: Token validation successful
+deactivate OAuthProvider
+
+OAuthService --> BackendServer: Token validated
+deactivate OAuthService
+
+BackendServer --> User: Login successful
+User -> ReactApplication: Redirect to home page
+deactivate BackendServer
+
+ReactApplication -> HomePage: render()
+activate HomePage
+
+deactivate ReactApplication
+deactivate LoginPage
+deactivate HomePage
+
+@enduml
