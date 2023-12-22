@@ -1,0 +1,67 @@
+@startuml
+title GetAllCustomerVehiclesById Design-Level Sequence Diagram
+
+actor Mechanic
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant CustomerAccountDetailsPage as "<<View>>\nCustomerAccountDetailsPage"
+participant CustomerAccountVehiclesPage as "<<View>>\nCustomerAccountVehiclesPage"
+participant VehicleController as "<<Controller>>\nVehicleController"
+participant VehicleService as "<<Service>>\nVehicleService"
+participant VehicleServiceImpl as "<<Service>>\nVehicleServiceImpl"
+participant VehicleRepository as "<<Repository>>\nVehicleRepository"
+participant VehicleResponseMapper as "<<Mapper>>\nVehicleResponseMapper"
+participant Database as "<<Database>>\nDatabase"
+
+Mechanic -> ReactApplication: Navigate to Account Details
+activate ReactApplication
+
+ReactApplication -> CustomerAccountDetailsPage: Render()
+activate CustomerAccountDetailsPage
+
+CustomerAccountDetailsPage -> CustomerAccountVehiclesPage: Navigate to Vehicles Page
+activate CustomerAccountVehiclesPage
+
+CustomerAccountVehiclesPage -> VehicleController: GET /api/v1/customers/{customerId}/vehicles
+activate VehicleController
+
+VehicleController -> VehicleService: getAllVehiclesByCustomerId(customerId)
+activate VehicleService
+
+VehicleService -> VehicleServiceImpl: getAllVehiclesByCustomerId(customerId)
+activate VehicleServiceImpl
+
+VehicleServiceImpl -> VehicleRepository: findAllVehiclesByCustomerId(customerId)
+activate VehicleRepository
+
+VehicleRepository -> Database: SELECT * FROM vehicles WHERE customerId = customerId
+activate Database
+
+Database --> VehicleRepository: List<Vehicle>
+deactivate Database
+
+VehicleRepository --> VehicleServiceImpl: List<Vehicle>
+deactivate VehicleRepository
+
+VehicleServiceImpl -> VehicleResponseMapper: entityToResponseModelList(List<Vehicle>)
+activate VehicleResponseMapper
+
+VehicleResponseMapper --> VehicleServiceImpl: List<VehicleResponseModel>
+deactivate VehicleResponseMapper
+
+VehicleServiceImpl --> VehicleService: List<VehicleResponseModel>
+deactivate VehicleServiceImpl
+
+VehicleService --> VehicleController: List<VehicleResponseModel>
+deactivate VehicleService
+
+VehicleController --> CustomerAccountVehiclesPage: List<VehicleResponseModel>
+deactivate VehicleController
+
+CustomerAccountVehiclesPage --> ReactApplication: Display Vehicles
+deactivate CustomerAccountVehiclesPage
+
+ReactApplication --> Mechanic: View Vehicle Details
+deactivate ReactApplication
+
+@enduml

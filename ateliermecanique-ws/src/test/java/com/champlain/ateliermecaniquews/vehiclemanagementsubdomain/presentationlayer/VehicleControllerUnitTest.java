@@ -2,10 +2,7 @@ package com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.presentation
 
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.businesslayer.VehicleService;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.TransmissionType;
-import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.Vehicle;
-import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.presentationlayer.VehicleResponseModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -20,7 +17,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -39,14 +35,14 @@ class VehicleControllerUnitTest {
     private VehicleService vehicleService;
 
     @Test
-    void getAllVehiclesForCustomer_withVehicles_shouldReturnOk() throws Exception {
+    void getAllVehiclesByCustomerId_shouldSucceed() throws Exception {
         String customerId = "someCustomerId";
         List<VehicleResponseModel> vehicles = Arrays.asList(
                 new VehicleResponseModel("1", "someCustomerId", "Honda", "Civic", "2020", TransmissionType.MANUAL, "1234567890"),
                 new VehicleResponseModel("2", "someCustomerId", "Honda", "Civic", "2020", TransmissionType.MANUAL, "1234567890")
         );
 
-        when(vehicleService.getAllVehiclesForCustomer(customerId)).thenReturn(vehicles);
+        when(vehicleService.getAllVehiclesByCustomerId(customerId)).thenReturn(vehicles);
 
         mockMvc.perform(get("/api/v1/customers/{customerId}/vehicles", customerId))
                 .andExpect(status().isOk())
@@ -57,9 +53,9 @@ class VehicleControllerUnitTest {
     }
 
     @Test
-    void getAllVehiclesForCustomer_noVehicles_shouldReturnNotFound() throws Exception {
+    void getAllVehiclesByCustomerId_noVehicles_shouldReturnNotFound() throws Exception {
         String customerId = "someCustomerId";
-        when(vehicleService.getAllVehiclesForCustomer(customerId)).thenReturn(Collections.emptyList());
+        when(vehicleService.getAllVehiclesByCustomerId(customerId)).thenReturn(Collections.emptyList());
 
         mockMvc.perform(get("/api/v1/customers/{customerId}/vehicles", customerId))
                 .andExpect(status().isNotFound());
@@ -67,7 +63,7 @@ class VehicleControllerUnitTest {
 
 
     @Test
-    void getVehicleById_validId_shouldReturnOk() throws Exception {
+    void getVehicleByVehicleId_shouldSucceed() throws Exception {
         String vehicleId = "validVehicleId";
         String customerId = "someCustomerId";
         VehicleResponseModel vehicle = new VehicleResponseModel(vehicleId, customerId, "Toyota", "Camry", "2019", TransmissionType.AUTOMATIC, "9876543210");
@@ -81,7 +77,7 @@ class VehicleControllerUnitTest {
     }
 
     @Test
-    void getVehicleById_invalidId_shouldReturnNotFound() throws Exception {
+    void getVehicleByInvalidVehicleId_shouldReturnNotFound() throws Exception {
         String vehicleId = "invalidVehicleId";
         String customerId = "someCustomerId";
 
@@ -92,7 +88,43 @@ class VehicleControllerUnitTest {
     }
 
     @Test
-    void updateVehicle_validData_shouldReturnOk() throws Exception {
+    void addVehicleToCustomerAccount_shouldSucceed() {
+        // Arrange
+        VehicleService vehicleService = mock(VehicleService.class);
+        VehicleController vehicleController = new VehicleController(vehicleService);
+        String validCustomerId = "validCustomerId";
+        String mockVehicleId = "mockVehicleId";
+        VehicleRequestModel requestModel = new VehicleRequestModel(validCustomerId, "Tesla", "Model 3", "2021", TransmissionType.AUTOMATIC, "10000");
+        VehicleResponseModel responseModel = new VehicleResponseModel(mockVehicleId, validCustomerId, "Tesla", "Model 3", "2021", TransmissionType.AUTOMATIC, "10000");
+        when(vehicleService.addVehicleToCustomerAccount(validCustomerId, requestModel)).thenReturn(responseModel);
+
+        // Act
+        ResponseEntity<VehicleResponseModel> responseEntity = vehicleController.addVehicleToCustomerAccount(validCustomerId, requestModel);
+
+        // Assert
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(responseModel, responseEntity.getBody());
+    }
+
+    @Test
+    void addVehicleToInvalidCustomerAccount_shouldReturnNotFound() {
+        // Arrange
+        VehicleService vehicleService = mock(VehicleService.class);
+        VehicleController vehicleController = new VehicleController(vehicleService);
+        String invalidCustomerId = "invalidCustomerId";
+        VehicleRequestModel requestModel = new VehicleRequestModel(invalidCustomerId, "Tesla", "Model 3", "2021", TransmissionType.AUTOMATIC, "10000");
+        when(vehicleService.addVehicleToCustomerAccount(invalidCustomerId, requestModel)).thenReturn(null);
+
+        // Act
+        ResponseEntity<VehicleResponseModel> responseEntity = vehicleController.addVehicleToCustomerAccount(invalidCustomerId, requestModel);
+
+        // Assert
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+    }
+
+
+    @Test
+    void updateVehicleByVehicleId_shouldSucceed() throws Exception {
         String vehicleId = "validVehicleId";
         String customerId = "someCustomerId";
         VehicleRequestModel vehicleRequestModel = new VehicleRequestModel( customerId, "Ford", "Fiesta", "2021", TransmissionType.AUTOMATIC, "1233211234");
@@ -109,7 +141,7 @@ class VehicleControllerUnitTest {
     }
 
     @Test
-    void updateVehicle_invalidData_shouldReturnNotFound() throws Exception {
+    void updateVehicleByInvalidVehicleId_shouldReturnNotFound() throws Exception {
         String vehicleId = "invalidVehicleId";
         String customerId = "someCustomerId";
         VehicleRequestModel invalidVehicleRequestModel = new VehicleRequestModel(customerId, "UnknownMake", "UnknownModel", "0000", TransmissionType.MANUAL, "0000000000");
@@ -123,66 +155,30 @@ class VehicleControllerUnitTest {
     }
 
     @Test
-    void addVehicleToCustomer_invalidCustomerId_shouldReturnNotFound() {
-        // Arrange
-        VehicleService vehicleService = mock(VehicleService.class);
-        VehicleController vehicleController = new VehicleController(vehicleService);
-        String invalidCustomerId = "invalidCustomerId";
-        VehicleRequestModel requestModel = new VehicleRequestModel(invalidCustomerId, "Tesla", "Model 3", "2021", TransmissionType.AUTOMATIC, "10000");
-        when(vehicleService.addVehicleToCustomer(invalidCustomerId, requestModel)).thenReturn(null);
-
-        // Act
-        ResponseEntity<VehicleResponseModel> responseEntity = vehicleController.addVehicleToCustomer(invalidCustomerId, requestModel);
-
-        // Assert
-        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-    }
-
-    @Test
-    void addVehicleToCustomer_validCustomerId_shouldReturnVehicleResponseModel() {
-        // Arrange
-        VehicleService vehicleService = mock(VehicleService.class);
-        VehicleController vehicleController = new VehicleController(vehicleService);
-        String validCustomerId = "validCustomerId";
-        String mockVehicleId = "mockVehicleId";
-        VehicleRequestModel requestModel = new VehicleRequestModel(validCustomerId, "Tesla", "Model 3", "2021", TransmissionType.AUTOMATIC, "10000");
-        VehicleResponseModel responseModel = new VehicleResponseModel(mockVehicleId, validCustomerId, "Tesla", "Model 3", "2021", TransmissionType.AUTOMATIC, "10000");
-        when(vehicleService.addVehicleToCustomer(validCustomerId, requestModel)).thenReturn(responseModel);
-
-        // Act
-        ResponseEntity<VehicleResponseModel> responseEntity = vehicleController.addVehicleToCustomer(validCustomerId, requestModel);
-
-        // Assert
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(responseModel, responseEntity.getBody());
-    }
-
-    @Test
-    void deleteVehicleById_shouldSucceed_whenVehicleFound() {
+    void deleteVehicleByVehicleId_shouldSucceed() {
         // Arrange
         VehicleController vehicleController = new VehicleController(vehicleService);
         String customerId = "existingCustomerId";
         String vehicleId = "existingVehicleId";
 
-        doNothing().when(vehicleService).deleteVehicleById(customerId, vehicleId);
+        doNothing().when(vehicleService).deleteVehicleByVehicleId(customerId, vehicleId);
 
         // Act
-        vehicleController.deleteVehicleById(customerId, vehicleId);
+        vehicleController.deleteVehicleByVehicleId(customerId, vehicleId);
 
         // Assert
-        verify(vehicleService).deleteVehicleById(customerId, vehicleId);
+        verify(vehicleService).deleteVehicleByVehicleId(customerId, vehicleId);
     }
 
     @Test
-    void deleteVehicleById_shouldFail_whenVehicleNotFound() {
+    void deleteVehicleByInvalidVehicleId_shouldReturnNull() {
         // Arrange
         VehicleController vehicleController = new VehicleController(vehicleService);
         String customerId = "nonExistingCustomerId";
         String vehicleId = "nonExistingVehicleId";
 
         // Assuming your service returns null if vehicle is not found
-        doNothing().when(vehicleService).deleteVehicleById(customerId, vehicleId);
-
+        doNothing().when(vehicleService).deleteVehicleByVehicleId(customerId, vehicleId);
 
     }
 

@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface VehicleService {
 
-    List<VehicleResponseModel> getAllVehiclesForCustomer(String customerId);
+    List<VehicleResponseModel> getAllVehiclesByCustomerId(String customerId);
 
     VehicleResponseModel getVehicleByVehicleId(String customerId, String vehicleId);
     VehicleResponseModel updateVehicleByVehicleId(VehicleRequestModel vehicleRequestModel, String customerId, String vehicleId);
 
-    VehicleResponseModel addVehicleToCustomer(String customerId, VehicleRequestModel vehicleRequestModel);
+    VehicleResponseModel addVehicleToCustomerAccount(String customerId, VehicleRequestModel vehicleRequestModel);
     void deleteAllVehiclesByCustomerId(String customerId);
 
-    void deleteVehicleById(String customerId, String vehicleId);
+    void deleteVehicleByVehicleId(String customerId, String vehicleId);
 }

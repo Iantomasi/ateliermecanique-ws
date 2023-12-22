@@ -9,21 +9,14 @@ import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.businesslayer
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Collections;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class CustomerAccountServiceImplTest {
@@ -41,7 +34,7 @@ class CustomerAccountServiceImplTest {
 
 
     @Test
-    void getAllCustomerAccountsTest() {
+    void getAllCustomerAccounts_shouldSucceed() {
         CustomerAccount customerAccount = new CustomerAccount("Jane", "Doe", "jane@example.com", "1234567890", "testPassword");
 
         List<CustomerAccount> customerAccounts = Collections.singletonList(customerAccount);
@@ -70,7 +63,8 @@ class CustomerAccountServiceImplTest {
     }
 
     @Test
-    void getCustomerByCustomerIdTest() {
+    void getCustomerAccountByCustomerId_shouldSucceed() {
+        //Arrange
         String customerId = "1";
         CustomerAccount customerAccount = new CustomerAccount("Jane", "Doe", "jane@example.com", "1234567890", "testPassword");
 
@@ -86,8 +80,10 @@ class CustomerAccountServiceImplTest {
 
         when(customerAccountResponseMapper.entityToResponseModel(customerAccount)).thenReturn(responseModel);
 
-        CustomerAccountResponseModel result = customerAccountService.getCustomerAccountById(customerId);
+        //Act
+        CustomerAccountResponseModel result = customerAccountService.getCustomerAccountByCustomerId(customerId);
 
+        //Assert
         assertNotNull(result);
         assertEquals(customerId, result.getCustomerId());
         assertEquals("Jane", result.getFirstName());
@@ -100,12 +96,12 @@ class CustomerAccountServiceImplTest {
     }
 
     @Test
-    void getCustomerByNonExistentCustomerIdTest() {
+    void getCustomerAccountByInvalidCustomerId_shouldReturnNull() {
         String nonExistentCustomerId = "notARealId";
 
         when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(nonExistentCustomerId)).thenReturn(null);
 
-        CustomerAccountResponseModel result = customerAccountService.getCustomerAccountById(nonExistentCustomerId);
+        CustomerAccountResponseModel result = customerAccountService.getCustomerAccountByCustomerId(nonExistentCustomerId);
 
         assertNull(result);
 
@@ -114,7 +110,7 @@ class CustomerAccountServiceImplTest {
 
 
     @Test
-    void testUpdateCustomerById_WhenAccountExists_ThenReturnUpdatedResponseModel() {
+    void updateCustomerAccountByCustomerId_shouldSucceed() {
         // Arrange
         String customerId = "555";
         CustomerAccountRequestModel requestModel = CustomerAccountRequestModel.builder()
@@ -147,7 +143,7 @@ class CustomerAccountServiceImplTest {
                 .thenReturn(expectedResponse);
 
         // Act
-        CustomerAccountResponseModel actualResponse = customerAccountService.updateCustomerById(customerId, requestModel);
+        CustomerAccountResponseModel actualResponse = customerAccountService.updateCustomerAccountByCustomerId(customerId, requestModel);
 
         // Assert
         assertNotNull(actualResponse);
@@ -164,7 +160,7 @@ class CustomerAccountServiceImplTest {
 
 
     @Test
-    void testUpdateCustomerById_WhenAccountNotExists_ThenReturnNull() {
+    void updateCustomerAccountByInvalidCustomerId_shouldReturnNull() {
         String nonExistingCustomerId = "nonExistingId";
         CustomerAccountRequestModel requestModel = CustomerAccountRequestModel.builder()
                 .firstName("JONNY")
@@ -175,20 +171,20 @@ class CustomerAccountServiceImplTest {
 
         when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(nonExistingCustomerId)).thenReturn(null);
 
-        CustomerAccountResponseModel updatedResponse = customerAccountService.updateCustomerById(nonExistingCustomerId, requestModel);
+        CustomerAccountResponseModel updatedResponse = customerAccountService.updateCustomerAccountByCustomerId(nonExistingCustomerId, requestModel);
 
         assertNull(updatedResponse);
     }
 
     @Test
-    void deleteCustomerById_WhenAccountExists_ShouldDeleteAccountAndVehicles() {
+    void deleteCustomerAccountAndVehiclesByCustomerId_shouldSucceed() {
         // Arrange
         String customerId = "testCustomerId";
         CustomerAccount customerAccount = new CustomerAccount();
         when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId)).thenReturn(customerAccount);
 
         // Act
-        customerAccountService.deleteCustomerById(customerId);
+        customerAccountService.deleteCustomerAccountByCustomerId(customerId);
 
         // Assert
         verify(customerAccountRepository).findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
@@ -197,13 +193,13 @@ class CustomerAccountServiceImplTest {
     }
 
     @Test
-    void deleteCustomerById_WhenAccountNotExists_ShouldNotDelete() {
+    void deleteCustomerAccountAndVehiclesByInvalidCustomerId_shouldReturnNull() {
         // Arrange
         String customerId = "nonExistingCustomerId";
         when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId)).thenReturn(null);
 
         // Act
-        customerAccountService.deleteCustomerById(customerId);
+        customerAccountService.deleteCustomerAccountByCustomerId(customerId);
 
         // Assert
         verify(customerAccountRepository).findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);

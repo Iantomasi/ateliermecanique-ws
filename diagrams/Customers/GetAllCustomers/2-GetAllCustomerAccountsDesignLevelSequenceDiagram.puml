@@ -1,0 +1,63 @@
+@startuml
+title GetAllCustomerAccounts Design-Level Sequence Diagram (Admin)
+
+actor Mechanic
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant CustomerAccountsView as "<<View>>\nCustomerAccountsPage"
+participant CustomerAccountController as "<<Controller>>\nCustomerAccountController"
+participant CustomerAccountService as "<<Service>>\nCustomerAccountService"
+participant CustomerAccountServiceImpl as "<<Service>>\nCustomerAccountServiceImpl"
+participant CustomerAccountRepository as "<<Repository>>\nCustomerAccountRepository"
+participant CustomerAccountResponseMapper as "<<Mapper>>\nCustomerAccountResponseMapper"
+participant Database as "<<Database>>\nDatabase"
+
+Mechanic -> ReactApplication: Navigate to All Customers
+activate ReactApplication
+
+ReactApplication -> CustomerAccountsView: Render()
+activate CustomerAccountsView
+
+CustomerAccountsView -> CustomerAccountController: GET /api/v1/customers
+activate CustomerAccountController
+
+CustomerAccountController -> CustomerAccountService: getAllCustomerAccounts()
+activate CustomerAccountService
+
+CustomerAccountService -> CustomerAccountServiceImpl: getAllCustomerAccounts()
+activate CustomerAccountServiceImpl
+
+CustomerAccountServiceImpl -> CustomerAccountRepository: findAll()
+activate CustomerAccountRepository
+
+CustomerAccountRepository -> Database: SELECT * FROM customers
+activate Database
+
+Database --> CustomerAccountRepository: List<CustomerAccount>
+deactivate Database
+
+CustomerAccountRepository --> CustomerAccountServiceImpl: List<CustomerAccount>
+deactivate CustomerAccountRepository
+
+CustomerAccountServiceImpl -> CustomerAccountResponseMapper: entityToResponseModelList(List<CustomerAccount>)
+activate CustomerAccountResponseMapper
+
+CustomerAccountResponseMapper --> CustomerAccountServiceImpl: List<CustomerAccountResponseModel>
+deactivate CustomerAccountResponseMapper
+
+CustomerAccountServiceImpl --> CustomerAccountService: List<CustomerAccountResponseModel>
+deactivate CustomerAccountServiceImpl
+
+CustomerAccountService --> CustomerAccountController: List<CustomerAccountResponseModel>
+deactivate CustomerAccountService
+
+CustomerAccountController --> CustomerAccountsView: List<CustomerAccountResponseModel>
+deactivate CustomerAccountController
+
+CustomerAccountsView --> ReactApplication: Display Customer Accounts
+deactivate CustomerAccountsView
+
+ReactApplication --> Mechanic: View Customer Accounts
+deactivate ReactApplication
+
+@enduml

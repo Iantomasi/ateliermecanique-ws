@@ -1,0 +1,35 @@
+@startuml
+
+title GetCustomerAccountByCustomerId  System Sequence Diagram
+
+actor Mechanic
+
+participant CustomerAccountController as "<<Controller>>\nCustomerAccountController"
+participant CustomerAccountService as "<<Service>>\nCustomerAccountService"
+participant CustomerAccountRepository as "<<Repository>>\nCustomerAccountRepository"
+participant Database as "<<Database>>\nDatabase"
+
+Mechanic -> CustomerAccountController: GET /api/v1/customers/{customerId}
+activate CustomerAccountController
+
+CustomerAccountController -> CustomerAccountService: getCustomerAccountByCustomerId(customerId)
+activate CustomerAccountService
+
+CustomerAccountService -> CustomerAccountRepository: getCustomerAccountByCustomerId(customerId)
+activate CustomerAccountRepository
+
+CustomerAccountRepository -> Database: SELECT * FROM customers WHERE id = customerId
+activate Database
+
+Database --> CustomerAccountRepository: CustomerAccount
+deactivate Database
+
+CustomerAccountRepository --> CustomerAccountService: CustomerAccount
+deactivate CustomerAccountRepository
+
+CustomerAccountService --> CustomerAccountController: CustomerAccountResponseModel
+deactivate CustomerAccountService
+
+CustomerAccountController --> Mechanic: CustomerAccountResponseModel
+deactivate CustomerAccountController
+@enduml

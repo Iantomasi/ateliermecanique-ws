@@ -1,0 +1,23 @@
+@startuml
+title State Transition Diagram for AddAppointment
+
+[*] --> FormNotSubmitted
+FormNotSubmitted : Customer is filling out the appointment form
+
+FormNotSubmitted --> AppointmentDataValidating : Submit Form
+AppointmentDataValidating : System validates submitted data
+
+AppointmentDataValidating --> AppointmentDataInvalid : Data Invalid
+AppointmentDataInvalid --> FormNotSubmitted : Edit Form
+
+AppointmentDataValidating --> AppointmentDataValid : Data Valid
+AppointmentDataValid --> SavingToDatabase : Save Request
+SavingToDatabase : AppointmentRepository attempts to save appointment
+
+SavingToDatabase --> AppointmentSaved : Appointment Persisted
+SavingToDatabase --> AppointmentNotSaved : Appointment Not Persisted
+
+AppointmentSaved --> [*] : Appointment added successfully
+AppointmentNotSaved --> FormNotSubmitted : Return to Form with Error Message
+
+@enduml

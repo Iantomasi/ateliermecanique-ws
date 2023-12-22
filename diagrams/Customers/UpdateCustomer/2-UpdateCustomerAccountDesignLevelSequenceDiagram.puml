@@ -1,0 +1,62 @@
+@startuml
+title UpdateCustomerAccount Design-Level Sequence Diagram (Admin)
+
+actor Mechanic
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant CustomerDetailsPage as "<<View>>\nCustomerDetailsPage"
+participant CustomerAccountController as "<<Controller>>\nCustomerAccountController"
+participant CustomerAccountService as "<<Service>>\nCustomerAccountService"
+participant CustomerAccountServiceImpl as "<<Service>>\nCustomerAccountServiceImpl"
+participant CustomerAccountRepository as "<<Repository>>\nCustomerAccountRepository"
+participant CustomerDatabase as "<<Database>>\nCustomerDatabase"
+
+Mechanic -> ReactApplication: Navigate to Customer Details
+activate ReactApplication
+
+ReactApplication -> CustomerDetailsPage: Render Customer Details
+activate CustomerDetailsPage
+
+CustomerDetailsPage -> CustomerAccountController: PUT /api/v1/customers/{customerId}
+activate CustomerAccountController
+
+CustomerAccountController -> CustomerAccountService: updateCustomerAccountByCustomerId(customerId, customerAccountRequestModel)
+activate CustomerAccountService
+
+CustomerAccountService -> CustomerAccountServiceImpl: updateCustomerAccountByCustomerId(customerId, customerAccountRequestModel)
+activate CustomerAccountServiceImpl
+
+CustomerAccountServiceImpl -> CustomerAccountRepository: findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId)
+activate CustomerAccountRepository
+
+CustomerAccountRepository -> CustomerDatabase: SELECT * FROM customers WHERE id = customerId
+activate CustomerDatabase
+
+CustomerDatabase --> CustomerAccountRepository: CustomerAccount
+
+deactivate CustomerAccountRepository
+
+CustomerAccountServiceImpl -> CustomerAccountRepository: save(updatedCustomerAccount)
+activate CustomerAccountRepository
+
+CustomerAccountRepository -> CustomerDatabase: UPDATE customers SET ... WHERE id = customerId
+activate CustomerDatabase
+
+CustomerDatabase --> CustomerAccountRepository: UpdateConfirmation
+
+deactivate CustomerAccountRepository
+deactivate CustomerDatabase
+
+CustomerAccountServiceImpl --> CustomerAccountService: UpdatedCustomerAccountResponseModel
+deactivate CustomerAccountServiceImpl
+
+CustomerAccountService --> CustomerAccountController: UpdatedCustomerAccountResponseModel
+deactivate CustomerAccountService
+
+CustomerAccountController --> CustomerDetailsPage: UpdatedCustomerAccountResponseModel
+deactivate CustomerAccountController
+
+CustomerDetailsPage --> Mechanic: Customer updated successfully
+deactivate CustomerDetailsPage
+
+@enduml

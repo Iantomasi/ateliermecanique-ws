@@ -1,0 +1,63 @@
+@startuml
+title AddVehicleToCustomerAccount Design-Level Sequence Diagram
+
+actor Mechanic
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant CustomerVehicleAdditionPage as "<<View>>\nCustomerVehicleAdditionPage"
+participant VehicleController as "<<Controller>>\nVehicleController"
+participant VehicleService as "<<Service>>\nVehicleService"
+participant VehicleServiceImpl as "<<Service>>\nVehicleServiceImpl"
+participant VehicleRepository as "<<Repository>>\nVehicleRepository"
+participant VehicleResponseMapper as "<<Mapper>>\nVehicleResponseMapper"
+participant Database as "<<Database>>\nDatabase"
+
+Mechanic -> ReactApplication: Navigate to Add Vehicle Page
+activate ReactApplication
+
+ReactApplication -> CustomerVehicleAdditionPage: Render()
+activate CustomerVehicleAdditionPage
+
+CustomerVehicleAdditionPage -> VehicleController: POST /api/v1/customers/{customerId}/vehicles
+activate VehicleController
+
+VehicleController -> VehicleService: addVehicleToCustomerAccount(customerId, vehicleRequestModel)
+activate VehicleService
+
+VehicleService -> VehicleServiceImpl: addVehicleToCustomerAccount(customerId, vehicleRequestModel)
+activate VehicleServiceImpl
+
+VehicleServiceImpl -> VehicleRepository: save(newVehicle)
+activate VehicleRepository
+
+VehicleRepository -> Database: INSERT INTO vehicles ...
+activate Database
+
+Database --> VehicleRepository: Vehicle
+deactivate Database
+
+VehicleRepository --> VehicleServiceImpl: Vehicle
+deactivate VehicleRepository
+
+VehicleServiceImpl -> VehicleResponseMapper: entityToResponseModel(Vehicle)
+activate VehicleResponseMapper
+
+VehicleResponseMapper --> VehicleServiceImpl: VehicleResponseModel
+deactivate VehicleResponseMapper
+
+VehicleServiceImpl --> VehicleService: VehicleResponseModel
+deactivate VehicleServiceImpl
+
+VehicleService --> VehicleController: VehicleResponseModel
+deactivate VehicleService
+
+VehicleController --> CustomerVehicleAdditionPage: VehicleResponseModel
+deactivate VehicleController
+
+CustomerVehicleAdditionPage --> ReactApplication: Display Vehicle Addition Confirmation
+deactivate CustomerVehicleAdditionPage
+
+ReactApplication --> Mechanic: Confirm Vehicle Addition
+deactivate ReactApplication
+
+@enduml

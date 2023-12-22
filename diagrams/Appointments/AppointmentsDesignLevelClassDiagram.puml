@@ -1,0 +1,102 @@
+@startuml
+skinparam class {
+    BackgroundColor<<entity>> Wheat
+    BackgroundColor<<controller>> LightSkyBlue
+    BackgroundColor<<service>> LightGreen
+    BackgroundColor<<repository>> LightCoral
+    BackgroundColor<<mapper>> Khaki
+}
+
+' AppointmentController for managing appointment endpoints
+class "<<controller>>\nAppointmentController" as appointmentController {
+    + getAllAppointments() : List<AppointmentResponseModel>
+    + getAppointmentById(appointmentId: UUID) : AppointmentResponseModel
+    + addAppointment(appointmentRequestModel: AppointmentRequestModel) : AppointmentResponseModel
+    + updateAppointmentById(appointmentId: UUID, appointmentRequestModel: AppointmentRequestModel) : AppointmentResponseModel
+    + deleteAppointmentById(appointmentId: UUID) : void
+}
+
+' AppointmentService interface
+interface "<<service>>\nAppointmentService" as appointmentService {
+    + getAllAppointments() : List<AppointmentResponseModel>
+    + getAppointmentById(appointmentId: UUID) : AppointmentResponseModel
+    + addAppointment(appointmentRequestModel: AppointmentRequestModel) : AppointmentResponseModel
+    + updateAppointmentById(appointmentId: UUID, appointmentRequestModel: AppointmentRequestModel) : AppointmentResponseModel
+    + deleteAppointmentById(appointmentId: UUID) : void
+}
+
+' AppointmentServiceImpl class
+class "<<service>>\nAppointmentServiceImpl" as appointmentServiceImpl {
+    - appointmentRepository : AppointmentRepository
+    - vehicleService : VehicleService
+    - appointmentResponseMapper : AppointmentResponseMapper
+    - appointmentRequestMapper : AppointmentRequestMapper
+    + getAllAppointments() : List<AppointmentResponseModel>
+    + getAppointmentById(appointmentId: UUID) : AppointmentResponseModel
+    + addAppointment(appointmentRequestModel: AppointmentRequestModel) : AppointmentResponseModel
+    + updateAppointmentById(appointmentId: UUID, appointmentRequestModel: AppointmentRequestModel) : AppointmentResponseModel
+    + deleteAppointmentById(appointmentId: UUID) : void
+}
+
+' AppointmentRepository interface
+interface "<<repository>>\nAppointmentRepository" as appointmentRepository {
+    + findAll() : List<Appointment>
+    + findAppointmentByAppointmentId(appointmentId: UUID) : Appointment
+    + save(appointment: Appointment) : Appointment
+    + delete(appointment: Appointment) : void
+}
+
+' AppointmentResponseMapper class
+class "<<mapper>>\nAppointmentResponseMapper" as responseMapper {
+    + entityToResponseModel(entity: Appointment) : AppointmentResponseModel
+    + entityToResponseModelList(entities: List<Appointment>) : List<AppointmentResponseModel>
+}
+
+' AppointmentRequestMapper class
+class "<<mapper>>\nAppointmentRequestMapper" as requestMapper {
+    + requestModelToEntity(appointmentRequestModel: AppointmentRequestModel) : Appointment
+}
+
+' Appointment class
+class "<<entity>>\nAppointment" as appointment {
+    - id : UUID
+    - appointmentIdentifier : AppointmentIdentifier
+    - appointmentDate : DateTime
+    - vehicleIdentifier : VehicleIdentifier
+    - clientIdentifier : ClientIdentifier
+}
+
+' AppointmentIdentifier class
+class "<<entity>>\nAppointmentIdentifier" as appointmentIdentifier {
+    - appointmentId : UUID
+    + getAppointmentId() : UUID
+}
+
+' VehicleIdentifier class
+class "<<entity>>\nVehicleIdentifier" as vehicleIdentifier {
+    - identifierDetails : String
+}
+
+' ClientIdentifier class
+class "<<entity>>\nClientIdentifier" as clientIdentifier {
+    - identifierDetails : String
+}
+
+' EmailService for managing email-related functionalities
+class "<<service>>\nEmailService" as emailService {
+    + sendEmail(appointmentID: UUID) : void
+}
+
+' Relationships
+appointmentController .up.|> appointmentService : implements
+appointmentServiceImpl .up.|> appointmentService : implements
+appointmentServiceImpl --> appointmentRepository : uses
+appointmentServiceImpl --> responseMapper : uses
+appointmentServiceImpl --> requestMapper : uses
+appointmentServiceImpl --> emailService : uses
+appointment --> appointmentIdentifier : contains
+appointment --> vehicleIdentifier : has
+appointment --> clientIdentifier : has
+emailService --> appointmentRepository : uses
+
+@enduml

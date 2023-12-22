@@ -10,9 +10,8 @@ public interface CustomerAccountService {
 
     //Admin permissions
     List<CustomerAccountResponseModel> getAllCustomerAccounts();
-    CustomerAccountResponseModel getCustomerAccountById(String customerId);
-    CustomerAccountResponseModel updateCustomerById(String customerId, CustomerAccountRequestModel customerAccountRequestModel);
-    void deleteCustomerById(String customerId);
+    CustomerAccountResponseModel getCustomerAccountByCustomerId(String customerId);
+    CustomerAccountResponseModel updateCustomerAccountByCustomerId(String customerId, CustomerAccountRequestModel customerAccountRequestModel);
+    void deleteCustomerAccountByCustomerId(String customerId);
 
 }
-// mohit test

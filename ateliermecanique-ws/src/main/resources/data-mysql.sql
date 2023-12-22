@@ -50,3 +50,31 @@ VALUES ('0f8c5e36-9e94-4c6d-921d-29d7e2e923b5', 'tuvw8x45-3y6z-8794-2abf-96328w6
 -- Vehicle 3
 INSERT INTO vehicles (vehicle_id, customer_id, make, model, year, transmission_type, mileage)
 VALUES ('01aa1f26-9f9b-438e-8346-572c83c2f181', 'mnop8q45-3r6s-8792-2abd-96326u6bs160', 'Ford', 'Focus', '2011', 'AUTOMATIC', '15000');
+
+-- Vehicle 4
+INSERT INTO vehicles (vehicle_id, customer_id, make, model, year, transmission_type, mileage)
+VALUES ('02bb2c37-9c99-4c8d-8d52-1c2e3e4f5b76', 'b7024d89-1a5e-4517-3gba-05178u7ar260', 'Toyota', 'Camry', '2018', 'AUTOMATIC', '25000');
+
+-- Vehicle 5
+INSERT INTO vehicles (vehicle_id, customer_id, make, model, year, transmission_type, mileage)
+VALUES ('03cc3d48-0dd1-49d2-9ed3-2d3e4e5f6c87', 'eggh9i83-7j8k-4567-4tyu-98765z5ar741', 'Honda', 'Civic', '2017', 'MANUAL', '30000');
+
+-- Vehicle 6
+INSERT INTO vehicles (vehicle_id, customer_id, make, model, year, transmission_type, mileage)
+VALUES ('04dd4e59-1ee2-58f3-9fe4-3f4e5f6g7h98', 'eggh9i83-7j8k-4567-4tyu-98765z5ar741', 'Nissan', 'Altima', '2019', 'AUTOMATIC', '20000');
+
+-- Vehicle 7
+INSERT INTO vehicles (vehicle_id, customer_id, make, model, year, transmission_type, mileage)
+VALUES ('05ee5f6a-2ff3-67g4-agh5-4g5h6i7j8k99', 'aebc4d79-2b6f-4527-3zda-05432x5ar321', 'Ford', 'Escape', '2020', 'AUTOMATIC', '15000');
+
+-- Vehicle 8
+INSERT INTO vehicles (vehicle_id, customer_id, make, model, year, transmission_type, mileage)
+VALUES ('06ff6g7b-3gg4-78h5-bih6-5h6i7j8k9l00', 'cdff4g82-9e8h-7532-1qws-75321v5ar963', 'Hyundai', 'Elantra', '2015', 'AUTOMATIC', '40000');
+
+-- Vehicle 9
+INSERT INTO vehicles (vehicle_id, customer_id, make, model, year, transmission_type, mileage)
+VALUES ('07gg7h8c-4hh5-89i6-cji7-6i7j8k9l1m11', 'eggh9i83-7j8k-4567-4tyu-98765z5ar741', 'BMW', '3 Series', '2021', 'AUTOMATIC', '10000');
+
+-- Vehicle 10
+INSERT INTO vehicles (vehicle_id, customer_id, make, model, year, transmission_type, mileage)
+VALUES ('08hh8i9d-5ii6-9aj7-dkj8-7j8k9l2n22', 'vwxy8z45-3a6b-8795-2abh-96329x6bv163', 'Volkswagen', 'Jetta', '2019', 'MANUAL', '22000');

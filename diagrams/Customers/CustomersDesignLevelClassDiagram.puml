@@ -1,0 +1,79 @@
+@startuml
+' Define class styles
+skinparam class {
+    BackgroundColor<<entity>> Wheat
+    BackgroundColor<<controller>> LightSkyBlue
+    BackgroundColor<<service>> LightGreen
+    BackgroundColor<<repository>> LightCoral
+    BackgroundColor<<mapper>> Khaki
+}
+
+' CustomerAccountController
+class "<<controller>>\nCustomerAccountController" as controller {
+    - CustomerAccountService : customerAccountService
+    + getAllCustomerAccounts() : ResponseEntity<List<CustomerAccountResponseModel>>
+    + getCustomerAccountByCustomerId(String customerId) : ResponseEntity<CustomerAccountResponseModel>
+    + updateCustomerAccountByCustomerId(String customerId, CustomerAccountRequestModel customerAccountRequestModel) : ResponseEntity<CustomerAccountResponseModel>
+    + deleteCustomerAccountByCustomerId(String customerId) : ResponseEntity<Void>
+}
+
+' CustomerAccountService interface
+interface "<<service>>\nCustomerAccountService" as service {
+    + getAllCustomerAccounts() : List<CustomerAccountResponseModel>
+    + getCustomerAccountByCustomerId(String customerId) : CustomerAccountResponseModel
+    + updateCustomerAccountByCustomerId(String customerId, CustomerAccountRequestModel customerAccountRequestModel) : CustomerAccountResponseModel
+    + deleteCustomerAccountByCustomerId(String customerId) : void
+}
+
+' CustomerAccountServiceImpl class
+class "<<service>>\nCustomerAccountServiceImpl" as serviceImpl {
+    - customerAccountRepository : CustomerAccountRepository
+    - vehicleService : VehicleService
+    - customerAccountResponseMapper : CustomerAccountResponseMapper
+    - customerAccountRequestMapper : CustomerAccountRequestMapper
+    + getAllCustomerAccounts() : List<CustomerAccountResponseModel>
+    + getCustomerAccountByCustomerId(String customerId) : CustomerAccountResponseModel
+    + updateCustomerAccountByCustomerId(String customerId, CustomerAccountRequestModel customerAccountRequestModel) : CustomerAccountResponseModel
+    + deleteCustomerAccountByCustomerId(String customerId) : void
+}
+serviceImpl .up.|> service
+
+' CustomerAccountRepository interface
+interface "<<repository>>\nCustomerAccountRepository" as repository {
+    + findCustomerAccountByCustomerAccountIdentifier_CustomerId(String customerId) : CustomerAccount
+}
+
+' CustomerAccountResponseMapper class
+class "<<mapper>>\nCustomerAccountResponseMapper" as responseMapper {
+    + entityToResponseModelList(List<CustomerAccount> customerAccounts) : List<CustomerAccountResponseModel>
+    + entityToResponseModel(CustomerAccount customerAccount) : CustomerAccountResponseModel
+}
+
+' CustomerAccountRequestMapper class
+class "<<mapper>>\nCustomerAccountRequestMapper" as requestMapper {
+    + requestModelToEntity(CustomerAccountRequestModel customerAccountRequestModel) : CustomerAccount
+}
+
+' CustomerAccount class
+class "<<entity>>\nCustomerAccount" as customerAccount {
+    - id : String
+    - firstName : String
+    - lastName : String
+    - email : String
+    - phoneNumber : String
+}
+
+' CustomerAccountIdentifier class
+class "CustomerAccountIdentifier" as accountIdentifier {
+    - customerId : String
+    + getCustomerId() : String
+}
+
+' Relationships
+controller --> service : uses
+serviceImpl --> repository : uses
+serviceImpl --> responseMapper : uses
+serviceImpl --> requestMapper : uses
+customerAccount --> accountIdentifier : contains
+
+@enduml
