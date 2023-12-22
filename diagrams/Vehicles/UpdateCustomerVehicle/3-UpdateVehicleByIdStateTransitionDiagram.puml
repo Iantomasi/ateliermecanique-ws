@@ -1,0 +1,22 @@
+@startuml
+[*] --> Start: Service called
+
+Start --> FetchData: updateVehicleById(vehicleId, vehicleData)
+FetchData --> DataRetrieved: Fetch vehicle by ID
+DataRetrieved --> DataIsNull: Vehicle data is null
+DataRetrieved --> DataIsNotEmpty: Vehicle data found
+
+DataIsNull --> EndNoDataFound: Return null or handle error
+DataIsNotEmpty --> UpdateData: Update vehicle data
+
+UpdateData --> DataUpdated: Data successfully updated
+DataUpdated --> MappingSuccess: Mapping updated data
+DataUpdated --> MappingFailure: Unable to map updated data
+
+MappingSuccess --> EndSuccess: Return updated vehicle data
+MappingFailure --> EndMappingFailure: Log warning & Return null or handle error
+
+EndNoDataFound --> [*]: Handle null or error case
+EndSuccess --> [*]: Return updated vehicle data
+EndMappingFailure --> [*]: Log warning & Return null or handle error
+@enduml

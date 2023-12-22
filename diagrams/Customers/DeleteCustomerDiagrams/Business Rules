@@ -1,3 +1,0 @@
-Business Rules:
-
-- When deleting a customer , the vehicles associated with that customer also have to be deleted.

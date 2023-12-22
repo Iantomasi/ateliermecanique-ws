@@ -5,32 +5,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.businesslayer.CustomerAccountService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -48,7 +36,7 @@ class CustomerAccountControllerUnitTest {
 
 
     @Test
-    void getAllCustomerAccounts_withAccounts_shouldReturnOk() throws Exception {
+    void getAllCustomerAccounts_shouldSucceed() throws Exception {
         // Arrange
         List<CustomerAccountResponseModel> accounts = Arrays.asList(
                 CustomerAccountResponseModel.builder()
@@ -89,7 +77,7 @@ class CustomerAccountControllerUnitTest {
     }
 
     @Test
-    void getCustomerAccountById_validId_shouldSucceed() throws Exception {
+    void getCustomerAccountByCustomerId_shouldSucceed() throws Exception {
         // Arrange
         String validCustomerId = "1";
         CustomerAccountResponseModel responseModel = CustomerAccountResponseModel.builder()
@@ -100,7 +88,7 @@ class CustomerAccountControllerUnitTest {
                 .phoneNumber("1234567890")
                 .build();
 
-        when(customerAccountService.getCustomerAccountById(validCustomerId)).thenReturn(responseModel);
+        when(customerAccountService.getCustomerAccountByCustomerId(validCustomerId)).thenReturn(responseModel);
 
         // Act & Assert
         mockMvc.perform(get("/api/v1/customers/{customerId}", validCustomerId))
@@ -114,11 +102,11 @@ class CustomerAccountControllerUnitTest {
     }
 
     @Test
-    void getCustomerAccountById_invalidId_shouldThrowNotFoundException() throws Exception {
+    void getCustomerAccountByInvalidCustomerId_shouldReturnNotFound() throws Exception {
         // Arrange
         String invalidCustomerId = "notGoodBuddy";
 
-        when(customerAccountService.getCustomerAccountById(invalidCustomerId)).thenReturn(null);
+        when(customerAccountService.getCustomerAccountByCustomerId(invalidCustomerId)).thenReturn(null);
 
         // Act & Assert
         mockMvc.perform(get("/api/v1/customers/{customerId}", invalidCustomerId))
@@ -127,7 +115,7 @@ class CustomerAccountControllerUnitTest {
 
 
     @Test
-    void updateCustomerById_validId_shouldSucceed() {
+    void updateCustomerAccountByCustomerId_shouldSucceed() {
         // Arrange
         CustomerAccountService accountService = mock(CustomerAccountService.class);
         CustomerAccountController accountController = new CustomerAccountController(accountService);
@@ -145,10 +133,10 @@ class CustomerAccountControllerUnitTest {
                 .email("jane@example.com")
                 .phoneNumber("9876543210")
                 .build();
-        when(accountService.updateCustomerById(customerId, requestModel)).thenReturn(expectedResponse);
+        when(accountService.updateCustomerAccountByCustomerId(customerId, requestModel)).thenReturn(expectedResponse);
 
         // Act
-        ResponseEntity<CustomerAccountResponseModel> responseEntity = accountController.updateCustomerById(customerId, requestModel);
+        ResponseEntity<CustomerAccountResponseModel> responseEntity = accountController.updateCustomerAccountByCustomerId(customerId, requestModel);
 
         // Assert
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -156,7 +144,7 @@ class CustomerAccountControllerUnitTest {
     }
 
     @Test
-    void updateCustomerById_invalidId_shouldReturnNotFound() {
+    void updateCustomerAccountByInvalidCustomerId_shouldReturnNotFound() {
         // Arrange
         CustomerAccountService accountService = mock(CustomerAccountService.class);
         CustomerAccountController accountController = new CustomerAccountController(accountService);
@@ -167,10 +155,10 @@ class CustomerAccountControllerUnitTest {
                 .email("jane@example.com")
                 .phoneNumber("9876543210")
                 .build();
-        when(accountService.updateCustomerById(invalidId, requestModel)).thenReturn(null);
+        when(accountService.updateCustomerAccountByCustomerId(invalidId, requestModel)).thenReturn(null);
 
         // Act
-        ResponseEntity<CustomerAccountResponseModel> responseEntity = accountController.updateCustomerById(invalidId, requestModel);
+        ResponseEntity<CustomerAccountResponseModel> responseEntity = accountController.updateCustomerAccountByCustomerId(invalidId, requestModel);
 
         // Assert
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());

@@ -1,0 +1,56 @@
+@startuml
+title DeleteVehicleByVehicleId Design-Level Sequence Diagram
+
+actor Mechanic
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant CustomerVehicleDetailsPage as "<<View>>\nCustomerVehicleDetailsPage"
+participant VehicleController as "<<Controller>>\nVehicleController"
+participant VehicleService as "<<Service>>\nVehicleService"
+participant VehicleServiceImpl as "<<Service>>\nVehicleServiceImpl"
+participant VehicleRepository as "<<Repository>>\nVehicleRepository"
+participant Database as "<<Database>>\nDatabase"
+
+Mechanic -> ReactApplication: Navigate to Vehicle Details Page
+activate ReactApplication
+
+ReactApplication -> CustomerVehicleDetailsPage: Render()
+activate CustomerVehicleDetailsPage
+
+CustomerVehicleDetailsPage -> VehicleController: DELETE /api/v1/customers/{customerId}/vehicles/{vehicleId}
+activate VehicleController
+
+VehicleController -> VehicleService: deleteVehicleByVehicleId(customerId, vehicleId)
+activate VehicleService
+
+VehicleService -> VehicleServiceImpl: deleteVehicleByVehicleId(customerId, vehicleId)
+activate VehicleServiceImpl
+
+VehicleServiceImpl -> VehicleRepository: deleteVehicleByVehicleId(customerId, vehicleId)
+activate VehicleRepository
+
+VehicleRepository -> Database: DELETE FROM vehicles WHERE customerId = customerId AND vehicleId = vehicleId
+activate Database
+
+Database --> VehicleRepository: DeletionConfirmation
+deactivate Database
+
+VehicleRepository --> VehicleServiceImpl: DeletionConfirmation
+deactivate VehicleRepository
+
+VehicleServiceImpl --> VehicleService: DeletionConfirmation
+deactivate VehicleServiceImpl
+
+VehicleService --> VehicleController: DeletionConfirmation
+deactivate VehicleService
+
+VehicleController --> CustomerVehicleDetailsPage: DeletionSuccessful
+deactivate VehicleController
+
+CustomerVehicleDetailsPage --> ReactApplication: Display Deletion Confirmation
+deactivate CustomerVehicleDetailsPage
+
+ReactApplication --> Mechanic: Confirm Deletion
+deactivate ReactApplication
+
+@enduml

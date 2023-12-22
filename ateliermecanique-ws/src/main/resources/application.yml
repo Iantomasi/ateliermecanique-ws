@@ -10,9 +10,8 @@ logging:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
-#for h2
-
-#for h2
+---
+#H2 Profile
 spring:
   config:
     activate:
@@ -23,7 +22,7 @@ spring:
       enabled: true
 
   datasource:
-    url: jdbc:h2:mem:employee-db;DB_CLOSE_DELAY=-1
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
     driver-class-name: org.h2.Driver
     username: sa
     password:
@@ -40,8 +39,7 @@ spring:
       mode: always
 
 ---
-# for docker
-
+#DOCKER Profile
 spring:
   datasource:
     url: jdbc:mysql://mysql1/ateliermecanique-db

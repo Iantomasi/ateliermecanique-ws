@@ -26,8 +26,8 @@ public class CustomerAccountController {
     }
 
     @GetMapping("/{customerId}")
-    public ResponseEntity<CustomerAccountResponseModel> getCustomerAccountById(@PathVariable String customerId) {
-        CustomerAccountResponseModel response = customerAccountService.getCustomerAccountById(customerId);
+    public ResponseEntity<CustomerAccountResponseModel> getCustomerAccountByCustomerId(@PathVariable String customerId) {
+        CustomerAccountResponseModel response = customerAccountService.getCustomerAccountByCustomerId(customerId);
         if (response == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -35,8 +35,8 @@ public class CustomerAccountController {
     }
 
     @PutMapping("/{customerId}")
-    public ResponseEntity<CustomerAccountResponseModel> updateCustomerById(@PathVariable String customerId,@RequestBody CustomerAccountRequestModel accountRequestModel){
-        CustomerAccountResponseModel response = customerAccountService.updateCustomerById(customerId,accountRequestModel);
+    public ResponseEntity<CustomerAccountResponseModel> updateCustomerAccountByCustomerId(@PathVariable String customerId, @RequestBody CustomerAccountRequestModel accountRequestModel){
+        CustomerAccountResponseModel response = customerAccountService.updateCustomerAccountByCustomerId(customerId,accountRequestModel);
         if (response == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -44,8 +44,8 @@ public class CustomerAccountController {
     }
 
     @DeleteMapping("/{customerId}")
-    public ResponseEntity<Void> deleteCustomerById(@PathVariable String customerId){
-        customerAccountService.deleteCustomerById(customerId);
+    public ResponseEntity<Void> deleteCustomerAccountByCustomerId(@PathVariable String customerId){
+        customerAccountService.deleteCustomerAccountByCustomerId(customerId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

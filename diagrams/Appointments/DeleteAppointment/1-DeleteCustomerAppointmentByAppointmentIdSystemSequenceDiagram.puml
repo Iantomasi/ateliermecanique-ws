@@ -1,0 +1,34 @@
+@startuml
+title DeleteAppointmentByAppointmentId System Sequence Diagram
+
+actor Customer
+
+participant AppointmentController as "<<Controller>>\nAppointmentController"
+participant AppointmentService as "<<Service>>\nAppointmentService"
+participant AppointmentRepository as "<<Repository>>\nAppointmentRepository"
+participant Database as "<<Database>>\nDatabase"
+
+Customer -> AppointmentController: DELETE /api/v1/customers/{customerId}/appointments/{appointmentId}
+activate AppointmentController
+
+AppointmentController -> AppointmentService: deleteAppointmentByAppointmentId(customerId, appointmentId)
+activate AppointmentService
+
+AppointmentService -> AppointmentRepository: findAppointmentByCustomerIdAndAppointmentId(String customerId, String appointmentId)
+activate AppointmentRepository
+
+AppointmentRepository -> Database: DELETE FROM appointments WHERE appointmentId = appointmentId
+activate Database
+
+Database --> AppointmentRepository: DeletionConfirmation
+deactivate Database
+
+AppointmentRepository --> AppointmentService: DeletionStatus
+deactivate AppointmentRepository
+
+AppointmentService --> AppointmentController: DeletionResponse
+deactivate AppointmentService
+
+AppointmentController --> Customer: DeletionResponse
+deactivate AppointmentController
+@enduml

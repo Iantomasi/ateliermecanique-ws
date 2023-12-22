@@ -27,12 +27,12 @@ public class CustomerAccountServiceImpl implements CustomerAccountService{
     }
 
     @Override
-    public CustomerAccountResponseModel getCustomerAccountById(String customerId) {
+    public CustomerAccountResponseModel getCustomerAccountByCustomerId(String customerId) {
         return customerAccountResponseMapper.entityToResponseModel(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId));
     }
 
     @Override
-    public CustomerAccountResponseModel updateCustomerById(String customerId, CustomerAccountRequestModel customerAccountRequestModel) {
+    public CustomerAccountResponseModel updateCustomerAccountByCustomerId(String customerId, CustomerAccountRequestModel customerAccountRequestModel) {
         CustomerAccount account = customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
         if (account != null) {
             // Check and update fields only if they are not null in the request model
@@ -61,7 +61,7 @@ public class CustomerAccountServiceImpl implements CustomerAccountService{
     }
 
     @Override
-    public void deleteCustomerById(String customerId) {
+    public void deleteCustomerAccountByCustomerId(String customerId) {
         CustomerAccount account = customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
 
         if (account != null){

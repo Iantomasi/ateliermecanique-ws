@@ -31,7 +31,7 @@ class CustomerAccountRepositoryTest {
     }
 
     @Test
-    public void whenFindByCustomerId_thenReturnCustomerAccount() {
+    public void findCustomerAccountByCustomerId_shouldSucceed() {
         // Arrange
         assertNotNull(savedCustomerId);
 
@@ -44,7 +44,7 @@ class CustomerAccountRepositoryTest {
     }
 
     @Test
-    public void whenFindByNonExistentCustomerId_thenReturnNull() {
+    public void findCustomerAccountByInvalidCustomerId_thenReturnNull() {
         // Arrange
         String nonExistentCustomerId = new CustomerAccountIdentifier().getCustomerId();
 

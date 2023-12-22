@@ -55,7 +55,7 @@ class CustomerAccountControllerIntegrationTest {
     }
 
     @Test
-    void getAllCustomerAccountsTest() throws Exception {
+    void getAllCustomerAccounts_shouldSucceed() throws Exception {
         mockMvc.perform(get("/api/v1/customers"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -64,7 +64,7 @@ class CustomerAccountControllerIntegrationTest {
     }
 
     @Test
-    void getCustomerAccountById_validId_shouldSucceed() throws Exception {
+    void getCustomerAccountByCustomerId_shouldSucceed() throws Exception {
         mockMvc.perform(get("/api/v1/customers/{customerId}", testAccountId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -72,14 +72,14 @@ class CustomerAccountControllerIntegrationTest {
     }
 
     @Test
-    void getCustomerAccountById_invalidId_shouldReturnNotFound() throws Exception {
+    void getCustomerAccountByInvalidCustomerId_shouldReturnNotFound() throws Exception {
         String randomUUID =  new CustomerAccountIdentifier().getCustomerId();
         mockMvc.perform(get("/api/v1/customers/{customerId}", randomUUID))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    void updateCustomerById_validId_shouldSucceed() throws Exception {
+    void updateCustomerAccountByCustomerId_shouldSucceed() throws Exception {
         CustomerAccountRequestModel requestModel = CustomerAccountRequestModel.builder()
                 .firstName("Jane")
                 .lastName("Doe")
@@ -96,7 +96,7 @@ class CustomerAccountControllerIntegrationTest {
     }
 
     @Test
-    void updateCustomerById_invalidId_shouldReturnNotFound() throws Exception {
+    void updateCustomerAccountByInvalidCustomerId_shouldReturnNotFound() throws Exception {
         CustomerAccountRequestModel requestModel = CustomerAccountRequestModel.builder()
                 .firstName("Jane")
                 .lastName("Doe")
@@ -112,18 +112,18 @@ class CustomerAccountControllerIntegrationTest {
     }
 
     @Test
-    void deleteCustomerById_shouldReturnNoContent() {
+    void deleteCustomerAccountAndVehiclesByCustomerId_shouldSucceed() {
         // Arrange
         String customerId = "testCustomerId";
         CustomerAccountService customerAccountService = mock(CustomerAccountService.class);
         CustomerAccountController customerAccountController = new CustomerAccountController(customerAccountService);
 
         // Act
-        ResponseEntity<Void> response = customerAccountController.deleteCustomerById(customerId);
+        ResponseEntity<Void> response = customerAccountController.deleteCustomerAccountByCustomerId(customerId);
 
         // Assert
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(customerAccountService).deleteCustomerById(customerId);
+        verify(customerAccountService).deleteCustomerAccountByCustomerId(customerId);
     }
 
 

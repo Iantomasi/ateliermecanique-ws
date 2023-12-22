@@ -1,0 +1,25 @@
+@startuml
+
+title State Transition Diagram for Adding a New Vehicle
+
+[*] --> FormNotSubmitted
+FormNotSubmitted : Mechanic is filling out the vehicle form
+
+FormNotSubmitted --> VehicleDataValidating : Submit
+VehicleDataValidating : System validates submitted data
+
+VehicleDataValidating --> VehicleDataInvalid : Data Invalid
+VehicleDataValidating --> VehicleDataValid : Data Valid
+
+VehicleDataInvalid --> FormNotSubmitted : Edit Form
+
+VehicleDataValid --> PersistingToDatabase : Save Request
+PersistingToDatabase : VehicleRepository attempts to save vehicle
+
+PersistingToDatabase --> VehicleSaved : Vehicle Persisted
+PersistingToDatabase --> VehicleNotSaved : Vehicle Not Persisted
+
+VehicleSaved --> [*] : Vehicle added successfully
+VehicleNotSaved --> FormNotSubmitted : Return to Form with Error Message
+
+@enduml

@@ -1,0 +1,35 @@
+@startuml
+title UpdateCustomerAccount System Sequence Diagram (Admin)
+
+actor Mechanic
+
+participant CustomerAccountController as "<<Controller>>\nCustomerAccountController"
+participant CustomerAccountService as "<<Service>>\nCustomerAccountService"
+participant CustomerAccountRepository as "<<Repository>>\nCustomerAccountRepository"
+participant Database as "<<Database>>\nDatabase"
+
+Mechanic -> CustomerAccountController: PUT /api/v1/customers/{customerId}
+activate CustomerAccountController
+
+CustomerAccountController -> CustomerAccountService: updateCustomerAccountByCustomerId(customerId, customerAccountRequestModel)
+activate CustomerAccountService
+
+CustomerAccountService -> CustomerAccountRepository: updateCustomerAccountByCustomerId(customerId, customerAccountRequestModel)
+activate CustomerAccountRepository
+
+CustomerAccountRepository -> Database: UPDATE customers SET ... WHERE id = customerId
+activate Database
+
+Database --> CustomerAccountRepository: UpdateConfirmation
+
+deactivate CustomerAccountRepository
+deactivate Database
+
+CustomerAccountService --> CustomerAccountController: CustomerAccountResponseModel
+
+deactivate CustomerAccountService
+CustomerAccountController --> Mechanic: CustomerAccountResponseModel
+
+deactivate CustomerAccountController
+
+@enduml

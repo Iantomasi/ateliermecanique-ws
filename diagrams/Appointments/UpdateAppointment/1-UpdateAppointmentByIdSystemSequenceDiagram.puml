@@ -1,0 +1,34 @@
+@startuml
+title UpdateAppointmentByAppointmentId System Sequence Diagram
+
+actor Mechanic
+
+participant AppointmentController as "<<Controller>>\nAppointmentController"
+participant AppointmentService as "<<Service>>\nAppointmentService"
+participant AppointmentRepository as "<<Repository>>\nAppointmentRepository"
+participant Database as "<<Database>>\nDatabase"
+
+Mechanic -> AppointmentController: PUT /api/v1/appointments/{appointmentId}
+activate AppointmentController
+
+AppointmentController -> AppointmentService: updateAppointmentById(appointmentId, appointmentRequestModel)
+activate AppointmentService
+
+AppointmentService -> AppointmentRepository: updateAppointmentById(appointmentId, appointmentRequestModel)
+activate AppointmentRepository
+
+AppointmentRepository -> Database: UPDATE appointments SET ... WHERE id = appointmentId
+activate Database
+
+Database --> AppointmentRepository: UpdateConfirmation
+deactivate Database
+
+AppointmentRepository --> AppointmentService: Appointment
+deactivate AppointmentRepository
+
+AppointmentService --> AppointmentController: AppointmentResponseModel
+deactivate AppointmentService
+
+AppointmentController --> Mechanic: AppointmentResponseModel
+deactivate AppointmentController
+@enduml

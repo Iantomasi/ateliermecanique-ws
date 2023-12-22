@@ -1,0 +1,63 @@
+@startuml
+title GetCustomerAccountById Design-Level Sequence Diagram
+
+actor Mechanic
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant CustomerDetailsPage as "<<View>>\nCustomerDetailsPage"
+participant CustomerAccountController as "<<Controller>>\nCustomerAccountController"
+participant CustomerAccountService as "<<Service>>\nCustomerAccountService"
+participant CustomerAccountServiceImpl as "<<Service>>\nCustomerAccountServiceImpl"
+participant CustomerAccountRepository as "<<Repository>>\nCustomerAccountRepository"
+participant CustomerAccountResponseMapper as "<<Mapper>>\nCustomerAccountResponseMapper"
+participant Database as "<<Database>>\nDatabase"
+
+Mechanic -> ReactApplication: Navigate to Customer Details
+activate ReactApplication
+
+ReactApplication -> CustomerDetailsPage: Render()
+activate CustomerDetailsPage
+
+CustomerDetailsPage -> CustomerAccountController: GET /api/v1/customers/{customerId}
+activate CustomerAccountController
+
+CustomerAccountController -> CustomerAccountService: getCustomerAccountByCustomerId(customerId)
+activate CustomerAccountService
+
+CustomerAccountService -> CustomerAccountServiceImpl: getCustomerAccountByCustomerId(customerId)
+activate CustomerAccountServiceImpl
+
+CustomerAccountServiceImpl -> CustomerAccountRepository: findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId)
+activate CustomerAccountRepository
+
+CustomerAccountRepository -> Database: SELECT * FROM customers WHERE id = customerId
+activate Database
+
+Database --> CustomerAccountRepository: CustomerAccount
+deactivate Database
+
+CustomerAccountRepository --> CustomerAccountServiceImpl: CustomerAccount
+deactivate CustomerAccountRepository
+
+CustomerAccountServiceImpl -> CustomerAccountResponseMapper: entityToResponseModel(CustomerAccount)
+activate CustomerAccountResponseMapper
+
+CustomerAccountResponseMapper --> CustomerAccountServiceImpl: CustomerAccountResponseModel
+deactivate CustomerAccountResponseMapper
+
+CustomerAccountServiceImpl --> CustomerAccountService: CustomerAccountResponseModel
+deactivate CustomerAccountServiceImpl
+
+CustomerAccountService --> CustomerAccountController: CustomerAccountResponseModel
+deactivate CustomerAccountService
+
+CustomerAccountController --> CustomerDetailsPage: CustomerAccountResponseModel
+deactivate CustomerAccountController
+
+CustomerDetailsPage --> ReactApplication: Display Customer Details
+deactivate CustomerDetailsPage
+
+ReactApplication --> Mechanic: View Customer Details
+deactivate ReactApplication
+
+@enduml

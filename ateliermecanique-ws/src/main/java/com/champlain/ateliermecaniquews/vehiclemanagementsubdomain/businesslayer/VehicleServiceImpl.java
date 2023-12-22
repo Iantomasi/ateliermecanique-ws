@@ -11,7 +11,6 @@ import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datamapperlay
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.presentationlayer.VehicleRequestModel;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.presentationlayer.VehicleResponseModel;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -37,8 +36,8 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public List<VehicleResponseModel> getAllVehiclesForCustomer(String customerId) {
-        List<Vehicle> vehicles = vehicleRepository.findAllByCustomerId(customerId);
+    public List<VehicleResponseModel> getAllVehiclesByCustomerId(String customerId) {
+        List<Vehicle> vehicles = vehicleRepository.findAllVehiclesByCustomerId(customerId);
         log.info("Fetching vehicles for customer ID: {}", customerId);
 
 
@@ -69,7 +68,7 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public VehicleResponseModel getVehicleByVehicleId(String customerId, String vehicleId) {
 
-        Vehicle foundVehicle = vehicleRepository.findByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId);
+        Vehicle foundVehicle = vehicleRepository.findVehicleByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId);
 
         // Check if the vehicle is null
         if (foundVehicle == null) {
@@ -83,7 +82,7 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public VehicleResponseModel updateVehicleByVehicleId(VehicleRequestModel vehicleRequestModel, String customerId, String vehicleId) {
-        Vehicle vehicleToUpdate = vehicleRepository.findByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId);
+        Vehicle vehicleToUpdate = vehicleRepository.findVehicleByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId);
 
         if (vehicleToUpdate == null) {
             return null; // Later throw exception
@@ -108,7 +107,7 @@ public class VehicleServiceImpl implements VehicleService {
 
 
     @Override
-    public VehicleResponseModel addVehicleToCustomer(String customerId, VehicleRequestModel vehicleRequestModel) {
+    public VehicleResponseModel addVehicleToCustomerAccount(String customerId, VehicleRequestModel vehicleRequestModel) {
         CustomerAccount customerAccount = customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
 
         if(customerAccount == null) {
@@ -132,13 +131,13 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public void deleteAllVehiclesByCustomerId(String customerId) {
-        List<Vehicle> vehicles = vehicleRepository.findAllByCustomerId(customerId);
+        List<Vehicle> vehicles = vehicleRepository.findAllVehiclesByCustomerId(customerId);
         vehicles.forEach(vehicle -> { vehicleRepository.delete(vehicle);});
     }
 
     @Override
-    public void deleteVehicleById(String customerId, String vehicleId) {
-        Vehicle foundVehicle = vehicleRepository.findByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId);
+    public void deleteVehicleByVehicleId(String customerId, String vehicleId) {
+        Vehicle foundVehicle = vehicleRepository.findVehicleByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId);
 
         // Check if the vehicle is null
         if (foundVehicle == null) {

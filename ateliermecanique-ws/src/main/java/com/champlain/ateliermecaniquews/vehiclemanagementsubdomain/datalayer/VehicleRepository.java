@@ -1,16 +1,13 @@
 package com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer;
 
-import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.businesslayer.VehicleService;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
 public interface VehicleRepository extends JpaRepository<Vehicle, Integer> {
 
-    Vehicle findVehicleByVehicleIdentifier_VehicleId(String vehicleId);
+    List<Vehicle> findAllVehiclesByCustomerId(String customerId);
 
-    List<Vehicle> findAllByCustomerId(String customerId);
-
-    Vehicle findByCustomerIdAndVehicleIdentifier_VehicleId(String customerId, String vehicleId);
+    Vehicle findVehicleByCustomerIdAndVehicleIdentifier_VehicleId(String customerId, String vehicleId);
 
 }

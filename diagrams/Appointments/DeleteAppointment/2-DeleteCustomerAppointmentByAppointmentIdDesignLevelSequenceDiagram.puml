@@ -1,0 +1,56 @@
+@startuml
+title DeleteAppointmentByAppointmentId Integrated System Sequence Diagram
+
+actor Customer
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant CustomerAppointmentsPage as "<<View>>\nCustomerAppointmentsPage"
+participant AppointmentController as "<<Controller>>\nAppointmentController"
+participant AppointmentService as "<<Service>>\nAppointmentService"
+participant AppointmentServiceImpl as "<<Service>>\nAppointmentServiceImpl"
+participant AppointmentRepository as "<<Repository>>\nAppointmentRepository"
+participant Database as "<<Database>>\nDatabase"
+
+Customer -> ReactApplication: Navigate to Customer Appointments Page
+activate ReactApplication
+
+ReactApplication -> CustomerAppointmentsPage: Render()
+activate CustomerAppointmentsPage
+
+CustomerAppointmentsPage -> AppointmentController: DELETE /api/v1/customers/{customerId}/appointments/{appointmentId}
+activate AppointmentController
+
+AppointmentController -> AppointmentService: deleteAppointmentByAppointmentId(customerId, appointmentId)
+activate AppointmentService
+
+AppointmentService -> AppointmentServiceImpl: deleteAppointmentByAppointmentId(customerId, appointmentId)
+activate AppointmentServiceImpl
+
+AppointmentServiceImpl -> AppointmentRepository: findAppointmentByCustomerIdAndAppointmentId(String customerId, String appointmentId)
+activate AppointmentRepository
+
+AppointmentRepository -> Database: DELETE FROM appointments WHERE appointmentId = appointmentId
+activate Database
+
+Database --> AppointmentRepository: DeletionConfirmation
+deactivate Database
+
+AppointmentRepository --> AppointmentServiceImpl: DeletionStatus
+deactivate AppointmentRepository
+
+AppointmentServiceImpl --> AppointmentService: DeletionResponse
+deactivate AppointmentServiceImpl
+
+AppointmentService --> AppointmentController: DeletionResponse
+deactivate AppointmentService
+
+AppointmentController --> CustomerAppointmentsPage: DeletionResponse
+deactivate AppointmentController
+
+CustomerAppointmentsPage --> ReactApplication: Display Deletion Status
+deactivate CustomerAppointmentsPage
+
+ReactApplication --> Customer: Confirm Appointment Deletion
+deactivate ReactApplication
+
+@enduml

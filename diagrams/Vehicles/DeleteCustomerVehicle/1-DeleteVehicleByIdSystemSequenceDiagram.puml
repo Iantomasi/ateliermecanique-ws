@@ -1,0 +1,34 @@
+@startuml
+title DeleteVehicleByVehicleId System Sequence Diagram
+
+actor Mechanic
+
+participant VehicleController as "<<Controller>>\nVehicleController"
+participant VehicleService as "<<Service>>\nVehicleService"
+participant VehicleRepository as "<<Repository>>\nVehicleRepository"
+participant Database as "<<Database>>\nDatabase"
+
+Mechanic -> VehicleController: DELETE /api/v1/customers/{customerId}/vehicles/{vehicleId}
+activate VehicleController
+
+VehicleController -> VehicleService: deleteVehicleByVehicleId(customerId, vehicleId)
+activate VehicleService
+
+VehicleService -> VehicleRepository: deleteVehicleByVehicleId(customerId, vehicleId)
+activate VehicleRepository
+
+VehicleRepository -> Database: DELETE FROM vehicles WHERE customerId = customerId AND vehicleId = vehicleId
+activate Database
+
+Database --> VehicleRepository: DeletionConfirmation
+deactivate Database
+
+VehicleRepository --> VehicleService: DeletionConfirmation
+deactivate VehicleRepository
+
+VehicleService --> VehicleController: DeletionConfirmation
+deactivate VehicleService
+
+VehicleController --> Mechanic: DeletionSuccessful
+deactivate VehicleController
+@enduml
