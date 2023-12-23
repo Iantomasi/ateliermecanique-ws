@@ -1,29 +1,38 @@
 import React from 'react';
-import './Sidebar.css'; // Assuming you create a separate CSS file for the sidebar
+import MechanicDisplay from '../../User_Components/MechanicDisplay';
 
-function Sidebar({customerId}) {
+function Sidebar({ customerId }) {
   return (
-      <aside className="sidebar">
+    <aside className="bg-white w-full md:w-1/4 h-auto md:h-[400px] p-5 shadow-md">
+      <MechanicDisplay className="mb-10" />
 
-        <nav className="sidebar-navigation">
-          <a href="/profile-settings" className="sidebar-link">
-            <i className="sidebar-icon settings-icon"></i>
+      <nav className="mt-5">
+        <div className="mb-5 hover:bg-gray-100 p-4">
+          <a href="/profile-settings">
+            <i className="settings-icon"></i>
             Profile Settings
           </a>
-          <a href={`/admin/customers/${customerId}/vehicles`} className="sidebar-link">
-            <i className="sidebar-icon vehicles-icon"></i>
+        </div>
+        <div className="mb-5 hover:bg-gray-100 p-4">
+          <a href={`/admin/customers/${customerId}/vehicles`}>
+            <i className="vehicles-icon"></i>
             Vehicle List
           </a>
-          <a href="/appointments" className="sidebar-link">
-            <i className="sidebar-icon appointments-icon"></i>
+        </div>
+        <div className="mb-5 hover:bg-gray-100 p-4">
+          <a href="/appointments">
+            <i className="appointments-icon"></i>
             Appointments
           </a>
-          <a href="/invoices" className="sidebar-link">
-            <i className="sidebar-icon invoices-icon"></i>
+        </div>
+        <div className="mb-5 hover:bg-gray-100 p-4">
+          <a href="/invoices">
+            <i className="invoices-icon"></i>
             Invoices
           </a>
-        </nav>
-      </aside>
+        </div>
+      </nav>
+    </aside>
   );
 }
 

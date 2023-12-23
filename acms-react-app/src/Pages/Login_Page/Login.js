@@ -22,7 +22,7 @@ function Login() {
             <NavBar />
             <main className="flex-grow flex flex-col justify-center">
                 <h1 className="text-5xl font-bold m-10 text-center">Welcome Back!</h1>
-                <form className="text-center max-w-md mx-auto pb-16">
+                <form className="text-center max-w-md mx-auto pb-16" onSubmit={handleSubmit}>
                     <input className="w-full h-16 px-4 my-4 rounded border bg-gray-100 focus:border-gray-500 focus:outline-none" type="email" placeholder="Enter your email" name="email" />
                     <input className="w-full h-16 px-4 my-4 rounded border bg-gray-100 focus:border-gray-500 focus:outline-none" type="password" placeholder="Enter your password" name="password" />
                     <a className="text-blue-500" href='#'>Forgot Password?</a>

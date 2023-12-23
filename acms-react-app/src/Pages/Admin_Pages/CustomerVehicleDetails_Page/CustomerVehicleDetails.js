@@ -5,8 +5,7 @@ import Navbar from '../../../Components/Navigation_Bars/Logged_In/NavBar.js';
 import Footer from '../../../Components/Footer/Footer.js';
 import MechanicDisplay from '../../../Components/User_Components/MechanicDisplay.js';
 import Sidebar from '../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
-import './CustomerVehicleDetails.css';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function CustomerVehicleDetails() {
   const { customerId, vehicleId } = useParams();
@@ -22,14 +21,15 @@ function CustomerVehicleDetails() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/api/v1/customers/${customerId}/vehicles/${vehicleId}`)
+    axios
+      .get(`http://localhost:8080/api/v1/customers/${customerId}/vehicles/${vehicleId}`)
       .then(res => {
         if (res.status === 200) {
           setVehicleDetails(res.data);
         }
       })
       .catch(error => {
-        console.error("Error fetching vehicle details", error);
+        console.error('Error fetching vehicle details', error);
       });
   }, [customerId, vehicleId]);
 
@@ -52,19 +52,22 @@ function CustomerVehicleDetails() {
       year: formData.get('year'),
       transmissionType: formData.get('transmissionType'),
       mileage: formData.get('mileage')
-      
     };
 
-    axios.put(`http://localhost:8080/api/v1/customers/${customerId}/vehicles/${vehicleId}`, updatedCustomerVehicle)
+    axios
+      .put(
+        `http://localhost:8080/api/v1/customers/${customerId}/vehicles/${vehicleId}`,
+        updatedCustomerVehicle
+      )
       .then(res => {
         if (res.status === 200) {
-          console.log("Customer Vehicle has been successfully updated!");
+          console.log('Customer Vehicle has been successfully updated!');
           setVehicleDetails(res.data);
-          alert("Customer Vehicle has been updated!")
+          alert('Customer Vehicle has been updated!');
         }
       })
       .catch(err => {
-        console.error("Error updating customer vehicle:", err);
+        console.error('Error updating customer vehicle:', err);
       });
   }
 
@@ -77,76 +80,86 @@ function CustomerVehicleDetails() {
   }
 
   function executeDelete() {
-    axios.delete(`http://localhost:8080/api/v1/customers/${customerId}/vehicles/${vehicleId}`)
-    .then(res => {
-      if(res.status === 204) {
-        alert("Customer Vehicle has been deleted!")
+    axios
+      .delete(`http://localhost:8080/api/v1/customers/${customerId}/vehicles/${vehicleId}`)
+      .then(res => {
+        if (res.status === 204) {
+          alert('Customer Vehicle has been deleted!');
+          setShowConfirmation(false);
+          navigate(`/admin/customers/${customerId}/vehicles`);
+        }
+      })
+      .catch(err => {
+        console.error('Error deleting customer:', err);
         setShowConfirmation(false);
-        navigate(`/admin/customers/${customerId}/vehicles`)
-      }
-    })
-    .catch(err =>{
-      console.error("Error deleting customer:", err);
-      setShowConfirmation(false);
-    })
+      });
   }
-
 
   if (!vehicleDetails) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div className="customervehicle-details-page">
+    <div className="">
       <Navbar />
-      <div className="customervehicle-details-content">
-        <aside className="customervehicle-details-mechanic-display">
-          <MechanicDisplay />
-          <Sidebar />
-        </aside>
-        <main className="customervehicle-details-main">
-          <div className="customervehicle-details-top-of-table">
+      <div className="flex flex-col md:flex-row">
+        <Sidebar customerId={customerId} />
+        <main className="flex-grow p-5">
+          <div className="text-4xl font-bold text-center">
             <p>VEHICLE DETAILS</p>
           </div>
           {vehicleDetails && (
-          <div className="customervehicle-details-form-container">
-            <form className="customervehicle-user-details-form" onSubmit={updateCustomerVehicle}>
-              <label>Make</label>
-              <input className="input-field" name="make" value={vehicleDetails.make} onChange={handleInputChange} type="text" required />
-            
-              <label>Model</label>
-              <input className="input-field" name="model" value={vehicleDetails.model} onChange={handleInputChange} type="text" required />
+            <div className="bg-gray-100 shadow-lg p-5 rounded-md mt-5 relative">
 
-              <label>Year</label>
-              <input className="input-field" name="year" value={vehicleDetails.year} onChange={handleInputChange} type="text" required />
+              <form className="customervehicle-user-details-form" onSubmit={updateCustomerVehicle}>
+                <label className="font-bold">Make</label>
+                <input className="w-full p-4 rounded border border-gray-400 mb-5" name="make" value={vehicleDetails.make} onChange={handleInputChange} type="text" required />
+                
+                <label className="font-bold">Model</label>
+                <input className="w-full p-4 rounded border border-gray-400 mb-5" name="model" value={vehicleDetails.model} onChange={handleInputChange} type="text" required />
 
-              <label>Transmission Type</label>
-              <select className="input-field" name="transmissionType"
-                      value={vehicleDetails.transmissionType} onChange={handleInputChange} required>
-                <option value="">Select Transmission Type</option>
-                <option value="AUTOMATIC">Automatic</option>
-                <option value="MANUAL">Manual</option>
-              </select>
-              <label>Mileage</label>
-              <input className="input-field" name="mileage" value={vehicleDetails.mileage} onChange={handleInputChange} type="text" required />
+                <label className="font-bold">Year</label>
+                <input className="w-full p-4 rounded border border-gray-400 mb-5" name="year" value={vehicleDetails.year} onChange={handleInputChange} type="text" required />
 
-              <button className="save-button" type='submit'>Save</button>
-              
-              <button className="delete-button" onClick={confirmDelete} type="button">Delete</button>
-              {showConfirmation && (
-                  <div className="confirmation-overlay">
-                    <div className="confirmation-box">
-                      <p>Are you sure you want to delete {vehicleDetails.make}?</p>
-                      <button onClick={executeDelete} type='button'>Yes</button>
-                      <button onClick={cancelDelete} type='button'>No</button>
+                <label className="font-bold">Transmission Type</label>
+                <select className="w-full p-4 rounded border border-gray-400 mb-5" name="transmissionType" value={vehicleDetails.transmission_type} onChange={handleInputChange} required>
+                  <option value="">Select Transmission Type</option>
+                  <option value="AUTOMATIC">Automatic</option>
+                  <option value="MANUAL">Manual</option>
+                </select>
+                
+                <label className="font-bold">Mileage</label>
+                <input className="w-full p-4 rounded border border-gray-400 mb-5" name="mileage" value={vehicleDetails.mileage} onChange={handleInputChange} type="text" required />
+
+                <div className="flex justify-center space-x-10">
+                  <button className="bg-yellow-400 border-none px-4 py-2 rounded font-bold transform transition duration-300 hover:scale-110" type="submit">
+                    Save
+                  </button>
+                  <button className="bg-red-500 border-none px-4 py-2 rounded font-bold transform transition duration-300 hover:scale-110" onClick={confirmDelete} type="button">
+                    Delete
+                  </button>
+                </div>
+                
+                {showConfirmation && (
+                  <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 flex justify-center items-center z-50">
+                    <div className="absolute bg-gray-100 border border-gray-300 rounded-md shadow-lg p-6">
+                      <p className="text-xl mb-4">Are you sure you want to delete {vehicleDetails.model}?</p>
+                      <div className="flex justify-center space-x-5">
+                        <button onClick={executeDelete} type="button" className="px-4 py-2 mr-2 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:ring focus:ring-red-200">
+                          Yes
+                        </button>
+                        <button onClick={cancelDelete} type="button" className="px-4 py-2 bg-yellow-400 focus:outline-none focus:ring focus:ring-gray-200">
+                          No
+                        </button>
+                      </div>
                     </div>
                   </div>
                 )}
-            </form>
-          </div>
+              </form>
+            </div>
           )}
-          <div className="customervehicle-details-car-image-container">
-            <img src="/yellow-car-sideview-free-vector.jpg" alt="Yellow Car Side" />
+          <div className="mt-5">
+            <img src="/yellow-car-sideview-free-vector.jpg" alt="Yellow Car Side" className="w-full md:w-1/3 h-auto" />
           </div>
         </main>
       </div>

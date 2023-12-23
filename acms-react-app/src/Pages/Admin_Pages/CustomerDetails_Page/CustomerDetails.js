@@ -1,11 +1,9 @@
 import Navbar from '../../../Components/Navigation_Bars/Logged_In/NavBar.js';
 import Footer from '../../../Components/Footer/Footer.js';
 import MechanicDisplay from '../../../Components/User_Components/MechanicDisplay.js';
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import './CustomerDetails.css';
 import Sidebar from '../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
 
 
@@ -92,51 +90,54 @@ function CustomerDetails() {
   if (!customerDetails) {
     return <div>Loading...</div>;
   }
+
   return (
     <div className="customer-details-page">
       <Navbar />
-      <div className="customer-details-content">
-        <aside className="customer-details-mechanic-display">
-          <MechanicDisplay/>
-          <Sidebar customerId={customerId} />
-        </aside>
-        <main className="customer-details-main">
-          <div className="customer-details-top-of-table">
-            <p>CUSTOMER ACCOUNT DETAILS</p>
-          </div>
+      <div className="flex">
+        <Sidebar customerId={customerId} />
+        
+        <main className="flex-grow p-5">
+            <p className="text-4xl font-bold text-center">CUSTOMER ACCOUNT DETAILS</p>
           {customerDetails && (
-            <div className="customer-details-form-container">
-              <form className="user-details-form" onSubmit={updateCustomer}>
-                <label>First Name</label>
-                <input className="input-field" name="firstName" value={customerDetails.firstName} onChange={handleInputChange} type="text" required />
+            <div className="bg-gray-100 shadow-lg p-5 rounded-md mt-5 relative">
+              <form onSubmit={updateCustomer}>
+                <label className='font-bold'>First Name</label>
+                <input className="w-full p-4 rounded border border-gray-400 mb-5" name="firstName" value={customerDetails.firstName} onChange={handleInputChange} type="text" required />
   
-                <label>Last Name</label>
-                <input className="input-field" name="lastName" value={customerDetails.lastName} onChange={handleInputChange} type="text" required />
+                <label className='font-bold'>Last Name</label>
+                <input className="w-full p-4 rounded border border-gray-400 mb-5" name="lastName" value={customerDetails.lastName} onChange={handleInputChange} type="text" required />
   
-                <label>Email Address</label>
-                <input className="input-field" name="email" value={customerDetails.email} onChange={handleInputChange} type="email" required />
+                <label className='font-bold'>Email Address</label>
+                <input className="w-full p-4 rounded border border-gray-400 mb-5" name="email" value={customerDetails.email} onChange={handleInputChange} type="email" required />
   
-                <label>Phone Number</label>
-                <input className="input-field" name="phoneNumber" value={customerDetails.phoneNumber} onChange={handleInputChange} type="text" required />
+                <label className='font-bold'>Phone Number</label>
+                <input className="w-full p-4 rounded border border-gray-400 mb-5" name="phoneNumber" value={customerDetails.phoneNumber} onChange={handleInputChange} type="text" required />
   
-                <div className="button-group">
-                  <button className="save-button" type="submit">Save</button>
-                  <button className="delete-button" onClick={confirmDelete} type="button">Delete</button>
+                <div className="flex justify-center space-x-10">
+                  <button className="bg-yellow-400 border-none px-4 py-2 rounded font-bold transform transition duration-300 hover:scale-110" type="submit">Save</button>
+                  <button className="bg-red-500 border-none px-4 py-2 rounded font-bold transform transition duration-300 hover:scale-110" onClick={confirmDelete} type="button">Delete</button>
                 </div>
                 {showConfirmation && (
-                  <div className="confirmation-overlay">
-                    <div className="confirmation-box">
-                      <p>Are you sure you want to delete {customerDetails.firstName}?</p>
-                      <button onClick={executeDelete} type='button'>Yes</button>
-                      <button onClick={cancelDelete} type='button'>No</button>
-                    </div>
+                  <div className=" fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 flex justify-center items-center z-50">
+                      <div className="absolute bg-gray-100 border border-gray-300 rounded-md shadow-lg p-6">
+                        <p className="text-xl mb-4">Are you sure you want to delete {customerDetails.firstName}?</p>
+                        <div className="flex justify-center space-x-5">
+                          <button onClick={executeDelete} type="button"className="px-4 py-2 mr-2 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:ring focus:ring-red-200">
+                          Yes
+                          </button>
+                          <button onClick={cancelDelete} type="button" className="px-4 py-2 bg-yellow-400  focus:outline-none focus:ring focus:ring-gray-200">
+                          No
+                          </button>
+                        </div>
+                      </div>
                   </div>
                 )}
               </form>
             </div>
           )}
-          <div className="customer-details-car-image-container">
-            <img src="/happy-young-man-and-car.png" alt="Happy Man Car" />
+          <div className=" mt-5">
+            <img src="/happy-young-man-and-car.png" alt="Happy Man Car" className="w-1/3 h-auto" />
           </div>
         </main>
       </div>

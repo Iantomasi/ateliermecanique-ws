@@ -1,14 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const CustomerVehicleBlock = ({ vehicle, customerId }) => {
+
+  const navigate = useNavigate()
+
+  function handleClick () {
+    navigate(`/admin/customers/${customerId}/vehicles/${vehicle.vehicleId}`)
+  }
   return (
-    <tr>
-      <td>
-        <Link to={`/admin/customers/${customerId}/vehicles/${vehicle.vehicleId}`}>
-          {vehicle.vehicleId}
-        </Link>
-      </td>
+    <tr className='hover:bg-gray-200 hover:cursor-pointer' onClick={handleClick}>
+      <td>{vehicle.vehicleId}</td>
       <td>{vehicle.customerId}</td>
       <td>{vehicle.make}</td>
       <td>{vehicle.model}</td>
