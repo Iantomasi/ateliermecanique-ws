@@ -21,11 +21,11 @@ public class FrontEndTesting {
         @BeforeEach()
         void setUp() {          // comment out the driver you don't use before testing
 
-           // WebDriverManager.chromedriver().setup();
-            // Configuration.browser = "chrome";
+            WebDriverManager.chromedriver().setup();
+             Configuration.browser = "chrome";
 
-            WebDriverManager.firefoxdriver().setup();
-            Configuration.browser = "firefox";
+            //WebDriverManager.firefoxdriver().setup();
+            //Configuration.browser = "firefox";
         }
 
         @Test
