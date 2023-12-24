@@ -6,7 +6,6 @@ import Navbar from '../../../Components/Navigation_Bars/Logged_In/NavBar.js';
 import Footer from '../../../Components/Footer/Footer.js';
 import MechanicDisplay from '../../../Components/User_Components/MechanicDisplay.js';
 import Sidebar from '../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
-import './AddNewVehicle.css';
 
 function AddNewVehicle() {
     const {customerId} = useParams();
@@ -65,47 +64,47 @@ function AddNewVehicle() {
             });
     }
     return (
-        <div className="add-vehicle-page">
-            <Navbar/>
-            <div className="add-vehicle-content">
-                <aside className="add-vehicle-mechanic-display">
-                    <MechanicDisplay/>
-                    <Sidebar customerId={customerId}/>
-                </aside>
-                <main className="add-vehicle-main">
-                    <div className="add-vehicle-top-of-form">
-                        <p>ADD NEW VEHICLE</p>
+        <div>
+            <Navbar />
+            <div className="flex flex-col md:flex-row">
+                <Sidebar customerId={customerId} />
+                <main className="flex-grow p-5">
+                    <div className="text-4xl font-bold text-center">
+                        <p>VEHICLE FORM</p>
                     </div>
-                    <div className="add-vehicle-form-container">
-                        <form className="vehicle-details-form" onSubmit={addVehicle}>
-                            <label>Make</label>
-                            <input className="input-field" name="make" value={vehicleDetails.make}
+                    <div className="bg-gray-100 shadow-lg p-5 rounded-md mt-5 relative">
+                        <form onSubmit={addVehicle}>
+                            <label className="font-bold">Make</label>
+                            <input className="w-full p-4 rounded border border-gray-400 mb-5" name="make" value={vehicleDetails.make}
                                    onChange={handleInputChange} type="text" required/>
 
-                            <label>Model</label>
-                            <input className="input-field" name="model" value={vehicleDetails.model}
+                            <label className="font-bold">Model</label>
+                            <input className="w-full p-4 rounded border border-gray-400 mb-5" name="model" value={vehicleDetails.model}
                                    onChange={handleInputChange} type="text" required/>
 
-                            <label>Year</label>
-                            <input className="input-field" name="year" value={vehicleDetails.year}
+                            <label className="font-bold">Year</label>
+                            <input className="w-full p-4 rounded border border-gray-400 mb-5" name="year" value={vehicleDetails.year}
                                    onChange={handleInputChange} type="text" required/>
 
-                            <label>Transmission Type</label>
-                            <select className="input-field" name="transmissionType"
+                            <label className="font-bold">Transmission Type</label>
+                            <select className="w-full p-4 rounded border border-gray-400 mb-5" name="transmissionType"
                                     value={vehicleDetails.transmissionType} onChange={handleInputChange} required>
                                 <option value="">Select Transmission Type</option>
                                 <option value="AUTOMATIC">Automatic</option>
                                 <option value="MANUAL">Manual</option>
                             </select>
 
-                            <label>Mileage</label>
-                            <input className="input-field" name="mileage" value={vehicleDetails.mileage}
+                            <label className="font-bold">Mileage</label>
+                            <input className="w-full p-4 rounded border border-gray-400 mb-5" name="mileage" value={vehicleDetails.mileage}
                                    onChange={handleInputChange} type="text" required/>
 
-                            <div className="button-group">
-                                <button className="save-button" type="submit">Add Vehicle</button>
+                            <div className="flex justify-center">
+                                <button className="bg-yellow-400 border-none px-4 py-2 rounded font-bold transform transition duration-300 hover:scale-110" type="submit">Add Vehicle</button>
                             </div>
                         </form>
+                    </div>
+                    <div className="flex mt-5 justify-center">
+                        <img src="/yellow-car-sideview-free-vector.jpg" alt="Yellow Car Side" className="w-full md:w-1/3 h-auto" />
                     </div>
                 </main>
             </div>

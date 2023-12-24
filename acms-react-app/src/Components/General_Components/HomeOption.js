@@ -1,17 +1,20 @@
 import React from 'react';
-import './HomeOption.css';
 import { useNavigate } from 'react-router-dom';
 
-const HomeOption = ({src,label}) => {
-  
+const HomeOption = ({ src, label }) => {
   const navigate = useNavigate();
-  function navigateToNext(){
-    navigate("/admin/"+label);
+
+  function navigateToNext() {
+    navigate(`/admin/${label}`);
   }
+
   return (
-    <div className="HomeOption" onClick={navigateToNext}>
-        <h2>{label}</h2>
-        <img src={src}/>
+    <div
+      className="inline-block cursor-pointer text-center m-2"
+      onClick={navigateToNext}
+    >
+      <h2 className="text-5xl mb-2">{label}</h2>
+      <img src={src} className="max-w-full h-auto" alt={label} />
     </div>
   );
 };

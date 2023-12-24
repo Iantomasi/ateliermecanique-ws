@@ -1,16 +1,13 @@
 import React from 'react';
-import './MechanicDisplay.css';
 
 const MechanicDisplay = () => {
   return (
-    <div className="display">
-      <div className="user-info">
-        <div className="user-image">
-          <img src="/userImage.svg" alt="Profile" />
-        </div>
-        <div className="details">
-          <div className="name">Mechanic</div>
-          <div className="role">CMS Member</div>
+    <div className="flex items-center">
+      <div className="flex items-center">
+        <img src="/userImage.svg" alt="Profile" className="w-12 h-auto mr-2" />
+        <div className="flex flex-col">
+          <div className="font-bold">Mechanic</div>
+          <div className="font-light">CMS Member</div>
         </div>
       </div>
     </div>
@@ -18,3 +15,5 @@ const MechanicDisplay = () => {
 };
 
 export default MechanicDisplay;
+
+
