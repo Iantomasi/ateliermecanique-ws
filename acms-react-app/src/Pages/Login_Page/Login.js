@@ -1,14 +1,60 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faGoogle, faApple } from '@fortawesome/free-brands-svg-icons';
 import NavBar from '../../Components/Navigation_Bars/Not_Logged_In/NavBar.js';
 import Footer from '../../Components/Footer/Footer.js';
 import { useNavigate } from 'react-router-dom';
+import { LoginSocialFacebook } from 'reactjs-social-login';
+import { jwtDecode } from "jwt-decode";
 
 function Login() {
-    const navigate = useNavigate();
 
-    const login = () => {
+    const google = window.google;
+    const navigate = useNavigate();
+    const googleButton = useRef(null);
+
+    useEffect(() => {
+        google.accounts.id.initialize({
+            client_id: "539616712207-be30bib3kb2fgvahdol0l6uvv26ra2u6.apps.googleusercontent.com",
+            callback: handleGoogleLogin,
+            scope: "https://www.googleapis.com/auth/userinfo.profile"
+        });
+    }, []);
+
+    useEffect(() => {
+    
+        const token = localStorage.getItem('userToken');
+
+        if (token) {
+            navigate('/admin');
+        }
+    }, [navigate]);
+
+    const handleGoogleLogin = (response) => {
+        console.log(response);
+        alert("Encoded JWT ID Token: " + response.credential);
+        localStorage.setItem('userToken', response.credential);
+        localStorage.setItem('provider', 'google');
+        const userObject = jwtDecode(response.credential);
+        localStorage.setItem('user', JSON.stringify(userObject));
+        console.log(localStorage.getItem('user'))
+        navigate('/admin');
+    };
+
+    const handleGoogleButtonClick = () => {
+        google.accounts.id.prompt();
+    };
+
+    const handleFacebookLogin = (response) => {
+        console.log(response);
+        localStorage.setItem('userToken', response.data.accessToken);
+        localStorage.setItem('provider', 'facebook');
+        localStorage.setItem('user', JSON.stringify(response.data));
+        console.log(localStorage.getItem('user'))
+        navigate('/admin');
+    }
+
+    const login = (response) => {
         navigate('/admin');
     };
 
@@ -31,15 +77,22 @@ function Login() {
                 <div className="text-center mb-8 mt-5">
                         <p>Or Login With</p>
                         <div className="flex justify-center mt-5">
-                            <button className="border border-black bg-white p-4 pt-6 text-5xl mr-4 rounded w-60">
+
+                            <LoginSocialFacebook
+                            appId='323237383960670'
+                            onResolve={handleFacebookLogin}
+                            onReject={(error) => console.log(error)}
+                            >
+                            <button className="border border-black bg-white p-4 pt-6 text-5xl mr-4 rounded w-60 hover:scale-110 hover:cursor-pointer">
                                 <FontAwesomeIcon icon={faFacebook} style={{ color: '#1877F2' }} />
                             </button>
+                            </LoginSocialFacebook>
 
-                            <button className="border border-black bg-white p-4 pt-6 text-center text-5xl rounded w-60 flex items-center justify-center mr-4">
-                                <img src="googleIcon.svg" alt="Google Icon" />
-                            </button>
+                            <div ref={googleButton} className=" hover:scale-110 hover:cursor-pointer border border-black bg-white p-4 pt-6 text-center text-5xl rounded w-60 flex items-center justify-center mr-4" onClick={handleGoogleButtonClick}>
+                            <img src="/googleIcon.svg" alt="Google Icon"/>
+                            </div>
 
-                            <button className="border border-black bg-white p-4 pt-6 text-5xl rounded w-60">
+                            <button className="border border-black bg-white p-4 pt-6 text-5xl rounded w-60 hover:scale-110 hover:cursor-pointer">
                                 <FontAwesomeIcon icon={faApple} />
                             </button>
                         </div>
