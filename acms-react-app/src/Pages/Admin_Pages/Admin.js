@@ -18,6 +18,9 @@ function Admin() {
       else if(provider === 'facebook'){
         setUsername(userObject.short_name);
       }
+      else if(provider === 'instagram'){
+        setUsername(userObject.username);
+      }
       
     }
   }, []);

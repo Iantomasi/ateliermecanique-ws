@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebook, faGoogle, faApple } from '@fortawesome/free-brands-svg-icons';
+import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import NavBar from '../../Components/Navigation_Bars/Not_Logged_In/NavBar.js';
 import Footer from '../../Components/Footer/Footer.js';
 import { useNavigate } from 'react-router-dom';
-import { LoginSocialFacebook } from 'reactjs-social-login';
+import { LoginSocialFacebook, LoginSocialInstagram} from 'reactjs-social-login';
 import { jwtDecode } from "jwt-decode";
 
 function Login() {
@@ -12,6 +12,7 @@ function Login() {
     const google = window.google;
     const navigate = useNavigate();
     const googleButton = useRef(null);
+    const REDIRECT_URI = window.location.href;
 
     useEffect(() => {
         google.accounts.id.initialize({
@@ -31,13 +32,12 @@ function Login() {
     }, [navigate]);
 
     const handleGoogleLogin = (response) => {
-        console.log(response);
-        alert("Encoded JWT ID Token: " + response.credential);
         localStorage.setItem('userToken', response.credential);
         localStorage.setItem('provider', 'google');
+
         const userObject = jwtDecode(response.credential);
         localStorage.setItem('user', JSON.stringify(userObject));
-        console.log(localStorage.getItem('user'))
+
         navigate('/admin');
     };
 
@@ -46,11 +46,21 @@ function Login() {
     };
 
     const handleFacebookLogin = (response) => {
-        console.log(response);
+        console.log(response)
         localStorage.setItem('userToken', response.data.accessToken);
         localStorage.setItem('provider', 'facebook');
         localStorage.setItem('user', JSON.stringify(response.data));
-        console.log(localStorage.getItem('user'))
+
+        navigate('/admin');
+    }
+
+    const handleInstagramLogin = (response) => {
+        console.log(response)
+        localStorage.setItem('userToken', response.data.access_token);
+        localStorage.setItem('provider', 'instagram');
+        localStorage.setItem('user', JSON.stringify(response.data));
+        
+
         navigate('/admin');
     }
 
@@ -79,7 +89,7 @@ function Login() {
                         <div className="flex justify-center mt-5">
 
                             <LoginSocialFacebook
-                            appId='323237383960670'
+                            appId={process.env.REACT_APP_FACEBOOK_APP_ID || ''}
                             onResolve={handleFacebookLogin}
                             onReject={(error) => console.log(error)}
                             >
@@ -92,9 +102,17 @@ function Login() {
                             <img src="/googleIcon.svg" alt="Google Icon"/>
                             </div>
 
+                            <LoginSocialInstagram
+                            appId={process.env.REACT_APP_INSTAGRAM_APP_ID || ''}
+                            client_id={process.env.REACT_APP_INSTAGRAM_CLIENT_ID || ''}
+                            client_secret={process.env.REACT_APP_INSTAGRAM_APP_SECRET || ''}
+                            redirect_uri={REDIRECT_URI}
+                            onResolve={handleInstagramLogin}
+                            onReject={(error) => console.log(error)}>
                             <button className="border border-black bg-white p-4 pt-6 text-5xl rounded w-60 hover:scale-110 hover:cursor-pointer">
-                                <FontAwesomeIcon icon={faApple} />
+                                <FontAwesomeIcon icon={faInstagram} />
                             </button>
+                            </LoginSocialInstagram>
                         </div>
                 </div>
             </main>
