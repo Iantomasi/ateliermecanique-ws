@@ -73,6 +73,13 @@ function CustomerVehicles() {
           </div>
         </div>
       </div>
+      <div className="w-full flex justify-between">
+        <div className="flex justify-around w-full">
+          <img src='/blue-car.svg' alt='car' className="w-1/3 h-auto" />
+          <img src='/car.svg' alt='car' className="w-1/3 h-auto" />
+          <img src='/moto.svg' alt='car' className="w-1/3 h-auto" />
+        </div>
+      </div>
       <Footer />
     </div>
   );

@@ -13,7 +13,7 @@ function CustomerVehicleDetails() {
     make: '',
     model: '',
     year: '',
-    transmissionType: '',
+    transmission_type: '',
     mileage: ''
   });
 
@@ -25,6 +25,7 @@ function CustomerVehicleDetails() {
       .get(`http://localhost:8080/api/v1/customers/${customerId}/vehicles/${vehicleId}`)
       .then(res => {
         if (res.status === 200) {
+          console.log(res.data)
           setVehicleDetails(res.data);
         }
       })
@@ -50,7 +51,7 @@ function CustomerVehicleDetails() {
       make: formData.get('make'),
       model: formData.get('model'),
       year: formData.get('year'),
-      transmissionType: formData.get('transmissionType'),
+      transmission_type: formData.get('transmission_type'),
       mileage: formData.get('mileage')
     };
 
@@ -122,7 +123,7 @@ function CustomerVehicleDetails() {
                 <input className="w-full p-4 rounded border border-gray-400 mb-5" name="year" value={vehicleDetails.year} onChange={handleInputChange} type="text" required />
 
                 <label className="font-bold">Transmission Type</label>
-                <select className="w-full p-4 rounded border border-gray-400 mb-5" name="transmissionType" value={vehicleDetails.transmissionType} onChange={handleInputChange} required>
+                <select className="w-full p-4 rounded border border-gray-400 mb-5" name="transmission_type" value={vehicleDetails.transmission_type} onChange={handleInputChange} required>
                   <option value="">Select Transmission Type</option>
                   <option value="AUTOMATIC">Automatic</option>
                   <option value="MANUAL">Manual</option>
@@ -159,7 +160,7 @@ function CustomerVehicleDetails() {
             </div>
           )}
           <div className="mt-5">
-            <img src="/yellow-car-sideview-free-vector.jpg" alt="Yellow Car Side" className="w-full md:w-1/3 h-auto" />
+            <img src="/car.svg" alt="Yellow Car Side" className="w-full md:w-1/3 h-auto" />
           </div>
         </main>
       </div>

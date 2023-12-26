@@ -32,6 +32,7 @@ function Login() {
     }, [navigate]);
 
     const handleGoogleLogin = (response) => {
+        console.log(response)
         localStorage.setItem('userToken', response.credential);
         localStorage.setItem('provider', 'google');
 
