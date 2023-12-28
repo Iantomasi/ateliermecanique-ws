@@ -49,7 +49,7 @@ public class oAuthServiceImpl implements oAuthService{
                     .firstName(firstName)
                     .lastName(lastName)
                     .token(JWT)
-                    .roles(Role.CUSTOMER)
+                    .role(String.valueOf(Role.CUSTOMER))
                     .build();
            return customerAccountService.createCustomerAccountForoAuth(customerAccountoAuthRequestModel);
         }

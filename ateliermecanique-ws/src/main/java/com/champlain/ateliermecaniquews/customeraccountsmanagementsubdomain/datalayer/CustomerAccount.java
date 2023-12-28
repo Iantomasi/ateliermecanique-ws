@@ -21,7 +21,7 @@ public class CustomerAccount {
     private String phoneNumber;
     private String password;
     private String token;
-    private Role roles;
+    private String role;
 
     public CustomerAccount(){this.customerAccountIdentifier = new CustomerAccountIdentifier();}
 
@@ -33,7 +33,7 @@ public class CustomerAccount {
         this.phoneNumber = customerPhoneNumber;
         this.password = customerPassword;
         this.token = token;
-        this.roles=Role.CUSTOMER;
+        this.role= String.valueOf(Role.CUSTOMER);
     }
     public CustomerAccount(String customerFirstName, String customerLastName, String customerEmail, String customerPhoneNumber, String customerPassword) {
         this.customerAccountIdentifier = new CustomerAccountIdentifier();
@@ -42,6 +42,6 @@ public class CustomerAccount {
         this.email = customerEmail;
         this.phoneNumber = customerPhoneNumber;
         this.password = customerPassword;
-        this.roles=Role.CUSTOMER;
+        this.role= String.valueOf(Role.CUSTOMER);
     }
 }

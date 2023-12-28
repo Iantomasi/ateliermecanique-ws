@@ -1,6 +1,5 @@
 package com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer;
 
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,5 +12,5 @@ public class CustomerAccountoAuthRequestModel {
     private String lastName;
     private String email;
     private String token;
-    private Role roles;
+    private String role;
 }

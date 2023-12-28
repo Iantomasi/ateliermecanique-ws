@@ -10,7 +10,7 @@ create table if not exists customers(
     phone_number VARCHAR(36),
     token VARCHAR (5000),
     password CHAR(60), -- for BCrypt hashing
-    roles VARCHAR (10)
+    role VARCHAR (10)
 );
 
 create table if not exists vehicles(

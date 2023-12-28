@@ -14,5 +14,5 @@ public class CustomerAccountResponseModel {
     private String email;
     private String phoneNumber;
     private String token;
-    private Role roles;
+    private String role;
 }
