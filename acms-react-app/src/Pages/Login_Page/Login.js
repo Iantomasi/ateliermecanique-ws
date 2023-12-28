@@ -6,6 +6,7 @@ import Footer from '../../Components/Footer/Footer.js';
 import { useNavigate } from 'react-router-dom';
 import { LoginSocialFacebook, LoginSocialInstagram} from 'reactjs-social-login';
 import { jwtDecode } from "jwt-decode";
+import axios from 'axios';
 
 function Login() {
 
@@ -16,9 +17,8 @@ function Login() {
 
     useEffect(() => {
         google.accounts.id.initialize({
-            client_id: "539616712207-be30bib3kb2fgvahdol0l6uvv26ra2u6.apps.googleusercontent.com",
-            callback: handleGoogleLogin,
-            scope: "https://www.googleapis.com/auth/userinfo.profile"
+            client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID || '',
+            callback: handleGoogleLogin
         });
     }, []);
 
@@ -32,14 +32,31 @@ function Login() {
     }, [navigate]);
 
     const handleGoogleLogin = (response) => {
-        console.log(response)
+
         localStorage.setItem('userToken', response.credential);
         localStorage.setItem('provider', 'google');
+        const jwtToken = response.credential;
 
+        //token has 3 parts, the kid is in the first part, each part is separated by a dot
+        // const tokenParts = jwtToken.split('.');
+        // const tokenHeader = JSON.parse(atob(tokenParts[1])); // Decoding base64url-encoded header --- This is the header
+        // console.log(tokenHeader)
+
+    
+        axios.post(`http://localhost:8080/api/v1/auth/google-login/${jwtToken}`)
+        .then(res => {
+            console.log(res.data)
+            res.data.roles === "CUSTOMER" ? navigate('/user') : navigate('/admin');
+        })
+        .catch(error => {
+            console.error('Error loging in', error);
+        })
+          
         const userObject = jwtDecode(response.credential);
+        console.log(userObject)
         localStorage.setItem('user', JSON.stringify(userObject));
 
-        navigate('/admin');
+        
     };
 
     const handleGoogleButtonClick = () => {
