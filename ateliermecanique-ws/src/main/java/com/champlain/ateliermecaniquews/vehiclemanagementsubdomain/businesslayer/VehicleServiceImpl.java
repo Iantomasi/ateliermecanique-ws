@@ -1,5 +1,4 @@
 package com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.businesslayer;
-
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccount;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountRepository;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.TransmissionType;
@@ -10,6 +9,7 @@ import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datamapperlay
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datamapperlayer.VehicleResponseMapper;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.presentationlayer.VehicleRequestModel;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.presentationlayer.VehicleResponseModel;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -18,22 +18,17 @@ import java.util.List;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class VehicleServiceImpl implements VehicleService {
 
-    private VehicleRepository vehicleRepository;
+    final private VehicleRepository vehicleRepository;
 
-    private VehicleResponseMapper vehicleResponseMapper;
+    final private VehicleResponseMapper vehicleResponseMapper;
 
-    private VehicleRequestMapper vehicleRequestMapper;
+    final private VehicleRequestMapper vehicleRequestMapper;
 
-    private CustomerAccountRepository customerAccountRepository;
+    final private CustomerAccountRepository customerAccountRepository;
 
-    public VehicleServiceImpl(VehicleRepository vehicleRepository, VehicleResponseMapper vehicleResponseMapper, VehicleRequestMapper vehicleRequestMapper, CustomerAccountRepository customerAccountRepository) {
-        this.vehicleRepository = vehicleRepository;
-        this.vehicleResponseMapper = vehicleResponseMapper;
-        this.vehicleRequestMapper = vehicleRequestMapper;
-        this.customerAccountRepository = customerAccountRepository;
-    }
 
     @Override
     public List<VehicleResponseModel> getAllVehiclesByCustomerId(String customerId) {

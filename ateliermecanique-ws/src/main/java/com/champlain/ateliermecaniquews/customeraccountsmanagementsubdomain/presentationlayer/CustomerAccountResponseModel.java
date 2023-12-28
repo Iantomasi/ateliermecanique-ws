@@ -1,5 +1,6 @@
 package com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer;
 
+import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.Role;
 import lombok.*;
 
 @Value
@@ -12,4 +13,6 @@ public class CustomerAccountResponseModel {
     private String lastName;
     private String email;
     private String phoneNumber;
+    private String token;
+    private Role roles;
 }

@@ -3,6 +3,7 @@ package com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.bus
 
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountRequestModel;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountResponseModel;
+import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountoAuthRequestModel;
 
 import java.util.List;
 
@@ -13,5 +14,6 @@ public interface CustomerAccountService {
     CustomerAccountResponseModel getCustomerAccountByCustomerId(String customerId);
     CustomerAccountResponseModel updateCustomerAccountByCustomerId(String customerId, CustomerAccountRequestModel customerAccountRequestModel);
     void deleteCustomerAccountByCustomerId(String customerId);
+    CustomerAccountResponseModel createCustomerAccountForoAuth(CustomerAccountoAuthRequestModel customerAccountoAuthRequestModel);
 
 }

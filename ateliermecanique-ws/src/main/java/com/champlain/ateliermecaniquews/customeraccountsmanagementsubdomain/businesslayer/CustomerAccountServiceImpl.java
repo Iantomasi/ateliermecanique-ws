@@ -4,8 +4,10 @@ import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.data
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountRepository;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datamapperlayer.CustomerAccountRequestMapper;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datamapperlayer.CustomerAccountResponseMapper;
+import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datamapperlayer.CustomerAccountoAuthRequestMapper;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountRequestModel;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountResponseModel;
+import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountoAuthRequestModel;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.businesslayer.VehicleService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ public class CustomerAccountServiceImpl implements CustomerAccountService{
     final private VehicleService vehicleService;
     final private CustomerAccountResponseMapper customerAccountResponseMapper;
     final private CustomerAccountRequestMapper customerAccountRequestMapper;
+    final private CustomerAccountoAuthRequestMapper customerAccountoAuthRequestMapper;
 
     @Override
     public List<CustomerAccountResponseModel> getAllCustomerAccounts() {
@@ -74,6 +77,16 @@ public class CustomerAccountServiceImpl implements CustomerAccountService{
             //throw exception
         }
     }
+
+    @Override
+    public CustomerAccountResponseModel createCustomerAccountForoAuth(CustomerAccountoAuthRequestModel customerAccountoAuthRequestModel) {
+       CustomerAccount account = customerAccountRepository.save(customerAccountoAuthRequestMapper.requestModelToEntity(customerAccountoAuthRequestModel));
+        if(account==null){
+            //throw exception
+        }
+        return customerAccountResponseMapper.entityToResponseModel(account);
+    }
+
 
 
 }
