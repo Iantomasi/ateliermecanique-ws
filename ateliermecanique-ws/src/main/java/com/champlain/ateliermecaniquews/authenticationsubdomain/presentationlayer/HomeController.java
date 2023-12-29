@@ -36,6 +36,24 @@ public class HomeController {
             return ResponseEntity.unprocessableEntity().build();
         }
     }
+
+    @PostMapping("/facebook-token-verification/{accessToken}")
+    public ResponseEntity<String> verifyFacebookToken(@PathVariable String accessToken){
+        try {
+            return ResponseEntity.ok().body(tokenService.verifyFacebookToken(accessToken));
+        } catch (Exception e) {
+            return ResponseEntity.unprocessableEntity().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/facebook-login")
+    public ResponseEntity<CustomerAccountResponseModel> verifyFacebookToken(@PathVariable LoginRequestModel loginRequestModel){
+        try {
+            return ResponseEntity.ok().body(oAuthService.facebookLogin(loginRequestModel));
+        } catch (Exception e) {
+            return ResponseEntity.unprocessableEntity().build();
+        }
+    }
 }
 
 

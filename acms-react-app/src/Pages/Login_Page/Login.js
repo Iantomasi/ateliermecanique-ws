@@ -69,6 +69,14 @@ function Login() {
         localStorage.setItem('provider', 'facebook');
         localStorage.setItem('user', JSON.stringify(response.data));
 
+        axios.post(`http://localhost:8080/api/v1/auth/facebook-token-verification/${response.data.accessToken}`)
+        .then(res => {
+            console.log(res.data)
+        })
+        .catch(error => {
+            console.error('Error loging in', error);
+        })
+
         navigate('/admin');
     }
 

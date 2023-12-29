@@ -1,6 +1,6 @@
 package com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datamapperlayer;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccount;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountoAuthRequestModel;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.CustomerAccountoAuthRequestModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

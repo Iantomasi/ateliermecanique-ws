@@ -20,6 +20,12 @@ import java.util.Collections;
 @AllArgsConstructor
 public class TokenServiceImpl implements TokenService{
 
+    private final String jwkUrl = "https://www.googleapis.com/oauth2/v3/certs";
+
+    private final String FACEBOOK_APP_SECRET = "408ed6f70a0674cfc76659eea63c3ea7";
+    private final String FACEBOOK_APP_ID = "888035386206245";
+
+
     @Override
     public String verifyGoogleToken(String jwtToken) throws JOSEException, ParseException {
 
@@ -45,14 +51,10 @@ public class TokenServiceImpl implements TokenService{
 
         long currentTimeSeconds = System.currentTimeMillis() / 1000; // Current time in seconds
 
-        System.out.println("Expiration Time :"+expirationTime);
-        System.out.println("Current Time:" +currentTimeSeconds);
-        System.out.println("-------------------------------------------------------------------------------");
         if (expirationTime >= currentTimeSeconds) {
 
             if (jwtKid != null && !jwtKid.isEmpty()) {
                 // Fetch Google's public keys
-                String jwkUrl = "https://www.googleapis.com/oauth2/v3/certs";
                 HttpHeaders headers = new HttpHeaders();
                 headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
                 HttpEntity<String> entity = new HttpEntity<>(headers);
@@ -103,4 +105,39 @@ public class TokenServiceImpl implements TokenService{
                 return "Token has expired.";
             }
     }
+
+    @Override
+    public String verifyFacebookToken(String accessToken) {
+        String tokenCheckUrl = "https://graph.facebook.com/v13.0/debug_token?input_token=" + accessToken + "&access_token=" + FACEBOOK_APP_ID + "|" + FACEBOOK_APP_SECRET;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.exchange(tokenCheckUrl, HttpMethod.GET, entity, String.class);
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            JSONObject jsonResponse = new JSONObject(response.getBody());
+            JSONObject data = jsonResponse.getJSONObject("data");
+
+            boolean isValid = data.getBoolean("is_valid");
+            long expiresAt = data.getLong("expires_at");
+
+            // Check if token is valid and not expired
+            if (isValid) {
+                long currentTimeSeconds = System.currentTimeMillis() / 1000;
+                if (expiresAt >= currentTimeSeconds) {
+                    return "Token is valid and not expired.";
+                } else {
+                    return "Token is valid but has expired.";
+                }
+            } else {
+                return "Token is not valid.";
+            }
+        } else {
+            return "Failed to validate token.";
+        }
+    }
+
+
 }

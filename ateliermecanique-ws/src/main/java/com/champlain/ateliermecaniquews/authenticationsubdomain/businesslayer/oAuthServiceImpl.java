@@ -1,5 +1,6 @@
 package com.champlain.ateliermecaniquews.authenticationsubdomain.businesslayer;
 
+import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.LoginRequestModel;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.businesslayer.CustomerAccountService;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccount;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountRepository;
@@ -7,7 +8,7 @@ import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.data
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datamapperlayer.CustomerAccountResponseMapper;
 
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountResponseModel;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountoAuthRequestModel;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.CustomerAccountoAuthRequestModel;
 import com.nimbusds.jose.JOSEException;
 import lombok.AllArgsConstructor;
 import org.json.JSONObject;
@@ -36,8 +37,6 @@ public class oAuthServiceImpl implements oAuthService{
         String decodedBody = new String(Base64.getDecoder().decode(encodedBody));
 
         JSONObject tokenBody = new JSONObject(decodedBody);
-        String exp = tokenBody.optString("exp"); //expiration date in Unix code
-
         String email = tokenBody.optString("email");
 
         CustomerAccount customerAccount = customerAccountRepository.findCustomerAccountByEmail(email);
@@ -55,6 +54,33 @@ public class oAuthServiceImpl implements oAuthService{
         }
         else {
             return customerAccountResponseMapper.entityToResponseModel(customerAccount);
+        }
+    }
+
+    @Override
+    public CustomerAccountResponseModel facebookLogin(LoginRequestModel loginRequestModel) {
+        String validation = tokenService.verifyFacebookToken(loginRequestModel.getToken());
+
+        if(validation == "Token is valid and not expired."){
+
+            CustomerAccount customerAccount = customerAccountRepository.findCustomerAccountByEmail(loginRequestModel.getEmail());
+
+            if(customerAccount == null){
+                CustomerAccountoAuthRequestModel customerAccountoAuthRequestModel = CustomerAccountoAuthRequestModel.builder()
+                        .email(loginRequestModel.getEmail())
+                        .firstName(loginRequestModel.getFirstName())
+                        .lastName(loginRequestModel.getLastName())
+                        .token(loginRequestModel.getToken())
+                        .role(String.valueOf(Role.CUSTOMER))
+                        .build();
+                return customerAccountService.createCustomerAccountForoAuth(customerAccountoAuthRequestModel);
+            }
+            else {
+                return customerAccountResponseMapper.entityToResponseModel(customerAccount);
+            }
+        }
+        else {
+            return null;
         }
     }
 }
