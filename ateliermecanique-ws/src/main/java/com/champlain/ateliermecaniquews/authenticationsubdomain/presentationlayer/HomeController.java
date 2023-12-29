@@ -47,12 +47,8 @@ public class HomeController {
     }
 
     @PostMapping("/facebook-login")
-    public ResponseEntity<CustomerAccountResponseModel> verifyFacebookToken(@PathVariable LoginRequestModel loginRequestModel){
-        try {
+    public ResponseEntity<CustomerAccountResponseModel> verifyFacebookToken(@RequestBody LoginRequestModel loginRequestModel){
             return ResponseEntity.ok().body(oAuthService.facebookLogin(loginRequestModel));
-        } catch (Exception e) {
-            return ResponseEntity.unprocessableEntity().build();
-        }
     }
 }
 

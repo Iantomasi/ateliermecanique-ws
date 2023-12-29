@@ -69,7 +69,15 @@ function Login() {
         localStorage.setItem('provider', 'facebook');
         localStorage.setItem('user', JSON.stringify(response.data));
 
-        axios.post(`http://localhost:8080/api/v1/auth/facebook-token-verification/${response.data.accessToken}`)
+        const userAccess = {
+            firstName: response.data.first_name,
+            lastName: response.data.last_name,
+            email: response.data.email,
+            token: response.data.accessToken
+          }
+
+          console.log(userAccess)
+        axios.post('http://localhost:8080/api/v1/auth/facebook-login', userAccess)
         .then(res => {
             console.log(res.data)
         })

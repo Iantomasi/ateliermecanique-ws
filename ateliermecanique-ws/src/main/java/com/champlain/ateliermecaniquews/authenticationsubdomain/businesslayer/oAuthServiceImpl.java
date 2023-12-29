@@ -28,32 +28,34 @@ public class oAuthServiceImpl implements oAuthService{
     @Override
     public CustomerAccountResponseModel googleLogin(String JWT) throws ParseException, JOSEException {
         String validation = tokenService.verifyGoogleToken(JWT);
-        if (validation != "Token signature is valid."){
-            throw new NullPointerException(validation);
-        }
-        String[] tokenParts = JWT.split("\\.");
+        if (validation.equals("Token signature is valid.")){
+            String[] tokenParts = JWT.split("\\.");
 
-        String encodedBody = tokenParts[1];
-        String decodedBody = new String(Base64.getDecoder().decode(encodedBody));
+            String encodedBody = tokenParts[1];
+            String decodedBody = new String(Base64.getDecoder().decode(encodedBody));
 
-        JSONObject tokenBody = new JSONObject(decodedBody);
-        String email = tokenBody.optString("email");
+            JSONObject tokenBody = new JSONObject(decodedBody);
+            String email = tokenBody.optString("email");
 
-        CustomerAccount customerAccount = customerAccountRepository.findCustomerAccountByEmail(email);
-        if(customerAccount == null){
-            String firstName = tokenBody.optString("given_name");
-            String lastName =tokenBody.optString("family_name");
-            CustomerAccountoAuthRequestModel customerAccountoAuthRequestModel = CustomerAccountoAuthRequestModel.builder()
-                    .email(email)
-                    .firstName(firstName)
-                    .lastName(lastName)
-                    .token(JWT)
-                    .role(String.valueOf(Role.CUSTOMER))
-                    .build();
-           return customerAccountService.createCustomerAccountForoAuth(customerAccountoAuthRequestModel);
+            CustomerAccount customerAccount = customerAccountRepository.findCustomerAccountByEmail(email);
+            if(customerAccount == null){
+                String firstName = tokenBody.optString("given_name");
+                String lastName =tokenBody.optString("family_name");
+                CustomerAccountoAuthRequestModel customerAccountoAuthRequestModel = CustomerAccountoAuthRequestModel.builder()
+                        .email(email)
+                        .firstName(firstName)
+                        .lastName(lastName)
+                        .token(JWT)
+                        .role(String.valueOf(Role.CUSTOMER))
+                        .build();
+               return customerAccountService.createCustomerAccountForoAuth(customerAccountoAuthRequestModel);
+            }
+            else {
+                return customerAccountResponseMapper.entityToResponseModel(customerAccount);
+            }
         }
         else {
-            return customerAccountResponseMapper.entityToResponseModel(customerAccount);
+            throw new NullPointerException(validation);
         }
     }
 
@@ -61,7 +63,7 @@ public class oAuthServiceImpl implements oAuthService{
     public CustomerAccountResponseModel facebookLogin(LoginRequestModel loginRequestModel) {
         String validation = tokenService.verifyFacebookToken(loginRequestModel.getToken());
 
-        if(validation == "Token is valid and not expired."){
+        if(validation.equals("Token is valid and not expired.")){
 
             CustomerAccount customerAccount = customerAccountRepository.findCustomerAccountByEmail(loginRequestModel.getEmail());
 
@@ -80,7 +82,7 @@ public class oAuthServiceImpl implements oAuthService{
             }
         }
         else {
-            return null;
+            throw new NullPointerException(validation);
         }
     }
 }
