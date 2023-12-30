@@ -85,4 +85,31 @@ public class oAuthServiceImpl implements oAuthService{
             throw new NullPointerException(validation);
         }
     }
+
+    @Override
+    public CustomerAccountResponseModel instagramLogin(LoginRequestModel loginRequestModel) {
+        String validation = tokenService.verifyInstagramToken(loginRequestModel.getToken());
+
+        if(validation.equals("Instagram token is valid.")){
+
+            CustomerAccount customerAccount = customerAccountRepository.findCustomerAccountByEmail(loginRequestModel.getEmail());
+
+            if(customerAccount == null){
+                CustomerAccountoAuthRequestModel customerAccountoAuthRequestModel = CustomerAccountoAuthRequestModel.builder()
+                        .email(loginRequestModel.getEmail())
+                        .firstName(loginRequestModel.getFirstName())
+                        .lastName(loginRequestModel.getLastName())
+                        .token(loginRequestModel.getToken())
+                        .role(String.valueOf(Role.CUSTOMER))
+                        .build();
+                return customerAccountService.createCustomerAccountForoAuth(customerAccountoAuthRequestModel);
+            }
+            else {
+                return customerAccountResponseMapper.entityToResponseModel(customerAccount);
+            }
+        }
+        else {
+            throw new NullPointerException(validation);
+        }
+    }
 }

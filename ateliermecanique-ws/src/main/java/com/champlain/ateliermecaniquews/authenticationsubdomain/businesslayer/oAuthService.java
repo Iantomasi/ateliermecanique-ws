@@ -9,4 +9,5 @@ import java.text.ParseException;
 public interface oAuthService {
     CustomerAccountResponseModel googleLogin(String JWT) throws ParseException, JOSEException;
     CustomerAccountResponseModel facebookLogin(LoginRequestModel loginRequestModel);
+    CustomerAccountResponseModel instagramLogin(LoginRequestModel loginRequestModel);
 }

@@ -141,7 +141,30 @@ public class TokenServiceImpl implements TokenService{
 
     @Override
     public String verifyInstagramToken(String accessToken) {
-        return null;
+        String userInfoUrl = "https://graph.instagram.com/me?fields=id,username&access_token=" + accessToken;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.exchange(userInfoUrl, HttpMethod.GET, entity, String.class);
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            JSONObject jsonResponse = new JSONObject(response.getBody());
+
+            // Perform checks based on the response
+            if (jsonResponse.has("id") && jsonResponse.has("username")) {
+                // Token is valid
+                return "Instagram token is valid.";
+            } else {
+                // Token is not valid or doesn't provide necessary data
+                return "Invalid Instagram token.";
+            }
+        } else {
+            // Failed to validate token
+            return "Failed to validate Instagram token.";
+        }
     }
 
 

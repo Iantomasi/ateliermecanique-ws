@@ -15,13 +15,11 @@ function CustomerVehicles() {
 
   const handleCustomerClick = (customerId) => {
     navigate(`/admin/customers/${customerId}/vehicles/newVehicle`);
-    console.log(customerId);
   };
 
   useEffect(() => {
     axios.get(`http://localhost:8080/api/v1/customers/${customerId}/vehicles`)
       .then(res => {
-        console.log('API response:', res);
         if (res.status === 200) {
           setVehicles(res.data);
         }

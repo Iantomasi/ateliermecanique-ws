@@ -47,8 +47,22 @@ public class HomeController {
     }
 
     @PostMapping("/facebook-login")
-    public ResponseEntity<CustomerAccountResponseModel> verifyFacebookToken(@RequestBody LoginRequestModel loginRequestModel){
+    public ResponseEntity<CustomerAccountResponseModel> facebookToken(@RequestBody LoginRequestModel loginRequestModel){
             return ResponseEntity.ok().body(oAuthService.facebookLogin(loginRequestModel));
+    }
+
+    @PostMapping("/instagram-token-verification/{accessToken}")
+    public ResponseEntity<String> verifyInstagramToken(@PathVariable String accessToken){
+        try {
+            return ResponseEntity.ok().body(tokenService.verifyInstagramToken(accessToken));
+        } catch (Exception e){
+            return ResponseEntity.unprocessableEntity().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/instagram-login")
+    public ResponseEntity<CustomerAccountResponseModel> instagramLogin(@RequestBody LoginRequestModel loginRequestModel){
+        return ResponseEntity.ok().body(oAuthService.instagramLogin(loginRequestModel));
     }
 }
 

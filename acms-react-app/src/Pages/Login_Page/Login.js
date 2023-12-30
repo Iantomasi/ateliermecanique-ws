@@ -91,6 +91,20 @@ function Login() {
         localStorage.setItem('provider', 'instagram');
         localStorage.setItem('user', JSON.stringify(response.data));
         
+        const userAccess = {
+            firstName: "",
+            lastName: "",
+            email: "",
+            token: response.data.access_token
+          }
+
+         axios.post('http://localhost:8080/api/v1/auth/instagram-login', userAccess)
+        .then(res => {
+            console.log(res.data)
+        })
+        .catch(error => {
+            console.error('Error loging in', error);
+        })
 
         navigate('/admin');
     }
