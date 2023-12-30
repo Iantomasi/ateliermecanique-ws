@@ -64,7 +64,6 @@ function Login() {
     };
 
     const handleFacebookLogin = (response) => {
-        console.log(response)
         localStorage.setItem('userToken', response.data.accessToken);
         localStorage.setItem('provider', 'facebook');
         localStorage.setItem('user', JSON.stringify(response.data));
@@ -75,8 +74,6 @@ function Login() {
             email: response.data.email,
             token: response.data.accessToken
           }
-
-          console.log(userAccess)
         axios.post('http://localhost:8080/api/v1/auth/facebook-login', userAccess)
         .then(res => {
             console.log(res.data)

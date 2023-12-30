@@ -139,5 +139,10 @@ public class TokenServiceImpl implements TokenService{
         }
     }
 
+    @Override
+    public String verifyInstagramToken(String accessToken) {
+        return null;
+    }
+
 
 }

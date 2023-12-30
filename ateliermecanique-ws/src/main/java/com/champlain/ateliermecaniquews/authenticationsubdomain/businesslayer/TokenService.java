@@ -7,4 +7,5 @@ import java.text.ParseException;
 public interface TokenService {
     String verifyGoogleToken(String jwtToken) throws JOSEException, ParseException;
     String verifyFacebookToken(String accessToken);
+    String verifyInstagramToken(String accessToken);
 }
