@@ -3,9 +3,11 @@ package com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalaye
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.TransmissionType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "appointments")
@@ -42,7 +44,8 @@ public class Appointment {
                 this.appointmentIdentifier = new AppointmentIdentifier();
                 this.customerId = customerId;
                 this.vehicleId = vehicleId;
-                this.appointmentDate = LocalDateTime.parse(appointmentDate);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                this.appointmentDate = LocalDateTime.parse(appointmentDate, formatter);
                 this.services = services;
                 this.comments = comments;
                 this.status = status;

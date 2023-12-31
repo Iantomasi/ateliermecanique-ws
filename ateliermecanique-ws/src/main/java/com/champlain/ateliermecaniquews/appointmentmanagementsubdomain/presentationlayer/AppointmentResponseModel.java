@@ -19,6 +19,7 @@ public class AppointmentResponseModel {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     LocalDateTime appointmentDate;
     private String services;
+    private String comments;
     private Status status;
 
 }
