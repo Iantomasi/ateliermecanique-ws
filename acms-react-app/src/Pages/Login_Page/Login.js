@@ -132,9 +132,6 @@ function Login() {
         
         //This is just for now, we need to get our app verified by instagram in order to request for the user's email, first name and last name.
         const userAccess = {
-            firstName: "",
-            lastName: "",
-            email: "",
             token: response.data.access_token
           }
 

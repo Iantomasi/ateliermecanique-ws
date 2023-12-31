@@ -4,9 +4,7 @@ import axios from 'axios';
 
 const UserProfile = () => {
   const [userImage, setUserImage] = useState('/userImage.svg'); // Set default user image
-  const [user, setUser] = useState({});
-  const [provider, setProvider] = useState('');
-
+ 
   useEffect(() => {
     const token = sessionStorage.getItem('userToken');
     if (token) {
@@ -29,8 +27,7 @@ const UserProfile = () => {
           });
       }
 
-      setUser(userObject);
-      setProvider(storedProvider);
+    
     }
   }, []);
 
