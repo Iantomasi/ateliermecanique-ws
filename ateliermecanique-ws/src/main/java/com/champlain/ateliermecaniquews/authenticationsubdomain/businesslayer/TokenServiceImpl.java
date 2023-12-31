@@ -87,7 +87,7 @@ public class TokenServiceImpl implements TokenService{
                     JWSObject jwsObject = JWSObject.parse(jwtToken);
                     if (jwsObject.verify(verifier)) {
                         // Token signature is valid
-                        return "Token signature is valid.";
+                        return "Token is valid and not expired.";
                     } else {
                         // Token signature verification failed
                         return "Token signature verification failed.";
@@ -156,7 +156,7 @@ public class TokenServiceImpl implements TokenService{
             // Perform checks based on the response
             if (jsonResponse.has("id") && jsonResponse.has("username")) {
                 // Token is valid
-                return "Instagram token is valid.";
+                return "Token is valid and not expired.";
             } else {
                 // Token is not valid or doesn't provide necessary data
                 return "Invalid Instagram token.";

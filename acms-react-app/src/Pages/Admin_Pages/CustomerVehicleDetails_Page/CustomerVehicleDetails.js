@@ -62,7 +62,6 @@ function CustomerVehicleDetails() {
       )
       .then(res => {
         if (res.status === 200) {
-          console.log('Customer Vehicle has been successfully updated!');
           setVehicleDetails(res.data);
           alert('Customer Vehicle has been updated!');
         }

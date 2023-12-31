@@ -7,6 +7,7 @@ import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.data
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.Role;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datamapperlayer.CustomerAccountResponseMapper;
 
+import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountRequestModel;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountResponseModel;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.CustomerAccountoAuthRequestModel;
 import com.nimbusds.jose.JOSEException;
@@ -28,7 +29,7 @@ public class oAuthServiceImpl implements oAuthService{
     @Override
     public CustomerAccountResponseModel googleLogin(String JWT) throws ParseException, JOSEException {
         String validation = tokenService.verifyGoogleToken(JWT);
-        if (validation.equals("Token signature is valid.")){
+        if (validation.equals("Token is valid and not expired.")){
             String[] tokenParts = JWT.split("\\.");
 
             String encodedBody = tokenParts[1];
@@ -51,7 +52,7 @@ public class oAuthServiceImpl implements oAuthService{
                return customerAccountService.createCustomerAccountForoAuth(customerAccountoAuthRequestModel);
             }
             else {
-                return customerAccountResponseMapper.entityToResponseModel(customerAccount);
+                return customerAccountService.updateCustomerToken(customerAccount.getCustomerAccountIdentifier().getCustomerId(),JWT);
             }
         }
         else {
@@ -78,7 +79,7 @@ public class oAuthServiceImpl implements oAuthService{
                 return customerAccountService.createCustomerAccountForoAuth(customerAccountoAuthRequestModel);
             }
             else {
-                return customerAccountResponseMapper.entityToResponseModel(customerAccount);
+                return customerAccountService.updateCustomerToken(customerAccount.getCustomerAccountIdentifier().getCustomerId(),loginRequestModel.getToken());
             }
         }
         else {
@@ -90,7 +91,7 @@ public class oAuthServiceImpl implements oAuthService{
     public CustomerAccountResponseModel instagramLogin(LoginRequestModel loginRequestModel) {
         String validation = tokenService.verifyInstagramToken(loginRequestModel.getToken());
 
-        if(validation.equals("Instagram token is valid.")){
+        if(validation.equals("Token is valid and not expired.")){
 
             CustomerAccount customerAccount = customerAccountRepository.findCustomerAccountByEmail(loginRequestModel.getEmail());
 
@@ -105,11 +106,24 @@ public class oAuthServiceImpl implements oAuthService{
                 return customerAccountService.createCustomerAccountForoAuth(customerAccountoAuthRequestModel);
             }
             else {
-                return customerAccountResponseMapper.entityToResponseModel(customerAccount);
+              return customerAccountService.updateCustomerToken(customerAccount.getCustomerAccountIdentifier().getCustomerId(),loginRequestModel.getToken());
             }
         }
         else {
             throw new NullPointerException(validation);
         }
     }
+
+    @Override
+    public CustomerAccountResponseModel findCustomerByToken(String token) {
+        CustomerAccount customerAccount = customerAccountRepository.findCustomerAccountByToken(token);
+
+        if(customerAccount == null){
+            throw new NullPointerException("Customer not found with token: "+token);
+        }
+        else {
+            return customerAccountResponseMapper.entityToResponseModel(customerAccount);
+        }
+    }
+
 }

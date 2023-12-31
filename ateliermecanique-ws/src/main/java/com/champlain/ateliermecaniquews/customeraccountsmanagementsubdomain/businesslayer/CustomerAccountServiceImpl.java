@@ -87,6 +87,14 @@ public class CustomerAccountServiceImpl implements CustomerAccountService{
         return customerAccountResponseMapper.entityToResponseModel(account);
     }
 
+    @Override
+    public CustomerAccountResponseModel updateCustomerToken(String customerId, String token) {
+        CustomerAccount customerAccount = customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
+
+        customerAccount.setToken(token);
+
+        return customerAccountResponseMapper.entityToResponseModel(customerAccountRepository.save(customerAccount));
+    }
 
 
 }

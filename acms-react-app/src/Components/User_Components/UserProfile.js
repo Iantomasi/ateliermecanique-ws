@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const UserProfile = () => {
   const [userImage, setUserImage] = useState('/userImage.svg'); // Set default user image
@@ -7,20 +8,25 @@ const UserProfile = () => {
   const [provider, setProvider] = useState('');
 
   useEffect(() => {
-    const token = localStorage.getItem('userToken');
+    const token = sessionStorage.getItem('userToken');
     if (token) {
-      const userObject = JSON.parse(localStorage.getItem('user'));
-      const storedProvider = localStorage.getItem('provider');
+      const userObject = JSON.parse(sessionStorage.getItem('user'));
+      const storedProvider = sessionStorage.getItem('provider');
 
       if (storedProvider === 'google') {
         if (userObject.picture) {
           setUserImage(userObject.picture);
         }
       } else if (storedProvider === 'facebook') {
-        if (userObject.picture && userObject.picture.data && userObject.picture.data.url) {
-          setUserImage(userObject.picture.data.url);
-          console.log(userObject.picture.data.url);
-        }
+        // Fetch Facebook profile picture using Facebook Graph API
+        axios.get(`https://graph.facebook.com/v14.0/${userObject.id}/picture?type=large`)
+          .then(response => {
+            setUserImage(response.request.responseURL);
+          })
+          .catch(error => {
+            console.error('Error fetching profile picture', error);
+            setUserImage('/defaultImage.svg'); // Set default image on error
+          });
       }
 
       setUser(userObject);
@@ -29,9 +35,10 @@ const UserProfile = () => {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('userToken');
-    localStorage.removeItem('provider');
-    localStorage.removeItem('user'); 
+    sessionStorage.removeItem('userToken');
+    sessionStorage.removeItem('provider');
+    sessionStorage.removeItem('user');
+    console.log("user logged out");
   };
 
   return (

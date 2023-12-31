@@ -18,7 +18,7 @@ public class HomeController {
     final private TokenService tokenService;
     final private oAuthService oAuthService;
     
-    @PostMapping("/google-token-verification/{JWT}")
+    @GetMapping("/google-token-verification/{JWT}")
     public ResponseEntity<String> verifyGoogleToken(@PathVariable String JWT){
         try {
             return ResponseEntity.ok().body(tokenService.verifyGoogleToken(JWT));
@@ -37,7 +37,7 @@ public class HomeController {
         }
     }
 
-    @PostMapping("/facebook-token-verification/{accessToken}")
+    @GetMapping("/facebook-token-verification/{accessToken}")
     public ResponseEntity<String> verifyFacebookToken(@PathVariable String accessToken){
         try {
             return ResponseEntity.ok().body(tokenService.verifyFacebookToken(accessToken));
@@ -51,7 +51,7 @@ public class HomeController {
             return ResponseEntity.ok().body(oAuthService.facebookLogin(loginRequestModel));
     }
 
-    @PostMapping("/instagram-token-verification/{accessToken}")
+    @GetMapping("/instagram-token-verification/{accessToken}")
     public ResponseEntity<String> verifyInstagramToken(@PathVariable String accessToken){
         try {
             return ResponseEntity.ok().body(tokenService.verifyInstagramToken(accessToken));
@@ -63,6 +63,11 @@ public class HomeController {
     @PostMapping("/instagram-login")
     public ResponseEntity<CustomerAccountResponseModel> instagramLogin(@RequestBody LoginRequestModel loginRequestModel){
         return ResponseEntity.ok().body(oAuthService.instagramLogin(loginRequestModel));
+    }
+
+    @GetMapping("/{accessToken}")
+    public ResponseEntity<CustomerAccountResponseModel> getCustomerByToken(@PathVariable String accessToken){
+        return ResponseEntity.ok().body(oAuthService.findCustomerByToken(accessToken));
     }
 }
 

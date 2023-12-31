@@ -2,16 +2,18 @@ import React, { useEffect , useState} from 'react';
 import NavBar from '../../Components/Navigation_Bars/Logged_In/NavBar.js';
 import Footer from '../../Components/Footer/Footer.js';
 import HomeOption from '../../Components/General_Components/HomeOption.js';
+import axios from 'axios';
 
 function User() {
 
   const [username, setUsername] = useState('');
+  const [ customer, setCustomer ] = useState({});
 
   useEffect(() => {
-    const token = localStorage.getItem('userToken');
+    const token = sessionStorage.getItem('userToken');
     if (token) {
-      const userObject = JSON.parse(localStorage.getItem('user'));
-      const provider = localStorage.getItem('provider');
+      const userObject = JSON.parse(sessionStorage.getItem('user'));
+      const provider = sessionStorage.getItem('provider');
       if(provider === 'google'){
         setUsername(userObject.given_name);
       }
@@ -23,6 +25,19 @@ function User() {
       }
       
     }
+  }, []);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('userToken')
+
+    axios.get(`http://localhost:8080/api/v1/auth/${token}`)
+    .then(res => {
+      console.log(res.data);
+      setCustomer(res.data);
+    })
+    .catch(error => {
+      console.error('Error fetching customer', error);
+    });
   }, []);
   return (
     <div className="bg-white">

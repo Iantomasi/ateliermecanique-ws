@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import NavBar from '../../Components/Navigation_Bars/Not_Logged_In/NavBar.js';
@@ -15,6 +15,8 @@ function Login() {
     const googleButton = useRef(null);
     const REDIRECT_URI = window.location.href;
 
+    const [validation, setValidation] = useState("");
+
     useEffect(() => {
         google.accounts.id.initialize({
             client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID || '',
@@ -23,18 +25,57 @@ function Login() {
     }, []);
 
     useEffect(() => {
+        const token = sessionStorage.getItem('userToken');
+        const provider = sessionStorage.getItem('provider');
     
-        const token = localStorage.getItem('userToken');
-
         if (token) {
-            navigate('/admin');
+            if (provider === 'google') {
+                axios.get(`http://localhost:8080/api/v1/auth/google-token-verification/${token}`)
+                    .then(res => {
+                        setValidation(res.data);
+                    })
+                    .catch(error => {
+                        console.error('Error logging in', error);
+                    });
+            } else if (provider === 'facebook') {
+                axios.get(`http://localhost:8080/api/v1/auth/facebook-token-verification/${token}`)
+                    .then(res => {
+                        setValidation(res.data); 
+                    })
+                    .catch(error => {
+                        console.error('Error logging in', error);
+                    });
+            } else if (provider === 'instagram') {
+                axios.get(`http://localhost:8080/api/v1/auth/instagram-token-verification/${token}`)
+                    .then(res => {
+                        setValidation(res.data); 
+                    })
+                    .catch(error => {
+                        console.error('Error logging in', error);
+                    });
+            }
         }
-    }, [navigate]);
+    }, [sessionStorage.getItem('userToken'), sessionStorage.getItem('provider')]);
+    
+    useEffect(() => {
+        if (validation === "Token is valid and not expired.") {
+            const token = sessionStorage.getItem('userToken');
+    
+            axios.get(`http://localhost:8080/api/v1/auth/${token}`)
+                .then(res => {
+                    res.data.role === "CUSTOMER" ? navigate('/user') : navigate('/admin');
+                })
+                .catch(error => {
+                    console.error('Error logging in', error);
+                });
+        }
+    }, [validation, navigate]);
+    
 
     const handleGoogleLogin = (response) => {
 
-        localStorage.setItem('userToken', response.credential);
-        localStorage.setItem('provider', 'google');
+        sessionStorage.setItem('userToken', response.credential);
+        sessionStorage.setItem('provider', 'google');
         const jwtToken = response.credential;
 
         //token has 3 parts, the kid is in the first part, each part is separated by a dot
@@ -45,16 +86,14 @@ function Login() {
     
         axios.post(`http://localhost:8080/api/v1/auth/google-login/${jwtToken}`)
         .then(res => {
-            console.log(res.data)
-            res.data.roles === "CUSTOMER" ? navigate('/user') : navigate('/admin');
+            res.data.role === "CUSTOMER" ? navigate('/user') : navigate('/admin');
         })
         .catch(error => {
             console.error('Error loging in', error);
         })
           
         const userObject = jwtDecode(response.credential);
-        console.log(userObject)
-        localStorage.setItem('user', JSON.stringify(userObject));
+        sessionStorage.setItem('user', JSON.stringify(userObject));
 
         
     };
@@ -64,9 +103,9 @@ function Login() {
     };
 
     const handleFacebookLogin = (response) => {
-        localStorage.setItem('userToken', response.data.accessToken);
-        localStorage.setItem('provider', 'facebook');
-        localStorage.setItem('user', JSON.stringify(response.data));
+        sessionStorage.setItem('userToken', response.data.accessToken);
+        sessionStorage.setItem('provider', 'facebook');
+        sessionStorage.setItem('user', JSON.stringify(response.data));
 
         const userAccess = {
             firstName: response.data.first_name,
@@ -76,7 +115,7 @@ function Login() {
           }
         axios.post('http://localhost:8080/api/v1/auth/facebook-login', userAccess)
         .then(res => {
-            console.log(res.data)
+            res.data.role === "CUSTOMER" ? navigate('/user') : navigate('/admin');
         })
         .catch(error => {
             console.error('Error loging in', error);
@@ -86,11 +125,12 @@ function Login() {
     }
 
     const handleInstagramLogin = (response) => {
-        console.log(response)
-        localStorage.setItem('userToken', response.data.access_token);
-        localStorage.setItem('provider', 'instagram');
-        localStorage.setItem('user', JSON.stringify(response.data));
+
+        sessionStorage.setItem('userToken', response.data.access_token);
+        sessionStorage.setItem('provider', 'instagram');
+        sessionStorage.setItem('user', JSON.stringify(response.data));
         
+        //This is just for now, we need to get our app verified by instagram in order to request for the user's email, first name and last name.
         const userAccess = {
             firstName: "",
             lastName: "",
@@ -100,7 +140,7 @@ function Login() {
 
          axios.post('http://localhost:8080/api/v1/auth/instagram-login', userAccess)
         .then(res => {
-            console.log(res.data)
+            res.data.role === "CUSTOMER" ? navigate('/user') : navigate('/admin');
         })
         .catch(error => {
             console.error('Error loging in', error);
