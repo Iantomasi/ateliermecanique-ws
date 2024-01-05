@@ -1,0 +1,70 @@
+@startuml
+title UpdateInvoiceById Design-Level Sequence Diagram (Admin)
+
+actor Mechanic
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant CustomerInvoiceDetailsPage as "<<View>>\nCustomerInvoiceDetailsPage"
+participant InvoiceController as "<<Controller>>\nInvoiceController"
+participant InvoiceService as "<<Service>>\nInvoiceService"
+participant InvoiceServiceImpl as "<<Service>>\nInvoiceServiceImpl"
+participant InvoiceRequestMapper as "<<Mapper>>\nInvoiceRequestMapper"
+participant InvoiceRepository as "<<Repository>>\nInvoiceRepository"
+participant InvoiceDatabase as "<<Database>>\nInvoiceDatabase"
+participant InvoiceResponseMapper as "<<Mapper>>\nInvoiceResponseMapper"
+
+Mechanic -> ReactApplication: Navigate to Invoice Details
+activate ReactApplication
+
+ReactApplication -> CustomerInvoiceDetailsPage: Render Invoice Details
+activate CustomerInvoiceDetailsPage
+
+CustomerInvoiceDetailsPage -> InvoiceController: PUT /api/v1/customers/{customerId}/invoices/{invoiceId}
+activate InvoiceController
+
+InvoiceController -> InvoiceService: updateInvoiceById(invoiceRequestModel, customerId, invoiceId)
+activate InvoiceService
+
+InvoiceService -> InvoiceServiceImpl: updateInvoiceById(invoiceRequestModel, customerId, invoiceId)
+activate InvoiceServiceImpl
+
+InvoiceServiceImpl -> InvoiceRequestMapper: requestToEntity(invoiceRequestModel)
+activate InvoiceRequestMapper
+
+InvoiceRequestMapper --> InvoiceServiceImpl: Invoice
+deactivate InvoiceRequestMapper
+
+InvoiceServiceImpl -> InvoiceRepository: save(updatedInvoice)
+activate InvoiceRepository
+
+InvoiceRepository -> InvoiceDatabase: UPDATE invoices SET ... WHERE customerId = customerId AND invoiceId = invoiceId
+activate InvoiceDatabase
+
+InvoiceDatabase --> InvoiceRepository: UpdateConfirmation
+deactivate InvoiceDatabase
+
+InvoiceRepository --> InvoiceServiceImpl: UpdatedInvoice
+deactivate InvoiceRepository
+
+InvoiceServiceImpl -> InvoiceResponseMapper: entityToResponseModel(UpdatedInvoice)
+activate InvoiceResponseMapper
+
+InvoiceResponseMapper --> InvoiceServiceImpl: InvoiceResponseModel
+deactivate InvoiceResponseMapper
+
+InvoiceServiceImpl --> InvoiceService: InvoiceResponseModel
+deactivate InvoiceServiceImpl
+
+InvoiceService --> InvoiceController: InvoiceResponseModel
+deactivate InvoiceService
+
+InvoiceController --> CustomerInvoiceDetailsPage: InvoiceResponseModel
+deactivate InvoiceController
+
+CustomerInvoiceDetailsPage --> ReactApplication: Display Updated Invoice Details
+deactivate CustomerInvoiceDetailsPage
+
+ReactApplication --> Mechanic: Confirm Invoice Update
+deactivate ReactApplication
+
+@enduml

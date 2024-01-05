@@ -1,0 +1,54 @@
+@startuml
+
+title DeleteCustomerAccount System Sequence Diagram
+
+actor Customer
+
+participant CustomerAccountController as "<<Controller>>\nCustomerAccountController"
+participant CustomerAccountService as "<<Service>>\nCustomerAccountService"
+participant CustomerAccountRepository as "<<Repository>>\nCustomerAccountRepository"
+participant VehicleService as "<<Service>>\nVehicleService"
+participant VehicleRepository as "<<Repository>>\nVehicleRepository"
+participant Database as "<<Database>>\nDatabase"
+
+Customer -> CustomerAccountController: DELETE /api/v1/customers/{customerId}
+activate CustomerAccountController
+
+CustomerAccountController -> CustomerAccountService: deleteCustomerAccountByCustomerId(customerId)
+activate CustomerAccountService
+
+CustomerAccountService -> CustomerAccountRepository: deleteCustomerAccountByCustomerId(customerId)
+activate CustomerAccountRepository
+
+CustomerAccountRepository -> Database: DELETE * FROM customers WHERE id = customerId
+activate Database
+
+Database --> CustomerAccountRepository: DeletionConfirmation
+
+deactivate CustomerAccountRepository
+deactivate Database
+
+CustomerAccountService -> VehicleService: deleteAllVehiclesByCustomerId(customerId)
+activate VehicleService
+
+VehicleService -> VehicleRepository: deleteAllVehiclesByCustomerId(customerId)
+activate VehicleRepository
+
+VehicleRepository -> Database: DELETE * FROM vehicles WHERE customerId = customerId
+activate Database
+
+Database --> VehicleRepository: DeletionConfirmation
+
+deactivate VehicleRepository
+deactivate Database
+
+deactivate VehicleService
+
+CustomerAccountService --> CustomerAccountController: DeletionConfirmation
+
+deactivate CustomerAccountService
+CustomerAccountController --> Customer: Customer deleted successfully
+
+deactivate CustomerAccountController
+
+@enduml

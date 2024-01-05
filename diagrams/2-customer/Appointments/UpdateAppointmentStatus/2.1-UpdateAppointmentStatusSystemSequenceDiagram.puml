@@ -1,0 +1,34 @@
+@startuml
+title UpdateAppointmentStatus System Sequence Diagram
+
+actor Customer
+
+participant AppointmentController as "<<Controller>>\nAppointmentController"
+participant AppointmentService as "<<Service>>\nAppointmentService"
+participant AppointmentRepository as "<<Repository>>\nAppointmentRepository"
+participant Database as "<<Database>>\nDatabase"
+
+Customer -> AppointmentController: PUT api/v1/customers/{customerId}/appointments/{appointmentId}/status
+activate AppointmentController
+
+AppointmentController -> AppointmentService: updateAppointmentStatus(customerId, appointmentId, statusUpdateModel)
+activate AppointmentService
+
+AppointmentService -> AppointmentRepository: updateAppointmentStatus(customerId, appointmentId, statusUpdateModel)
+activate AppointmentRepository
+
+AppointmentRepository -> Database: UPDATE appointments SET status = ... WHERE customerId = customerId AND id = appointmentId
+activate Database
+
+Database --> AppointmentRepository: UpdateConfirmation
+deactivate Database
+
+AppointmentRepository --> AppointmentService: UpdateConfirmation
+deactivate AppointmentRepository
+
+AppointmentService --> AppointmentController: UpdateConfirmation
+deactivate AppointmentService
+
+AppointmentController --> Customer: UpdateConfirmation
+deactivate AppointmentController
+@enduml

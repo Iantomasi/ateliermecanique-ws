@@ -1,0 +1,67 @@
+@startuml
+title GetAllCustomerInvoicesByCustomerId Design-Level Sequence Diagram (Admin)
+
+actor Mechanic
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant CustomerAccountDetailsPage as "<<View>>\nCustomerAccountDetailsPage"
+participant CustomerAccountInvoicesPage as "<<View>>\nCustomerAccountInvoicesPage"
+participant InvoiceController as "<<Controller>>\nInvoiceController"
+participant InvoiceService as "<<Service>>\nInvoiceService"
+participant InvoiceServiceImpl as "<<Service>>\nInvoiceServiceImpl"
+participant InvoiceRepository as "<<Repository>>\nInvoiceRepository"
+participant InvoiceResponseMapper as "<<Mapper>>\nInvoiceResponseMapper"
+participant Database as "<<Database>>\nDatabase"
+
+Mechanic -> ReactApplication: Navigate to Account Details
+activate ReactApplication
+
+ReactApplication -> CustomerAccountDetailsPage: Render()
+activate CustomerAccountDetailsPage
+
+CustomerAccountDetailsPage -> CustomerAccountInvoicesPage: Navigate to Invoices Page
+activate CustomerAccountInvoicesPage
+
+CustomerAccountInvoicesPage -> InvoiceController: GET /api/v1/customers/{customerId}/invoices
+activate InvoiceController
+
+InvoiceController -> InvoiceService: getAllInvoicesByCustomerId(customerId)
+activate InvoiceService
+
+InvoiceService -> InvoiceServiceImpl: getAllInvoicesByCustomerId(customerId)
+activate InvoiceServiceImpl
+
+InvoiceServiceImpl -> InvoiceRepository: findAllInvoicesByCustomerId(customerId)
+activate InvoiceRepository
+
+InvoiceRepository -> Database: SELECT * FROM invoices WHERE customerId = customerId
+activate Database
+
+Database --> InvoiceRepository: List<Invoice>
+deactivate Database
+
+InvoiceRepository --> InvoiceServiceImpl: List<Invoice>
+deactivate InvoiceRepository
+
+InvoiceServiceImpl -> InvoiceResponseMapper: entityToResponseModelList(List<Invoice>)
+activate InvoiceResponseMapper
+
+InvoiceResponseMapper --> InvoiceServiceImpl: List<InvoiceResponseModel>
+deactivate InvoiceResponseMapper
+
+InvoiceServiceImpl --> InvoiceService: List<InvoiceResponseModel>
+deactivate InvoiceServiceImpl
+
+InvoiceService --> InvoiceController: List<InvoiceResponseModel>
+deactivate InvoiceService
+
+InvoiceController --> CustomerAccountInvoicesPage: List<InvoiceResponseModel>
+deactivate InvoiceController
+
+CustomerAccountInvoicesPage --> ReactApplication: Display Invoices
+deactivate CustomerAccountInvoicesPage
+
+ReactApplication --> Mechanic: View Invoice Details
+deactivate ReactApplication
+
+@enduml

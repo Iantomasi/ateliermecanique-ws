@@ -1,0 +1,34 @@
+@startuml
+title GetAllInvoices System Sequence Diagram (Admin)
+
+actor Mechanic
+
+participant InvoiceController as "<<Controller>>\nInvoiceController"
+participant InvoiceService as "<<Service>>\nInvoiceService"
+participant InvoiceRepository as "<<Repository>>\nInvoiceRepository"
+participant Database as "<<Database>>\nDatabase"
+
+Mechanic -> InvoiceController: GET /api/v1/invoices
+activate InvoiceController
+
+InvoiceController -> InvoiceService: getAllInvoices()
+activate InvoiceService
+
+InvoiceService -> InvoiceRepository: getAllInvoices()
+activate InvoiceRepository
+
+InvoiceRepository -> Database: SELECT * FROM invoices
+activate Database
+
+Database --> InvoiceRepository: List<Invoice>
+deactivate Database
+
+InvoiceRepository --> InvoiceService: List<Invoice>
+deactivate InvoiceRepository
+
+InvoiceService --> InvoiceController: List<InvoiceResponseModel>
+deactivate InvoiceService
+
+InvoiceController --> Mechanic: List<InvoiceResponseModel>
+deactivate InvoiceController
+@enduml

@@ -1,0 +1,34 @@
+@startuml
+title Delete All Cancelled Appointments System Sequence Diagram (Admin)
+
+actor Mechanic
+
+participant AppointmentController as "<<Controller>>\nAppointmentController"
+participant AppointmentService as "<<Service>>\nAppointmentService"
+participant AppointmentRepository as "<<Repository>>\nAppointmentRepository"
+participant Database as "<<Database>>\nDatabase"
+
+Mechanic -> AppointmentController: DELETE /api/v1/appointments/status/cancelled
+activate AppointmentController
+
+AppointmentController -> AppointmentService: deleteAllCancelledAppointments()
+activate AppointmentService
+
+AppointmentService -> AppointmentRepository: deleteAllCancelledAppointments()
+activate AppointmentRepository
+
+AppointmentRepository -> Database: DELETE * FROM appointments WHERE status = 'CANCELLED'
+activate Database
+
+Database --> AppointmentRepository: DeletionConfirmation
+deactivate Database
+
+AppointmentRepository --> AppointmentService: DeletionConfirmation
+deactivate AppointmentRepository
+
+AppointmentService --> AppointmentController: DeletionConfirmation
+deactivate AppointmentService
+
+AppointmentController --> Mechanic: DeletionConfirmation
+deactivate AppointmentController
+@enduml

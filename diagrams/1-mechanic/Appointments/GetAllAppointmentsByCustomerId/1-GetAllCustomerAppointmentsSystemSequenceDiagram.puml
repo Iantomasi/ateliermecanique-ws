@@ -1,0 +1,34 @@
+@startuml
+title GetAllCustomerAppointments System Sequence Diagram (Admin)
+
+actor Mechanic
+
+participant AppointmentController as "<<Controller>>\nAppointmentController"
+participant AppointmentService as "<<Service>>\nAppointmentService"
+participant AppointmentRepository as "<<Repository>>\nAppointmentRepository"
+participant Database as "<<Database>>\nDatabase"
+
+Mechanic -> AppointmentController: GET /api/v1/customers/{customerId}/appointments
+activate AppointmentController
+
+AppointmentController -> AppointmentService: getAllAppointmentsByCustomerId(customerId)
+activate AppointmentService
+
+AppointmentService -> AppointmentRepository: findByCustomerId(customerId)
+activate AppointmentRepository
+
+AppointmentRepository -> Database: SELECT * FROM appointments WHERE customerId = customerId
+activate Database
+
+Database --> AppointmentRepository: List<Appointment>
+deactivate Database
+
+AppointmentRepository --> AppointmentService: List<Appointment>
+deactivate AppointmentRepository
+
+AppointmentService --> AppointmentController: List<AppointmentResponseModel>
+deactivate AppointmentService
+
+AppointmentController --> Mechanic: List<AppointmentResponseModel>
+deactivate AppointmentController
+@enduml

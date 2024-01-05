@@ -1,0 +1,95 @@
+@startuml
+!theme toy
+' Define class styles
+skinparam class {
+    BackgroundColor<<entity>> Wheat
+    BackgroundColor<<controller>> LightSkyBlue
+    BackgroundColor<<service>> LightGreen
+    BackgroundColor<<repository>> LightCoral
+    BackgroundColor<<mapper>> Khaki
+}
+
+' VehicleController
+class "<<controller>>\nVehicleController" as controller {
+    - VehicleService : vehicleService
+    + getAllVehiclesByCustomerId(String customerId) : ResponseEntity<List<VehicleResponseModel>>
+    + getVehicleByVehicleId(String customerId, String vehicleId) : ResponseEntity<VehicleResponseModel>
+    + addVehicleToCustomerAccount(String customerId, VehicleRequestModel vehicleRequestModel) : ResponseEntity<VehicleResponseModel>
+    + updateVehicleByVehicleId(VehicleRequestModel vehicleRequestModel, String customerId, String vehicleId) : ResponseEntity<VehicleResponseModel>
+    + deleteVehicleByVehicleId(String customerId, String vehicleId) : ResponseEntity<Void>
+}
+
+' VehicleService interface
+interface "VehicleService" as service {
+    + getAllVehiclesByCustomerId(String customerId) : List<VehicleResponseModel>
+    + getVehicleByVehicleId(String customerId, String vehicleId) : VehicleResponseModel
+    + addVehicleToCustomerAccount(String customerId, VehicleRequestModel vehicleRequestModel) : VehicleResponseModel
+    + updateVehicleByVehicleId(VehicleRequestModel vehicleRequestModel, String customerId, String vehicleId) : VehicleResponseModel
+    + deleteVehicleByVehicleId(String customerId, String vehicleId) : void
+}
+
+' VehicleServiceImpl class
+class "<<service>>\nVehicleServiceImpl" as serviceImpl {
+    - vehicleRepository : VehicleRepository
+    - vehicleResponseMapper : VehicleResponseMapper
+    - vehicleRequestMapper : VehicleRequestMapper
+    + getAllVehiclesByCustomerId(String customerId) : List<VehicleResponseModel>
+    + getVehicleByVehicleId(String customerId, String vehicleId) : VehicleResponseModel
+    + addVehicleToCustomerAccount(String customerId, VehicleRequestModel vehicleRequestModel) : VehicleResponseModel
+    + updateVehicleByVehicleId(VehicleRequestModel vehicleRequestModel, String customerId, String vehicleId) : VehicleResponseModel
+    + deleteVehicleByVehicleId(String customerId, String vehicleId) : void
+}
+serviceImpl .up.|> service
+
+' VehicleRepository interface
+interface "<<repository>>\nVehicleRepository" as repository {
+    + findAllVehiclesByCustomerId(String customerId) : List<Vehicle>
+    + findVehicleByCustomerIdAndVehicleIdentifier_VehicleId(String customerId, String vehicleId) : Vehicle
+    + save(Vehicle vehicle) : Vehicle
+    + delete(Vehicle vehicle) : void
+}
+
+' VehicleResponseMapper class
+class "<<mapper>>\nVehicleResponseMapper" as responseMapper {
+    + entityToResponseModel(Vehicle vehicle) : VehicleResponseModel
+    + entityToResponseModelList(List<Vehicle> vehicles) : List<VehicleResponseModel>
+}
+
+' VehicleRequestMapper class (assuming existence)
+class "<<mapper>>\nVehicleRequestMapper" as requestMapper {
+    + requestToEntity(VehicleRequestModel requestModel) : Vehicle
+}
+
+' Vehicle class
+class "<<entity>>\nVehicle" as vehicle {
+    - id : Integer
+    - vehicleIdentifier : VehicleIdentifier
+    - customerId : String
+    - make : String
+    - model : String
+    - year : String
+    - transmissionType : TransmissionType
+    - mileage : Integer
+}
+
+' VehicleIdentifier class
+class "VehicleIdentifier" as vehicleIdentifier {
+    - vehicleId : String
+    + getVehicleId() : String
+}
+
+' TransmissionType enum
+enum "TransmissionType" as transmissionType {
+  MANUAL
+  AUTOMATIC
+}
+
+' Vehicle Relationships
+controller --> service : uses
+serviceImpl --> repository : uses
+serviceImpl --> responseMapper : uses
+serviceImpl --> requestMapper : uses
+vehicle --> vehicleIdentifier : contains
+vehicle --> transmissionType : uses
+
+@enduml

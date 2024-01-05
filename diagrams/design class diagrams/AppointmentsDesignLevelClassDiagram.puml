@@ -1,0 +1,127 @@
+@startuml
+skinparam class {
+    BackgroundColor<<entity>> Wheat
+    BackgroundColor<<controller>> LightSkyBlue
+    BackgroundColor<<service>> LightGreen
+    BackgroundColor<<repository>> LightCoral
+    BackgroundColor<<mapper>> Khaki
+}
+
+' AppointmentController
+class "<<controller>>\nAppointmentController" as appointmentController {
+    - appointmentService : AppointmentService
+    + getAllAppointments() : ResponseEntity<List<AppointmentResponseModel>>
+    + getAllAppointmentsByCustomerId(String customerId) : ResponseEntity<List<AppointmentResponseModel>>
+    + getAppointmentByAppointmentId(String customerId, String appointmentId) : ResponseEntity<AppointmentResponseModel>
+    + getAllVisitsByStatus(String status) : ResponseEntity<List<AppointmentResponseModel>>
+    + addAppointmentToCustomerAccount(String customerId, AppointmentRequestModel appointmentRequestModel) : ResponseEntity<AppointmentResponseModel>
+    + updateAppointmentByAppointmentId(AppointmentRequestModel appointmentRequestModel, String customerId, String appointmentId) : ResponseEntity<AppointmentResponseModel>
+    + updateAppointmentStatusByAppointmentId(String appointmentId, Status status) : ResponseEntity<AppointmentResponseModel>
+    + deleteAppointmentByAppointmentId(String customerId, String appointmentId) : ResponseEntity<Void>
+    + deleteAllCancelledAppointments() : ResponseEntity<Void>
+}
+
+' AppointmentService interface
+interface "AppointmentService" as appointmentService {
+    + getAllAppointmentsByCustomerId(String customerId) : List<AppointmentResponseModel>
+    + getAppointmentByAppointmentId(String customerId, String appointmentId) : AppointmentResponseModel
+    + getAllVisitsByStatus(String status) : List<AppointmentResponseModel>
+    + addAppointmentToCustomerAccount(String customerId, AppointmentRequestModel appointmentRequestModel) : AppointmentResponseModel
+    + updateAppointmentByAppointmentId(AppointmentRequestModel appointmentRequestModel, String customerId, String appointmentId) : AppointmentResponseModel
+    + updateAppointmentStatusByAppointmentId(String appointmentId, Status status) : AppointmentResponseModel
+    + deleteAppointmentByAppointmentId(String customerId, String appointmentId) : void
+    + deleteAllCancelledAppointments() : void
+
+}
+
+' AppointmentServiceImpl class
+class "<<service>>\nAppointmentServiceImpl" as appointmentServiceImpl {
+    - appointmentRepository : AppointmentRepository
+    - appointmentResponseMapper : AppointmentResponseMapper
+    - appointmentRequestMapper : AppointmentRequestMapper
+    - emailService : EmailService
+    + getAllAppointmentsByCustomerId(String customerId) : List<AppointmentResponseModel>
+    + getAppointmentByAppointmentId(String customerId, String appointmentId) : AppointmentResponseModel
+    + getAllVisitsByStatus(String status) : List<AppointmentResponseModel>
+    + addAppointmentToCustomerAccount(String customerId, AppointmentRequestModel appointmentRequestModel) : AppointmentResponseModel
+    + updateAppointmentByAppointmentId(AppointmentRequestModel appointmentRequestModel, String customerId, String appointmentId) : AppointmentResponseModel
+    + updateAppointmentStatusByAppointmentId(String appointmentId, Status status) : AppointmentResponseModel
+    + deleteAppointmentByAppointmentId(String customerId, String appointmentId) : void
+    + deleteAllCancelledAppointments() : void
+}
+appointmentServiceImpl .up.|> appointmentService
+
+' AppointmentRepository interface
+interface "<<repository>>\nAppointmentRepository" as appointmentRepository {
+    + findAllAppointmentsByCustomerId(String customerId) : List<Appointment>
+    + findAppointmentByCustomerIdAndAppointmentId(String customerId, String appointmentId) : Appointment
+    + findAllAppointmentsByStatus(String status): List<Appointment>
+    + save(Appointment appointment) : Appointment
+    + delete(Appointment appointment) : void
+}
+
+' AppointmentResponseMapper class
+class "<<mapper>>\nAppointmentResponseMapper" as appointmentResponseMapper {
+    + entityToResponseModel(entity: Appointment) : AppointmentResponseModel
+    + entityToResponseModelList(entities: List<Appointment>) : List<AppointmentResponseModel>
+}
+
+' AppointmentRequestMapper class
+class "<<mapper>>\nAppointmentRequestMapper" as appointmentRequestMapper {
+    + requestModelToEntity(appointmentRequestModel: AppointmentRequestModel) : Appointment
+}
+
+' Appointment class
+class "<<entity>>\nAppointment" as appointment {
+    - id : UUID
+    - appointmentId : AppointmentIdentifier
+    - vehicleId : VehicleIdentifier
+    - customerId : CustomerAccountIdentifier
+    - appointmentDate : DateTime
+    - services : String
+    - comments : String
+    - status : Status
+}
+
+' AppointmentIdentifier class
+class "<<entity>>\nAppointmentIdentifier" as appointmentIdentifier {
+    - appointmentId : UUID
+    + getAppointmentId() : UUID
+}
+
+' VehicleIdentifier class
+class "<<entity>>\nVehicleIdentifier" as vehicleIdentifier {
+    - identifierDetails : String
+}
+
+' ClientIdentifier class
+class "<<entity>>\nCustomerAccountIdentifier" as customerAccountIdentifier {
+    - identifierDetails : String
+}
+
+' Status enum
+enum "Status" as status {
+    PENDING
+    CONFIRMED
+    COMPLETED
+    CANCELLED
+}
+
+' EmailService for managing email-related functionalities
+class "<<service>>\nEmailService" as emailService {
+    + sendEmail(appointmentID: UUID) : void
+}
+
+' Appointment Relationships
+appointmentController --> appointmentService : uses
+appointmentServiceImpl --> appointmentRepository : uses
+appointmentServiceImpl --> appointmentResponseMapper : uses
+appointmentServiceImpl --> appointmentRequestMapper : uses
+appointmentServiceImpl --> emailService : uses
+appointment --> appointmentIdentifier : contains
+appointment --> vehicleIdentifier : has
+appointment --> customerAccountIdentifier : has
+appointment --> status : has
+emailService --> appointmentRepository : uses
+
+@enduml

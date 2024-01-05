@@ -1,0 +1,4 @@
+Business Rules:
+
+- When deleting a customer , the vehicles associated with that customer also have to be deleted.
+- When deleting a customer, the invoices associated to that customer should be kept intact.

@@ -1,0 +1,27 @@
+@startuml
+title Create Invoice Design-Level Sequence Diagram (Admin)
+
+actor Mechanic
+
+participant InvoiceController as "<<Controller>>\nInvoiceController"
+participant InvoiceService as "<<Service>>\nInvoiceService"
+participant InvoiceRepository as "<<Repository>>\nInvoiceRepository"
+
+Mechanic -> InvoiceController: POST /api/v1/customers/{customerId}/invoices
+activate InvoiceController
+
+InvoiceController -> InvoiceService: addInvoice(customerId, invoiceRequestModel)
+activate InvoiceService
+
+InvoiceService -> InvoiceRepository: save(newInvoice)
+activate InvoiceRepository
+
+InvoiceRepository --> InvoiceService: Invoice
+deactivate InvoiceRepository
+
+InvoiceService --> InvoiceController: InvoiceResponseModel
+deactivate InvoiceService
+
+InvoiceController --> Mechanic: InvoiceResponseModel
+deactivate InvoiceController
+@enduml
