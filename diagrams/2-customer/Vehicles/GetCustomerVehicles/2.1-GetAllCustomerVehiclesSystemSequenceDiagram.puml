@@ -1,0 +1,34 @@
+@startuml
+title GetAllCustomerVehiclesById System Sequence Diagram
+
+actor Customer
+
+participant VehicleController as "<<Controller>>\nVehicleController"
+participant VehicleService as "<<Service>>\nVehicleService"
+participant VehicleRepository as "<<Repository>>\nVehicleRepository"
+participant Database as "<<Database>>\nDatabase"
+
+Customer -> VehicleController: GET /api/v1/customers/{customerId}/vehicles
+activate VehicleController
+
+VehicleController -> VehicleService: getAllVehiclesByCustomerId(customerId)
+activate VehicleService
+
+VehicleService -> VehicleRepository: findAllVehiclesByCustomerId(customerId)
+activate VehicleRepository
+
+VehicleRepository -> Database: SELECT * FROM vehicles WHERE customerId = customerId
+activate Database
+
+Database --> VehicleRepository: List<Vehicle>
+deactivate Database
+
+VehicleRepository --> VehicleService: List<Vehicle>
+deactivate VehicleRepository
+
+VehicleService --> VehicleController: List<VehicleResponseModel>
+deactivate VehicleService
+
+VehicleController --> Customer: List<VehicleResponseModel>
+deactivate VehicleController
+@enduml

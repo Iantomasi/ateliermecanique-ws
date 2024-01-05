@@ -1,0 +1,70 @@
+@startuml
+title UpdateAppointmentByAppointmentId Design-Level Sequence Diagram (Admin)
+
+actor Mechanic
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant CustomerAppointmentDetailsPage as "<<View>>\nCustomerAppointmentDetailsPage"
+participant AppointmentController as "<<Controller>>\nAppointmentController"
+participant AppointmentService as "<<Service>>\nAppointmentService"
+participant AppointmentServiceImpl as "<<Service>>\nAppointmentServiceImpl"
+participant AppointmentRequestMapper as "<<Mapper>>\nAppointmentRequestMapper"
+participant AppointmentRepository as "<<Repository>>\nAppointmentRepository"
+participant AppointmentDatabase as "<<Database>>\nAppointmentDatabase"
+participant AppointmentResponseMapper as "<<Mapper>>\nAppointmentResponseMapper"
+
+Mechanic -> ReactApplication: Navigate to Appointment Details
+activate ReactApplication
+
+ReactApplication -> CustomerAppointmentDetailsPage: Render Appointment Details
+activate CustomerAppointmentDetailsPage
+
+CustomerAppointmentDetailsPage -> AppointmentController: PUT /api/v1/customers/{customerId}/appointments/{appointmentId}
+activate AppointmentController
+
+AppointmentController -> AppointmentService: updateAppointmentByAppointmentId(appointmentRequestModel, customerId, appointmentId)
+activate AppointmentService
+
+AppointmentService -> AppointmentServiceImpl: updateAppointmentByAppointmentId(appointmentRequestModel, customerId, appointmentId)
+activate AppointmentServiceImpl
+
+AppointmentServiceImpl -> AppointmentRequestMapper: requestToEntity(appointmentRequestModel)
+activate AppointmentRequestMapper
+
+AppointmentRequestMapper --> AppointmentServiceImpl: Appointment
+deactivate AppointmentRequestMapper
+
+AppointmentServiceImpl -> AppointmentRepository: save(updatedAppointment)
+activate AppointmentRepository
+
+AppointmentRepository -> AppointmentDatabase: UPDATE appointments SET ... WHERE customerId = customerId AND appointmentId = appointmentId
+activate AppointmentDatabase
+
+AppointmentDatabase --> AppointmentRepository: UpdateConfirmation
+deactivate AppointmentDatabase
+
+AppointmentRepository --> AppointmentServiceImpl: UpdatedAppointment
+deactivate AppointmentRepository
+
+AppointmentServiceImpl -> AppointmentResponseMapper: entityToResponseModel(UpdatedAppointment)
+activate AppointmentResponseMapper
+
+AppointmentResponseMapper --> AppointmentServiceImpl: AppointmentResponseModel
+deactivate AppointmentResponseMapper
+
+AppointmentServiceImpl --> AppointmentService: AppointmentResponseModel
+deactivate AppointmentServiceImpl
+
+AppointmentService --> AppointmentController: AppointmentResponseModel
+deactivate AppointmentService
+
+AppointmentController --> CustomerAppointmentDetailsPage: AppointmentResponseModel
+deactivate AppointmentController
+
+CustomerAppointmentDetailsPage --> ReactApplication: Display Updated Appointment Details
+deactivate CustomerAppointmentDetailsPage
+
+ReactApplication --> Mechanic: Confirm Appointment Update
+deactivate ReactApplication
+
+@enduml

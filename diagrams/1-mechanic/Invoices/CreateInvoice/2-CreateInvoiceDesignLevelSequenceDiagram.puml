@@ -1,0 +1,70 @@
+@startuml
+title Create Invoice System Sequence Diagram (Admin)
+
+actor Mechanic
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant CustomerInvoicesPage as "<<View>>\nCustomerInvoicesPage"
+participant InvoiceController as "<<Controller>>\nInvoiceController"
+participant InvoiceService as "<<Service>>\nInvoiceService"
+participant InvoiceServiceImpl as "<<Service>>\nInvoiceServiceImpl"
+participant InvoiceRequestMapper as "<<Mapper>>\nInvoiceRequestMapper"
+participant InvoiceRepository as "<<Repository>>\nInvoiceRepository"
+participant Database as "<<Database>>\nDatabase"
+participant InvoiceResponseMapper as "<<Mapper>>\nInvoiceResponseMapper"
+
+Mechanic -> ReactApplication: Navigate to Invoices Page
+activate ReactApplication
+
+ReactApplication -> CustomerInvoicesPage: Render()
+activate CustomerInvoicesPage
+
+CustomerInvoicesPage -> InvoiceController: POST /api/v1/customers/{customerId}/invoices
+activate InvoiceController
+
+InvoiceController -> InvoiceService: addInvoice(customerId, invoiceRequestModel)
+activate InvoiceService
+
+InvoiceService -> InvoiceServiceImpl: addInvoice(customerId, invoiceRequestModel)
+activate InvoiceServiceImpl
+
+InvoiceServiceImpl -> InvoiceRequestMapper: requestModelToEntity(invoiceRequestModel)
+activate InvoiceRequestMapper
+
+InvoiceRequestMapper --> InvoiceServiceImpl: Invoice
+deactivate InvoiceRequestMapper
+
+InvoiceServiceImpl -> InvoiceRepository: save(newInvoice)
+activate InvoiceRepository
+
+InvoiceRepository -> Database: INSERT INTO invoices ...
+activate Database
+
+Database --> InvoiceRepository: Invoice
+deactivate Database
+
+InvoiceRepository --> InvoiceServiceImpl: Invoice
+deactivate InvoiceRepository
+
+InvoiceServiceImpl -> InvoiceResponseMapper: entityToResponseModel(Invoice)
+activate InvoiceResponseMapper
+
+InvoiceResponseMapper --> InvoiceServiceImpl: InvoiceResponseModel
+deactivate InvoiceResponseMapper
+
+InvoiceServiceImpl --> InvoiceService: InvoiceResponseModel
+deactivate InvoiceServiceImpl
+
+InvoiceService --> InvoiceController: InvoiceResponseModel
+deactivate InvoiceService
+
+InvoiceController --> CustomerInvoicesPage: InvoiceResponseModel
+deactivate InvoiceController
+
+CustomerInvoicesPage --> ReactApplication: Display Confirmation
+deactivate CustomerInvoicesPage
+
+ReactApplication --> Mechanic: Confirm Invoice Added
+deactivate ReactApplication
+
+@enduml

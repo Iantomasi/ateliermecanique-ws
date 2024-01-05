@@ -1,0 +1,45 @@
+@startuml
+
+actor User
+
+participant OAuthService as "<<Service>>\nOAuthService"
+participant OAuthProvider as "<<External System>>\nOAuthProvider"
+participant BackendServer as "<<Backend>>\nBackendServer"
+
+User -> OAuthService: Initiate OAuth Login
+activate OAuthService
+
+OAuthService -> OAuthProvider: Initiate OAuth Process
+activate OAuthProvider
+
+OAuthProvider --> OAuthService: OAuth authentication page
+deactivate OAuthProvider
+
+OAuthService -> User: Redirect to OAuth provider's login page
+deactivate OAuthService
+
+User -> OAuthProvider: Enters credentials
+activate OAuthProvider
+
+OAuthProvider --> OAuthService: Successful OAuth authentication
+deactivate OAuthProvider
+
+OAuthService -> BackendServer: Send OAuth token
+activate BackendServer
+
+BackendServer -> OAuthService: Validate OAuth Token
+activate OAuthService
+
+OAuthService -> OAuthProvider: Validate token with provider
+activate OAuthProvider
+
+OAuthProvider --> OAuthService: Token validation successful
+deactivate OAuthProvider
+
+OAuthService --> BackendServer: Token validated
+deactivate OAuthService
+
+BackendServer --> User: Login successful
+deactivate BackendServer
+
+@enduml

@@ -1,0 +1,95 @@
+@startuml
+
+title DeleteCustomerAccount Design-Level Sequence Diagram
+
+actor Customer
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant CustomerDetailsPage as "<<View>>\nCustomerDetailsPage"
+participant CustomerAccountController as "<<Controller>>\nCustomerAccountController"
+participant CustomerAccountService as "<<Service>>\nCustomerAccountService"
+participant CustomerAccountServiceImpl as "<<Service>>\nCustomerAccountServiceImpl"
+participant CustomerAccountRepository as "<<Repository>>\nCustomerAccountRepository"
+participant CustomerDatabase as "<<Database>>\nCustomerDatabase"
+participant VehicleService as "<<Service>>\nVehicleService"
+participant VehicleServiceImpl as "<<Service>>\nVehicleServiceImpl"
+participant VehicleRepository as "<<Repository>>\nVehicleRepository"
+participant VehicleDatabase as "<<Database>>\nVehicleDatabase"
+
+Customer -> ReactApplication: Navigate to Customer Details
+activate ReactApplication
+
+ReactApplication -> CustomerDetailsPage: Render Customer Details
+activate CustomerDetailsPage
+
+CustomerDetailsPage -> CustomerAccountController: DELETE /api/v1/customers/{customerId}
+activate CustomerAccountController
+
+CustomerAccountController -> CustomerAccountService: deleteCustomerAccountByCustomerId(customerId)
+activate CustomerAccountService
+
+CustomerAccountService -> CustomerAccountServiceImpl: deleteCustomerAccountByCustomerId(customerId)
+activate CustomerAccountServiceImpl
+
+CustomerAccountServiceImpl -> CustomerAccountRepository: findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId)
+activate CustomerAccountRepository
+
+CustomerAccountRepository -> CustomerDatabase: SELECT * FROM customers WHERE id = customerId
+activate CustomerDatabase
+
+CustomerDatabase --> CustomerAccountRepository: CustomerAccount
+
+deactivate CustomerAccountRepository
+
+CustomerAccountServiceImpl -> CustomerAccountRepository: delete(customer)
+activate CustomerAccountRepository
+
+CustomerAccountRepository -> CustomerDatabase: DELETE * FROM customers WHERE id = customerId
+activate CustomerDatabase
+
+CustomerDatabase --> CustomerAccountRepository: DeletionConfirmation
+
+deactivate CustomerAccountRepository
+deactivate CustomerDatabase
+
+CustomerAccountServiceImpl -> VehicleService: deleteAllVehiclesByCustomerId(customerId)
+activate VehicleService
+
+VehicleService -> VehicleServiceImpl: deleteAllVehiclesByCustomerId(customerId)
+activate VehicleServiceImpl
+
+VehicleServiceImpl -> VehicleRepository: findAllVehiclesByCustomerId(customerId)
+activate VehicleRepository
+
+VehicleRepository -> VehicleDatabase: SELECT * FROM vehicles WHERE customerId = customerId
+activate VehicleDatabase
+
+VehicleDatabase --> VehicleRepository: VehiclesData
+
+VehicleServiceImpl -> VehicleRepository: delete(vehicle)
+activate VehicleRepository
+
+VehicleRepository -> VehicleDatabase: DELETE * FROM vehicles WHERE customerId = customerId
+activate VehicleDatabase
+
+VehicleDatabase --> VehicleRepository: DeletionConfirmation
+
+deactivate VehicleRepository
+deactivate VehicleDatabase
+
+deactivate VehicleServiceImpl
+deactivate VehicleService
+
+CustomerAccountServiceImpl --> CustomerAccountService: DeletionConfirmation
+deactivate CustomerAccountServiceImpl
+
+CustomerAccountService --> CustomerAccountController: DeletionConfirmation
+deactivate CustomerAccountService
+
+CustomerAccountController --> CustomerDetailsPage: DeletionConfirmation
+deactivate CustomerAccountController
+
+CustomerDetailsPage --> Customer: Customer deleted successfully
+deactivate CustomerDetailsPage
+
+@enduml

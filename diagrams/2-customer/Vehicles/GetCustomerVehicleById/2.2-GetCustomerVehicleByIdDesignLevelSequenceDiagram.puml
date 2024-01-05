@@ -1,0 +1,67 @@
+@startuml
+title GetCustomerVehicleById Design-Level Sequence Diagram
+
+actor Customer
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant CustomerVehiclesPage as "<<View>>\nCustomerVehiclesPage"
+participant CustomerVehicleDetailsPage as "<<View>>\nCustomerVehicleDetailsPage"
+participant VehicleController as "<<Controller>>\nVehicleController"
+participant VehicleService as "<<Service>>\nVehicleService"
+participant VehicleServiceImpl as "<<Service>>\nVehicleServiceImpl"
+participant VehicleRepository as "<<Repository>>\nVehicleRepository"
+participant VehicleResponseMapper as "<<Mapper>>\nVehicleResponseMapper"
+participant Database as "<<Database>>\nDatabase"
+
+Customer -> ReactApplication: Navigate to Vehicles Page
+activate ReactApplication
+
+ReactApplication -> CustomerVehiclesPage: Render()
+activate CustomerVehiclesPage
+
+CustomerVehiclesPage -> CustomerVehicleDetailsPage: Select Vehicle
+activate CustomerVehicleDetailsPage
+
+CustomerVehicleDetailsPage -> VehicleController: GET /api/v1/customers/{customerId}/vehicles/{vehicleId}
+activate VehicleController
+
+VehicleController -> VehicleService: getVehicleByVehicleId(customerId, vehicleId)
+activate VehicleService
+
+VehicleService -> VehicleServiceImpl: getVehicleByVehicleId(customerId, vehicleId)
+activate VehicleServiceImpl
+
+VehicleServiceImpl -> VehicleRepository: findVehicleByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId)
+activate VehicleRepository
+
+VehicleRepository -> Database: SELECT * FROM vehicles WHERE customerId = customerId AND vehicleId = vehicleId
+activate Database
+
+Database --> VehicleRepository: Vehicle
+deactivate Database
+
+VehicleRepository --> VehicleServiceImpl: Vehicle
+deactivate VehicleRepository
+
+VehicleServiceImpl -> VehicleResponseMapper: entityToResponseModel(Vehicle)
+activate VehicleResponseMapper
+
+VehicleResponseMapper --> VehicleServiceImpl: VehicleResponseModel
+deactivate VehicleResponseMapper
+
+VehicleServiceImpl --> VehicleService: VehicleResponseModel
+deactivate VehicleServiceImpl
+
+VehicleService --> VehicleController: VehicleResponseModel
+deactivate VehicleService
+
+VehicleController --> CustomerVehicleDetailsPage: VehicleResponseModel
+deactivate VehicleController
+
+CustomerVehicleDetailsPage --> ReactApplication: Display Vehicle Details
+deactivate CustomerVehicleDetailsPage
+
+ReactApplication --> Customer: View Vehicle Details
+deactivate ReactApplication
+
+@enduml

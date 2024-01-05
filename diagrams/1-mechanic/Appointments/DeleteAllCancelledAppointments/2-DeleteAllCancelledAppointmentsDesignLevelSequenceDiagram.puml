@@ -1,0 +1,56 @@
+@startuml
+title Delete All Cancelled Appointments Design-Level System Sequence Diagram (Admin)
+
+actor Mechanic
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant CustomerAppointmentsPage as "<<View>>\nCustomerAppointmentsPage"
+participant AppointmentController as "<<Controller>>\nAppointmentController"
+participant AppointmentService as "<<Service>>\nAppointmentService"
+participant AppointmentServiceImpl as "<<Service>>\nAppointmentServiceImpl"
+participant AppointmentRepository as "<<Repository>>\nAppointmentRepository"
+participant Database as "<<Database>>\nDatabase"
+
+Mechanic -> ReactApplication: Navigate to Cancelled Appointments Page
+activate ReactApplication
+
+ReactApplication -> CustomerAppointmentsPage: Render Cancelled Appointments
+activate CustomerAppointmentsPage
+
+CustomerAppointmentsPage -> AppointmentController: DELETE /api/v1/appointments/status/cancelled
+activate AppointmentController
+
+AppointmentController -> AppointmentService: deleteAllCancelledAppointments()
+activate AppointmentService
+
+AppointmentService -> AppointmentServiceImpl: deleteAllCancelledAppointments()
+activate AppointmentServiceImpl
+
+AppointmentServiceImpl -> AppointmentRepository: deleteAllCancelledAppointments()
+activate AppointmentRepository
+
+AppointmentRepository -> Database: DELETE * FROM appointments WHERE status = 'CANCELLED'
+activate Database
+
+Database --> AppointmentRepository: DeletionConfirmation
+deactivate Database
+
+AppointmentRepository --> AppointmentServiceImpl: DeletionConfirmation
+deactivate AppointmentRepository
+
+AppointmentServiceImpl --> AppointmentService: DeletionConfirmation
+deactivate AppointmentServiceImpl
+
+AppointmentService --> AppointmentController: DeletionConfirmation
+deactivate AppointmentService
+
+AppointmentController --> CustomerAppointmentsPage: Display Deletion Confirmation
+deactivate AppointmentController
+
+CustomerAppointmentsPage --> ReactApplication: Confirm Cancelled Appointments Deletion
+deactivate CustomerAppointmentsPage
+
+ReactApplication --> Mechanic: Deletion of Cancelled Appointments Confirmed
+deactivate ReactApplication
+
+@enduml

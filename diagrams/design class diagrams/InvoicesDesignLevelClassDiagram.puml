@@ -1,0 +1,92 @@
+@startuml
+
+!theme toy
+' Define class styles
+skinparam class {
+    BackgroundColor<<entity>> Wheat
+    BackgroundColor<<controller>> LightSkyBlue
+    BackgroundColor<<service>> LightGreen
+    BackgroundColor<<repository>> LightCoral
+    BackgroundColor<<mapper>> Khaki
+}
+
+' InvoiceController
+class "<<controller>>\nInvoiceController" as controller {
+    - InvoiceService : invoiceService
+    + getAllInvoicesByCustomerId(String customerId) : ResponseEntity<List<InvoiceResponseModel>>
+    + getInvoiceByInvoiceId(String customerId, String invoiceId) : ResponseEntity<InvoiceResponseModel>
+    + addInvoiceToCustomerAccount(String customerId, InvoiceRequestModel invoiceRequestModel) : ResponseEntity<InvoiceResponseModel>
+    + updateInvoiceByInvoiceId(InvoiceRequestModel invoiceRequestModel, String customerId, String invoiceId) : ResponseEntity<InvoiceResponseModel>
+    + deleteInvoiceByInvoiceId(String customerId, String invoiceId) : ResponseEntity<Void>
+}
+
+' InvoiceService interface
+interface "InvoiceService" as service {
+    + getAllInvoicesByCustomerId(String customerId) : List<InvoiceResponseModel>
+    + getInvoiceByInvoiceId(String customerId, String invoiceId) : InvoiceResponseModel
+    + addInvoiceToCustomerAccount(String customerId, InvoiceRequestModel invoiceRequestModel) : InvoiceResponseModel
+    + updateInvoiceByInvoiceId(InvoiceRequestModel invoiceRequestModel, String customerId, String invoiceId) : InvoiceResponseModel
+    + deleteInvoiceByInvoiceId(String customerId, String invoiceId) : void
+}
+
+' InvoiceServiceImpl class
+class "<<service>>\nInvoiceServiceImpl" as serviceImpl {
+    - invoiceRepository : InvoiceRepository
+    - invoiceResponseMapper : InvoiceResponseMapper
+    - invoiceRequestMapper : InvoiceRequestMapper
+    + getAllInvoicesByCustomerId(String customerId) : List<InvoiceResponseModel>
+    + getInvoiceByInvoiceId(String customerId, String invoiceId) : InvoiceResponseModel
+    + addInvoiceToCustomerAccount(String customerId, InvoiceRequestModel invoiceRequestModel) : InvoiceResponseModel
+    + updateInvoiceByInvoiceId(InvoiceRequestModel invoiceRequestModel, String customerId, String invoiceId) : InvoiceResponseModel
+    + deleteInvoiceByInvoiceId(String customerId, String invoiceId) : void
+}
+serviceImpl .up.|> service
+
+' InvoiceRepository interface
+interface "<<repository>>\nInvoiceRepository" as repository {
+    + findAllInvoicesByCustomerId(String customerId) : List<Invoice>
+    + findInvoiceByCustomerIdAndInvoiceId(String customerId, String invoiceId) : Invoice
+    + save(Invoice invoice) : Invoice
+    + delete(Invoice invoice) : void
+}
+
+' InvoiceResponseMapper class
+class "<<mapper>>\nInvoiceResponseMapper" as responseMapper {
+    + entityToResponseModel(Invoice invoice) : InvoiceResponseModel
+    + entityToResponseModelList(List<Invoice> invoices) : List<InvoiceResponseModel>
+}
+
+' InvoiceRequestMapper class
+class "<<mapper>>\nInvoiceRequestMapper" as requestMapper {
+    + requestToEntity(InvoiceRequestModel requestModel) : Invoice
+}
+
+' Invoice class
+class "<<entity>>\nInvoice" as invoice {
+    - id : Integer
+    - invoiceIdentifier : InvoiceIdentifier
+    - customerId : String
+    - invoiceDate : DateTime
+    - mechanicNotes: String
+    - sumOfServices : Decimal
+}
+
+' InvoiceIdentifier class
+class "InvoiceIdentifier" as invoiceIdentifier {
+    - invoiceId : String
+    + getInvoiceId() : String
+}
+
+
+
+' Invoice Relationships
+controller --> service : uses
+serviceImpl --> repository : uses
+serviceImpl --> responseMapper : uses
+serviceImpl --> requestMapper : uses
+invoice --> invoiceIdentifier : contains
+
+
+
+
+@enduml

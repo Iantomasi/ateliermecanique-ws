@@ -21,11 +21,11 @@ public class FrontEndTesting {
         @BeforeEach()
         void setUp() {          // comment out the driver you don't use before testing
 
-            WebDriverManager.chromedriver().setup();
-             Configuration.browser = "chrome";
+            //WebDriverManager.chromedriver().setup();
+             //Configuration.browser = "chrome";
 
-            //WebDriverManager.firefoxdriver().setup();
-            //Configuration.browser = "firefox";
+            WebDriverManager.firefoxdriver().setup();
+            Configuration.browser = "firefox";
         }
 
         @Test
@@ -276,4 +276,17 @@ public class FrontEndTesting {
         }
 
 
+    @Test
+    public void getAllAppointments() {
+        open("http://localhost:3000/");
+        $("a[href='/login']").click();
+        sleep(1000);
+        $("button[type='submit']").click();
+        sleep(1000);
+        $("img[src='appointments.svg']").click();
+        sleep(1000);
+        $("p").shouldHave(text("APPOINTMENTS"));
     }
+
+
+}

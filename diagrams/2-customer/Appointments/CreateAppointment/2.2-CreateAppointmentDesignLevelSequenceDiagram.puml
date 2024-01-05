@@ -1,0 +1,27 @@
+@startuml
+title Create Appointment Design-Level Sequence Diagram (Admin)
+
+actor Customer
+
+participant AppointmentController as "<<Controller>>\nAppointmentController"
+participant AppointmentService as "<<Service>>\nAppointmentService"
+participant AppointmentRepository as "<<Repository>>\nAppointmentRepository"
+
+Customer -> AppointmentController: POST /api/v1/customers/{customerId}/appointments
+activate AppointmentController
+
+AppointmentController -> AppointmentService: addAppointment(customerId, appointmentRequestModel)
+activate AppointmentService
+
+AppointmentService -> AppointmentRepository: save(newAppointment)
+activate AppointmentRepository
+
+AppointmentRepository --> AppointmentService: Appointment
+deactivate AppointmentRepository
+
+AppointmentService --> AppointmentController: AppointmentResponseModel
+deactivate AppointmentService
+
+AppointmentController --> Customer: AppointmentResponseModel
+deactivate AppointmentController
+@enduml

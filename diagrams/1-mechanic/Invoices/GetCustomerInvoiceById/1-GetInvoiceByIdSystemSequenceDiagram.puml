@@ -1,0 +1,34 @@
+@startuml
+title GetCustomerInvoiceById System Sequence Diagram (Admin)
+
+actor Mechanic
+
+participant InvoiceController as "<<Controller>>\nInvoiceController"
+participant InvoiceService as "<<Service>>\nInvoiceService"
+participant InvoiceRepository as "<<Repository>>\nInvoiceRepository"
+participant Database as "<<Database>>\nDatabase"
+
+Mechanic -> InvoiceController: GET /api/v1/customers/{customerId}/invoices/{invoiceId}
+activate InvoiceController
+
+InvoiceController -> InvoiceService: getInvoiceByInvoiceId(customerId, invoiceId)
+activate InvoiceService
+
+InvoiceService -> InvoiceRepository: findInvoiceByCustomerIdAndInvoiceId(customerId, invoiceId)
+activate InvoiceRepository
+
+InvoiceRepository -> Database: SELECT * FROM invoices WHERE customerId = customerId AND invoiceId = invoiceId
+activate Database
+
+Database --> InvoiceRepository: Invoice
+deactivate Database
+
+InvoiceRepository --> InvoiceService: Invoice
+deactivate InvoiceRepository
+
+InvoiceService --> InvoiceController: InvoiceResponseModel
+deactivate InvoiceService
+
+InvoiceController --> Mechanic: InvoiceResponseModel
+deactivate InvoiceController
+@enduml

@@ -9,6 +9,7 @@ import CustomerDetails from './Pages/Admin_Pages/CustomerDetails_Page/CustomerDe
 import CustomerVehicles from './Pages/Admin_Pages/CustomerVehicles_Page/CustomerVehicles';
 import CustomerVehicleDetails from './Pages/Admin_Pages/CustomerVehicleDetails_Page/CustomerVehicleDetails';
 import AddNewVehicle from './Pages/Admin_Pages/AddNewVehicle_Page/AddNewVehicle';
+import Appointments from './Pages/Admin_Pages/Appointments_Page/Appointments';
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: "/admin/customers/:customerId/vehicles/newVehicle",
         element: <AddNewVehicle/>,
+      },
+      {
+        path : "/admin/appointments",
+        element: <Appointments/>
       }
 
   ]

@@ -1,0 +1,69 @@
+@startuml
+title UpdateAppointmentStatus Design-Level Sequence Diagram
+actor Customer
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant CustomerAppointmentDetailsPage as "<<View>>\nCustomerAppointmentDetailsPage"
+participant AppointmentController as "<<Controller>>\nAppointmentController"
+participant AppointmentService as "<<Service>>\nAppointmentService"
+participant AppointmentServiceImpl as "<<Service>>\nAppointmentServiceImpl"
+participant StatusUpdateMapper as "<<Mapper>>\nStatusUpdateMapper"
+participant AppointmentRepository as "<<Repository>>\nAppointmentRepository"
+participant AppointmentDatabase as "<<Database>>\nAppointmentDatabase"
+participant AppointmentResponseMapper as "<<Mapper>>\nAppointmentResponseMapper"
+
+Customer -> ReactApplication: Navigate to Update Appointment Status Page
+activate ReactApplication
+
+ReactApplication -> CustomerAppointmentDetailsPage: Render Update Status Form
+activate CustomerAppointmentDetailsPage
+
+CustomerAppointmentDetailsPage -> AppointmentController: PUT /api/v1/customers/{customerId}/appointments/{appointmentId}/status
+activate AppointmentController
+
+AppointmentController -> AppointmentService: updateAppointmentStatus(appointmentId, statusUpdateModel)
+activate AppointmentService
+
+AppointmentService -> AppointmentServiceImpl: updateAppointmentStatus(appointmentId, statusUpdateModel)
+activate AppointmentServiceImpl
+
+AppointmentServiceImpl -> StatusUpdateMapper: mapToEntity(statusUpdateModel)
+activate StatusUpdateMapper
+
+StatusUpdateMapper --> AppointmentServiceImpl: Appointment
+deactivate StatusUpdateMapper
+
+AppointmentServiceImpl -> AppointmentRepository: updateStatus(appointmentId, status)
+activate AppointmentRepository
+
+AppointmentRepository -> AppointmentDatabase: UPDATE appointments SET status = ... WHERE id = appointmentId
+activate AppointmentDatabase
+
+AppointmentDatabase --> AppointmentRepository: UpdateConfirmation
+deactivate AppointmentDatabase
+
+AppointmentRepository --> AppointmentServiceImpl: UpdateConfirmation
+deactivate AppointmentRepository
+
+AppointmentServiceImpl -> AppointmentResponseMapper: mapToResponseModel(UpdatedAppointment)
+activate AppointmentResponseMapper
+
+AppointmentResponseMapper --> AppointmentServiceImpl: AppointmentResponseModel
+deactivate AppointmentResponseMapper
+
+AppointmentServiceImpl --> AppointmentService: AppointmentResponseModel
+deactivate AppointmentServiceImpl
+
+AppointmentService --> AppointmentController: AppointmentResponseModel
+deactivate AppointmentService
+
+AppointmentController --> CustomerAppointmentDetailsPage: Display Update Confirmation
+deactivate AppointmentController
+
+CustomerAppointmentDetailsPage --> ReactApplication: Confirm Status Update
+deactivate CustomerAppointmentDetailsPage
+
+ReactApplication --> Customer: Status Update Confirmed
+deactivate ReactApplication
+
+@enduml

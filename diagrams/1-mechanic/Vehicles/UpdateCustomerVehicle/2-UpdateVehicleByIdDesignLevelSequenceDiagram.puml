@@ -1,0 +1,70 @@
+@startuml
+title UpdateVehicleByVehicleId Design-Level Sequence Diagram (Admin)
+
+actor Mechanic
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant CustomerVehicleDetailsPage as "<<View>>\nCustomerVehicleDetailsPage"
+participant VehicleController as "<<Controller>>\nVehicleController"
+participant VehicleService as "<<Service>>\nVehicleService"
+participant VehicleServiceImpl as "<<Service>>\nVehicleServiceImpl"
+participant VehicleRequestMapper as "<<Mapper>>\nVehicleRequestMapper"
+participant VehicleRepository as "<<Repository>>\nVehicleRepository"
+participant VehicleDatabase as "<<Database>>\nVehicleDatabase"
+participant VehicleResponseMapper as "<<Mapper>>\nVehicleResponseMapper"
+
+Mechanic -> ReactApplication: Navigate to Vehicle Details
+activate ReactApplication
+
+ReactApplication -> CustomerVehicleDetailsPage: Render Vehicle Details
+activate CustomerVehicleDetailsPage
+
+CustomerVehicleDetailsPage -> VehicleController: PUT /api/v1/customers/{customerId}/vehicles/{vehicleId}
+activate VehicleController
+
+VehicleController -> VehicleService: updateVehicleByVehicleId(vehicleRequestModel, customerId, vehicleId)
+activate VehicleService
+
+VehicleService -> VehicleServiceImpl: updateVehicleByVehicleId(vehicleRequestModel, customerId, vehicleId)
+activate VehicleServiceImpl
+
+VehicleServiceImpl -> VehicleRequestMapper: requestToEntity(vehicleRequestModel)
+activate VehicleRequestMapper
+
+VehicleRequestMapper --> VehicleServiceImpl: Vehicle
+deactivate VehicleRequestMapper
+
+VehicleServiceImpl -> VehicleRepository: save(updatedVehicle)
+activate VehicleRepository
+
+VehicleRepository -> VehicleDatabase: UPDATE vehicles SET ... WHERE customerId = customerId AND vehicleId = vehicleId
+activate VehicleDatabase
+
+VehicleDatabase --> VehicleRepository: UpdateConfirmation
+deactivate VehicleDatabase
+
+VehicleRepository --> VehicleServiceImpl: UpdatedVehicle
+deactivate VehicleRepository
+
+VehicleServiceImpl -> VehicleResponseMapper: entityToResponseModel(UpdatedVehicle)
+activate VehicleResponseMapper
+
+VehicleResponseMapper --> VehicleServiceImpl: VehicleResponseModel
+deactivate VehicleResponseMapper
+
+VehicleServiceImpl --> VehicleService: VehicleResponseModel
+deactivate VehicleServiceImpl
+
+VehicleService --> VehicleController: VehicleResponseModel
+deactivate VehicleService
+
+VehicleController --> CustomerVehicleDetailsPage: VehicleResponseModel
+deactivate VehicleController
+
+CustomerVehicleDetailsPage --> ReactApplication: Display Updated Vehicle Details
+deactivate CustomerVehicleDetailsPage
+
+ReactApplication --> Mechanic: Confirm Vehicle Update
+deactivate ReactApplication
+
+@enduml

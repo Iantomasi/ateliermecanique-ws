@@ -2,5 +2,5 @@ package com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalaye
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface AppointmentRepository {
+public interface AppointmentRepository extends JpaRepository<Appointment, Integer>{
 }

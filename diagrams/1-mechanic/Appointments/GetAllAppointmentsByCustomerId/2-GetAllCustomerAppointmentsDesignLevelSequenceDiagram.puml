@@ -1,0 +1,56 @@
+@startuml
+title GetAllCustomerAppointments Integrated System Sequence Diagram (Admin)
+
+actor Mechanic
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant CustomerAppointmentsPage as "<<View>>\nCustomerAppointmentsPage"
+participant AppointmentController as "<<Controller>>\nAppointmentController"
+participant AppointmentService as "<<Service>>\nAppointmentService"
+participant AppointmentServiceImpl as "<<Service>>\nAppointmentServiceImpl"
+participant AppointmentRepository as "<<Repository>>\nAppointmentRepository"
+participant Database as "<<Database>>\nDatabase"
+
+Mechanic -> ReactApplication: Navigate to Appointments Page
+activate ReactApplication
+
+ReactApplication -> CustomerAppointmentsPage: Render()
+activate CustomerAppointmentsPage
+
+CustomerAppointmentsPage -> AppointmentController: GET /api/v1/customers/{customerId}/appointments
+activate AppointmentController
+
+AppointmentController -> AppointmentService: getAllAppointmentsByCustomerId(customerId)
+activate AppointmentService
+
+AppointmentService -> AppointmentServiceImpl: getAllAppointmentsByCustomerId(customerId)
+activate AppointmentServiceImpl
+
+AppointmentServiceImpl -> AppointmentRepository: findByCustomerId(customerId)
+activate AppointmentRepository
+
+AppointmentRepository -> Database: SELECT * FROM appointments WHERE customerId = customerId
+activate Database
+
+Database --> AppointmentRepository: List<Appointment>
+deactivate Database
+
+AppointmentRepository --> AppointmentServiceImpl: List<Appointment>
+deactivate AppointmentRepository
+
+AppointmentServiceImpl --> AppointmentService: List<AppointmentResponseModel>
+deactivate AppointmentServiceImpl
+
+AppointmentService --> AppointmentController: List<AppointmentResponseModel>
+deactivate AppointmentService
+
+AppointmentController --> CustomerAppointmentsPage: List<AppointmentResponseModel>
+deactivate AppointmentController
+
+CustomerAppointmentsPage --> ReactApplication: Display Appointments
+deactivate CustomerAppointmentsPage
+
+ReactApplication --> Mechanic: View Appointments
+deactivate ReactApplication
+
+@enduml

@@ -1,0 +1,34 @@
+@startuml
+title UpdateVehicleByVehicleId System Sequence Diagram (Admin)
+
+actor Mechanic
+
+participant VehicleController as "<<Controller>>\nVehicleController"
+participant VehicleService as "<<Service>>\nVehicleService"
+participant VehicleRepository as "<<Repository>>\nVehicleRepository"
+participant Database as "<<Database>>\nDatabase"
+
+Mechanic -> VehicleController: PUT /api/v1/customers/{customerId}/vehicles/{vehicleId}
+activate VehicleController
+
+VehicleController -> VehicleService: updateVehicleByVehicleId(vehicleRequestModel, customerId, vehicleId)
+activate VehicleService
+
+VehicleService -> VehicleRepository: updateVehicleByVehicleId(vehicleRequestModel, customerId, vehicleId)
+activate VehicleRepository
+
+VehicleRepository -> Database: UPDATE vehicles SET ... WHERE customerId = customerId AND vehicleId = vehicleId
+activate Database
+
+Database --> VehicleRepository: UpdateConfirmation
+deactivate Database
+
+VehicleRepository --> VehicleService: UpdateConfirmation
+deactivate VehicleRepository
+
+VehicleService --> VehicleController: VehicleResponseModel
+deactivate VehicleService
+
+VehicleController --> Mechanic: VehicleResponseModel
+deactivate VehicleController
+@enduml

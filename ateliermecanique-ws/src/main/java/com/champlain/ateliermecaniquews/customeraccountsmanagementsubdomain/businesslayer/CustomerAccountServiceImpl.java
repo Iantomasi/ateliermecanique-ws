@@ -8,11 +8,13 @@ import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.pres
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountResponseModel;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.businesslayer.VehicleService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 @AllArgsConstructor
 public class CustomerAccountServiceImpl implements CustomerAccountService{
 

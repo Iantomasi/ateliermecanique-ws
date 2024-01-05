@@ -1,0 +1,34 @@
+@startuml
+title UpdateInvoice System Sequence Diagram (Admin)
+
+actor Mechanic
+
+participant InvoiceController as "<<Controller>>\nInvoiceController"
+participant InvoiceService as "<<Service>>\nInvoiceService"
+participant InvoiceRepository as "<<Repository>>\nInvoiceRepository"
+participant Database as "<<Database>>\nDatabase"
+
+Mechanic -> InvoiceController: PUT api/v1/customers/{customerId}/invoices/{invoiceId}
+activate InvoiceController
+
+InvoiceController -> InvoiceService: updateInvoiceById(invoiceRequestModel, customerId, invoiceId)
+activate InvoiceService
+
+InvoiceService -> InvoiceRepository: updateInvoiceById(invoiceRequestModel, customerId, invoiceId)
+activate InvoiceRepository
+
+InvoiceRepository -> Database: UPDATE invoices SET ... WHERE id = invoiceId
+activate Database
+
+Database --> InvoiceRepository: UpdateConfirmation
+deactivate Database
+
+InvoiceRepository --> InvoiceService: Invoice
+deactivate InvoiceRepository
+
+InvoiceService --> InvoiceController: InvoiceResponseModel
+deactivate InvoiceService
+
+InvoiceController --> Mechanic: InvoiceResponseModel
+deactivate InvoiceController
+@enduml

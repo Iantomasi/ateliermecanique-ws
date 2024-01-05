@@ -1,0 +1,34 @@
+@startuml
+title AddVehicleToCustomerAccount System Sequence Diagram
+
+actor Customer
+
+participant VehicleController as "<<Controller>>\nVehicleController"
+participant VehicleService as "<<Service>>\nVehicleService"
+participant VehicleRepository as "<<Repository>>\nVehicleRepository"
+participant Database as "<<Database>>\nDatabase"
+
+Customer -> VehicleController: POST /api/v1/customers/{customerId}/vehicles
+activate VehicleController
+
+VehicleController -> VehicleService: addVehicleToCustomerAccount(customerId, vehicleRequestModel)
+activate VehicleService
+
+VehicleService -> VehicleRepository: save(newVehicle)
+activate VehicleRepository
+
+VehicleRepository -> Database: INSERT INTO vehicles ...
+activate Database
+
+Database --> VehicleRepository: Vehicle
+deactivate Database
+
+VehicleRepository --> VehicleService: Vehicle
+deactivate VehicleRepository
+
+VehicleService --> VehicleController: VehicleResponseModel
+deactivate VehicleService
+
+VehicleController --> Customer: VehicleResponseModel
+deactivate VehicleController
+@enduml

@@ -1,0 +1,35 @@
+@startuml
+
+title GetAllCustomerAccounts System Sequence Diagram
+
+actor Customer
+
+participant CustomerAccountController as "<<Controller>>\nCustomerAccountController"
+participant CustomerAccountService as "<<Service>>\nCustomerAccountService"
+participant CustomerAccountRepository as "<<Repository>>\nCustomerAccountRepository"
+participant Database as "<<Database>>\nDatabase"
+
+Customer -> CustomerAccountController: GET /api/v1/customers
+activate CustomerAccountController
+
+CustomerAccountController -> CustomerAccountService: getAllCustomerAccounts()
+activate CustomerAccountService
+
+CustomerAccountService -> CustomerAccountRepository: getAllCustomerAccounts()
+activate CustomerAccountRepository
+
+CustomerAccountRepository -> Database: SELECT * FROM customers
+activate Database
+
+Database --> CustomerAccountRepository: List<CustomerAccount>
+deactivate Database
+
+CustomerAccountRepository --> CustomerAccountService: List<CustomerAccount>
+deactivate CustomerAccountRepository
+
+CustomerAccountService --> CustomerAccountController: List<CustomerAccountResponseModel>
+deactivate CustomerAccountService
+
+CustomerAccountController --> Customer: List<CustomerAccountResponseModel>
+deactivate CustomerAccountController
+@enduml

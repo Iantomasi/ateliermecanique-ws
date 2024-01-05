@@ -1,0 +1,327 @@
+@startuml
+' Define styles for the containers
+skinparam class {
+    BackgroundColor<<entity>> Wheat
+    BackgroundColor<<controller>> LightSkyBlue
+    BackgroundColor<<service>> LightGreen
+    BackgroundColor<<repository>> LightCoral
+    BackgroundColor<<mapper>> Khaki
+}
+
+
+' Customer Container
+package "Customer Components" <<customer>> {
+    ' CustomerAccountController
+    class "<<controller>>\nCustomerAccountController" as customerController {
+        + getAllCustomerAccounts() : ResponseEntity<List<CustomerAccountResponseModel>>
+        + getCustomerAccountByCustomerId(String customerId) : ResponseEntity<CustomerAccountResponseModel>
+        + updateCustomerAccountByCustomerId(String customerId, CustomerAccountRequestModel customerAccountRequestModel) : ResponseEntity<CustomerAccountResponseModel>
+        + deleteCustomerAccountByCustomerId(String customerId) : ResponseEntity<Void>
+    }
+
+    ' CustomerAccountService interface
+    interface "<<service>>\nCustomerAccountService" as customerService {
+        + getAllCustomerAccounts() : List<CustomerAccountResponseModel>
+        + getCustomerAccountByCustomerId(String customerId) : CustomerAccountResponseModel
+        + updateCustomerAccountByCustomerId(String customerId, CustomerAccountRequestModel customerAccountRequestModel) : CustomerAccountResponseModel
+        + deleteCustomerAccountByCustomerId(String customerId) : void
+    }
+
+    ' CustomerAccountServiceImpl class
+    class "<<service>>\nCustomerAccountServiceImpl" as customerServiceImpl {
+        - customerAccountRepository : CustomerAccountRepository
+        - customerAccountResponseMapper : CustomerAccountResponseMapper
+        - customerAccountRequestMapper : CustomerAccountRequestMapper
+        + getAllCustomerAccounts() : List<CustomerAccountResponseModel>
+        + getCustomerAccountByCustomerId(String customerId) : CustomerAccountResponseModel
+        + updateCustomerAccountByCustomerId(String customerId, CustomerAccountRequestModel customerAccountRequestModel) : CustomerAccountResponseModel
+        + deleteCustomerAccountByCustomerId(String customerId) : void
+    }
+
+    ' CustomerAccountRepository interface
+    interface "<<repository>>\nCustomerAccountRepository" as customerRepository {
+        + findAll() : List<CustomerAccount>
+        + findCustomerAccountByCustomerAccountIdentifier_CustomerId(String customerId) : CustomerAccount
+        + save(CustomerAccount customerAccount) : CustomerAccount
+        + delete(CustomerAccount customerAccount) : void
+    }
+
+    ' CustomerAccountResponseMapper class
+    class "<<mapper>>\nCustomerAccountResponseMapper" as customerResponseMapper {
+        + entityToResponseModelList(List<CustomerAccount> customerAccounts) : List<CustomerAccountResponseModel>
+        + entityToResponseModel(CustomerAccount customerAccount) : CustomerAccountResponseModel
+    }
+
+    ' CustomerAccountRequestMapper class
+    class "<<mapper>>\nCustomerAccountRequestMapper" as customerRequestMapper {
+        + requestModelToEntity(CustomerAccountRequestModel customerAccountRequestModel) : CustomerAccount
+    }
+
+    ' CustomerAccount class
+    class "<<entity>>\nCustomerAccount" as customerAccount {
+        - id : String
+        - firstName : String
+        - lastName : String
+        - email : String
+        - phoneNumber : String
+    }
+
+    ' CustomerAccountIdentifier class
+    class "<<entity>>\nCustomerAccountIdentifier" as customerIdentifier {
+        - customerId : String
+        + getCustomerId() : String
+    }
+}
+
+' Vehicle Container
+package "Vehicle Components" <<vehicle>> {
+    ' VehicleController
+    class "<<controller>>\nVehicleController" as vehicleController {
+        - VehicleService : vehicleService
+        + getAllVehiclesByCustomerId(String customerId) : ResponseEntity<List<VehicleResponseModel>>
+        + getVehicleByVehicleId(String customerId, String vehicleId) : ResponseEntity<VehicleResponseModel>
+        + addVehicleToCustomerAccount(String customerId, VehicleRequestModel vehicleRequestModel) : ResponseEntity<VehicleResponseModel>
+        + updateVehicleByVehicleId(VehicleRequestModel vehicleRequestModel, String customerId, String vehicleId) : ResponseEntity<VehicleResponseModel>
+        + deleteVehicleByVehicleId(String customerId, String vehicleId) : ResponseEntity<Void>
+    }
+
+    ' VehicleService interface
+    interface "VehicleService" as vehicleService {
+        + getAllVehiclesByCustomerId(String customerId) : List<VehicleResponseModel>
+        + getVehicleByVehicleId(String customerId, String vehicleId) : VehicleResponseModel
+        + addVehicleToCustomerAccount(String customerId, VehicleRequestModel vehicleRequestModel) : VehicleResponseModel
+        + updateVehicleByVehicleId(VehicleRequestModel vehicleRequestModel, String customerId, String vehicleId) : VehicleResponseModel
+        + deleteVehicleByVehicleId(String customerId, String vehicleId) : void
+    }
+
+    ' VehicleServiceImpl class
+    class "<<service>>\nVehicleServiceImpl" as vehicleServiceImpl {
+        - vehicleRepository : VehicleRepository
+        - vehicleResponseMapper : VehicleResponseMapper
+        - vehicleRequestMapper : VehicleRequestMapper
+        + getAllVehiclesByCustomerId(String customerId) : List<VehicleResponseModel>
+        + getVehicleByVehicleId(String customerId, String vehicleId) : VehicleResponseModel
+        + addVehicleToCustomerAccount(String customerId, VehicleRequestModel vehicleRequestModel) : VehicleResponseModel
+        + updateVehicleByVehicleId(VehicleRequestModel vehicleRequestModel, String customerId, String vehicleId) : VehicleResponseModel
+        + deleteVehicleByVehicleId(String customerId, String vehicleId) : void
+    }
+
+    ' VehicleRepository interface
+    interface "<<repository>>\nVehicleRepository" as vehicleRepository {
+        + findAllVehiclesByCustomerId(String customerId) : List<Vehicle>
+        + findVehicleByCustomerIdAndVehicleIdentifier_VehicleId(String customerId, String vehicleId) : Vehicle
+        + save(Vehicle vehicle) : Vehicle
+        + delete(Vehicle vehicle) : void
+    }
+
+    ' VehicleResponseMapper class
+    class "<<mapper>>\nVehicleResponseMapper" as vehicleResponseMapper {
+        + entityToResponseModel(Vehicle vehicle) : VehicleResponseModel
+        + entityToResponseModelList(List<Vehicle> vehicles) : List<VehicleResponseModel>
+    }
+
+    ' VehicleRequestMapper class
+    class "<<mapper>>\nVehicleRequestMapper" as vehicleRequestMapper {
+        + requestToEntity(VehicleRequestModel requestModel) : Vehicle
+    }
+
+    ' Vehicle class
+    class "<<entity>>\nVehicle" as vehicle {
+        - id : String
+        - vehicleIdentifier : VehicleIdentifier
+        - customerId : String
+        - make : String
+        - model : String
+        - year : Integer
+        - transmissionType : TransmissionType
+        - mileage : Integer
+    }
+
+    ' VehicleIdentifier class
+    class "VehicleIdentifier" as vehicleIdentifier {
+        - vehicleId : String
+        + getVehicleId() : String
+    }
+
+    ' TransmissionType enum
+    enum "TransmissionType" as transmissionType {
+      MANUAL
+      AUTOMATIC
+    }
+}
+
+' Appointment Components
+package "Appointment Components" <<appointment>> {
+
+' AppointmentController
+class "<<controller>>\nAppointmentController" as appointmentController {
+    - appointmentService : AppointmentService
+    + getAllAppointments() : ResponseEntity<List<AppointmentResponseModel>>
+    + getAllAppointmentsByCustomerId(String customerId) : ResponseEntity<List<AppointmentResponseModel>>
+    + getAppointmentByAppointmentId(String customerId, String appointmentId) : ResponseEntity<AppointmentResponseModel>
+    + getAllVisitsByStatus(String status) : ResponseEntity<List<AppointmentResponseModel>>
+    + addAppointmentToCustomerAccount(String customerId, AppointmentRequestModel appointmentRequestModel) : ResponseEntity<AppointmentResponseModel>
+    + updateAppointmentByAppointmentId(AppointmentRequestModel appointmentRequestModel, String customerId, String appointmentId) : ResponseEntity<AppointmentResponseModel>
+    + updateAppointmentStatusByAppointmentId(String appointmentId, Status status) : ResponseEntity<AppointmentResponseModel>
+    + deleteAppointmentByAppointmentId(String customerId, String appointmentId) : ResponseEntity<Void>
+    + deleteAllCancelledAppointments() : ResponseEntity<Void>
+}
+
+' AppointmentService interface
+interface "AppointmentService" as appointmentService {
+    + getAllAppointmentsByCustomerId(String customerId) : List<AppointmentResponseModel>
+    + getAppointmentByAppointmentId(String customerId, String appointmentId) : AppointmentResponseModel
+    + getAllVisitsByStatus(String status) : List<AppointmentResponseModel>
+    + addAppointmentToCustomerAccount(String customerId, AppointmentRequestModel appointmentRequestModel) : AppointmentResponseModel
+    + updateAppointmentByAppointmentId(AppointmentRequestModel appointmentRequestModel, String customerId, String appointmentId) : AppointmentResponseModel
+    + updateAppointmentStatusByAppointmentId(String appointmentId, Status status) : AppointmentResponseModel
+    + deleteAppointmentByAppointmentId(String customerId, String appointmentId) : void
+    + deleteAllCancelledAppointments() : void
+
+}
+
+' AppointmentServiceImpl class
+class "<<service>>\nAppointmentServiceImpl" as appointmentServiceImpl {
+    - appointmentRepository : AppointmentRepository
+    - appointmentResponseMapper : AppointmentResponseMapper
+    - appointmentRequestMapper : AppointmentRequestMapper
+    - emailService : EmailService
+    + getAllAppointmentsByCustomerId(String customerId) : List<AppointmentResponseModel>
+    + getAppointmentByAppointmentId(String customerId, String appointmentId) : AppointmentResponseModel
+    + getAllVisitsByStatus(String status) : List<AppointmentResponseModel>
+    + addAppointmentToCustomerAccount(String customerId, AppointmentRequestModel appointmentRequestModel) : AppointmentResponseModel
+    + updateAppointmentByAppointmentId(AppointmentRequestModel appointmentRequestModel, String customerId, String appointmentId) : AppointmentResponseModel
+    + updateAppointmentStatusByAppointmentId(String appointmentId, Status status) : AppointmentResponseModel
+    + deleteAppointmentByAppointmentId(String customerId, String appointmentId) : void
+    + deleteAllCancelledAppointments() : void
+}
+appointmentServiceImpl .up.|> appointmentService
+
+' AppointmentRepository interface
+interface "<<repository>>\nAppointmentRepository" as appointmentRepository {
+    + findAllAppointmentsByCustomerId(String customerId) : List<Appointment>
+    + findAppointmentByCustomerIdAndAppointmentId(String customerId, String appointmentId) : Appointment
+    + findAllAppointmentsByStatus(String status): List<Appointment>
+    + save(Appointment appointment) : Appointment
+    + delete(Appointment appointment) : void
+}
+
+  ' AppointmentResponseMapper class
+  class "<<mapper>>\nAppointmentResponseMapper" as appointmentResponseMapper {
+      + entityToResponseModel(entity: Appointment) : AppointmentResponseModel
+      + entityToResponseModelList(entities: List<Appointment>) : List<AppointmentResponseModel>
+  }
+
+  ' AppointmentRequestMapper class
+  class "<<mapper>>\nAppointmentRequestMapper" as appointmentRequestMapper {
+      + requestModelToEntity(appointmentRequestModel: AppointmentRequestModel) : Appointment
+  }
+
+' Appointment class
+class "<<entity>>\nAppointment" as appointment {
+    - id : UUID
+    - appointmentId : AppointmentIdentifier
+    - vehicleId : VehicleIdentifier
+    - customerId : CustomerAccountIdentifier
+    - appointmentDate : DateTime
+    - services : String
+    - comments : String
+    - status : Status
+}
+
+' AppointmentIdentifier class
+class "<<entity>>\nAppointmentIdentifier" as appointmentIdentifier {
+    - appointmentId : UUID
+    + getAppointmentId() : UUID
+}
+
+' Status enum
+enum "Status" as status {
+    PENDING
+    CONFIRMED
+    COMPLETED
+    CANCELLED
+}
+
+  ' EmailService for managing email-related functionalities
+  class "<<service>>\nEmailService" as emailService {
+      + sendEmail(appointmentID: UUID) : void
+  }
+
+}
+
+' Authentication Components
+package "Authentication Components" <<authentication>> {
+    class "<<controller>>\nAuthController" as authController {
+        + login(username: String, password: String) : ResponseEntity<TokenResponse>
+        + logout(token: String) : ResponseEntity<String>
+    }
+
+    class "<<service>>\nTokenService" as tokenService {
+        + generateToken(username: String, password: String) : String
+        + validateToken(token: String) : boolean
+        + invalidateToken(token: String) : void
+    }
+
+    interface "<<repository>>\nUserRepository" as userRepository {
+        + findByUsername(username: String) : User
+        + save(user: User) : User
+        + deleteByUsername(username: String) : void
+    }
+
+    class "<<entity>>\nUser" as user {
+        - id : Integer
+        - username : String
+        - password : String
+        - roles : List<Role>
+    }
+
+    enum "<<entity>>\nRole" as role {
+        ADMIN
+        CUSTOMER
+    }
+
+    class "<<entity>>\nTokenResponse" as tokenResponse {
+        - token : String
+        - expiration : Date
+    }
+}
+
+
+' Customer Relationships
+customerController --> customerService : uses
+customerServiceImpl --> customerRepository : uses
+customerServiceImpl --> customerResponseMapper : uses
+customerServiceImpl --> customerRequestMapper : uses
+customerAccount --> customerIdentifier : contains
+
+' Vehicle Relationships
+vehicleController --> vehicleService : uses
+vehicleServiceImpl --> vehicleRepository : uses
+vehicleServiceImpl --> vehicleResponseMapper : uses
+vehicleServiceImpl --> vehicleRequestMapper : uses
+vehicle --> vehicleIdentifier : contains
+vehicle --> transmissionType : uses
+
+
+
+' Appointment Relationships
+appointmentController --> appointmentService : uses
+appointmentServiceImpl --> appointmentRepository : uses
+appointmentServiceImpl --> appointmentResponseMapper : uses
+appointmentServiceImpl --> appointmentRequestMapper : uses
+appointmentServiceImpl --> emailService : uses
+appointment --> appointmentIdentifier : contains
+appointment --> vehicleIdentifier : has
+appointment --> customerIdentifier : has
+appointment --> status : has
+emailService --> appointmentRepository : uses
+
+' Relationships within Authentication Components
+authController .up.|> tokenService : uses
+tokenService --> userRepository : uses
+userRepository --> user : retrieves/stores
+user .. role : has
+user --> customerAccount : associatedWith
+
+@enduml

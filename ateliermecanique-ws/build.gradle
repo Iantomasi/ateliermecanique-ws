@@ -62,6 +62,8 @@ dependencies {
 
     runtimeOnly 'com.h2database:h2'
     implementation('com.h2database:h2')
+
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'	//for serializing and deserializing java.time.LocalDateTime
 }
 
 

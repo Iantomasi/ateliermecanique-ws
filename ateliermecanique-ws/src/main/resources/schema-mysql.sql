@@ -48,12 +48,14 @@ create table if not exists vehicles(
 
 
 create table if not exists appointments(
-                                       id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                       appointment_id VARCHAR(36),
-                                       vehicle_id VARCHAR(36),
-    appointment_datetime DATETIME,
-    appointment_services VARCHAR(255),
-    appointment_comments VARCHAR(255)
+                                           id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                           appointment_id VARCHAR(36),
+                                           customer_id VARCHAR(36),
+                                           vehicle_id VARCHAR(36),
+    appointment_date DATETIME,
+    services VARCHAR(255),
+    comments VARCHAR(255),
+    status VARCHAR(36)
 );
 
 
