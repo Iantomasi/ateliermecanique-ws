@@ -7,12 +7,13 @@ import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.data
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.Role;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datamapperlayer.CustomerAccountResponseMapper;
 
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountRequestModel;
+
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountResponseModel;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.CustomerAccountoAuthRequestModel;
 import com.nimbusds.jose.JOSEException;
 import lombok.AllArgsConstructor;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -29,6 +30,8 @@ public class oAuthServiceImpl implements oAuthService{
     @Override
     public CustomerAccountResponseModel googleLogin(String JWT) throws ParseException, JOSEException {
         String validation = tokenService.verifyGoogleToken(JWT);
+
+
         if (validation.equals("Token is valid and not expired.")){
             String[] tokenParts = JWT.split("\\.");
 

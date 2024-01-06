@@ -8,7 +8,7 @@ create table if not exists customers(
     username VARCHAR(36),
     email VARCHAR(36),
     phone_number VARCHAR(36),
-    token VARCHAR (5000),
+    token VARCHAR(5000),
     password CHAR(60), -- for BCrypt hashing
     role VARCHAR (10)
 );

@@ -7,6 +7,7 @@ import com.nimbusds.jose.JOSEException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.text.ParseException;
 
@@ -17,6 +18,7 @@ import java.text.ParseException;
 public class HomeController {
     final private TokenService tokenService;
     final private oAuthService oAuthService;
+    final private RestTemplate restTemplate;
     
     @GetMapping("/google-token-verification/{JWT}")
     public ResponseEntity<String> verifyGoogleToken(@PathVariable String JWT){

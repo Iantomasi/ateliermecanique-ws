@@ -1,6 +1,7 @@
 package com.champlain.ateliermecaniquews.authenticationsubdomain.businesslayer;
 
 import com.nimbusds.jose.JOSEException;
+import org.springframework.web.client.RestTemplate;
 
 import java.text.ParseException;
 

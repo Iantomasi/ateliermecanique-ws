@@ -80,7 +80,7 @@ function Login() {
 
         //token has 3 parts, the kid is in the first part, each part is separated by a dot
         // const tokenParts = jwtToken.split('.');
-        // const tokenHeader = JSON.parse(atob(tokenParts[1])); // Decoding base64url-encoded header --- This is the header
+        // const tokenHeader = JSON.parse(atob(tokenParts[0])); // Decoding base64url-encoded header --- This is the header
         // console.log(tokenHeader)
 
     
@@ -142,8 +142,6 @@ function Login() {
         .catch(error => {
             console.error('Error loging in', error);
         })
-
-        navigate('/admin');
     }
 
     const login = (response) => {

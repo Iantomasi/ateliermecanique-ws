@@ -11,6 +11,10 @@ function User() {
   const [showUserForm, setShowUserForm] = useState(false);
 
   useEffect(() => {
+    getCustomer();
+  }, []);
+
+  function getCustomer() {
     const token = sessionStorage.getItem('userToken');
 
     axios
@@ -27,9 +31,10 @@ function User() {
       .catch((error) => {
         console.error('Error fetching customer', error);
       });
-  }, []);
+  }
 
   const hideForm = () => {
+    getCustomer();
     setShowUserForm(false);
   };
 

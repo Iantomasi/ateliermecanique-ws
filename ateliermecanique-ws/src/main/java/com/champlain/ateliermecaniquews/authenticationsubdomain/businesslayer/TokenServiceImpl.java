@@ -8,6 +8,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import lombok.AllArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -25,12 +26,14 @@ public class TokenServiceImpl implements TokenService{
     private final String FACEBOOK_APP_SECRET = "408ed6f70a0674cfc76659eea63c3ea7";
     private final String FACEBOOK_APP_ID = "888035386206245";
 
+    @Autowired
+    private final RestTemplate restTemplate;
 
     @Override
     public String verifyGoogleToken(String jwtToken) throws JOSEException, ParseException {
 
         String[] tokenParts = jwtToken.split("\\.");
-        if (tokenParts.length < 1) {
+        if (tokenParts.length < 3) {
             return "Invalid JWT format";
         }
 
@@ -58,7 +61,6 @@ public class TokenServiceImpl implements TokenService{
                 HttpHeaders headers = new HttpHeaders();
                 headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
                 HttpEntity<String> entity = new HttpEntity<>(headers);
-
                 RestTemplate restTemplate = new RestTemplate();
                 ResponseEntity<String> response = restTemplate.exchange(jwkUrl, HttpMethod.GET, entity, String.class);
 
@@ -97,7 +99,7 @@ public class TokenServiceImpl implements TokenService{
                     return "Matching key for kid not found.";
                 }
             } else {
-                return "kid not found in token header";
+                return "kid not found in token header.";
             }
         }
         else {
@@ -113,7 +115,6 @@ public class TokenServiceImpl implements TokenService{
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.exchange(tokenCheckUrl, HttpMethod.GET, entity, String.class);
 
         if (response.getStatusCode() == HttpStatus.OK) {
@@ -147,7 +148,6 @@ public class TokenServiceImpl implements TokenService{
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.exchange(userInfoUrl, HttpMethod.GET, entity, String.class);
 
         if (response.getStatusCode() == HttpStatus.OK) {
@@ -166,6 +166,7 @@ public class TokenServiceImpl implements TokenService{
             return "Failed to validate Instagram token.";
         }
     }
+
 
 
 }
