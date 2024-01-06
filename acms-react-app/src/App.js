@@ -9,11 +9,9 @@ import CustomerDetails from './Pages/Admin_Pages/CustomerDetails_Page/CustomerDe
 import CustomerVehicles from './Pages/Admin_Pages/CustomerVehicles_Page/CustomerVehicles';
 import CustomerVehicleDetails from './Pages/Admin_Pages/CustomerVehicleDetails_Page/CustomerVehicleDetails';
 import AddNewVehicle from './Pages/Admin_Pages/AddNewVehicle_Page/AddNewVehicle';
-<<<<<<< HEAD
 import Appointments from './Pages/Admin_Pages/Appointments_Page/Appointments';
-=======
 import User from './Pages/User_Pages/User';
->>>>>>> 59f4409 (fixed trasmission display and added user main page)
+
 
 const router = createBrowserRouter([
   {
