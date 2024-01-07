@@ -1,7 +1,5 @@
 package com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer;
 
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccount;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountIdentifier;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -15,8 +13,6 @@ public class Vehicle {
 
     @Embedded
     private VehicleIdentifier vehicleIdentifier;
-
-
     @Column(name = "customer_id")
     private String customerId;
     private String make;

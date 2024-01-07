@@ -10,6 +10,8 @@ import CustomerVehicles from './Pages/Admin_Pages/CustomerVehicles_Page/Customer
 import CustomerVehicleDetails from './Pages/Admin_Pages/CustomerVehicleDetails_Page/CustomerVehicleDetails';
 import AddNewVehicle from './Pages/Admin_Pages/AddNewVehicle_Page/AddNewVehicle';
 import Appointments from './Pages/Admin_Pages/Appointments_Page/Appointments';
+import User from './Pages/User_Pages/User';
+
 
 const router = createBrowserRouter([
   {
@@ -56,6 +58,10 @@ const router = createBrowserRouter([
       {
         path : "/admin/appointments",
         element: <Appointments/>
+      },
+      {
+        path: "/user",
+        element: <User/>
       }
 
   ]

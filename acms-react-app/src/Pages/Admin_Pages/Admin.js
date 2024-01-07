@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect , useState} from 'react';
 import NavBar from '../../Components/Navigation_Bars/Logged_In/NavBar.js';
 import Footer from '../../Components/Footer/Footer.js';
 import HomeOption from '../../Components/General_Components/HomeOption.js';
 
 function Admin() {
+
   return (
     <div className="bg-white">
       <NavBar />
@@ -12,7 +13,7 @@ function Admin() {
           <img src="waveHand.svg" alt="hand" className="max-w-full" />
         </div>
 
-        <h2 className="text-7xl mt-2 mb-2">Welcome Admin!</h2>
+        <h2 className="text-7xl mt-2 mb-5">Welcome Admin!</h2>
 
         <div className="flex flex-col">
           <div className="flex">

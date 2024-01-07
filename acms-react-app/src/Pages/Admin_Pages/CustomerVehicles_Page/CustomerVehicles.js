@@ -15,13 +15,11 @@ function CustomerVehicles() {
 
   const handleCustomerClick = (customerId) => {
     navigate(`/admin/customers/${customerId}/vehicles/newVehicle`);
-    console.log(customerId);
   };
 
   useEffect(() => {
     axios.get(`http://localhost:8080/api/v1/customers/${customerId}/vehicles`)
       .then(res => {
-        console.log('API response:', res);
         if (res.status === 200) {
           setVehicles(res.data);
         }
@@ -71,6 +69,13 @@ function CustomerVehicles() {
               </table>
             </div>
           </div>
+        </div>
+      </div>
+      <div className="w-full flex justify-between">
+        <div className="flex justify-around w-full">
+          <img src='/blue-car.svg' alt='car' className="w-1/3 h-auto" />
+          <img src='/car.svg' alt='car' className="w-1/3 h-auto" />
+          <img src='/moto.svg' alt='car' className="w-1/3 h-auto" />
         </div>
       </div>
       <Footer />

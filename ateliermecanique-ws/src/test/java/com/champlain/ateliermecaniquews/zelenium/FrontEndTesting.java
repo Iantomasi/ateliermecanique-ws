@@ -21,16 +21,16 @@ public class FrontEndTesting {
         @BeforeEach()
         void setUp() {          // comment out the driver you don't use before testing
 
-            //WebDriverManager.chromedriver().setup();
-             //Configuration.browser = "chrome";
+            WebDriverManager.chromedriver().setup();
+             Configuration.browser = "chrome";
 
-            WebDriverManager.firefoxdriver().setup();
-            Configuration.browser = "firefox";
+//            WebDriverManager.firefoxdriver().setup();
+//            Configuration.browser = "firefox";
         }
 
         @Test
         public void getAllCustomerAccounts() {
-            open("http://localhost:3000/");
+            open("https://localhost:3000/");
             $("a[href='/login']").click();
             sleep(1000);
             $("button[type='submit']").click();
@@ -43,7 +43,7 @@ public class FrontEndTesting {
         // GIULIANO 01
         @Test
         public void getCustomerAccountByCustomerId() {
-            open("http://localhost:3000/");
+            open("https://localhost:3000/");
             $("a[href='/login']").click();
             sleep(1000);
             $("button[type='submit']").click();
@@ -61,7 +61,7 @@ public class FrontEndTesting {
         // CRISTIAN 01
         @Test
         public void updateCustomerAccountByCustomerId() {
-            open("http://localhost:3000/");
+            open("https://localhost:3000/");
             $("a[href='/login']").click();
             sleep(1000);
             $("button[type='submit']").click();
@@ -83,7 +83,7 @@ public class FrontEndTesting {
         // MICHAEL 01
         @Test
         public void getAllVehiclesForCustomerAccount() {
-            open("http://localhost:3000/");
+            open("https://localhost:3000/");
             $("a[href='/login']").click();
             sleep(1000);
             $("button[type='submit']").click();
@@ -103,7 +103,7 @@ public class FrontEndTesting {
         // GIULIANO 02
         @Test
         public void getVehicleByVehicleId() {
-            open("http://localhost:3000/");
+            open("https://localhost:3000/");
             $("a[href='/login']").click();
             sleep(1000);
             $("button[type='submit']").click();
@@ -111,7 +111,7 @@ public class FrontEndTesting {
             $("img[src='customersImage.svg']").click();
             sleep(1000);
 
-            String customerId = "tuvw8x45-3y6z-8794-2abf-96328w6bu162";
+            String customerId = "aebc4d79-2b6f-4527-3zda-05432x5ar321";
             String vehicleId = "0f8c5e36-9e94-4c6d-921d-29d7e2e923b5";
 
             $$("td").findBy(text(customerId)).click();
@@ -135,14 +135,14 @@ public class FrontEndTesting {
         // GIULIANO 03
         @Test
         public void updateVehicleByVehicleId() {
-            open("http://localhost:3000/");
+            open("https://localhost:3000/");
             $("a[href='/login']").click();
             sleep(1000);
             $("button[type='submit']").click();
             sleep(1000);
             $("img[src='customersImage.svg']").click();
             sleep(1000);
-            String customerId = "tuvw8x45-3y6z-8794-2abf-96328w6bu162";
+            String customerId = "aebc4d79-2b6f-4527-3zda-05432x5ar321";
             String vehicleId = "0f8c5e36-9e94-4c6d-921d-29d7e2e923b5";
 
             SelenideElement customerLink = $$("td").findBy(text(customerId));
@@ -166,7 +166,7 @@ public class FrontEndTesting {
             $("input[name='model']").setValue("NewModel");
             $("input[name='year']").setValue("2023");
 
-            $("select[name='transmissionType']").selectOption("Manual");
+            $("select[name='transmission_type']").selectOption("Manual");
             $("input[name='mileage']").setValue("1000");
 
             $("button[type='submit']").click();
@@ -176,7 +176,7 @@ public class FrontEndTesting {
         // CRISTIAN 02
         @Test
         public void deleteCustomerAccountByCustomerId(){
-            open("http://localhost:3000/");
+            open("https://localhost:3000/");
             $("a[href='/login']").click();
             sleep(1000);
             $("button[type='submit']").click();
@@ -203,7 +203,7 @@ public class FrontEndTesting {
         // MICHAEL 02
         @Test
         public void addVehicleToCustomerAccount(){
-            open("http://localhost:3000/");
+            open("https://localhost:3000/");
             $("a[href='/login']").click();
             sleep(1000);
             $("button[type='submit']").click();
@@ -237,7 +237,7 @@ public class FrontEndTesting {
         // MOHIT 01
         @Test
         public void deleteVehicleByVehicleId() {
-            open("http://localhost:3000/");
+            open("https://localhost:3000/");
             $("a[href='/login']").click();
             sleep(1000);
             $("button[type='submit']").click();
@@ -246,7 +246,7 @@ public class FrontEndTesting {
             sleep(1000);
 
             // ethan customer
-            String customerId = "mnop8q45-3r6s-8792-2abd-96326u6bs160";
+            String customerId = "cdff4g82-9e8h-7532-1qws-75321v5ar963";
             String vehicleIdToDelete = "01aa1f26-9f9b-438e-8346-572c83c2f181";
 
             $$("td").findBy(text(customerId)).click();
@@ -278,7 +278,7 @@ public class FrontEndTesting {
 
     @Test
     public void getAllAppointments() {
-        open("http://localhost:3000/");
+        open("https://localhost:3000/");
         $("a[href='/login']").click();
         sleep(1000);
         $("button[type='submit']").click();
