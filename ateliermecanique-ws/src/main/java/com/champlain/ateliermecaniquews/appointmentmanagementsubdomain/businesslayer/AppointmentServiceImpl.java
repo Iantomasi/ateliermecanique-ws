@@ -2,6 +2,7 @@ package com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.business
 
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Appointment;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.AppointmentRepository;
+import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Status;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datamapperlayer.AppointmentRequestMapper;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datamapperlayer.AppointmentResponseMapper;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentResponseModel;
@@ -29,6 +30,35 @@ public class AppointmentServiceImpl implements AppointmentService{
         return appointmentResponseMapper.entityToResponseModelList(appointmentRepository.findAll());
     }
 
+    @Override
+    public AppointmentResponseModel updateAppointmentStatusAdmin(String appointmentId, boolean isConfirm) {
+        Appointment appointment = appointmentRepository.findAppointmentByAppointmentIdentifier_AppointmentId(appointmentId);
+
+        // Set the status based on the button pressed in the frontend
+        if (isConfirm) {
+            appointment.setStatus(Status.CONFIRMED);
+        } else {
+            appointment.setStatus(Status.CANCELLED);
+        }
+
+        appointmentRepository.save(appointment);
+        return appointmentResponseMapper.entityToResponseModel(appointment);
+    }
+
+    @Override
+    public AppointmentResponseModel updateAppointmentStatusCustomer(String customerId, String appointmentId, boolean isConfirm) {
+        Appointment appointment = appointmentRepository.findAppointmentByCustomerIdAndAppointmentIdentifier_AppointmentId(customerId, appointmentId);
+
+        // Set the status based on the button pressed in the frontend
+        if (isConfirm) {
+            appointment.setStatus(Status.CONFIRMED);
+        } else {
+            appointment.setStatus(Status.CANCELLED);
+        }
+
+        appointmentRepository.save(appointment);
+        return appointmentResponseMapper.entityToResponseModel(appointment);
+    }
 
 
 }

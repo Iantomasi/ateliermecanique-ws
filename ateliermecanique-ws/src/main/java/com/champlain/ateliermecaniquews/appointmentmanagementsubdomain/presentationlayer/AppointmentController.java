@@ -1,14 +1,10 @@
 package com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer;
 
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.businesslayer.AppointmentService;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountResponseModel;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,6 +23,27 @@ public class AppointmentController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.ok(appointments);
+    }
+
+
+    // Admin
+    @PutMapping("/appointments/{appointmentId}/updateStatus")
+    public ResponseEntity<AppointmentResponseModel> updateAppointmentStatusAdmin(@PathVariable String appointmentId, @RequestParam boolean isConfirm) {
+        AppointmentResponseModel appointment = appointmentService.updateAppointmentStatusAdmin(appointmentId, isConfirm);
+        if (appointment == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(appointment);
+    }
+
+    // Customer
+    @PutMapping("/customers/{customerId}/appointments/{appointmentId}/updateStatus")
+    public ResponseEntity<AppointmentResponseModel> updateAppointmentStatusCustomer(@PathVariable String customerId, @PathVariable String appointmentId, @RequestParam boolean isConfirm) {
+        AppointmentResponseModel appointment = appointmentService.updateAppointmentStatusCustomer(customerId, appointmentId, isConfirm);
+        if (appointment == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(appointment);
     }
 
 

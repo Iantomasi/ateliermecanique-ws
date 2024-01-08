@@ -16,7 +16,7 @@ class "<<controller>>\nAppointmentController" as appointmentController {
     + getAllVisitsByStatus(String status) : ResponseEntity<List<AppointmentResponseModel>>
     + addAppointmentToCustomerAccount(String customerId, AppointmentRequestModel appointmentRequestModel) : ResponseEntity<AppointmentResponseModel>
     + updateAppointmentByAppointmentId(AppointmentRequestModel appointmentRequestModel, String customerId, String appointmentId) : ResponseEntity<AppointmentResponseModel>
-    + updateAppointmentStatusByAppointmentId(String appointmentId, Status status) : ResponseEntity<AppointmentResponseModel>
+    + updateAppointmentStatus(String appointmentId, Status status) : ResponseEntity<AppointmentResponseModel>
     + deleteAppointmentByAppointmentId(String customerId, String appointmentId) : ResponseEntity<Void>
     + deleteAllCancelledAppointments() : ResponseEntity<Void>
 }
@@ -45,7 +45,7 @@ class "<<service>>\nAppointmentServiceImpl" as appointmentServiceImpl {
     + getAllVisitsByStatus(String status) : List<AppointmentResponseModel>
     + addAppointmentToCustomerAccount(String customerId, AppointmentRequestModel appointmentRequestModel) : AppointmentResponseModel
     + updateAppointmentByAppointmentId(AppointmentRequestModel appointmentRequestModel, String customerId, String appointmentId) : AppointmentResponseModel
-    + updateAppointmentStatusByAppointmentId(String appointmentId, Status status) : AppointmentResponseModel
+    + updatedAppointmentStatus(String appointmentId, boolean isConfirm) : AppointmentResponseModel
     + deleteAppointmentByAppointmentId(String customerId, String appointmentId) : void
     + deleteAllCancelledAppointments() : void
 }
@@ -54,7 +54,7 @@ appointmentServiceImpl .up.|> appointmentService
 ' AppointmentRepository interface
 interface "<<repository>>\nAppointmentRepository" as appointmentRepository {
     + findAllAppointmentsByCustomerId(String customerId) : List<Appointment>
-    + findAppointmentByCustomerIdAndAppointmentId(String customerId, String appointmentId) : Appointment
+    + findAppointmentByAppointmentIdentifier_AppointmentId(String customerId, String appointmentId) : Appointment
     + findAllAppointmentsByStatus(String status): List<Appointment>
     + save(Appointment appointment) : Appointment
     + delete(Appointment appointment) : void
