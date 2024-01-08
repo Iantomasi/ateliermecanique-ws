@@ -89,7 +89,7 @@ public class VehicleServiceImpl implements VehicleService {
         vehicleToUpdate.setYear(vehicleRequestModel.getYear());
 
         // Check for non-null transmission type and update after converting to enum
-        TransmissionType transmissionType = vehicleRequestModel.getTransmissionType();
+        TransmissionType transmissionType = vehicleRequestModel.getTransmission_type();
         if (transmissionType != null) {
             // Assuming the enum is valid and does not need to be converted from a string
             vehicleToUpdate.setTransmission_type(transmissionType);
@@ -116,7 +116,7 @@ public class VehicleServiceImpl implements VehicleService {
         newVehicle.setMake(vehicleRequestModel.getMake());
         newVehicle.setModel(vehicleRequestModel.getModel());
         newVehicle.setYear(vehicleRequestModel.getYear());
-        newVehicle.setTransmission_type(vehicleRequestModel.getTransmissionType());
+        newVehicle.setTransmission_type(vehicleRequestModel.getTransmission_type());
         newVehicle.setMileage(vehicleRequestModel.getMileage());
 
 

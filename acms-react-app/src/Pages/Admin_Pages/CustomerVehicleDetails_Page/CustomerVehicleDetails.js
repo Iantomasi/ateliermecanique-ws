@@ -122,7 +122,7 @@ function CustomerVehicleDetails() {
                 <input className="w-full p-4 rounded border border-gray-400 mb-5" name="year" value={vehicleDetails.year} onChange={handleInputChange} type="text" required />
 
                 <label className="font-bold">Transmission Type</label>
-                <select className="w-full p-4 rounded border border-gray-400 mb-5" name="transmission_type" value={vehicleDetails.transmission_type} onChange={handleInputChange} required>
+                <select className="w-full p-4 rounded border border-gray-400 mb-5" name="transmission_type" value={vehicleDetails.transmission_type} onChange={handleInputChange}  required>
                   <option value="">Select Transmission Type</option>
                   <option value="AUTOMATIC">Automatic</option>
                   <option value="MANUAL">Manual</option>
