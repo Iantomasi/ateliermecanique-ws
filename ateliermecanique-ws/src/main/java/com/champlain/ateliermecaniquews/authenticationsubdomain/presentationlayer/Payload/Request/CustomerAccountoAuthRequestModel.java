@@ -1,4 +1,4 @@
-package com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer;
+package com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,9 +7,10 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
-public class LoginRequestModel {
+public class CustomerAccountoAuthRequestModel {
     private String firstName;
     private String lastName;
     private String email;
     private String token;
+    private String role;
 }

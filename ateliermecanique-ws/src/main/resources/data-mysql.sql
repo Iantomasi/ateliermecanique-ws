@@ -118,3 +118,10 @@ INSERT INTO appointments (appointment_id, customer_id, vehicle_id, appointment_d
 
 -- Appointment 13 (Mason Rodriguez 4)
 INSERT INTO appointments (appointment_id, customer_id, vehicle_id, appointment_date, services, comments, status) VALUE ('1008dc5c-d460-443f-8f37-a174284f8684', 'yzab8cd5-3e6f-8796-2abi-96330c6bw164', '08hh8i9d-5ii6-9aj7-dkj8-7j8k9l2n22', '2024-09-25 19:00', 'Oil Change', 'None', 'PENDING');
+INSERT INTO appointments (appointment_id, customer_id, vehicle_id, appointment_date, services, comments, status) VALUE ('1008dc5c-d460-443f-8f37-a174284f868l', 'yzab8cd5-3e6f-8796-2abi-96330c6bw164', '08hh8i9d-5ii6-9aj7-dkj8-7j8k9l2n22', '2024-03-24 18:00', 'Brakes', 'None', 'CANCELLED');
+
+--ROLES
+
+INSERT INTO roles (name) VALUES ('CUSTOMER');
+INSERT INTO roles (name) VALUES ('ADMIN');
+

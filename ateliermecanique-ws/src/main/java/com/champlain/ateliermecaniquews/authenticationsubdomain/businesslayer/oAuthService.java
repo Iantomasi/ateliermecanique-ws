@@ -1,6 +1,6 @@
 package com.champlain.ateliermecaniquews.authenticationsubdomain.businesslayer;
 
-import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.LoginRequestModel;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request.LoginRequestModel;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountResponseModel;
 import com.nimbusds.jose.JOSEException;
 

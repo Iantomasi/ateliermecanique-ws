@@ -2,6 +2,8 @@ package com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlay
 
 import com.champlain.ateliermecaniquews.authenticationsubdomain.businesslayer.TokenService;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.businesslayer.oAuthService;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.controllers.AuthController;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request.LoginRequestModel;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.utils.InvalidAccessTokenException;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountResponseModel;
 import com.nimbusds.jose.JOSEException;
@@ -13,19 +15,19 @@ import org.springframework.web.client.RestTemplate;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class HomeControllerTest {
+class AuthControllerTest {
 
     private TokenService tokenService;
     private oAuthService oAuthService;
     private RestTemplate restTemplate;
-    private HomeController homeController;
+    private AuthController homeController;
 
     @BeforeEach
     void setUp() {
         tokenService = mock(TokenService.class);
         oAuthService = mock(oAuthService.class);
         restTemplate = mock(RestTemplate.class);
-        homeController = new HomeController(tokenService, oAuthService, restTemplate);
+        homeController = new AuthController(tokenService, oAuthService, restTemplate);
     }
 
     @Test

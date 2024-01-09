@@ -49,4 +49,25 @@ create table if not exists invoices(
     invoice_sumofservices DECIMAL(15,2)
 );
 
+CREATE TABLE if not exists users (
+                       id INT AUTO_INCREMENT PRIMARY KEY,
+                       username VARCHAR(20) NOT NULL,
+                       email VARCHAR(50) NOT NULL,
+                       password VARCHAR(120) NOT NULL,
+                       UNIQUE (username),
+                       UNIQUE (email)
+);
+
+CREATE TABLE if not exists roles (
+                                     id INT AUTO_INCREMENT PRIMARY KEY,
+                                     name VARCHAR(20) NOT NULL
+    );
+
+CREATE TABLE if not exists user_roles (
+                            user_id INT,
+                            role_id INT,
+                            PRIMARY KEY (user_id, role_id),
+                            FOREIGN KEY (user_id) REFERENCES users(id),
+                            FOREIGN KEY (role_id) REFERENCES roles(id)
+);
 
