@@ -7,6 +7,7 @@ import java.util.List;
 public interface AppointmentService {
 
     List<AppointmentResponseModel> getAllAppointments();
+    List<AppointmentResponseModel> getAllAppointmentsByCustomerId(String customerId);
     AppointmentResponseModel updateAppointmentStatusAdmin(String appointmentId, boolean isConfirm);
     AppointmentResponseModel updateAppointmentStatusCustomer(String customerId, String appointmentId, boolean isConfirm);
 }

@@ -16,9 +16,21 @@ public class AppointmentController {
 
     final private AppointmentService appointmentService;
 
+    // Admin
     @GetMapping("/appointments")
     public ResponseEntity<List<AppointmentResponseModel>> getAllAppointments() {
         List<AppointmentResponseModel> appointments = appointmentService.getAllAppointments();
+        if (appointments == null || appointments.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(appointments);
+    }
+
+    // Customer
+
+    @GetMapping("/customers/{customerId}/appointments")
+    public ResponseEntity<List<AppointmentResponseModel>> getAllAppointmentsByCustomerId(@PathVariable String customerId) {
+        List<AppointmentResponseModel> appointments = appointmentService.getAllAppointmentsByCustomerId(customerId);
         if (appointments == null || appointments.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

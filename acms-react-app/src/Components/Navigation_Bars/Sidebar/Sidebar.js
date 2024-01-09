@@ -20,7 +20,7 @@ function Sidebar({ customerId }) {
           </a>
         </div>
         <div className="mb-5 hover:bg-gray-100 p-4">
-          <a href="/appointments">
+        <a href={`/admin/customers/${customerId}/appointments`}>
             <i className="appointments-icon"></i>
             Appointments
           </a>
