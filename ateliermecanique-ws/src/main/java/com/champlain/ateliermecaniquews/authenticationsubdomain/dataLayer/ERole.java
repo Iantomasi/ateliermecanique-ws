@@ -1,6 +1,6 @@
 package com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer;
 
 public enum ERole {
-    CUSTOMER,
-    ADMIN
+    ROLE_CUSTOMER,
+    ROLE_ADMIN
 }

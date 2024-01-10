@@ -45,13 +45,13 @@ dependencies {
     implementation 'com.nimbusds:nimbus-jose-jwt:9.30.2'
     implementation 'org.json:json:20230227'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'io.jsonwebtoken:jjwt-api:0.11.3' // Use the latest version available
-
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5' // Use the latest version available
+    implementation 'io.jsonwebtoken:jjwt-gson:0.11.5'
 
     compileOnly 'org.projectlombok:lombok'
 
     runtimeOnly 'mysql:mysql-connector-java'
-    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.3'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
@@ -60,7 +60,7 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-    // testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'com.codeborne:selenide:6.17.0'
     testImplementation 'io.github.bonigarcia:webdrivermanager:5.6.2'

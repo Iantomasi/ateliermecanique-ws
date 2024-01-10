@@ -12,7 +12,6 @@ import AddNewVehicle from './Pages/Admin_Pages/AddNewVehicle_Page/AddNewVehicle'
 import Appointments from './Pages/Admin_Pages/Appointments_Page/Appointments';
 import User from './Pages/User_Pages/User';
 import CustomerAppointments from './Pages/Admin_Pages/CustomerAppointments_Page/CustomerAppointments';
-
 import AppointmentSpecifics from './Pages/Admin_Pages/AppointmentSpecifics_Page/AppointmentSpecifics';
 import Calendar from './Pages/Admin_Pages/AppointmentNew_Page/Calendar';
 import CustomerAppointmentDetails from './Pages/Admin_Pages/CustomerAppointmentDetails_Page/CustomerAppointmentDetails';
@@ -107,3 +106,4 @@ function App() {
 }
 
 export default App;
+

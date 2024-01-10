@@ -7,6 +7,7 @@ import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.Role;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.RoleRepository;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request.LoginRequest;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request.LoginRequestModel;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request.SignupRequest;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Response.JWTResponse;
@@ -35,7 +36,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/auth")
-@CrossOrigin(origins = "*")
 @AllArgsConstructor
 public class AuthController {
     final private TokenService tokenService;
@@ -114,7 +114,7 @@ public class AuthController {
 
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequestModel loginRequest){
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest){
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),loginRequest.getPassword()));
 
@@ -141,7 +141,7 @@ public class AuthController {
                     .body(new MessageResponse("Error: username is already taken!"));
         }
 
-        if(userRepository.existsByUsername(signupRequest.getEmail())){
+        if(userRepository.existsByEmail(signupRequest.getEmail())){
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: email is already in use!"));
@@ -157,7 +157,7 @@ public class AuthController {
 
 
         if(strRoles == null){
-            Role userRole = roleRepository.findByName(ERole.CUSTOMER)
+            Role userRole = roleRepository.findByName(ERole.ROLE_CUSTOMER)
                     .orElseThrow(()-> new RuntimeException("Error: Role is not found"));
             roles.add(userRole);
         } else {
@@ -165,13 +165,13 @@ public class AuthController {
 
                 switch (role){
                     case "admin":
-                        Role adminRole = roleRepository.findByName(ERole.ADMIN)
+                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
                                 .orElseThrow(()-> new RuntimeException("Error: Role is not found"));
                         roles.add(adminRole);
                         break;
 
                     default:
-                        Role userRole = roleRepository.findByName(ERole.CUSTOMER)
+                        Role userRole = roleRepository.findByName(ERole.ROLE_CUSTOMER)
                                 .orElseThrow(()-> new RuntimeException("Error: Role is not found"));
                         roles.add(userRole);
                 }

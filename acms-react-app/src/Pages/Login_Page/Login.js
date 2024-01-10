@@ -7,8 +7,12 @@ import { useNavigate } from 'react-router-dom';
 import { LoginSocialFacebook, LoginSocialInstagram} from 'reactjs-social-login';
 import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
+import authService from '../../Services/auth.service.js';
 
 function Login() {
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
     const google = window.google;
     const navigate = useNavigate();
@@ -144,13 +148,23 @@ function Login() {
         })
     }
 
-    const login = (response) => {
-        navigate('/admin');
-    };
-
-    function handleSubmit(event) {
+    function handleLogin(event) {
         event.preventDefault();
-        login();
+        authService.login(email, password).then(
+            () => {
+                navigate("/admin");
+            },
+            (error) => {
+                const resMessage =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+
+                alert(resMessage);
+            }
+        );
     }
 
     return (
@@ -158,9 +172,9 @@ function Login() {
             <NavBar />
             <main className="flex-grow flex flex-col justify-center">
                 <h1 className="text-5xl font-bold m-10 text-center">Welcome Back!</h1>
-                <form className="text-center max-w-md mx-auto pb-16" onSubmit={handleSubmit}>
-                    <input className="w-full h-16 px-4 my-4 rounded border bg-gray-100 focus:border-gray-500 focus:outline-none" type="email" placeholder="Enter your email" name="email" />
-                    <input className="w-full h-16 px-4 my-4 rounded border bg-gray-100 focus:border-gray-500 focus:outline-none" type="password" placeholder="Enter your password" name="password" />
+                <form className="text-center max-w-md mx-auto pb-16" onSubmit={handleLogin}>
+                    <input className="w-full h-16 px-4 my-4 rounded border bg-gray-100 focus:border-gray-500 focus:outline-none" type="email" placeholder="Enter your email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                    <input className="w-full h-16 px-4 my-4 rounded border bg-gray-100 focus:border-gray-500 focus:outline-none" type="password" placeholder="Enter your password"  value={password} onChange={(e) => setPassword(e.target.value)} required />
                     <a className="text-blue-500" href='#'>Forgot Password?</a>
                     <button className="w-full h-16 px-4 my-4 bg-gray-200 text-black border-none cursor-pointer transition duration-300 hover:bg-gray-400 rounded" type='submit'>Login</button>
                 </form>
