@@ -8,16 +8,28 @@ participant AppointmentService as "<<Service>>\nAppointmentService"
 participant AppointmentRepository as "<<Repository>>\nAppointmentRepository"
 participant Database as "<<Database>>\nDatabase"
 
-Mechanic -> AppointmentController: PUT api/v1/customers/{customerId}/appointments/{appointmentId}/status
+Mechanic -> AppointmentController: PUT api/v1/appointments/{appointmentId}/updateStatus?isConfirm
 activate AppointmentController
 
-AppointmentController -> AppointmentService: updateAppointmentStatus(customerId, appointmentId, statusUpdateModel)
+AppointmentController -> AppointmentService: updateAppointmentStatus(appointmentId, isConfirm)
 activate AppointmentService
 
-AppointmentService -> AppointmentRepository: updateAppointmentStatus(customerId, appointmentId, statusUpdateModel)
+AppointmentService -> AppointmentRepository: findAppointmentByAppointmentIdentifier_AppointmentId(appointmentId)
 activate AppointmentRepository
 
-AppointmentRepository -> Database: UPDATE appointments SET status = ... WHERE customerId = customerId AND id = appointmentId
+AppointmentRepository -> Database: SELECT * appointment WHERE id = appointmentId
+activate Database
+
+Database --> AppointmentRepository: AppointmentDetails
+deactivate Database
+
+AppointmentRepository --> AppointmentService: AppointmentDetails
+deactivate AppointmentRepository
+
+AppointmentService -> AppointmentRepository: Save updated appointment
+activate AppointmentRepository
+
+AppointmentRepository -> Database: UPDATE appointments SET status = ... WHERE id = appointmentId
 activate Database
 
 Database --> AppointmentRepository: UpdateConfirmation
@@ -26,9 +38,9 @@ deactivate Database
 AppointmentRepository --> AppointmentService: UpdateConfirmation
 deactivate AppointmentRepository
 
-AppointmentService --> AppointmentController: UpdateConfirmation
+AppointmentService --> AppointmentController: AppointmentResponseModel
 deactivate AppointmentService
 
-AppointmentController --> Mechanic: UpdateConfirmation
+AppointmentController --> Mechanic: AppointmentResponseModel
 deactivate AppointmentController
 @enduml

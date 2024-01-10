@@ -22,13 +22,13 @@ activate CustomerAppointmentDetailsPage
 CustomerAppointmentDetailsPage -> AppointmentController: PUT /api/v1/customers/{customerId}/appointments/{appointmentId}
 activate AppointmentController
 
-AppointmentController -> AppointmentService: updateAppointmentByAppointmentId(appointmentRequestModel, customerId, appointmentId)
+AppointmentController -> AppointmentService: updateAppointmentByAppointmentId(appointmentRequestModel, appointmentId)
 activate AppointmentService
 
-AppointmentService -> AppointmentServiceImpl: updateAppointmentByAppointmentId(appointmentRequestModel, customerId, appointmentId)
+AppointmentService -> AppointmentServiceImpl: updateAppointmentByAppointmentId(appointmentRequestModel, appointmentId)
 activate AppointmentServiceImpl
 
-AppointmentServiceImpl -> AppointmentRequestMapper: requestToEntity(appointmentRequestModel)
+AppointmentServiceImpl -> AppointmentRequestMapper: requestModelToEntity(appointmentRequestModel)
 activate AppointmentRequestMapper
 
 AppointmentRequestMapper --> AppointmentServiceImpl: Appointment

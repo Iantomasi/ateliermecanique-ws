@@ -152,30 +152,28 @@ package "Vehicle Components" <<vehicle>> {
 
 ' Appointment Components
 package "Appointment Components" <<appointment>> {
-
 ' AppointmentController
 class "<<controller>>\nAppointmentController" as appointmentController {
     - appointmentService : AppointmentService
     + getAllAppointments() : ResponseEntity<List<AppointmentResponseModel>>
     + getAllAppointmentsByCustomerId(String customerId) : ResponseEntity<List<AppointmentResponseModel>>
-    + getAppointmentByAppointmentId(String customerId, String appointmentId) : ResponseEntity<AppointmentResponseModel>
-    + getAllVisitsByStatus(String status) : ResponseEntity<List<AppointmentResponseModel>>
-    + addAppointmentToCustomerAccount(String customerId, AppointmentRequestModel appointmentRequestModel) : ResponseEntity<AppointmentResponseModel>
-    + updateAppointmentByAppointmentId(AppointmentRequestModel appointmentRequestModel, String customerId, String appointmentId) : ResponseEntity<AppointmentResponseModel>
-    + updateAppointmentStatusByAppointmentId(String appointmentId, Status status) : ResponseEntity<AppointmentResponseModel>
-    + deleteAppointmentByAppointmentId(String customerId, String appointmentId) : ResponseEntity<Void>
+    + getAppointmentByAppointmentId(String appointmentId) : ResponseEntity<AppointmentResponseModel>
+    + addAppointment(AppointmentRequestModel appointmentRequestModel) : ResponseEntity<AppointmentResponseModel>
+    + updateAppointmentByAppointmentId(AppointmentRequestModel appointmentRequestModel, String appointmentId) : ResponseEntity<AppointmentResponseModel>
+    + updateAppointmentStatus(String appointmentId, boolean isConfirm) : ResponseEntity<AppointmentResponseModel>
+    + deleteAppointmentByAppointmentId(String appointmentId) : ResponseEntity<Void>
     + deleteAllCancelledAppointments() : ResponseEntity<Void>
 }
 
 ' AppointmentService interface
 interface "AppointmentService" as appointmentService {
+    + getAllAppointments() : List<AppointmentResponseModel>
     + getAllAppointmentsByCustomerId(String customerId) : List<AppointmentResponseModel>
-    + getAppointmentByAppointmentId(String customerId, String appointmentId) : AppointmentResponseModel
-    + getAllVisitsByStatus(String status) : List<AppointmentResponseModel>
-    + addAppointmentToCustomerAccount(String customerId, AppointmentRequestModel appointmentRequestModel) : AppointmentResponseModel
-    + updateAppointmentByAppointmentId(AppointmentRequestModel appointmentRequestModel, String customerId, String appointmentId) : AppointmentResponseModel
-    + updateAppointmentStatusByAppointmentId(String appointmentId, Status status) : AppointmentResponseModel
-    + deleteAppointmentByAppointmentId(String customerId, String appointmentId) : void
+    + getAppointmentByAppointmentId(String appointmentId) : AppointmentResponseModel
+    + addAppointment(AppointmentRequestModel appointmentRequestModel) : AppointmentResponseModel
+    + updateAppointmentByAppointmentId(AppointmentRequestModel appointmentRequestModel, String appointmentId) : AppointmentResponseModel
+    + updateAppointmentStatus(String appointmentId, boolean isConfirm) : ResponseEntity<AppointmentResponseModel>
+    + deleteAppointmentByAppointmentId(String appointmentId) : void
     + deleteAllCancelledAppointments() : void
 
 }
@@ -186,21 +184,22 @@ class "<<service>>\nAppointmentServiceImpl" as appointmentServiceImpl {
     - appointmentResponseMapper : AppointmentResponseMapper
     - appointmentRequestMapper : AppointmentRequestMapper
     - emailService : EmailService
-    + getAllAppointmentsByCustomerId(String customerId) : List<AppointmentResponseModel>
-    + getAppointmentByAppointmentId(String customerId, String appointmentId) : AppointmentResponseModel
-    + getAllVisitsByStatus(String status) : List<AppointmentResponseModel>
-    + addAppointmentToCustomerAccount(String customerId, AppointmentRequestModel appointmentRequestModel) : AppointmentResponseModel
-    + updateAppointmentByAppointmentId(AppointmentRequestModel appointmentRequestModel, String customerId, String appointmentId) : AppointmentResponseModel
-    + updateAppointmentStatusByAppointmentId(String appointmentId, Status status) : AppointmentResponseModel
-    + deleteAppointmentByAppointmentId(String customerId, String appointmentId) : void
-    + deleteAllCancelledAppointments() : void
+     + getAllAppointments() : List<AppointmentResponseModel>
+     + getAllAppointmentsByCustomerId(String customerId) : List<AppointmentResponseModel>
+     + getAppointmentByAppointmentId(String appointmentId) : AppointmentResponseModel
+     + addAppointment(AppointmentRequestModel appointmentRequestModel) : AppointmentResponseModel
+     + updateAppointmentByAppointmentId(AppointmentRequestModel appointmentRequestModel, String appointmentId) : AppointmentResponseModel
+     + updateAppointmentStatus(String appointmentId, boolean isConfirm) : ResponseEntity<AppointmentResponseModel>
+     + deleteAppointmentByAppointmentId(String appointmentId) : void
+     + deleteAllCancelledAppointments() : void
 }
 appointmentServiceImpl .up.|> appointmentService
 
 ' AppointmentRepository interface
 interface "<<repository>>\nAppointmentRepository" as appointmentRepository {
-    + findAllAppointmentsByCustomerId(String customerId) : List<Appointment>
-    + findAppointmentByCustomerIdAndAppointmentId(String customerId, String appointmentId) : Appointment
+
+    + findAppointmentByAppointmentIdentifier_AppointmentId(String appointmentId): Appointment
+    + findAllAppointmentsByCustomerId(String customerId): List<Appointment>
     + findAllAppointmentsByStatus(String status): List<Appointment>
     + save(Appointment appointment) : Appointment
     + delete(Appointment appointment) : void
@@ -292,23 +291,26 @@ package "Authentication Components" <<authentication>> {
 
 ' Invoice Container
 package "Invoice Components" <<invoice>> {
+
 ' InvoiceController
 class "<<controller>>\nInvoiceController" as invoiceController {
     - InvoiceService : invoiceService
+    + getAllInvoices() : ResponseEntity<List<InvoiceResponseModel>>
     + getAllInvoicesByCustomerId(String customerId) : ResponseEntity<List<InvoiceResponseModel>>
-    + getInvoiceByInvoiceId(String customerId, String invoiceId) : ResponseEntity<InvoiceResponseModel>
-    + addInvoiceToCustomerAccount(String customerId, InvoiceRequestModel invoiceRequestModel) : ResponseEntity<InvoiceResponseModel>
-    + updateInvoiceByInvoiceId(InvoiceRequestModel invoiceRequestModel, String customerId, String invoiceId) : ResponseEntity<InvoiceResponseModel>
-    + deleteInvoiceByInvoiceId(String customerId, String invoiceId) : ResponseEntity<Void>
+    + getInvoiceByInvoiceId(String invoiceId) : ResponseEntity<InvoiceResponseModel>
+    + addInvoice(InvoiceRequestModel invoiceRequestModel) : ResponseEntity<InvoiceResponseModel>
+    + updateInvoiceByInvoiceId(InvoiceRequestModel invoiceRequestModel, String invoiceId) : ResponseEntity<InvoiceResponseModel>
+    + deleteInvoiceByInvoiceId(String invoiceId) : ResponseEntity<Void>
 }
 
 ' InvoiceService interface
 interface "InvoiceService" as invoiceService {
+    + getAllInvoices() : List<InvoiceResponseModel>
     + getAllInvoicesByCustomerId(String customerId) : List<InvoiceResponseModel>
-    + getInvoiceByInvoiceId(String customerId, String invoiceId) : InvoiceResponseModel
-    + addInvoiceToCustomerAccount(String customerId, InvoiceRequestModel invoiceRequestModel) : InvoiceResponseModel
-    + updateInvoiceByInvoiceId(InvoiceRequestModel invoiceRequestModel, String customerId, String invoiceId) : InvoiceResponseModel
-    + deleteInvoiceByInvoiceId(String customerId, String invoiceId) : void
+    + getInvoiceByInvoiceId(String invoiceId) : InvoiceResponseModel
+    + addInvoice(InvoiceRequestModel invoiceRequestModel) : InvoiceResponseModel
+    + updateInvoiceByInvoiceId(InvoiceRequestModel invoiceRequestModel, String invoiceId) : InvoiceResponseModel
+    + deleteInvoiceByInvoiceId(String invoiceId) : void
 }
 
 ' InvoiceServiceImpl class
@@ -316,20 +318,21 @@ class "<<service>>\nInvoiceServiceImpl" as invoiceServiceImpl {
     - invoiceRepository : InvoiceRepository
     - invoiceResponseMapper : InvoiceResponseMapper
     - invoiceRequestMapper : InvoiceRequestMapper
-    + getAllInvoicesByCustomerId(String customerId) : List<InvoiceResponseModel>
-    + getInvoiceByInvoiceId(String customerId, String invoiceId) : InvoiceResponseModel
-    + addInvoiceToCustomerAccount(String customerId, InvoiceRequestModel invoiceRequestModel) : InvoiceResponseModel
-    + updateInvoiceByInvoiceId(InvoiceRequestModel invoiceRequestModel, String customerId, String invoiceId) : InvoiceResponseModel
-    + deleteInvoiceByInvoiceId(String customerId, String invoiceId) : void
+     + getAllInvoices() : List<InvoiceResponseModel>
+     + getAllInvoicesByCustomerId(String customerId) : List<InvoiceResponseModel>
+     + getInvoiceByInvoiceId(String invoiceId) : InvoiceResponseModel
+     + addInvoice(InvoiceRequestModel invoiceRequestModel) : InvoiceResponseModel
+     + updateInvoiceByInvoiceId(InvoiceRequestModel invoiceRequestModel, String invoiceId) : InvoiceResponseModel
+     + deleteInvoiceByInvoiceId(String invoiceId) : void
 }
 invoiceServiceImpl .up.|> invoiceService
 
 ' InvoiceRepository interface
 interface "<<repository>>\nInvoiceRepository" as invoiceRepository {
-    + findAllInvoicesByCustomerId(String customerId) : List<Invoice>
-    + findInvoiceByCustomerIdAndInvoiceId(String customerId, String invoiceId) : Invoice
-    + save(Invoice invoice) : Invoice
-    + delete(Invoice invoice) : void
+        + findInvoiceByInvoiceIdentifier_InvoiceId(String invoiceId): Invoice
+        + findAllInvoicesByCustomerId(String customerId): List<Invoice>
+        + save(Invoice invoice) : Invoice
+        + delete(Invoice invoice) : void
 }
 
 ' InvoiceResponseMapper class

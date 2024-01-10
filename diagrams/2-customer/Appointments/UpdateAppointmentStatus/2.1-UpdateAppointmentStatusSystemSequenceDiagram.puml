@@ -8,16 +8,17 @@ participant AppointmentService as "<<Service>>\nAppointmentService"
 participant AppointmentRepository as "<<Repository>>\nAppointmentRepository"
 participant Database as "<<Database>>\nDatabase"
 
-Customer -> AppointmentController: PUT api/v1/customers/{customerId}/appointments/{appointmentId}/status
+Customer -> AppointmentController: PUT api/v1/customers/{customerId}/appointments/{appointmentId}/updateStatus?isConfirm
 activate AppointmentController
 
 AppointmentController -> AppointmentService: updateAppointmentStatus(customerId, appointmentId, statusUpdateModel)
 activate AppointmentService
 
-AppointmentService -> AppointmentRepository: updateAppointmentStatus(customerId, appointmentId, statusUpdateModel)
+AppointmentService -> AppointmentRepository: updateAppointmentStatus(appointmentId, isConfirm)
+
 activate AppointmentRepository
 
-AppointmentRepository -> Database: UPDATE appointments SET status = ... WHERE customerId = customerId AND id = appointmentId
+AppointmentRepository -> Database: UPDATE appointments SET status = ... WHERE  appointmentId = appointmentId
 activate Database
 
 Database --> AppointmentRepository: UpdateConfirmation

@@ -1,40 +1,36 @@
 @startuml
-title GetCustomerInvoiceById Design-Level Sequence Diagram
+title GetInvoiceById Design-Level Sequence Diagram
 
 actor Customer
 
 participant ReactApplication as "<<View>>\nReactApplication"
-participant CustomerInvoicesPage as "<<View>>\nCustomerInvoicesPage"
 participant CustomerInvoiceDetailsPage as "<<View>>\nCustomerInvoiceDetailsPage"
 participant InvoiceController as "<<Controller>>\nInvoiceController"
 participant InvoiceService as "<<Service>>\nInvoiceService"
 participant InvoiceServiceImpl as "<<Service>>\nInvoiceServiceImpl"
 participant InvoiceRepository as "<<Repository>>\nInvoiceRepository"
-participant InvoiceResponseMapper as "<<Mapper>>\nInvoiceResponseMapper"
 participant Database as "<<Database>>\nDatabase"
+participant InvoiceResponseMapper as "<<Mapper>>\nInvoiceResponseMapper"
 
-Customer -> ReactApplication: Navigate to Invoices Page
+Customer -> ReactApplication: Navigate to Invoice Details Page
 activate ReactApplication
 
-ReactApplication -> CustomerInvoicesPage: Render()
-activate CustomerInvoicesPage
-
-CustomerInvoicesPage -> CustomerInvoiceDetailsPage: Select Invoice
+ReactApplication -> CustomerInvoiceDetailsPage: Render()
 activate CustomerInvoiceDetailsPage
 
 CustomerInvoiceDetailsPage -> InvoiceController: GET /api/v1/customers/{customerId}/invoices/{invoiceId}
 activate InvoiceController
 
-InvoiceController -> InvoiceService: getInvoiceByInvoiceId(customerId, invoiceId)
+InvoiceController -> InvoiceService: getInvoiceByInvoiceId(invoiceId)
 activate InvoiceService
 
-InvoiceService -> InvoiceServiceImpl: getInvoiceByInvoiceId(customerId, invoiceId)
+InvoiceService -> InvoiceServiceImpl: getInvoiceByInvoiceId(invoiceId)
 activate InvoiceServiceImpl
 
-InvoiceServiceImpl -> InvoiceRepository: findInvoiceByCustomerIdAndInvoiceId(customerId, invoiceId)
+InvoiceServiceImpl -> InvoiceRepository: findByInvoiceId(invoiceId)
 activate InvoiceRepository
 
-InvoiceRepository -> Database: SELECT * FROM invoices WHERE customerId = customerId AND invoiceId = invoiceId
+InvoiceRepository -> Database: SELECT * FROM invoices WHERE invoiceId = invoiceId
 activate Database
 
 Database --> InvoiceRepository: Invoice

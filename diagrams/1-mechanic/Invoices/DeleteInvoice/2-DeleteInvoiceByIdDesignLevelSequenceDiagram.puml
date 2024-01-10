@@ -1,56 +1,56 @@
 @startuml
-title DeleteInvoiceById Design-Level Sequence Diagram (Admin)
+title Delete Invoice Design-Level System Sequence Diagram (Admin)
 
 actor Mechanic
 
 participant ReactApplication as "<<View>>\nReactApplication"
-participant CustomerInvoiceDetailsPage as "<<View>>\nCustomerInvoiceDetailsPage"
+participant CustomerInvoicesPage as "<<View>>\nCustomerInvoicesPage"
 participant InvoiceController as "<<Controller>>\nInvoiceController"
 participant InvoiceService as "<<Service>>\nInvoiceService"
 participant InvoiceServiceImpl as "<<Service>>\nInvoiceServiceImpl"
 participant InvoiceRepository as "<<Repository>>\nInvoiceRepository"
 participant Database as "<<Database>>\nDatabase"
 
-Mechanic -> ReactApplication: Navigate to Invoice Details Page
+Mechanic -> ReactApplication: Navigate to Mechanic Invoices Page
 activate ReactApplication
 
-ReactApplication -> CustomerInvoiceDetailsPage: Render()
-activate CustomerInvoiceDetailsPage
+ReactApplication -> CustomerInvoicesPage: Render()
+activate CustomerInvoicesPage
 
-CustomerInvoiceDetailsPage -> InvoiceController: DELETE /api/v1/customers/{customerId}/invoices/{invoiceId}
+CustomerInvoicesPage -> InvoiceController: DELETE /api/v1/invoices/{invoiceId}
 activate InvoiceController
 
-InvoiceController -> InvoiceService: deleteInvoiceById(customerId, invoiceId)
+InvoiceController -> InvoiceService: deleteInvoiceByInvoiceId(invoiceId)
 activate InvoiceService
 
-InvoiceService -> InvoiceServiceImpl: deleteInvoiceById(customerId, invoiceId)
+InvoiceService -> InvoiceServiceImpl: deleteInvoiceByInvoiceId(invoiceId)
 activate InvoiceServiceImpl
 
-InvoiceServiceImpl -> InvoiceRepository: deleteInvoiceById(customerId, invoiceId)
+InvoiceServiceImpl -> InvoiceRepository: findInvoiceByInvoiceIdentifier_InvoiceId(String invoiceId)
 activate InvoiceRepository
 
-InvoiceRepository -> Database: DELETE FROM invoices WHERE customerId = customerId AND invoiceId = invoiceId
+InvoiceRepository -> Database: DELETE * FROM invoices WHERE invoiceId = invoiceId
 activate Database
 
 Database --> InvoiceRepository: DeletionConfirmation
 deactivate Database
 
-InvoiceRepository --> InvoiceServiceImpl: DeletionConfirmation
+InvoiceRepository --> InvoiceServiceImpl: DeletionStatus
 deactivate InvoiceRepository
 
-InvoiceServiceImpl --> InvoiceService: DeletionConfirmation
+InvoiceServiceImpl --> InvoiceService: DeletionResponse
 deactivate InvoiceServiceImpl
 
-InvoiceService --> InvoiceController: DeletionConfirmation
+InvoiceService --> InvoiceController: DeletionResponse
 deactivate InvoiceService
 
-InvoiceController --> CustomerInvoiceDetailsPage: DeletionSuccessful
+InvoiceController --> CustomerInvoicesPage: DeletionResponse
 deactivate InvoiceController
 
-CustomerInvoiceDetailsPage --> ReactApplication: Display Deletion Confirmation
-deactivate CustomerInvoiceDetailsPage
+CustomerInvoicesPage --> ReactApplication: Display Deletion Status
+deactivate CustomerInvoicesPage
 
-ReactApplication --> Mechanic: Confirm Deletion
+ReactApplication --> Mechanic: Confirm Invoice Deletion
 deactivate ReactApplication
 
 @enduml

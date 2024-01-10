@@ -17,7 +17,8 @@ activate ReactApplication
 ReactApplication -> CustomerAppointmentsPage: Render Cancelled Appointments
 activate CustomerAppointmentsPage
 
-CustomerAppointmentsPage -> AppointmentController: DELETE /api/v1/appointments/status/cancelled
+CustomerAppointmentsPage -> AppointmentController: DELETE /api/v1/appointments?status=CANCELLED
+
 activate AppointmentController
 
 AppointmentController -> AppointmentService: deleteAllCancelledAppointments()

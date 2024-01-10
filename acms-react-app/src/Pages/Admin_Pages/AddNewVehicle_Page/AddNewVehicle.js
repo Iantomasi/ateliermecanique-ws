@@ -13,7 +13,7 @@ function AddNewVehicle() {
         make: '',
         model: '',
         year: '',
-        transmissionType: '',
+        transmission_type: '',
         mileage: '',
     });
 
@@ -47,7 +47,7 @@ function AddNewVehicle() {
             make: vehicleDetails.make,
             model: vehicleDetails.model,
             year: vehicleDetails.year,
-            transmissionType: vehicleDetails.transmissionType,
+            transmission_type: vehicleDetails.transmission_type,
             mileage: vehicleDetails.mileage
         };
 
@@ -87,8 +87,8 @@ function AddNewVehicle() {
                                    onChange={handleInputChange} type="text" required/>
 
                             <label className="font-bold">Transmission Type</label>
-                            <select className="w-full p-4 rounded border border-gray-400 mb-5" name="transmissionType"
-                                    value={vehicleDetails.transmissionType} onChange={handleInputChange} required>
+                            <select className="w-full p-4 rounded border border-gray-400 mb-5" name="transmission_type"
+                                    value={vehicleDetails.transmission_type} onChange={handleInputChange} required>
                                 <option value="">Select Transmission Type</option>
                                 <option value="AUTOMATIC">Automatic</option>
                                 <option value="MANUAL">Manual</option>

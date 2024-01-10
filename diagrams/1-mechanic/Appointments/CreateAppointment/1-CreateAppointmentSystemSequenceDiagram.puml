@@ -7,10 +7,10 @@ participant AppointmentController as "<<Controller>>\nAppointmentController"
 participant AppointmentService as "<<Service>>\nAppointmentService"
 participant AppointmentRepository as "<<Repository>>\nAppointmentRepository"
 
-Mechanic -> AppointmentController: POST /api/v1/customers/{customerId}/appointments
+Mechanic -> AppointmentController: POST /api/v1/appointments
 activate AppointmentController
 
-AppointmentController -> AppointmentService: addAppointment(customerId, appointmentRequestModel)
+AppointmentController -> AppointmentService: addAppointment(appointmentRequestModel)
 activate AppointmentService
 
 AppointmentService -> AppointmentRepository: save(newAppointment)

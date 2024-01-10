@@ -11,6 +11,7 @@ import CustomerVehicleDetails from './Pages/Admin_Pages/CustomerVehicleDetails_P
 import AddNewVehicle from './Pages/Admin_Pages/AddNewVehicle_Page/AddNewVehicle';
 import Appointments from './Pages/Admin_Pages/Appointments_Page/Appointments';
 import User from './Pages/User_Pages/User';
+import CustomerAppointments from './Pages/Admin_Pages/CustomerAppointments_Page/CustomerAppointments';
 
 
 const router = createBrowserRouter([
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
       {
         path : "/admin/appointments",
         element: <Appointments/>
+      },
+      {
+        path: "/admin/customers/:customerId/appointments",
+        element: <CustomerAppointments/>,
       },
       {
         path: "/user",

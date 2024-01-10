@@ -20,13 +20,13 @@ activate CustomerAppointmentsPage
 CustomerAppointmentsPage -> AppointmentController: DELETE /api/v1/customers/{customerId}/appointments/{appointmentId}
 activate AppointmentController
 
-AppointmentController -> AppointmentService: deleteAppointmentByAppointmentId(customerId, appointmentId)
+AppointmentController -> AppointmentService: deleteAppointmentByAppointmentId(appointmentId)
 activate AppointmentService
 
-AppointmentService -> AppointmentServiceImpl: deleteAppointmentByAppointmentId(customerId, appointmentId)
+AppointmentService -> AppointmentServiceImpl: deleteAppointmentByAppointmentId(appointmentId)
 activate AppointmentServiceImpl
 
-AppointmentServiceImpl -> AppointmentRepository: findAppointmentByCustomerIdAndAppointmentId(String customerId, String appointmentId)
+AppointmentServiceImpl -> AppointmentRepository: findAppointmentByAppointmentIdentifier_AppointmentId(String appointmentId)
 activate AppointmentRepository
 
 AppointmentRepository -> Database: DELETE FROM appointments WHERE appointmentId = appointmentId

@@ -1,5 +1,5 @@
 @startuml
-title DeleteInvoiceById System Sequence Diagram (Admin)
+title Delete Invoice System Sequence Diagram (Admin)
 
 actor Mechanic
 
@@ -8,27 +8,27 @@ participant InvoiceService as "<<Service>>\nInvoiceService"
 participant InvoiceRepository as "<<Repository>>\nInvoiceRepository"
 participant Database as "<<Database>>\nDatabase"
 
-Mechanic -> InvoiceController: DELETE /api/v1/customers/{customerId}/invoices/{invoiceId}
+Mechanic -> InvoiceController: DELETE /api/v1/invoices/{invoiceId}
 activate InvoiceController
 
-InvoiceController -> InvoiceService: deleteInvoiceById(customerId, invoiceId)
+InvoiceController -> InvoiceService: deleteInvoiceByInvoiceId(invoiceId)
 activate InvoiceService
 
-InvoiceService -> InvoiceRepository: deleteInvoiceById(customerId, invoiceId)
+InvoiceService -> InvoiceRepository: findInvoiceByInvoiceIdentifier_InvoiceId(String invoiceId)
 activate InvoiceRepository
 
-InvoiceRepository -> Database: DELETE FROM invoices WHERE customerId = customerId AND invoiceId = invoiceId
+InvoiceRepository -> Database: DELETE * FROM invoices WHERE invoiceId = invoiceId
 activate Database
 
 Database --> InvoiceRepository: DeletionConfirmation
 deactivate Database
 
-InvoiceRepository --> InvoiceService: DeletionConfirmation
+InvoiceRepository --> InvoiceService: DeletionStatus
 deactivate InvoiceRepository
 
-InvoiceService --> InvoiceController: DeletionConfirmation
+InvoiceService --> InvoiceController: DeletionResponse
 deactivate InvoiceService
 
-InvoiceController --> Mechanic: DeletionSuccessful
+InvoiceController --> Mechanic: DeletionResponse
 deactivate InvoiceController
 @enduml

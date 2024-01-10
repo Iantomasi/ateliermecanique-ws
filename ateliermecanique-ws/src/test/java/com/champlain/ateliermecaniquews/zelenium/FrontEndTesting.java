@@ -21,11 +21,11 @@ public class FrontEndTesting {
         @BeforeEach()
         void setUp() {          // comment out the driver you don't use before testing
 
-            WebDriverManager.chromedriver().setup();
-             Configuration.browser = "chrome";
+            //WebDriverManager.chromedriver().setup();
+             //Configuration.browser = "chrome";
 
-//            WebDriverManager.firefoxdriver().setup();
-//            Configuration.browser = "firefox";
+            WebDriverManager.firefoxdriver().setup();
+            Configuration.browser = "firefox";
         }
 
         @Test
@@ -287,6 +287,63 @@ public class FrontEndTesting {
         sleep(1000);
         $("p").shouldHave(text("APPOINTMENTS"));
     }
+
+    /*
+    @Test
+    public void updateAppointmentStatusAdmin(){
+        open("https://localhost:3000/");
+        $("a[href='/login']").click();
+        sleep(1000);
+        $("button[type='submit']").click();
+        sleep(1000);
+        $("img[src='appointments.svg']").click();
+        sleep(1000);
+        $("p").shouldHave(text("APPOINTMENTS"));
+        $$("button").findBy(text("CANCEL")).click();
+        sleep(1000);
+    }
+     */
+    @Test
+    public void getAllAppointmentsByCustomerId(){
+        open("https://localhost:3000/");
+        $("a[href='/login']").click();
+        sleep(5000);
+        $("button[type='submit']").click();
+        sleep(5000);
+        $("img[src='customersImage.svg']").click();
+        sleep(9000);
+        String customerId = "yzab8cd5-3e6f-8796-2abi-96330c6bw164";
+        SelenideElement customerLink = $$("td").findBy(text(customerId));
+        customerLink.shouldBe(visible).click();
+        sleep(5000);
+        $("p").shouldHave(text("CUSTOMER ACCOUNT DETAILS"));
+
+        $("a[href^='/admin/customers/" + customerId + "/appointments']").click();
+        $("p").shouldHave(text("APPOINTMENTS"));
+        }
+
+    @Test
+    public void updateAppointmentStatusCustomer(){
+        open("https://localhost:3000/");
+        $("a[href='/login']").click();
+        sleep(1000);
+        $("button[type='submit']").click();
+        sleep(1000);
+        $("img[src='customersImage.svg']").click();
+        sleep(1000);
+        String customerId = "yzab8cd5-3e6f-8796-2abi-96330c6bw164";
+        SelenideElement customerLink = $$("td").findBy(text(customerId));
+        customerLink.shouldBe(visible).click();
+        $("p").shouldHave(text("CUSTOMER ACCOUNT DETAILS"));
+
+        $("a[href^='/admin/customers/" + customerId + "/appointments']").click();
+        $("p").shouldHave(text("APPOINTMENTS"));
+
+        $$("button").findBy(text("CANCEL")).click();
+        sleep(1000);
+
+    }
+
 
 
 }

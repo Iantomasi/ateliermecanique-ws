@@ -11,10 +11,10 @@ participant Database as "<<Database>>\nDatabase"
 Customer -> AppointmentController: PUT api/v1/customers/{customerId}/appointments/{appointmentId}
 activate AppointmentController
 
-AppointmentController -> AppointmentService: updateAppointmentById(appointmentRequestModel, customerId, appointmentId)
+AppointmentController -> AppointmentService: updateAppointmentByAppointmentId(appointmentRequestModel, appointmentId)
 activate AppointmentService
 
-AppointmentService -> AppointmentRepository: updateAppointmentById(appointmentRequestModel, customerId, appointmentId)
+AppointmentService -> AppointmentRepository: updateAppointmentByAppointmentId(appointmentRequestModel, appointmentId)
 activate AppointmentRepository
 
 AppointmentRepository -> Database: UPDATE appointments SET ... WHERE id = appointmentId

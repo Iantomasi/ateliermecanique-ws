@@ -56,11 +56,16 @@ function Appointments() {
                   <th>VEHICLE</th>
                   <th>CUSTOMER</th>
                   <th>STATUS</th>
+                  <th></th> {/* Don't del for table structure*/}
+                  <th></th> {/* Don't del for table structure*/}
                 </tr>
               </thead>
               <tbody className="text-center">
                 {appointments.map((appointment) => (
-                  <AppointmentBlock key={appointment.appointmentId} appointment={appointment} />
+                  <AppointmentBlock  
+                  key={appointment.appointmentId}
+                  appointment={appointment}
+                  refreshAppointments={getAppointments}/>
                 ))}
               </tbody>
             </table>

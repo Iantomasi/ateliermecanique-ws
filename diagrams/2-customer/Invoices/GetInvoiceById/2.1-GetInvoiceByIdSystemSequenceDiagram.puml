@@ -1,5 +1,5 @@
 @startuml
-title GetCustomerInvoiceById System Sequence Diagram
+title GetInvoiceById System Sequence Diagram
 
 actor Customer
 
@@ -11,13 +11,13 @@ participant Database as "<<Database>>\nDatabase"
 Customer -> InvoiceController: GET /api/v1/customers/{customerId}/invoices/{invoiceId}
 activate InvoiceController
 
-InvoiceController -> InvoiceService: getInvoiceByInvoiceId(customerId, invoiceId)
+InvoiceController -> InvoiceService: getInvoiceByInvoiceId(invoiceId)
 activate InvoiceService
 
-InvoiceService -> InvoiceRepository: findInvoiceByCustomerIdAndInvoiceId(customerId, invoiceId)
+InvoiceService -> InvoiceRepository: findByInvoiceId(invoiceId)
 activate InvoiceRepository
 
-InvoiceRepository -> Database: SELECT * FROM invoices WHERE customerId = customerId AND invoiceId = invoiceId
+InvoiceRepository -> Database: SELECT * FROM invoices WHERE invoiceId = invoiceId
 activate Database
 
 Database --> InvoiceRepository: Invoice
