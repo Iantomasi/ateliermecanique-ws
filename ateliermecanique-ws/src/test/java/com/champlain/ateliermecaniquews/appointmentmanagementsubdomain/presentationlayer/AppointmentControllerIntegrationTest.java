@@ -21,7 +21,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -89,7 +88,7 @@ class AppointmentControllerIntegrationTest {
     @Test
     void updateAppointmentStatusAdmin_shouldUpdateStatus() throws Exception {
         // Mock the service layer response
-        when(appointmentService.updateAppointmentStatusAdmin(anyString(), anyBoolean()))
+        when(appointmentService.updateAppointmentStatus(anyString(), anyBoolean()))
                 .thenReturn(new AppointmentResponseModel(testAppointmentId, null, null, null, null, null, Status.CONFIRMED));
 
         mockMvc.perform(put("/api/v1/appointments/{appointmentId}/updateStatus?isConfirm=true", testAppointmentId))
@@ -101,7 +100,7 @@ class AppointmentControllerIntegrationTest {
     @Test
     void updateAppointmentStatusCustomer_shouldUpdateStatus() throws Exception {
         // Mock the service layer response
-        when(appointmentService.updateAppointmentStatusCustomer(anyString(), anyString(), anyBoolean()))
+        when(appointmentService.updateAppointmentStatus(anyString(), anyBoolean()))
                 .thenReturn(new AppointmentResponseModel(testAppointmentId, null, null, null, null, null, Status.CANCELLED));
 
         mockMvc.perform(put("/api/v1/customers/{customerId}/appointments/{appointmentId}/updateStatus?isConfirm=false", "customer123", testAppointmentId))
@@ -113,7 +112,7 @@ class AppointmentControllerIntegrationTest {
     @Test
     void updateAppointmentStatusAdmin_appointmentNotFound() throws Exception {
         // Mock the service layer response for not found
-        when(appointmentService.updateAppointmentStatusAdmin(anyString(), anyBoolean()))
+        when(appointmentService.updateAppointmentStatus(anyString(), anyBoolean()))
                 .thenReturn(null);
 
         mockMvc.perform(put("/api/v1/appointments/{appointmentId}/updateStatus?isConfirm=true", "nonExistingAppointmentId"))
@@ -124,7 +123,7 @@ class AppointmentControllerIntegrationTest {
     @Test
     void updateAppointmentStatusCustomer_appointmentNotFound() throws Exception {
         // Mock the service layer response for not found
-        when(appointmentService.updateAppointmentStatusCustomer(anyString(), anyString(), anyBoolean()))
+        when(appointmentService.updateAppointmentStatus(anyString(), anyBoolean()))
                 .thenReturn(null);
 
         mockMvc.perform(put("/api/v1/customers/{customerId}/appointments/{appointmentId}/updateStatus?isConfirm=false", "customer123", "nonExistingAppointmentId"))

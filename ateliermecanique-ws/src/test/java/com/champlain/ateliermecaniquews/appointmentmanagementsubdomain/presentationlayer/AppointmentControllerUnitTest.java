@@ -16,7 +16,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -103,7 +102,7 @@ class AppointmentControllerUnitTest {
         // Arrange
         String appointmentId = "1";
         boolean isConfirm = true;
-        when(appointmentService.updateAppointmentStatusAdmin(appointmentId, isConfirm))
+        when(appointmentService.updateAppointmentStatus(appointmentId, isConfirm))
                 .thenReturn(new AppointmentResponseModel(appointmentId, null, null, null, null, null, Status.CONFIRMED));
 
         // Act & Assert
@@ -115,11 +114,11 @@ class AppointmentControllerUnitTest {
     @Test
     void updateAppointmentStatusCustomer_shouldUpdateStatus() throws Exception {
         // Arrange
-        String customerId = "customer123";
         String appointmentId = "1";
+        String customerId = "customer123";
         boolean isConfirm = false;
-        when(appointmentService.updateAppointmentStatusCustomer(customerId, appointmentId, isConfirm))
-                .thenReturn(new AppointmentResponseModel(appointmentId, customerId, null, null, null, null, Status.CANCELLED));
+        when(appointmentService.updateAppointmentStatus(appointmentId, isConfirm))
+                .thenReturn(new AppointmentResponseModel(appointmentId,customerId, null, null, null, null, Status.CANCELLED));
 
         // Act & Assert
         mockMvc.perform(put("/api/v1/customers/{customerId}/appointments/{appointmentId}/updateStatus?isConfirm=false", customerId, appointmentId))

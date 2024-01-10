@@ -1,63 +1,63 @@
 @startuml
-title GetAppointmentById Design-Level Sequence Diagram (Admin)
+title GetInvoiceById Design-Level Sequence Diagram (Admin)
 
 actor Mechanic
 
 participant ReactApplication as "<<View>>\nReactApplication"
-participant CustomerAppointmentDetailsPage as "<<View>>\nCustomerAppointmentDetailsPage"
-participant AppointmentController as "<<Controller>>\nAppointmentController"
-participant AppointmentService as "<<Service>>\nAppointmentService"
-participant AppointmentServiceImpl as "<<Service>>\nAppointmentServiceImpl"
-participant AppointmentRepository as "<<Repository>>\nAppointmentRepository"
+participant CustomerInvoiceDetailsPage as "<<View>>\nCustomerInvoiceDetailsPage"
+participant InvoiceController as "<<Controller>>\nInvoiceController"
+participant InvoiceService as "<<Service>>\nInvoiceService"
+participant InvoiceServiceImpl as "<<Service>>\nInvoiceServiceImpl"
+participant InvoiceRepository as "<<Repository>>\nInvoiceRepository"
 participant Database as "<<Database>>\nDatabase"
-participant AppointmentResponseMapper as "<<Mapper>>\nAppointmentResponseMapper"
+participant InvoiceResponseMapper as "<<Mapper>>\nInvoiceResponseMapper"
 
-Mechanic -> ReactApplication: Navigate to Appointment Details Page
+Mechanic -> ReactApplication: Navigate to Invoice Details Page
 activate ReactApplication
 
-ReactApplication -> CustomerAppointmentDetailsPage: Render()
-activate CustomerAppointmentDetailsPage
+ReactApplication -> CustomerInvoiceDetailsPage: Render()
+activate CustomerInvoiceDetailsPage
 
-CustomerAppointmentDetailsPage -> AppointmentController: GET /api/v1/customers/{customerId}/appointments/{appointmentId}
-activate AppointmentController
+CustomerInvoiceDetailsPage -> InvoiceController: GET /api/v1/invoices/{invoiceId}
+activate InvoiceController
 
-AppointmentController -> AppointmentService: getAppointmentByCustomerIdAndAppointmentId(customerId, appointmentId)
-activate AppointmentService
+InvoiceController -> InvoiceService: getInvoiceByInvoiceId(invoiceId)
+activate InvoiceService
 
-AppointmentService -> AppointmentServiceImpl: getAppointmentByCustomerIdAndAppointmentId(customerId, appointmentId)
-activate AppointmentServiceImpl
+InvoiceService -> InvoiceServiceImpl: getInvoiceByInvoiceId(invoiceId)
+activate InvoiceServiceImpl
 
-AppointmentServiceImpl -> AppointmentRepository: findByCustomerIdAndAppointmentId(customerId, appointmentId)
-activate AppointmentRepository
+InvoiceServiceImpl -> InvoiceRepository: findByInvoiceIdentifier_InvoiceId(invoiceId)
+activate InvoiceRepository
 
-AppointmentRepository -> Database: SELECT * FROM appointments WHERE customerId = customerId AND appointmentId = appointmentId
+InvoiceRepository -> Database: SELECT * FROM invoices WHERE customerId = customerId AND invoiceId = invoiceId
 activate Database
 
-Database --> AppointmentRepository: Appointment
+Database --> InvoiceRepository: Invoice
 deactivate Database
 
-AppointmentRepository --> AppointmentServiceImpl: Appointment
-deactivate AppointmentRepository
+InvoiceRepository --> InvoiceServiceImpl: Invoice
+deactivate InvoiceRepository
 
-AppointmentServiceImpl -> AppointmentResponseMapper: entityToResponseModel(Appointment)
-activate AppointmentResponseMapper
+InvoiceServiceImpl -> InvoiceResponseMapper: entityToResponseModel(Invoice)
+activate InvoiceResponseMapper
 
-AppointmentResponseMapper --> AppointmentServiceImpl: AppointmentResponseModel
-deactivate AppointmentResponseMapper
+InvoiceResponseMapper --> InvoiceServiceImpl: InvoiceResponseModel
+deactivate InvoiceResponseMapper
 
-AppointmentServiceImpl --> AppointmentService: AppointmentResponseModel
-deactivate AppointmentServiceImpl
+InvoiceServiceImpl --> InvoiceService: InvoiceResponseModel
+deactivate InvoiceServiceImpl
 
-AppointmentService --> AppointmentController: AppointmentResponseModel
-deactivate AppointmentService
+InvoiceService --> InvoiceController: InvoiceResponseModel
+deactivate InvoiceService
 
-AppointmentController --> CustomerAppointmentDetailsPage: AppointmentResponseModel
-deactivate AppointmentController
+InvoiceController --> CustomerInvoiceDetailsPage: InvoiceResponseModel
+deactivate InvoiceController
 
-CustomerAppointmentDetailsPage --> ReactApplication: Display Appointment Details
-deactivate CustomerAppointmentDetailsPage
+CustomerInvoiceDetailsPage --> ReactApplication: Display Invoice Details
+deactivate CustomerInvoiceDetailsPage
 
-ReactApplication --> Mechanic: View Appointment Details
+ReactApplication --> Mechanic: View Invoice Details
 deactivate ReactApplication
 
 @enduml

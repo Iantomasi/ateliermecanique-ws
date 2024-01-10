@@ -8,13 +8,13 @@ participant InvoiceService as "<<Service>>\nInvoiceService"
 participant InvoiceRepository as "<<Repository>>\nInvoiceRepository"
 participant Database as "<<Database>>\nDatabase"
 
-Mechanic -> InvoiceController: PUT api/v1/customers/{customerId}/invoices/{invoiceId}
+Mechanic -> InvoiceController: PUT api/v1/invoices/{invoiceId}
 activate InvoiceController
 
-InvoiceController -> InvoiceService: updateInvoiceById(invoiceRequestModel, customerId, invoiceId)
+InvoiceController -> InvoiceService: updateInvoiceByInvoiceId(invoiceRequestModel, invoiceId)
 activate InvoiceService
 
-InvoiceService -> InvoiceRepository: updateInvoiceById(invoiceRequestModel, customerId, invoiceId)
+InvoiceService -> InvoiceRepository: updateInvoiceByInvoiceId(invoiceRequestModel, invoiceId)
 activate InvoiceRepository
 
 InvoiceRepository -> Database: UPDATE invoices SET ... WHERE id = invoiceId

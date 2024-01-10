@@ -37,10 +37,7 @@ public class AppointmentServiceImpl implements AppointmentService{
         log.info("Fetching appointments for customer ID: {}", customerId);
 
         // Check if the appointments list is empty or null
-        if (appointments == null) {
-            log.warn("No appointments found for customer ID: {} (appointments is null)", customerId);
-            return Collections.emptyList();
-        } else if (appointments.isEmpty()) {
+        if (appointments.isEmpty()) {
             log.warn("No appointments found for customer ID: {} (appointments list is empty)", customerId);
             return Collections.emptyList();
         } else {
@@ -49,8 +46,6 @@ public class AppointmentServiceImpl implements AppointmentService{
         List<AppointmentResponseModel> appointmentResponseModels = appointmentResponseMapper.entityToResponseModelList(appointments);
         if (appointmentResponseModels == null) {
             log.warn("AppointmentResponseModels is null after mapping");
-        } else if (appointmentResponseModels.isEmpty()) {
-            log.warn("AppointmentResponseModels is empty after mapping");
         } else {
             log.info("Mapping successful. Number of AppointmentResponseModels: {}", appointmentResponseModels.size());
         }
@@ -58,7 +53,7 @@ public class AppointmentServiceImpl implements AppointmentService{
     }
 
     @Override
-    public AppointmentResponseModel updateAppointmentStatusAdmin(String appointmentId, boolean isConfirm) {
+    public AppointmentResponseModel updateAppointmentStatus(String appointmentId, boolean isConfirm) {
         Appointment appointment = appointmentRepository.findAppointmentByAppointmentIdentifier_AppointmentId(appointmentId);
 
         // Set the status based on the button pressed in the frontend
@@ -71,23 +66,6 @@ public class AppointmentServiceImpl implements AppointmentService{
         appointmentRepository.save(appointment);
         return appointmentResponseMapper.entityToResponseModel(appointment);
     }
-
-    @Override
-    public AppointmentResponseModel updateAppointmentStatusCustomer(String customerId, String appointmentId, boolean isConfirm) {
-        Appointment appointment = appointmentRepository.findAppointmentByCustomerIdAndAppointmentIdentifier_AppointmentId(customerId, appointmentId);
-
-        // Set the status based on the button pressed in the frontend
-        if (isConfirm) {
-            appointment.setStatus(Status.CONFIRMED);
-        } else {
-            appointment.setStatus(Status.CANCELLED);
-        }
-
-        appointmentRepository.save(appointment);
-        return appointmentResponseMapper.entityToResponseModel(appointment);
-    }
-
-
 
 
 }

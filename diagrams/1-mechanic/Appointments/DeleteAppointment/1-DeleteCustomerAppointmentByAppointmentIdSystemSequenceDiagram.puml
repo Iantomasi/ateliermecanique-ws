@@ -8,16 +8,16 @@ participant AppointmentService as "<<Service>>\nAppointmentService"
 participant AppointmentRepository as "<<Repository>>\nAppointmentRepository"
 participant Database as "<<Database>>\nDatabase"
 
-Mechanic -> AppointmentController: DELETE /api/v1/customers/{customerId}/appointments/{appointmentId}
+Mechanic -> AppointmentController: DELETE /api/v1/appointments/{appointmentId}
 activate AppointmentController
 
-AppointmentController -> AppointmentService: deleteAppointmentByAppointmentId(customerId, appointmentId)
+AppointmentController -> AppointmentService: deleteAppointmentByAppointmentId(appointmentId)
 activate AppointmentService
 
-AppointmentService -> AppointmentRepository: findAppointmentByCustomerIdAndAppointmentId(String customerId, String appointmentId)
+AppointmentService -> AppointmentRepository: findAppointmentByAppointmentIdentifier_AppointmentId(String appointmentId)
 activate AppointmentRepository
 
-AppointmentRepository -> Database: DELETE FROM appointments WHERE appointmentId = appointmentId
+AppointmentRepository -> Database: DELETE * FROM appointments WHERE appointmentId = appointmentId
 activate Database
 
 Database --> AppointmentRepository: DeletionConfirmation

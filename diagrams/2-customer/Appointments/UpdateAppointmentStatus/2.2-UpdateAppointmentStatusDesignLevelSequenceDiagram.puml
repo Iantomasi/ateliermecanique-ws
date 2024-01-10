@@ -18,22 +18,24 @@ activate ReactApplication
 ReactApplication -> CustomerAppointmentDetailsPage: Render Update Status Form
 activate CustomerAppointmentDetailsPage
 
-CustomerAppointmentDetailsPage -> AppointmentController: PUT /api/v1/customers/{customerId}/appointments/{appointmentId}/status
+CustomerAppointmentDetailsPage -> AppointmentController: PUT api/v1/customers/{customerId}/appointments/{appointmentId}/updateStatus?isConfirm
 activate AppointmentController
 
-AppointmentController -> AppointmentService: updateAppointmentStatus(appointmentId, statusUpdateModel)
+AppointmentController -> AppointmentService: updateAppointmentStatus(appointmentId, isConfirm)
+
 activate AppointmentService
 
-AppointmentService -> AppointmentServiceImpl: updateAppointmentStatus(appointmentId, statusUpdateModel)
+AppointmentService -> AppointmentServiceImpl: updateAppointmentStatus(appointmentId, isConfirm)
+
 activate AppointmentServiceImpl
 
-AppointmentServiceImpl -> StatusUpdateMapper: mapToEntity(statusUpdateModel)
+AppointmentServiceImpl -> StatusUpdateMapper: requestModelToEntity(appointmentRequestModel)
 activate StatusUpdateMapper
 
 StatusUpdateMapper --> AppointmentServiceImpl: Appointment
 deactivate StatusUpdateMapper
 
-AppointmentServiceImpl -> AppointmentRepository: updateStatus(appointmentId, status)
+AppointmentServiceImpl -> AppointmentRepository: updateAppointmentStatus(appointmentId, isConfirm)
 activate AppointmentRepository
 
 AppointmentRepository -> AppointmentDatabase: UPDATE appointments SET status = ... WHERE id = appointmentId
@@ -45,7 +47,7 @@ deactivate AppointmentDatabase
 AppointmentRepository --> AppointmentServiceImpl: UpdateConfirmation
 deactivate AppointmentRepository
 
-AppointmentServiceImpl -> AppointmentResponseMapper: mapToResponseModel(UpdatedAppointment)
+AppointmentServiceImpl -> AppointmentResponseMapper: entityToResponseModel(UpdatedAppointment)
 activate AppointmentResponseMapper
 
 AppointmentResponseMapper --> AppointmentServiceImpl: AppointmentResponseModel

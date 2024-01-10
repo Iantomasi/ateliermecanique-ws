@@ -16,9 +16,8 @@ public class AppointmentController {
 
     final private AppointmentService appointmentService;
 
-    // Admin
     @GetMapping("/appointments")
-    public ResponseEntity<List<AppointmentResponseModel>> getAllAppointments() {
+    public ResponseEntity<List<AppointmentResponseModel>> getAllAppointmentsAdmin() {
         List<AppointmentResponseModel> appointments = appointmentService.getAllAppointments();
         if (appointments == null || appointments.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -26,7 +25,6 @@ public class AppointmentController {
         return ResponseEntity.ok(appointments);
     }
 
-    // Customer
 
     @GetMapping("/customers/{customerId}/appointments")
     public ResponseEntity<List<AppointmentResponseModel>> getAllAppointmentsByCustomerId(@PathVariable String customerId) {
@@ -38,20 +36,9 @@ public class AppointmentController {
     }
 
 
-    // Admin
-    @PutMapping("/appointments/{appointmentId}/updateStatus")
-    public ResponseEntity<AppointmentResponseModel> updateAppointmentStatusAdmin(@PathVariable String appointmentId, @RequestParam boolean isConfirm) {
-        AppointmentResponseModel appointment = appointmentService.updateAppointmentStatusAdmin(appointmentId, isConfirm);
-        if (appointment == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.ok(appointment);
-    }
-
-    // Customer
-    @PutMapping("/customers/{customerId}/appointments/{appointmentId}/updateStatus")
-    public ResponseEntity<AppointmentResponseModel> updateAppointmentStatusCustomer(@PathVariable String customerId, @PathVariable String appointmentId, @RequestParam boolean isConfirm) {
-        AppointmentResponseModel appointment = appointmentService.updateAppointmentStatusCustomer(customerId, appointmentId, isConfirm);
+    @PutMapping({"/appointments/{appointmentId}/updateStatus","/customers/{customerId}/appointments/{appointmentId}/updateStatus"})
+    public ResponseEntity<AppointmentResponseModel> updateAppointmentStatus(@PathVariable String appointmentId, @RequestParam boolean isConfirm) {
+        AppointmentResponseModel appointment = appointmentService.updateAppointmentStatus(appointmentId, isConfirm);
         if (appointment == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

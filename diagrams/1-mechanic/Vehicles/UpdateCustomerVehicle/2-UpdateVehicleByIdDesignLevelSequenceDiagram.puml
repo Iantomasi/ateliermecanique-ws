@@ -28,7 +28,7 @@ activate VehicleService
 VehicleService -> VehicleServiceImpl: updateVehicleByVehicleId(vehicleRequestModel, customerId, vehicleId)
 activate VehicleServiceImpl
 
-VehicleServiceImpl -> VehicleRequestMapper: requestToEntity(vehicleRequestModel)
+VehicleServiceImpl -> VehicleRequestMapper: requestModelToEntity(vehicleRequestModel)
 activate VehicleRequestMapper
 
 VehicleRequestMapper --> VehicleServiceImpl: Vehicle

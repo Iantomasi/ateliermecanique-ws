@@ -8,13 +8,13 @@ participant AppointmentService as "<<Service>>\nAppointmentService"
 participant AppointmentRepository as "<<Repository>>\nAppointmentRepository"
 participant Database as "<<Database>>\nDatabase"
 
-Mechanic -> AppointmentController: DELETE /api/v1/appointments/status/cancelled
+Mechanic -> AppointmentController: DELETE /api/v1/appointments?status=CANCELLED
 activate AppointmentController
 
 AppointmentController -> AppointmentService: deleteAllCancelledAppointments()
 activate AppointmentService
 
-AppointmentService -> AppointmentRepository: deleteAllCancelledAppointments()
+AppointmentService -> AppointmentRepository: deleteAllCancelledAppointments())
 activate AppointmentRepository
 
 AppointmentRepository -> Database: DELETE * FROM appointments WHERE status = 'CANCELLED'

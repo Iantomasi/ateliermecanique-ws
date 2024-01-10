@@ -1,5 +1,5 @@
 @startuml
-title GetAllCustomerInvoicesByCustomerId System Sequence Diagram
+title GetAllCustomerInvoices System Sequence Diagram
 
 actor Customer
 
@@ -14,7 +14,7 @@ activate InvoiceController
 InvoiceController -> InvoiceService: getAllInvoicesByCustomerId(customerId)
 activate InvoiceService
 
-InvoiceService -> InvoiceRepository: findAllInvoicesByCustomerId(customerId)
+InvoiceService -> InvoiceRepository: findAllInvoicesByCustomerId(String customerId)
 activate InvoiceRepository
 
 InvoiceRepository -> Database: SELECT * FROM invoices WHERE customerId = customerId

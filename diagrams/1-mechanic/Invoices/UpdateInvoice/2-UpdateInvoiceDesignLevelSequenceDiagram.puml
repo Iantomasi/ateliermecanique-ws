@@ -1,5 +1,5 @@
 @startuml
-title UpdateInvoiceById Design-Level Sequence Diagram (Admin)
+title UpdateInvoiceByInvoiceId Design-Level Sequence Diagram (Admin)
 
 actor Mechanic
 
@@ -19,16 +19,16 @@ activate ReactApplication
 ReactApplication -> CustomerInvoiceDetailsPage: Render Invoice Details
 activate CustomerInvoiceDetailsPage
 
-CustomerInvoiceDetailsPage -> InvoiceController: PUT /api/v1/customers/{customerId}/invoices/{invoiceId}
+CustomerInvoiceDetailsPage -> InvoiceController: PUT /api/v1/invoices/{invoiceId}
 activate InvoiceController
 
-InvoiceController -> InvoiceService: updateInvoiceById(invoiceRequestModel, customerId, invoiceId)
+InvoiceController -> InvoiceService: updateInvoiceByInvoiceId(invoiceRequestModel, invoiceId)
 activate InvoiceService
 
-InvoiceService -> InvoiceServiceImpl: updateInvoiceById(invoiceRequestModel, customerId, invoiceId)
+InvoiceService -> InvoiceServiceImpl: updateInvoiceByInvoiceId(invoiceRequestModel, invoiceId)
 activate InvoiceServiceImpl
 
-InvoiceServiceImpl -> InvoiceRequestMapper: requestToEntity(invoiceRequestModel)
+InvoiceServiceImpl -> InvoiceRequestMapper: requestModelToEntity(invoiceRequestModel)
 activate InvoiceRequestMapper
 
 InvoiceRequestMapper --> InvoiceServiceImpl: Invoice

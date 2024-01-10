@@ -11,13 +11,13 @@ participant Database as "<<Database>>\nDatabase"
 Customer -> AppointmentController: GET /api/v1/customers/{customerId}/appointments/{appointmentId}
 activate AppointmentController
 
-AppointmentController -> AppointmentService: getAppointmentByCustomerIdAndAppointmentId(customerId, appointmentId)
+AppointmentController -> AppointmentService: getAppointmentByAppointmentId(appointmentId)
 activate AppointmentService
 
-AppointmentService -> AppointmentRepository: getAppointmentByCustomerIdAndAppointmentId(customerId, appointmentId)
+AppointmentService -> AppointmentRepository: getAppointmentByAppointmentId(appointmentId)
 activate AppointmentRepository
 
-AppointmentRepository -> Database: SELECT * FROM appointments WHERE customerId = customerId AND appointmentId = appointmentId
+AppointmentRepository -> Database: SELECT * FROM appointments WHERE appointmentId = appointmentId
 activate Database
 
 Database --> AppointmentRepository: Appointment

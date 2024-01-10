@@ -14,7 +14,7 @@ activate AppointmentController
 AppointmentController -> AppointmentService: getAllAppointmentsByCustomerId(customerId)
 activate AppointmentService
 
-AppointmentService -> AppointmentRepository: findByCustomerId(customerId)
+AppointmentService -> AppointmentRepository: findAllAppointmentsByCustomerId(String customerId)
 activate AppointmentRepository
 
 AppointmentRepository -> Database: SELECT * FROM appointments WHERE customerId = customerId

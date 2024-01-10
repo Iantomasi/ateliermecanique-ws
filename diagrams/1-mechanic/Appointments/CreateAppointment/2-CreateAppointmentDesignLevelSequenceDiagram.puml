@@ -19,13 +19,13 @@ activate ReactApplication
 ReactApplication -> CustomerAppointmentsPage: Render()
 activate CustomerAppointmentsPage
 
-CustomerAppointmentsPage -> AppointmentController: POST /api/v1/customers/{customerId}/appointments
+CustomerAppointmentsPage -> AppointmentController: POST /api/v1/appointments
 activate AppointmentController
 
-AppointmentController -> AppointmentService: addAppointment(customerId, appointmentRequestModel)
+AppointmentController -> AppointmentService: addAppointment(appointmentRequestModel)
 activate AppointmentService
 
-AppointmentService -> AppointmentServiceImpl: addAppointment(customerId, appointmentRequestModel)
+AppointmentService -> AppointmentServiceImpl: addAppointment(appointmentRequestModel)
 activate AppointmentServiceImpl
 
 AppointmentServiceImpl -> AppointmentRequestMapper: requestModelToEntity(appointmentRequestModel)

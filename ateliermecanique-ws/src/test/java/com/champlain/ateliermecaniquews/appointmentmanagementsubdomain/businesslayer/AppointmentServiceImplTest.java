@@ -4,11 +4,8 @@ import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.AppointmentRepository;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Status;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datamapperlayer.AppointmentResponseMapper;
-import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentRequestModel;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentResponseModel;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccount;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountRepository;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountResponseModel;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -19,7 +16,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -151,7 +147,7 @@ class AppointmentServiceImplTest {
     }
 
     @Test
-    void updateAppointmentStatusAdmin_shouldConfirmAppointment() {
+    void updateAppointmentStatus_shouldConfirmAppointment() {
         // Arrange
         String appointmentId = "existingAppointmentId";
         boolean isConfirm = true;
@@ -169,7 +165,7 @@ class AppointmentServiceImplTest {
                 .thenAnswer(invocation -> new AppointmentResponseModel(appointmentId, null, null, null, null, null, expectedStatus));
 
         // Act
-        AppointmentResponseModel result = appointmentService.updateAppointmentStatusAdmin(appointmentId, isConfirm);
+        AppointmentResponseModel result = appointmentService.updateAppointmentStatus(appointmentId, isConfirm);
 
         // Assert
         assertNotNull(result);
@@ -177,7 +173,7 @@ class AppointmentServiceImplTest {
     }
 
     @Test
-    void updateAppointmentStatusAdmin_shouldCancelAppointment() {
+    void updateAppointmentStatus_shouldCancelAppointment() {
         // Arrange
         String appointmentId = "existingAppointmentId";
         boolean isConfirm = false;
@@ -195,7 +191,7 @@ class AppointmentServiceImplTest {
                 .thenAnswer(invocation -> new AppointmentResponseModel(appointmentId, null, null, null, null, null, expectedStatus));
 
         // Act
-        AppointmentResponseModel result = appointmentService.updateAppointmentStatusAdmin(appointmentId, isConfirm);
+        AppointmentResponseModel result = appointmentService.updateAppointmentStatus(appointmentId, isConfirm);
 
         // Assert
         assertNotNull(result);
@@ -203,7 +199,7 @@ class AppointmentServiceImplTest {
     }
 
     @Test
-    void updateAppointmentStatusAdmin_saveFails_shouldThrowException() {
+    void updateAppointmentStatus_saveFails_shouldThrowException() {
         // Arrange
         String appointmentId = "existingAppointmentId";
         boolean isConfirm = true;
@@ -219,89 +215,8 @@ class AppointmentServiceImplTest {
 
         // Act & Assert
         assertThrows(RuntimeException.class, () -> {
-            appointmentService.updateAppointmentStatusAdmin(appointmentId, isConfirm);
+            appointmentService.updateAppointmentStatus(appointmentId, isConfirm);
         });
     }
-
-    @Test
-    void updateAppointmentStatusCustomer_shouldConfirmAppointment() {
-        // Arrange
-        String customerId = "existingCustomerId";
-        String appointmentId = "existingAppointmentId";
-        boolean isConfirm = true;
-        Status expectedStatus = Status.CONFIRMED;
-
-        Appointment existingAppointment = new Appointment();
-        existingAppointment.setStatus(Status.PENDING); // initial status
-
-        when(appointmentRepository.findAppointmentByCustomerIdAndAppointmentIdentifier_AppointmentId(customerId, appointmentId))
-                .thenReturn(existingAppointment);
-
-        when(appointmentRepository.save(any(Appointment.class))).thenAnswer(invocation -> invocation.getArgument(0));
-
-        when(appointmentResponseMapper.entityToResponseModel(any(Appointment.class)))
-                .thenAnswer(invocation -> new AppointmentResponseModel(appointmentId, customerId, null, null, null, null, expectedStatus));
-
-        // Act
-        AppointmentResponseModel result = appointmentService.updateAppointmentStatusCustomer(customerId, appointmentId, isConfirm);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(expectedStatus, result.getStatus());
-        verify(appointmentRepository).save(any(Appointment.class));
-    }
-
-    @Test
-    void updateAppointmentStatusCustomer_shouldCancelAppointment() {
-        // Arrange
-        String customerId = "existingCustomerId";
-        String appointmentId = "existingAppointmentId";
-        boolean isConfirm = false;
-        Status expectedStatus = Status.CANCELLED;
-
-        Appointment existingAppointment = new Appointment();
-        existingAppointment.setStatus(Status.PENDING); // initial status
-
-        when(appointmentRepository.findAppointmentByCustomerIdAndAppointmentIdentifier_AppointmentId(customerId, appointmentId))
-                .thenReturn(existingAppointment);
-
-        when(appointmentRepository.save(any(Appointment.class))).thenAnswer(invocation -> invocation.getArgument(0));
-
-        when(appointmentResponseMapper.entityToResponseModel(any(Appointment.class)))
-                .thenAnswer(invocation -> new AppointmentResponseModel(appointmentId, customerId, null, null, null, null, expectedStatus));
-
-        // Act
-        AppointmentResponseModel result = appointmentService.updateAppointmentStatusCustomer(customerId, appointmentId, isConfirm);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(expectedStatus, result.getStatus());
-        verify(appointmentRepository).save(any(Appointment.class));
-    }
-
-    @Test
-    void updateAppointmentStatusCustomer_saveFails_shouldThrowException() {
-        // Arrange
-        String customerId = "existingCustomerId";
-        String appointmentId = "existingAppointmentId";
-        boolean isConfirm = true;
-        Appointment existingAppointment = new Appointment();
-        existingAppointment.setStatus(Status.PENDING);
-
-        when(appointmentRepository.findAppointmentByCustomerIdAndAppointmentIdentifier_AppointmentId(customerId, appointmentId))
-                .thenReturn(existingAppointment);
-
-        // Simulate save method throwing an exception
-        when(appointmentRepository.save(any(Appointment.class)))
-                .thenThrow(new RuntimeException("Database error"));
-
-        // Act & Assert
-        assertThrows(RuntimeException.class, () -> {
-            appointmentService.updateAppointmentStatusCustomer(customerId, appointmentId, isConfirm);
-        });
-    }
-
-
-
 
 }

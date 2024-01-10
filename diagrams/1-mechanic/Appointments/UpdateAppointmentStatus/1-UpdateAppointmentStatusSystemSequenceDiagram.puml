@@ -11,7 +11,7 @@ participant Database as "<<Database>>\nDatabase"
 Mechanic -> AppointmentController: PUT api/v1/appointments/{appointmentId}/updateStatus?isConfirm
 activate AppointmentController
 
-AppointmentController -> AppointmentService: updatedAppointmentStatus(appointmentId, isConfirm)
+AppointmentController -> AppointmentService: updateAppointmentStatus(appointmentId, isConfirm)
 activate AppointmentService
 
 AppointmentService -> AppointmentRepository: findAppointmentByAppointmentIdentifier_AppointmentId(appointmentId)

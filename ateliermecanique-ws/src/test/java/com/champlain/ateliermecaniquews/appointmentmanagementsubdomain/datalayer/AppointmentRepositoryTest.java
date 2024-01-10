@@ -59,21 +59,7 @@ class AppointmentRepositoryTest {
         assertFalse(foundAppointments.isEmpty());
         assertEquals(savedCustomerId, foundAppointments.get(0).getCustomerId());
     }
-
-    @Test
-    public void findAppointmentByCustomerIdAndAppointmentId_shouldSucceed() {
-        // Arrange
-        assertNotNull(savedCustomerId);
-        assertNotNull(savedAppointmentId);
-
-        // Act
-        Appointment found = appointmentRepository.findAppointmentByCustomerIdAndAppointmentIdentifier_AppointmentId(savedCustomerId, savedAppointmentId);
-
-        // Assert
-        assertNotNull(found);
-        assertEquals(savedCustomerId, found.getCustomerId());
-        assertEquals(savedAppointmentId, found.getAppointmentIdentifier().getAppointmentId());
-    }
+    
 
     @Test
     public void findAppointmentByInvalidAppointmentId_thenReturnNull() {
@@ -99,15 +85,4 @@ class AppointmentRepositoryTest {
         assertTrue(foundAppointments.isEmpty());
     }
 
-    @Test
-    public void findAppointmentByCustomerIdAndNonExistentAppointmentId_thenReturnNull() {
-        // Arrange
-        String nonExistentAppointmentId = "nonExistent";
-
-        // Act
-        Appointment found = appointmentRepository.findAppointmentByCustomerIdAndAppointmentIdentifier_AppointmentId(savedCustomerId, nonExistentAppointmentId);
-
-        // Assert
-        assertNull(found);
-    }
 }

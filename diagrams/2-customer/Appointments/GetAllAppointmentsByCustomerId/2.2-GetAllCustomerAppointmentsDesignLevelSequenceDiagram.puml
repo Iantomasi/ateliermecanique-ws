@@ -26,7 +26,7 @@ activate AppointmentService
 AppointmentService -> AppointmentServiceImpl: getAllAppointmentsByCustomerId(customerId)
 activate AppointmentServiceImpl
 
-AppointmentServiceImpl -> AppointmentRepository: findByCustomerId(customerId)
+AppointmentServiceImpl -> AppointmentRepository: findAllAppointmentsByCustomerId(String customerId)
 activate AppointmentRepository
 
 AppointmentRepository -> Database: SELECT * FROM appointments WHERE customerId = customerId

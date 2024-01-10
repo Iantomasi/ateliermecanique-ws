@@ -19,13 +19,13 @@ activate ReactApplication
 ReactApplication -> CustomerInvoicesPage: Render()
 activate CustomerInvoicesPage
 
-CustomerInvoicesPage -> InvoiceController: POST /api/v1/customers/{customerId}/invoices
+CustomerInvoicesPage -> InvoiceController: POST /api/v1/invoices
 activate InvoiceController
 
-InvoiceController -> InvoiceService: addInvoice(customerId, invoiceRequestModel)
+InvoiceController -> InvoiceService: addInvoice(invoiceRequestModel)
 activate InvoiceService
 
-InvoiceService -> InvoiceServiceImpl: addInvoice(customerId, invoiceRequestModel)
+InvoiceService -> InvoiceServiceImpl: addInvoice(invoiceRequestModel)
 activate InvoiceServiceImpl
 
 InvoiceServiceImpl -> InvoiceRequestMapper: requestModelToEntity(invoiceRequestModel)
