@@ -1,11 +1,14 @@
 JIRA: link to jira ticket
 (link)
+
 ## Context:
 (sentence description)
+
 ## Changes
 - (changes made listed in point form)
 
 ## Before and After UI (Required for UI-impacting PRs)
+
 Before changes:
 (images)
 
