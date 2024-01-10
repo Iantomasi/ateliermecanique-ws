@@ -50,13 +50,15 @@ create table if not exists invoices(
 );
 
 CREATE TABLE if not exists users (
-                       id INT AUTO_INCREMENT PRIMARY KEY,
-                       username VARCHAR(20) NOT NULL,
-                       email VARCHAR(50) NOT NULL,
-                       password VARCHAR(120) NOT NULL,
-                       UNIQUE (username),
-                       UNIQUE (email)
-);
+                                     id INT AUTO_INCREMENT PRIMARY KEY,
+                                     user_id VARCHAR(36),
+    email VARCHAR(50) NOT NULL,
+    password VARCHAR(120) NOT NULL,
+    first_name VARCHAR(20) NOT NULL,
+    last_name VARCHAR(40) NOT NULL,
+    phone_number VARCHAR(20) NOT NULL,
+    UNIQUE (email)
+    );
 
 CREATE TABLE if not exists roles (
                                      id INT AUTO_INCREMENT PRIMARY KEY,
@@ -64,10 +66,11 @@ CREATE TABLE if not exists roles (
     );
 
 CREATE TABLE if not exists user_roles (
-                            user_id INT,
-                            role_id INT,
-                            PRIMARY KEY (user_id, role_id),
-                            FOREIGN KEY (user_id) REFERENCES users(id),
-                            FOREIGN KEY (role_id) REFERENCES roles(id)
-);
+                                          user_id INT,
+                                          role_id INT,
+                                          PRIMARY KEY (user_id, role_id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (role_id) REFERENCES roles(id)
+    );
+
 

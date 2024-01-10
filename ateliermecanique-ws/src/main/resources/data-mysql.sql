@@ -125,13 +125,11 @@ INSERT INTO appointments (appointment_id, customer_id, vehicle_id, appointment_d
 INSERT INTO roles (name) VALUES ('ROLE_CUSTOMER');
 INSERT INTO roles (name) VALUES ('ROLE_ADMIN');
 
-
 -- Inserting an admin user into the users table
-INSERT INTO users (username, email, password)
-VALUES ('admin', 'admin@example.com', '$2a$10$A/d6EXvgk/nd8PWGlbyUXeCv3qccFJEFKMHG/WkNye9cCychhn1lG');
---password is Hello!
+INSERT INTO users (user_id,email, password, first_name, last_name, phone_number)
+VALUES ('f47ac10b-58cc-4372-a567-0e02b2c3d479','admin@example.com', '$2a$10$A/d6EXvgk/nd8PWGlbyUXeCv3qccFJEFKMHG/WkNye9cCychhn1lG', 'Jean', 'Jacques', '438-993-2345');
 
--- Assigning the 'ADMIN' role to the admin user in the user_roles table
 INSERT INTO user_roles (user_id, role_id)
-VALUES ((SELECT id FROM users WHERE username = 'admin'),
+
+VALUES ((SELECT id FROM users WHERE email = 'admin@example.com'),
         (SELECT id FROM roles WHERE name = 'ROLE_ADMIN'));

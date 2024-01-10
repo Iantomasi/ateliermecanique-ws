@@ -9,7 +9,9 @@ import java.util.Set;
 @Builder
 public class SignupRequest {
 
-    private String username;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
     private String email;
     private Set<String> role;
     private String password;

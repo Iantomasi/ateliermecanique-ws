@@ -127,19 +127,17 @@ public class AuthController {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(new JWTResponse(jwt,
-                userDetails.getId(),
-                userDetails.getUsername(),
+                userDetails.getUserId(),
+                userDetails.getFirstName(),
+                userDetails.getLastName(),
+                userDetails.getPhoneNumber(),
                 userDetails.getEmail(),
                 roles));
     }
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest){
-        if(userRepository.existsByUsername(signupRequest.getUsername())){
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: username is already taken!"));
-        }
+
 
         if(userRepository.existsByEmail(signupRequest.getEmail())){
             return ResponseEntity
@@ -148,7 +146,9 @@ public class AuthController {
         }
 
         User user = User.builder()
-                .username(signupRequest.getUsername())
+                .firstName(signupRequest.getFirstName())
+                .lastName(signupRequest.getLastName())
+                .phoneNumber(signupRequest.getPhoneNumber())
                 .email(signupRequest.getEmail())
                 .password(encoder.encode(signupRequest.getPassword())).build();
 

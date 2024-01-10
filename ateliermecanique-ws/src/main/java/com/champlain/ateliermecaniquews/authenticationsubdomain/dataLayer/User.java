@@ -16,7 +16,6 @@ import java.util.Set;
 @Builder
 @Data
 @Table(name = "users",uniqueConstraints = {
-        @UniqueConstraint(columnNames = "username"),
         @UniqueConstraint(columnNames = "email")
 })
 @NoArgsConstructor
@@ -25,11 +24,22 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Integer id;
+
+    @Embedded
+    private UserIdentifier userIdentifier;
 
     @NotBlank
     @Size(max = 20)
-    private String username;
+    private String firstName;
+
+    @NotBlank
+    @Size(max = 40)
+    private String lastName;
+
+    @NotBlank
+    @Size(max = 20)
+    private String phoneNumber;
 
     @NotBlank
     @Size(max = 50)

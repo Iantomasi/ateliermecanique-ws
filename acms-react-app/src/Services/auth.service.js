@@ -22,9 +22,11 @@ class AuthService {
         sessionStorage.removeItem('user');
     }
 
-    register(username,email,password){
+    register(firstName,lastName,phoneNumber,email,password){
         return axios.post(API_URL + 'signup',{
-            username,
+            firstName,
+            lastName,
+            phoneNumber,
             email,
             password
         });

@@ -24,8 +24,10 @@ function Signup() {
         }
 
         authService.register(firstName,lastName,phoneNumber,email,password).then(
-            () => {
-                navigate("/admin");
+            (response) => {
+                const message =response.data.message;
+                alert(message);
+                navigate("/login");
             },
             (error) => {
                 const resMessage =
