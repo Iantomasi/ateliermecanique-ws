@@ -3,9 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 
-
-
 const AppointmentBlock = ({ appointment, refreshAppointments }) => {
+    const navigate = useNavigate();
   const handleStatusChange = (isConfirm) => {
     axios.put(`http://localhost:8080/api/v1/appointments/${appointment.appointmentId}/updateStatus?isConfirm=${isConfirm}`)
       .then(response => {
@@ -16,14 +15,32 @@ const AppointmentBlock = ({ appointment, refreshAppointments }) => {
       });
   };
 
+    const handleAppointmentClick = () => {
+        navigate(`/admin/appointments/${appointment.appointmentId}`);
+    };
+
+    const handleCustomerClick = () => {
+        navigate(`/admin/customers/${appointment.customerId}`);
+    };
+
+    const handleVehicleClick = () => {
+        navigate(`/admin/customers/${appointment.customerId}/vehicles/${appointment.vehicleId}`);
+    };
+
   return (
     <>
       <tr className='hover:bg-gray-200 hover:cursor-pointer h-10'>
-        <td>{appointment.appointmentId}</td>
+          <td className='hover:cursor-pointer' onClick={handleAppointmentClick}>
+              {appointment.appointmentId}
+          </td>
         <td>{appointment.appointmentDate}</td>
         <td>{appointment.services}</td>
-        <td>{appointment.vehicleId}</td>
-        <td>{appointment.customerId}</td>
+          <td className='hover:cursor-pointer' onClick={handleVehicleClick}>
+              {appointment.vehicleId}
+          </td>
+          <td className='hover:cursor-pointer' onClick={handleCustomerClick}>
+              {appointment.customerId}
+          </td>
         <td>{appointment.status}</td>
         {/* Separate cells for buttons if status is PENDING, otherwise an empty cell */}
         {appointment.status === 'PENDING' ? (
@@ -52,5 +69,4 @@ const AppointmentBlock = ({ appointment, refreshAppointments }) => {
     </>
   );
 };
-
 export default AppointmentBlock;

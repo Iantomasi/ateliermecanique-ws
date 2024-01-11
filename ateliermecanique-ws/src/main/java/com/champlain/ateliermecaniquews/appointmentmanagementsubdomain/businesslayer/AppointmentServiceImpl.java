@@ -67,5 +67,18 @@ public class AppointmentServiceImpl implements AppointmentService{
         return appointmentResponseMapper.entityToResponseModel(appointment);
     }
 
+    @Override
+    public AppointmentResponseModel getAppointmentById(String appointmentId) {
+        Appointment appointment = appointmentRepository.findByAppointmentIdentifier_AppointmentId(appointmentId);
+
+        if (appointment == null) {
+            log.warn("No appointment found for appointment ID: {}", appointmentId);
+            return null;
+        }
+
+        return appointmentResponseMapper.entityToResponseModel(appointment);
+    }
+
+
 
 }

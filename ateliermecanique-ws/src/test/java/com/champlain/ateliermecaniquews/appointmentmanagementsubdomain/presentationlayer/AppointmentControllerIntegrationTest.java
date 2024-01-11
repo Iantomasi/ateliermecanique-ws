@@ -24,6 +24,8 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -82,6 +84,14 @@ class AppointmentControllerIntegrationTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].services").value("Preventive Maintenance"));
+    }
+    @Test
+    void getAppointmentById_shouldReturnAppointment() throws Exception {
+        mockMvc.perform(get("/api/v1/appointments/{appointmentId}", testAppointmentId))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.appointmentId", is(testAppointmentId)))
+                .andExpect(jsonPath("$.services", is("Preventive Maintenance")));
     }
 
 
