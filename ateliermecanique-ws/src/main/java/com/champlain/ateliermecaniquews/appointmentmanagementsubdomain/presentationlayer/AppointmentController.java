@@ -54,5 +54,11 @@ public class AppointmentController {
         return ResponseEntity.ok(appointment);
     }
 
+    @DeleteMapping("/appointments/cancelled")
+    public ResponseEntity<Void> deleteAllCancelledAppointments(){
+        appointmentService.deleteAllCancelledAppointments();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 
 }

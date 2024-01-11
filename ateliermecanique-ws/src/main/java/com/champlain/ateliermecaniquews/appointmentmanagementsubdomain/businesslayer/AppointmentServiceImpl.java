@@ -79,6 +79,15 @@ public class AppointmentServiceImpl implements AppointmentService{
         return appointmentResponseMapper.entityToResponseModel(appointment);
     }
 
+    @Override
+    public void deleteAllCancelledAppointments() {
+        List<Appointment> cancelledAppointments =  appointmentRepository.findAllAppointmentsByStatus(Status.CANCELLED);
+
+        if(!cancelledAppointments.isEmpty()){
+            appointmentRepository.deleteAll(cancelledAppointments);
+        }
+
+    }
 
 
 }
