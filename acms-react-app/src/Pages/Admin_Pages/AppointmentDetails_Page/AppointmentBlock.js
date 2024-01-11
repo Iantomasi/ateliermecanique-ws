@@ -1,4 +1,5 @@
 import React from 'react';
+<<<<<<< HEAD
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -52,5 +53,41 @@ const AppointmentBlock = ({ appointment, refreshAppointments }) => {
     </>
   );
 };
+=======
+import { useNavigate } from 'react-router-dom';
+
+const AppointmentBlock = ({ appointment }) => {
+    const navigate = useNavigate();
+
+    const handleAppointmentClick = () => {
+        navigate(`/admin/appointments/${appointment.appointmentId}`);
+    };
+
+    const handleCustomerClick = () => {
+        navigate(`/admin/customers/${appointment.customerId}`);
+    };
+
+    const handleVehicleClick = () => {
+        navigate(`/admin/customers/${appointment.customerId}/vehicles/${appointment.vehicleId}`);
+    };
+
+    return (
+        <tr className='hover:bg-gray-200 h-10'>
+            <td className='hover:cursor-pointer' onClick={handleAppointmentClick}>
+                {appointment.appointmentId}
+            </td>
+            <td>{appointment.appointmentDate}</td>
+            <td>{appointment.services}</td>
+            <td className='hover:cursor-pointer' onClick={handleVehicleClick}>
+                {appointment.vehicleId}
+            </td>
+            <td className='hover:cursor-pointer' onClick={handleCustomerClick}>
+                {appointment.customerId}
+            </td>
+            <td>{appointment.status}</td>
+        </tr>
+    );
+}
+>>>>>>> d9a826c (Rebase from origin)
 
 export default AppointmentBlock;
