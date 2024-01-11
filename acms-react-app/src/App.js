@@ -10,22 +10,22 @@ import CustomerVehicles from './Pages/Admin_Pages/CustomerVehicles_Page/Customer
 import CustomerVehicleDetails from './Pages/Admin_Pages/CustomerVehicleDetails_Page/CustomerVehicleDetails';
 import AddNewVehicle from './Pages/Admin_Pages/AddNewVehicle_Page/AddNewVehicle';
 import Appointments from './Pages/Admin_Pages/Appointments_Page/Appointments';
-import AppointmentSpecifics from './Pages/Admin_Pages/Appointment_Specifics_Page/AppointmentSpecifics';
 import User from './Pages/User_Pages/User';
 import CustomerAppointments from './Pages/Admin_Pages/CustomerAppointments_Page/CustomerAppointments';
+import AppointmentSpecifics from './Pages/Admin_Pages/Appointment_Specifics_Page/AppointmentSpecifics';
 
 
 const router = createBrowserRouter([
   {
     children  :[
-    {
-      path : "/",
-      element: <Home/>
-    },
-    {
-      path : "/login",
-      element: <Login/>
-    },
+      {
+        path : "/",
+        element: <Home/>
+      },
+      {
+        path : "/login",
+        element: <Login/>
+      },
       {
         path: "/signup",
         element: <Signup/>
@@ -62,20 +62,19 @@ const router = createBrowserRouter([
         element: <Appointments/>
       },
       {
-<<<<<<< HEAD
         path: "/admin/customers/:customerId/appointments",
         element: <CustomerAppointments/>,
-=======
-        path : "/admin/appointments/:appointmentId",
-        element: <AppointmentSpecifics/>
->>>>>>> d9a826c (Rebase from origin)
+      },
+      {
+        path:"/admin/appointments/:appointmentId",
+        element: <AppointmentSpecifics/>,
       },
       {
         path: "/user",
         element: <User/>
       }
 
-  ]
+    ]
   }
 ])
 
