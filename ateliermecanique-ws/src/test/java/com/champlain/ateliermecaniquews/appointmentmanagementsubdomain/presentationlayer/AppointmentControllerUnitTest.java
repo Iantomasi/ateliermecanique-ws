@@ -72,7 +72,6 @@ class AppointmentControllerUnitTest {
     }
 
     @Test
-<<<<<<< HEAD
     void getAllAppointmentsByCustomerId_shouldSucceed() throws Exception {
         // Arrange
         String customerId = "customer123";
@@ -127,8 +126,7 @@ class AppointmentControllerUnitTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("CANCELLED"));
     }
-}
-=======
+@Test
     void getAppointmentById_shouldReturnAppointment() throws Exception {
         // Arrange
         String appointmentId = "1";
@@ -162,4 +160,4 @@ class AppointmentControllerUnitTest {
 
 
 }
->>>>>>> 10fcf8b (All testing and front end done)
+

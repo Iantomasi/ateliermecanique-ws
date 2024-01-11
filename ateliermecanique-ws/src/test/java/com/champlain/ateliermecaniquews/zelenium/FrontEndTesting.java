@@ -288,7 +288,7 @@ public class FrontEndTesting {
         $("p").shouldHave(text("APPOINTMENTS"));
     }
 
-<<<<<<< HEAD
+
     /*
     @Test
     public void updateAppointmentStatusAdmin(){
@@ -351,17 +351,22 @@ public class FrontEndTesting {
     }
 
 
-=======
+    @Test
+    public void getAppointmentById() {
+        open("https://localhost:3000/");
+        $("a[href='/login']").click();
+        sleep(1000);
+        $("button[type='submit']").click();
+        sleep(1000);
+        $("img[src='appointments.svg']").click();
+        sleep(1000);
 
-        // Replace with the actual ID of the appointment you want to test
         String appointmentId = "1508dc5c-d460-443f-8f37-a174284f868c";
         SelenideElement appointmentLink = $$("td").findBy(text(appointmentId));
         appointmentLink.shouldBe(visible).click();
         sleep(1000);
 
-        // Replace with a check that confirms you are on the appointment details page
         $("p").shouldHave(text("APPOINTMENT DETAILS"));
     }
->>>>>>> 10fcf8b (All testing and front end done)
 
 }
