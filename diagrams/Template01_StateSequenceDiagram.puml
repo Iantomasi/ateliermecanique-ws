@@ -1,0 +1,74 @@
+@startuml
+
+title View Customer Accounts Use Case Sequence Diagram (Admin)
+
+actor Mechanic
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant HomePage as "<<View>>\nHomePage"
+
+participant CustomerAccountController as "<<Controller>>\nCustomerAccountController"
+
+participant CustomerAccountService as "<<Service>>\nCustomerAccountService"
+
+participant CustomerAccountRepository as "<<Repository>>\nCustomerAccountRepository"
+
+participant Database as "<<Database>>\nDatabase"
+
+participant CustomerAccountResponseMapper as "<<Mapper>>\nCustomerAccountResponseMapper"
+
+Mechanic -> ReactApplication : GET /
+activate ReactApplication
+
+ReactApplication -> HomePage : render()
+activate HomePage
+
+
+
+HomePage -> CustomerAccountController : GET /api/v1/customers
+activate CustomerAccountController
+
+
+
+
+
+CustomerAccountController -> CustomerAccountService : getCustomerAccounts()
+activate CustomerAccountService
+
+
+CustomerAccountService -> CustomerAccountRepository : findAll()
+activate CustomerAccountRepository
+
+
+CustomerAccountRepository -> Database : SELECT * FROM customers
+activate Database
+
+Database --> CustomerAccountService : CustomerAccounts
+
+deactivate CustomerAccountRepository
+
+deactivate Database
+
+
+
+CustomerAccountService -> CustomerAccountResponseMapper : entityListToResponseModel(CustomerAccounts)
+activate CustomerAccountResponseMapper
+
+CustomerAccountResponseMapper --> CustomerAccountService : CustomerAccountsResponseModel
+
+deactivate CustomerAccountResponseMapper
+
+CustomerAccountService --> CustomerAccountController : CustomerAccountsResponseModel
+
+deactivate CustomerAccountService
+
+CustomerAccountController --> HomePage : CustomerAccountsResponseModel
+
+deactivate CustomerAccountController
+
+HomePage --> Mechanic : CustomerAccounts
+
+deactivate HomePage
+
+
+@endpuml

@@ -32,6 +32,7 @@ public class AppointmentServiceImpl implements AppointmentService{
     }
 
     @Override
+<<<<<<< HEAD
     public List<AppointmentResponseModel> getAllAppointmentsByCustomerId(String customerId) {
         List<Appointment> appointments = appointmentRepository.findAllAppointmentsByCustomerId(customerId);
         log.info("Fetching appointments for customer ID: {}", customerId);
@@ -66,6 +67,19 @@ public class AppointmentServiceImpl implements AppointmentService{
         appointmentRepository.save(appointment);
         return appointmentResponseMapper.entityToResponseModel(appointment);
     }
+=======
+    public AppointmentResponseModel getAppointmentById(String appointmentId) {
+        Appointment appointment = appointmentRepository.findByAppointmentIdentifier_AppointmentId(appointmentId);
+
+        if (appointment == null) {
+            log.warn("No appointment found for appointment ID: {}", appointmentId);
+            return null;
+        }
+
+        return appointmentResponseMapper.entityToResponseModel(appointment);
+    }
+
+>>>>>>> a59de34 (Back end working)
 
 
 }
