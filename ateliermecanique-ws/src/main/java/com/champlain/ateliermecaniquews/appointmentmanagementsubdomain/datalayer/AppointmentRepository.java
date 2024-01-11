@@ -12,7 +12,4 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
 
     List<Appointment> findAllAppointmentsByStatus(Status status);
 
-
-    List<Appointment> findAllAppointmentsByStatus(Status status);
-
 }
