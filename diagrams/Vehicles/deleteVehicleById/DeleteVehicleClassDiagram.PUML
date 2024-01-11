@@ -1,0 +1,76 @@
+@startuml
+!theme toy
+' Define class styles
+skinparam class {
+    BackgroundColor<<entity>> Wheat
+    BackgroundColor<<controller>> LightSkyBlue
+    BackgroundColor<<service>> LightGreen
+    BackgroundColor<<repository>> LightCoral
+    BackgroundColor<<mapper>> Khaki
+}
+
+' VehicleController
+class "<<controller>>\nVehicleController" as controller {
+    - VehicleService : vehicleService
+    + getAllVehiclesForCustomer(@PathVariable String customerId) : ResponseEntity<List<CustomerAccountResponseModel>>
+    + deleteVehicleById(@PathVariable String customerId, @PathVariable String vehicleId): ResponseEntity<Void>)
+}
+
+' VehicleService interfacea
+interface "VehicleService" as service {
+    + getAllVehiclesForCustomer() : List<VehicleResponseModel>
+    + deleteVehicleById(String customerId, String vehicleId): Void
+}
+
+' CustomerAccountServiceImpl class
+class "<<service>>\nVehicleServiceImpl" as serviceImpl {
+    - vehicleRepository : VehicleRepository
+    - vehicleResponseMapper : VehicleResponseMapper
+    - vehicleRequestMapper : VehicleRequestMapper
+    - customerAccountRepository: CustomerAccountRepository
+    + getAllVehiclesForCustomer() : List<VehicleResponseModel>
+    + deleteVehicleById(String customerId, String vehicleId): Void
+}
+serviceImpl .up.|> service
+
+' CustomerAccountRepository interface (assuming existence)
+interface "<<repository>>\nVehicleRepository" as repository {
+    + findAllByCustomerId() : List<Vehicle>
+}
+
+' CustomerAccountResponseMapper class (assuming existence)
+class "<<mapper>>\nVehicleResponseMapper" as responseMapper {
+    + entityToResponseModelList(entities : List<Vehicle> vehicles) : List<VehicleResponseModel>
+}
+
+' CustomerAccount class
+class "<<entity>>\nCustomerAccount" as customerAccount {
+    - id : Integer
+    - vehicleIdentifier : VehicleIdentifier
+    - customerId : String
+    - make : String
+    - model : String
+    - year : String
+    - transmission_type : TransmissionType
+    - mileage : String
+}
+
+' CustomerAccountIdentifier class
+class "VehicleIdentifier" as accountIdentifier {
+    - vehicleId : String
+    + getVehicleId() : String
+}
+' TransmissionType enum
+enum "TransmissionType" as transmissionType {
+  - MANUAL
+  - AUTOMATIC
+}
+
+' Relationships
+controller --> service : uses
+serviceImpl --> repository : uses
+serviceImpl --> responseMapper : uses
+customerAccount --> accountIdentifier : contains
+customerAccount --> transmissionType : uses
+
+@enduml

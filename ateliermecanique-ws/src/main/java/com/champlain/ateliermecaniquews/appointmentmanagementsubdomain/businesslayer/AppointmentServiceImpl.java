@@ -68,6 +68,7 @@ public class AppointmentServiceImpl implements AppointmentService{
     }
 
     @Override
+<<<<<<< HEAD
     public AppointmentResponseModel getAppointmentById(String appointmentId) {
         Appointment appointment = appointmentRepository.findByAppointmentIdentifier_AppointmentId(appointmentId);
 
@@ -82,6 +83,10 @@ public class AppointmentServiceImpl implements AppointmentService{
     @Override
     public void deleteAllCancelledAppointments() {
         List<Appointment> cancelledAppointments =  appointmentRepository.findAllAppointmentsByStatus(Status.CANCELLED);
+=======
+    public void deleteAllCancelledAppointments() {
+      List<Appointment> cancelledAppointments =  appointmentRepository.findAllAppointmentsByStatus(Status.CANCELLED);
+>>>>>>> eddc6f1 (setting up canceling appointment methods in serviceImp and repository)
 
         if(!cancelledAppointments.isEmpty()){
             appointmentRepository.deleteAll(cancelledAppointments);
