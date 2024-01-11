@@ -32,7 +32,6 @@ public class AppointmentServiceImpl implements AppointmentService{
     }
 
     @Override
-<<<<<<< HEAD
     public List<AppointmentResponseModel> getAllAppointmentsByCustomerId(String customerId) {
         List<Appointment> appointments = appointmentRepository.findAllAppointmentsByCustomerId(customerId);
         log.info("Fetching appointments for customer ID: {}", customerId);
@@ -67,7 +66,8 @@ public class AppointmentServiceImpl implements AppointmentService{
         appointmentRepository.save(appointment);
         return appointmentResponseMapper.entityToResponseModel(appointment);
     }
-=======
+
+    @Override
     public AppointmentResponseModel getAppointmentById(String appointmentId) {
         Appointment appointment = appointmentRepository.findByAppointmentIdentifier_AppointmentId(appointmentId);
 
@@ -79,7 +79,6 @@ public class AppointmentServiceImpl implements AppointmentService{
         return appointmentResponseMapper.entityToResponseModel(appointment);
     }
 
->>>>>>> a59de34 (Back end working)
 
 
 }

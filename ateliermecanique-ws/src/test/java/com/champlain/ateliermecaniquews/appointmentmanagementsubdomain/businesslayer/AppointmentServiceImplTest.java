@@ -84,6 +84,60 @@ class AppointmentServiceImplTest {
         verify(appointmentRepository, times(1)).findAll();
         verify(appointmentResponseMapper, times(1)).entityToResponseModelList(appointments);
     }
+    @Test
+    void getAppointmentById_shouldReturnAppointment() {
+        // Arrange
+        String appointmentId = "b7024d89-1a5e-4517-3gba-05178u7ar260";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime dateTime = LocalDateTime.parse("2024-03-24 11:00", formatter);
+
+        Appointment appointment = new Appointment(
+                appointmentId,
+                "132b41b2-2bec-4b98-b08d-c7c0e03fe33e",
+                "2024-03-24 11:00",
+                "Preventive Maintenance",
+                "None",
+                Status.PENDING
+        );
+
+        AppointmentResponseModel expectedResponse = AppointmentResponseModel.builder()
+                .appointmentId(appointmentId)
+                .customerId(appointment.getCustomerId())
+                .vehicleId(appointment.getVehicleId())
+                .appointmentDate(dateTime)
+                .services(appointment.getServices())
+                .status(appointment.getStatus())
+                .build();
+
+        when(appointmentRepository.findByAppointmentIdentifier_AppointmentId(appointmentId)).thenReturn(appointment);
+        when(appointmentResponseMapper.entityToResponseModel(appointment)).thenReturn(expectedResponse);
+
+        // Act
+        AppointmentResponseModel result = appointmentService.getAppointmentById(appointmentId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(expectedResponse.getAppointmentId(), result.getAppointmentId());
+        assertEquals(expectedResponse.getCustomerId(), result.getCustomerId());
+
+        verify(appointmentRepository, times(1)).findByAppointmentIdentifier_AppointmentId(appointmentId);
+        verify(appointmentResponseMapper, times(1)).entityToResponseModel(appointment);
+    }
+
+    @Test
+    void getAppointmentById_whenNotFound_shouldReturnNull() {
+        // Arrange
+        String appointmentId = "non-existent-id";
+        when(appointmentRepository.findByAppointmentIdentifier_AppointmentId(appointmentId)).thenReturn(null);
+
+        // Act
+        AppointmentResponseModel result = appointmentService.getAppointmentById(appointmentId);
+
+        // Assert
+        assertNull(result);
+        verify(appointmentRepository, times(1)).findByAppointmentIdentifier_AppointmentId(appointmentId);
+        verify(appointmentResponseMapper, never()).entityToResponseModel(any(Appointment.class));
+    }
 
     @Test
     void getAllAppointmentsByCustomerId_shouldReturnAppointmentResponseModelList() {

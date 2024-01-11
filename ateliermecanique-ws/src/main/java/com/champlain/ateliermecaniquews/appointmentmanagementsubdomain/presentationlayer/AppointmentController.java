@@ -25,7 +25,7 @@ public class AppointmentController {
         return ResponseEntity.ok(appointments);
     }
 
-    @GetMapping("/appointments/{appointmentId}")
+    @GetMapping({"/appointments/{appointmentId}", "customers/{customerId}/appointments/{appointmentId}"})
     public ResponseEntity<AppointmentResponseModel> getAppointmentById(@PathVariable String appointmentId) {
         AppointmentResponseModel appointment = appointmentService.getAppointmentById(appointmentId);
         if (appointment == null) {

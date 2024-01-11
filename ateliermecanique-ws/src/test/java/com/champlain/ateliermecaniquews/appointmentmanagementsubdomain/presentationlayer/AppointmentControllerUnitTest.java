@@ -17,6 +17,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.when;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -71,6 +72,7 @@ class AppointmentControllerUnitTest {
     }
 
     @Test
+<<<<<<< HEAD
     void getAllAppointmentsByCustomerId_shouldSucceed() throws Exception {
         // Arrange
         String customerId = "customer123";
@@ -126,3 +128,38 @@ class AppointmentControllerUnitTest {
                 .andExpect(jsonPath("$.status").value("CANCELLED"));
     }
 }
+=======
+    void getAppointmentById_shouldReturnAppointment() throws Exception {
+        // Arrange
+        String appointmentId = "1";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        AppointmentResponseModel appointment = AppointmentResponseModel.builder()
+                .appointmentId(appointmentId)
+                .customerId("1")
+                .vehicleId("1")
+                .appointmentDate(LocalDateTime.parse("2021-01-01 12:00", formatter))
+                .build();
+
+        when(appointmentService.getAppointmentById(appointmentId)).thenReturn(appointment);
+
+        // Act & Assert
+        mockMvc.perform(get("/api/v1/appointments/{appointmentId}", appointmentId))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.appointmentId", is(appointmentId)));
+    }
+
+    @Test
+    void getAppointmentById_notFound_shouldReturnNotFound() throws Exception {
+        // Arrange
+        String appointmentId = "non-existent-id";
+        when(appointmentService.getAppointmentById(appointmentId)).thenReturn(null);
+
+        // Act & Assert
+        mockMvc.perform(get("/api/v1/appointments/{appointmentId}", appointmentId))
+                .andExpect(status().isNotFound());
+    }
+
+
+}
+>>>>>>> 10fcf8b (All testing and front end done)
