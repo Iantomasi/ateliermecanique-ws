@@ -10,7 +10,7 @@ public interface AppointmentService {
 
     List<AppointmentResponseModel> getAllAppointmentsByCustomerId(String customerId);
     AppointmentResponseModel updateAppointmentStatus(String appointmentId, boolean isConfirm);
-    
+
     AppointmentResponseModel getAppointmentById(String appointmentId);
     void deleteAllCancelledAppointments();
 }
