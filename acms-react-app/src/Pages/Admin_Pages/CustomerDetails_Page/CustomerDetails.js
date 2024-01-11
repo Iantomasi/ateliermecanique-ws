@@ -3,7 +3,7 @@ import Footer from '../../../Components/Footer/Footer.js';
 import MechanicDisplay from '../../../Components/User_Components/MechanicDisplay.js';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import adminService from '../../../Services/admin.service.js';
 import Sidebar from '../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
 
 
@@ -21,7 +21,7 @@ function CustomerDetails() {
   const navigate = useNavigate()
   
   useEffect(() => {
-    axios.get(`http://localhost:8080/api/v1/customers/${customerId}`)
+    adminService.getCustomerById(customerId)
       .then(res => {
         if (res.status === 200) {
           setCustomerDetails(res.data);
@@ -51,7 +51,7 @@ function CustomerDetails() {
       phoneNumber: formData.get('phoneNumber')
     };
   
-    axios.put(`http://localhost:8080/api/v1/customers/${customerId}`, updatedCustomer)
+    adminService.updateCustomer(customerId, updatedCustomer)
       .then(res => {
         if (res.status === 200) {
           console.log("Customer has been successfully updated!");
@@ -73,7 +73,7 @@ function CustomerDetails() {
   }
 
   function executeDelete() {
-    axios.delete(`http://localhost:8080/api/v1/customers/${customerId}`)
+    adminService.deleteCustomer(customerId)
     .then(res => {
       if(res.status === 204) {
         alert("Customer has been deleted!")

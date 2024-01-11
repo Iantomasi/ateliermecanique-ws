@@ -15,5 +15,4 @@ public interface CustomerAccountService {
     CustomerAccountResponseModel updateCustomerAccountByCustomerId(String customerId, CustomerAccountRequestModel customerAccountRequestModel);
     void deleteCustomerAccountByCustomerId(String customerId);
     CustomerAccountResponseModel createCustomerAccountForoAuth(CustomerAccountoAuthRequestModel customerAccountoAuthRequestModel);
-    CustomerAccountResponseModel updateCustomerToken(String customerId, String token);
 }

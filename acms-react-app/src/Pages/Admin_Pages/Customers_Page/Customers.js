@@ -5,16 +5,19 @@ import Footer from '../../../Components/Footer/Footer.js';
 import MechanicDisplay from '../../../Components/User_Components/MechanicDisplay.js';
 import CustomerBlock from '../CustomerDetails_Page/CustomerBlock.js';
 import axios from 'axios';
+import adminService from '../../../Services/admin.service.js';
+import userService from '../../../Services/user.service.js';
 
 function Customers() {
   const [customers, setCustomers] = useState([]);
 
   useEffect(() => {
+    getPublic();
     getCustomers();
   }, []);
 
   function getCustomers() {
-    axios.get("http://localhost:8080/api/v1/customers")
+    adminService.getAllCustomers()
       .then(res => {
         console.log('API response:', res); 
         if (res.status === 200) {
@@ -24,6 +27,18 @@ function Customers() {
       .catch(error => {
         console.log(error);
       })
+  }
+  function getPublic(){
+    userService.getAdminBoard()
+    .then(res => {
+      console.log('API response:', res); 
+      if (res.status === 200) {
+        console.log(res.data.message);
+      }
+    })
+    .catch(error => {
+      console.log(error);
+    })
   }
 
   return (

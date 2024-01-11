@@ -13,8 +13,8 @@ public class Vehicle {
 
     @Embedded
     private VehicleIdentifier vehicleIdentifier;
-    @Column(name = "customer_id")
-    private String customerId;
+    @Column(name = "user_id")
+    private String userId;
     private String make;
     private String model;
     private String year;
@@ -25,9 +25,9 @@ public class Vehicle {
 
     public Vehicle(){ this.vehicleIdentifier = new VehicleIdentifier(); }
 
-    public Vehicle(String customerId, String make, String model, String year, TransmissionType transmission_type, String mileage) {
+    public Vehicle(String userId, String make, String model, String year, TransmissionType transmission_type, String mileage) {
         this.vehicleIdentifier = new VehicleIdentifier();
-        this.customerId = customerId;
+        this.userId = userId;
         this.make = make;
         this.model = model;
         this.year = year;

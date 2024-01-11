@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface VehicleRepository extends JpaRepository<Vehicle, Integer> {
 
-    List<Vehicle> findAllVehiclesByCustomerId(String customerId);
+    List<Vehicle> findAllVehiclesByUserId(String userId);
 
-    Vehicle findVehicleByCustomerIdAndVehicleIdentifier_VehicleId(String customerId, String vehicleId);
+    Vehicle findVehicleByUserIdAndVehicleIdentifier_VehicleId(String userId, String vehicleId);
 
 }

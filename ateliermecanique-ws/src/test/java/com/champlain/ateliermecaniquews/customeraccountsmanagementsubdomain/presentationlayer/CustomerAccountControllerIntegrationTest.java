@@ -1,9 +1,11 @@
 package com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer;
 
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.ERole;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.Role;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.UserIdentifier;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.businesslayer.CustomerAccountService;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccount;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountIdentifier;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,25 +38,29 @@ class CustomerAccountControllerIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private CustomerAccountRepository customerAccountRepository;
+    private UserRepository userRepository;
 
-    private CustomerAccount testAccount;
+    private User testAccount;
     private String testAccountId;
 
     @BeforeEach
     void setUp() {
         // Set up data before each test
-        CustomerAccountIdentifier identifier = new CustomerAccountIdentifier(); // Create a UUID
-        testAccount = new CustomerAccount("John", "Doe", "john@example.com", "1234567890", "password123");
-        testAccount.setCustomerAccountIdentifier(identifier);
-        CustomerAccount savedAccount = customerAccountRepository.save(testAccount);
-        testAccountId = savedAccount.getCustomerAccountIdentifier().getCustomerId(); // Get the UUID
+        UserIdentifier userIdentifier = new UserIdentifier(); // Create a UUID
+
+        Set<Role> roles = new HashSet<>();
+        roles.add(new Role(ERole.ROLE_CUSTOMER));
+
+        testAccount = new User("John", "Doe", "john@example.com", "1234567890", "password123",roles);
+        testAccount.setUserIdentifier(userIdentifier);
+        User savedAccount = userRepository.save(testAccount);
+        testAccountId = savedAccount.getUserIdentifier().getUserId(); // Get the UUID
     }
 
     @AfterEach
     void tearDown() {
         // Clean up the database after each test
-        customerAccountRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
@@ -73,7 +82,7 @@ class CustomerAccountControllerIntegrationTest {
 
     @Test
     void getCustomerAccountByInvalidCustomerId_shouldReturnNotFound() throws Exception {
-        String randomUUID =  new CustomerAccountIdentifier().getCustomerId();
+        String randomUUID =  new UserIdentifier().getUserId();
         mockMvc.perform(get("/api/v1/customers/{customerId}", randomUUID))
                 .andExpect(status().isNotFound());
     }
@@ -104,7 +113,7 @@ class CustomerAccountControllerIntegrationTest {
                 .phoneNumber("9876543210")
                 .build();
 
-        String randomUUID = new CustomerAccountIdentifier().getCustomerId();
+        String randomUUID = new UserIdentifier().getUserId();
         mockMvc.perform(put("/api/v1/customers/{customerId}", randomUUID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(requestModel)))

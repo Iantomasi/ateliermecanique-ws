@@ -7,13 +7,13 @@ const CustomerBlock = ({ customer }) => {
   const navigate = useNavigate()
 
   function handleClick() {
-    navigate(`/admin/customers/${customer.customerId}`)
+    navigate(`/admin/customers/${customer.id}`)
   }
   return (
     
       <tr className='hover:bg-gray-200 hover:cursor-pointer h-10' onClick={handleClick}>
       <td>
-            {customer.customerId}
+            {customer.id}
 
         </td>
         <td>{customer.firstName}</td>

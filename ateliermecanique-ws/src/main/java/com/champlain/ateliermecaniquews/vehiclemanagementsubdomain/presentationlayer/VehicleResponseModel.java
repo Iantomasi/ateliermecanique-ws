@@ -12,7 +12,7 @@ import lombok.Value;
 public class VehicleResponseModel {
 
     private String vehicleId;
-    private String customerId;
+    private String userId;
     private String make;
     private String model;
     private String year;

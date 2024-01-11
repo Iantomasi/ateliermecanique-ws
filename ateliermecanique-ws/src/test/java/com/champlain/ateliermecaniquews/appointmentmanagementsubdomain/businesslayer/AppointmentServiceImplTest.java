@@ -6,8 +6,8 @@ import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datamapperlayer.AppointmentResponseMapper;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentRequestModel;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentResponseModel;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccount;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountRepository;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -36,7 +36,7 @@ class AppointmentServiceImplTest {
     private AppointmentResponseMapper appointmentResponseMapper;
 
     @Mock
-    private CustomerAccountRepository customerAccountRepository;
+    private UserRepository userRepository;
 
     @InjectMocks
     private AppointmentServiceImpl appointmentService;
@@ -360,10 +360,10 @@ class AppointmentServiceImplTest {
     @Test
     void addAppointmentToCustomerAccount_ShouldAddAppointment() {
         // Arrange
-        String customerId = "testCustomerId";
+        String userId = "testCustomerId";
         LocalDateTime appointmentDateTime = LocalDateTime.now();
         AppointmentRequestModel requestModel = AppointmentRequestModel.builder()
-                .customerId(customerId)
+                .customerId(userId)
                 .vehicleId("testVehicleId")
                 .appointmentDate(appointmentDateTime)
                 .services("Test Service")
@@ -371,9 +371,9 @@ class AppointmentServiceImplTest {
                 .status(Status.PENDING)
                 .build();
 
-        CustomerAccount customerAccount = new CustomerAccount();
+        User customerAccount = new User();
 
-        when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId))
+        when(userRepository.findUserByUserIdentifier_UserId(userId))
                 .thenReturn(customerAccount);
 
         Appointment savedAppointment = new Appointment();
@@ -384,7 +384,7 @@ class AppointmentServiceImplTest {
 
         AppointmentResponseModel expectedResponse = AppointmentResponseModel.builder()
                 .appointmentId("1")
-                .customerId(customerId)
+                .customerId(userId)
                 .vehicleId("testVehicleId")
                 .appointmentDate(appointmentDateTime)
                 .services("Test Service")
@@ -396,7 +396,7 @@ class AppointmentServiceImplTest {
                 .thenReturn(expectedResponse);
 
         // Act
-        AppointmentResponseModel result = appointmentService.addAppointmentToCustomerAccount(customerId, requestModel);
+        AppointmentResponseModel result = appointmentService.addAppointmentToCustomerAccount(userId, requestModel);
 
         // Assert
         assertNotNull(result);
@@ -404,7 +404,7 @@ class AppointmentServiceImplTest {
         assertEquals(expectedResponse.getServices(), result.getServices());
         // Additional assertions as needed
 
-        verify(customerAccountRepository, times(1)).findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
+        verify(userRepository, times(1)).findUserByUserIdentifier_UserId(userId);
         verify(appointmentRepository, times(1)).save(any(Appointment.class));
     }
 

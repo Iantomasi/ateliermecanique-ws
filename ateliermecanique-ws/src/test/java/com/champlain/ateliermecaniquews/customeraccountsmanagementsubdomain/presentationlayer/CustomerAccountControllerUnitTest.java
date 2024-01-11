@@ -40,14 +40,14 @@ class CustomerAccountControllerUnitTest {
         // Arrange
         List<CustomerAccountResponseModel> accounts = Arrays.asList(
                 CustomerAccountResponseModel.builder()
-                        .customerId("1")
+                        .id("1")
                         .firstName("John")
                         .lastName("Doe")
                         .email("john@example.com")
                         .phoneNumber("1234567890")
                         .build(),
                 CustomerAccountResponseModel.builder()
-                        .customerId("2")
+                        .id("2")
                         .firstName("Jane")
                         .lastName("Doe")
                         .email("jane@example.com")
@@ -81,7 +81,7 @@ class CustomerAccountControllerUnitTest {
         // Arrange
         String validCustomerId = "1";
         CustomerAccountResponseModel responseModel = CustomerAccountResponseModel.builder()
-                .customerId(validCustomerId)
+                .id(validCustomerId)
                 .firstName("Cristiano")
                 .lastName("Ronaldo")
                 .email("cr7@example.com")
@@ -127,7 +127,7 @@ class CustomerAccountControllerUnitTest {
                 .phoneNumber("9876543210")
                 .build();
         CustomerAccountResponseModel expectedResponse = CustomerAccountResponseModel.builder()
-                .customerId(customerId)
+                .id(customerId)
                 .firstName("Jane")
                 .lastName("Doe")
                 .email("jane@example.com")

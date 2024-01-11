@@ -89,11 +89,6 @@ public class AuthController {
         return ResponseEntity.ok().body(oAuthService.instagramLogin(loginRequestModel));
     }
 
-    @GetMapping("/{accessToken}")
-    public ResponseEntity<CustomerAccountResponseModel> getCustomerByToken(@PathVariable String accessToken){
-        return ResponseEntity.ok().body(oAuthService.findCustomerByToken(accessToken));
-    }
-
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

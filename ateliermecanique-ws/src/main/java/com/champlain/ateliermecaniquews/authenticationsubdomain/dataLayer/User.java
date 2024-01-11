@@ -22,6 +22,16 @@ import java.util.Set;
 @AllArgsConstructor
 public class User {
 
+    public User(String firstName, String lastName, String phoneNumber, String email, String password, Set<Role> roles) {
+        this.userIdentifier = new UserIdentifier();
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

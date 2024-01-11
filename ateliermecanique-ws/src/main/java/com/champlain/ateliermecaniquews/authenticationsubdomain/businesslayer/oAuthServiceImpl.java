@@ -1,10 +1,11 @@
 package com.champlain.ateliermecaniquews.authenticationsubdomain.businesslayer;
 
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.ERole;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.Role;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request.LoginRequestModel;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.businesslayer.CustomerAccountService;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccount;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountRepository;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.Role;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datamapperlayer.CustomerAccountResponseMapper;
 
 
@@ -13,17 +14,19 @@ import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlaye
 import com.nimbusds.jose.JOSEException;
 import lombok.AllArgsConstructor;
 import org.json.JSONObject;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.Base64;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class oAuthServiceImpl implements oAuthService{
 
     final private TokenService tokenService;
-    final private CustomerAccountRepository customerAccountRepository;
+    final private UserRepository userRepository;
     final private CustomerAccountService customerAccountService;
     final private CustomerAccountResponseMapper customerAccountResponseMapper;
     @Override
@@ -40,7 +43,9 @@ public class oAuthServiceImpl implements oAuthService{
             JSONObject tokenBody = new JSONObject(decodedBody);
             String email = tokenBody.optString("email");
 
-            CustomerAccount customerAccount = customerAccountRepository.findCustomerAccountByEmail(email);
+            User customerAccount = userRepository.findByEmail(email)
+                    .orElseThrow(()-> new UsernameNotFoundException("User not found with email: "+email));
+
             if(customerAccount == null){
                 String firstName = tokenBody.optString("given_name");
                 String lastName =tokenBody.optString("family_name");
@@ -49,12 +54,12 @@ public class oAuthServiceImpl implements oAuthService{
                         .firstName(firstName)
                         .lastName(lastName)
                         .token(JWT)
-                        .role(String.valueOf(Role.CUSTOMER))
+                        .role(ERole.ROLE_CUSTOMER.name())
                         .build();
                return customerAccountService.createCustomerAccountForoAuth(customerAccountoAuthRequestModel);
             }
             else {
-                return customerAccountService.updateCustomerToken(customerAccount.getCustomerAccountIdentifier().getCustomerId(),JWT);
+                return customerAccountResponseMapper.entityToResponseModel(customerAccount);
             }
         }
         else {
@@ -68,20 +73,21 @@ public class oAuthServiceImpl implements oAuthService{
 
         if(validation.equals("Token is valid and not expired.")){
 
-            CustomerAccount customerAccount = customerAccountRepository.findCustomerAccountByEmail(loginRequestModel.getEmail());
+            User account = userRepository.findByEmail(loginRequestModel.getEmail())
+                    .orElseThrow(()-> new UsernameNotFoundException("User not found with email: "+loginRequestModel.getEmail()));
 
-            if(customerAccount == null){
+            if(account == null){
                 CustomerAccountoAuthRequestModel customerAccountoAuthRequestModel = CustomerAccountoAuthRequestModel.builder()
                         .email(loginRequestModel.getEmail())
                         .firstName(loginRequestModel.getFirstName())
                         .lastName(loginRequestModel.getLastName())
                         .token(loginRequestModel.getToken())
-                        .role(String.valueOf(Role.CUSTOMER))
+                        .role(ERole.ROLE_CUSTOMER.name())
                         .build();
                 return customerAccountService.createCustomerAccountForoAuth(customerAccountoAuthRequestModel);
             }
             else {
-                return customerAccountService.updateCustomerToken(customerAccount.getCustomerAccountIdentifier().getCustomerId(),loginRequestModel.getToken());
+                return customerAccountResponseMapper.entityToResponseModel(account);
             }
         }
         else {
@@ -95,20 +101,21 @@ public class oAuthServiceImpl implements oAuthService{
 
         if(validation.equals("Token is valid and not expired.")){
 
-            CustomerAccount customerAccount = customerAccountRepository.findCustomerAccountByEmail(loginRequestModel.getEmail());
+            User account = userRepository.findByEmail(loginRequestModel.getEmail())
+                    .orElseThrow(()-> new UsernameNotFoundException("User not found with email: "+loginRequestModel.getEmail()));;
 
-            if(customerAccount == null){
+            if(account == null){
                 CustomerAccountoAuthRequestModel customerAccountoAuthRequestModel = CustomerAccountoAuthRequestModel.builder()
                         .email(loginRequestModel.getEmail())
                         .firstName(loginRequestModel.getFirstName())
                         .lastName(loginRequestModel.getLastName())
                         .token(loginRequestModel.getToken())
-                        .role(String.valueOf(Role.CUSTOMER))
+                        .role(ERole.ROLE_CUSTOMER.name())
                         .build();
                 return customerAccountService.createCustomerAccountForoAuth(customerAccountoAuthRequestModel);
             }
             else {
-              return customerAccountService.updateCustomerToken(customerAccount.getCustomerAccountIdentifier().getCustomerId(),loginRequestModel.getToken());
+              return customerAccountResponseMapper.entityToResponseModel(account);
             }
         }
         else {
@@ -116,16 +123,6 @@ public class oAuthServiceImpl implements oAuthService{
         }
     }
 
-    @Override
-    public CustomerAccountResponseModel findCustomerByToken(String token) {
-        CustomerAccount customerAccount = customerAccountRepository.findCustomerAccountByToken(token);
 
-        if(customerAccount == null){
-            throw new NullPointerException("Customer not found with token: "+token);
-        }
-        else {
-            return customerAccountResponseMapper.entityToResponseModel(customerAccount);
-        }
-    }
 
 }

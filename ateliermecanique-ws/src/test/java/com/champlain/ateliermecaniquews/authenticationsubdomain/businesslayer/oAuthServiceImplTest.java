@@ -1,11 +1,11 @@
 package com.champlain.ateliermecaniquews.authenticationsubdomain.businesslayer;
 
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.ERole;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request.CustomerAccountoAuthRequestModel;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request.LoginRequestModel;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.businesslayer.CustomerAccountService;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccount;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountRepository;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.Role;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datamapperlayer.CustomerAccountResponseMapper;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountResponseModel;
 import com.nimbusds.jose.JOSEException;
@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.text.ParseException;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -28,7 +29,7 @@ class oAuthServiceImplTest {
     private TokenService tokenService;
 
     @Mock
-    private CustomerAccountRepository customerAccountRepository;
+    private UserRepository userRepository;
 
     @Mock
     private CustomerAccountService customerAccountService;
@@ -52,18 +53,16 @@ class oAuthServiceImplTest {
         when(tokenService.verifyFacebookToken(token)).thenReturn(validatedMessage);
 
         // Mock an existing customer account
-        CustomerAccount existingCustomerAccount = new CustomerAccount();
+        User existingCustomerAccount = new User();
         existingCustomerAccount.setEmail("test@example.com");
 
-        when(customerAccountRepository.findCustomerAccountByEmail(anyString())).thenReturn(existingCustomerAccount);
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(existingCustomerAccount));
 
         CustomerAccountResponseModel customerAccountResponseModel = CustomerAccountResponseModel.builder()
                 .email("test@example.com")
                         .firstName("John")
                                 .lastName("Doe")
                                         .build();
-        // Mock the service method calls
-        when(customerAccountService.updateCustomerToken(anyString(), anyString())).thenReturn(customerAccountResponseModel);
 
         // Prepare a dummy LoginRequestModel
         LoginRequestModel loginRequestModel = LoginRequestModel.builder()
@@ -79,13 +78,13 @@ class oAuthServiceImplTest {
 
         // Verify interactions and assertions
         verify(tokenService).verifyFacebookToken(token);
-        verify(customerAccountRepository).findCustomerAccountByEmail(anyString());
-        verify(customerAccountService).updateCustomerToken(anyString(), anyString());
+        verify(userRepository).findByEmail(anyString());
+
         // Add assertions for the response if needed
         assertEquals(response.getLastName(),customerAccountResponseModel.getLastName());
         assertEquals(response.getFirstName(),customerAccountResponseModel.getFirstName());
         assertEquals(response.getEmail(),customerAccountResponseModel.getEmail());
-        assertEquals(response.getToken(),customerAccountResponseModel.getToken());
+
     }
 
     @Test
@@ -96,7 +95,7 @@ class oAuthServiceImplTest {
         when(tokenService.verifyFacebookToken(token)).thenReturn(validatedMessage);
 
         // Mock that the customer account does not exist
-        when(customerAccountRepository.findCustomerAccountByEmail(anyString())).thenReturn(null);
+        when(userRepository.findByEmail(anyString())).thenReturn(null);
 
         // Mock the service method call to create a new account
         CustomerAccountResponseModel createdAccountResponse = CustomerAccountResponseModel.builder()
@@ -120,7 +119,7 @@ class oAuthServiceImplTest {
 
         // Verify interactions and assertions
         verify(tokenService).verifyFacebookToken(token);
-        verify(customerAccountRepository).findCustomerAccountByEmail(anyString());
+        verify(userRepository).findByEmail(anyString());
         verify(customerAccountService).createCustomerAccountForoAuth(any(CustomerAccountoAuthRequestModel.class));
 
         // Add assertions for the response
@@ -128,7 +127,7 @@ class oAuthServiceImplTest {
         assertEquals(createdAccountResponse.getLastName(), response.getLastName());
         assertEquals(createdAccountResponse.getFirstName(), response.getFirstName());
         assertEquals(createdAccountResponse.getEmail(), response.getEmail());
-        assertEquals(createdAccountResponse.getToken(), response.getToken());
+
     }
 
     @Test
@@ -162,19 +161,16 @@ class oAuthServiceImplTest {
         when(tokenService.verifyInstagramToken(token)).thenReturn(validatedMessage);
 
         // Mock an existing customer account
-        CustomerAccount existingCustomerAccount = new CustomerAccount();
+        User existingCustomerAccount = new User();
         existingCustomerAccount.setEmail("test@example.com");
 
-        when(customerAccountRepository.findCustomerAccountByEmail(anyString())).thenReturn(existingCustomerAccount);
+        when(userRepository.findUserByUserIdentifier_UserId(anyString())).thenReturn(existingCustomerAccount);
 
         CustomerAccountResponseModel customerAccountResponseModel = CustomerAccountResponseModel.builder()
                 .email("test@example.com")
                 .firstName("John")
                 .lastName("Doe")
                 .build();
-
-        // Mock the service method calls
-        when(customerAccountService.updateCustomerToken(anyString(), anyString())).thenReturn(customerAccountResponseModel);
 
         // Prepare a dummy LoginRequestModel
         LoginRequestModel loginRequestModel = LoginRequestModel.builder()
@@ -189,13 +185,11 @@ class oAuthServiceImplTest {
 
         // Verify interactions and assertions
         verify(tokenService).verifyInstagramToken(token);
-        verify(customerAccountRepository).findCustomerAccountByEmail(anyString());
-        verify(customerAccountService).updateCustomerToken(anyString(), anyString());
+        verify(userRepository).findByEmail(anyString());
         // Add assertions for the response if needed
         assertEquals(response.getLastName(), customerAccountResponseModel.getLastName());
         assertEquals(response.getFirstName(), customerAccountResponseModel.getFirstName());
         assertEquals(response.getEmail(), customerAccountResponseModel.getEmail());
-        assertEquals(response.getToken(), customerAccountResponseModel.getToken());
     }
 
     @Test
@@ -206,7 +200,7 @@ class oAuthServiceImplTest {
         when(tokenService.verifyInstagramToken(token)).thenReturn(validatedMessage);
 
         // Mock a non-existing customer account
-        when(customerAccountRepository.findCustomerAccountByEmail(anyString())).thenReturn(null);
+        when(userRepository.findByEmail(anyString())).thenReturn(null);
 
         CustomerAccountResponseModel customerAccountResponseModel = CustomerAccountResponseModel.builder()
                 .email("test@example.com")
@@ -230,13 +224,12 @@ class oAuthServiceImplTest {
 
         // Verify interactions and assertions
         verify(tokenService).verifyInstagramToken(token);
-        verify(customerAccountRepository).findCustomerAccountByEmail(anyString());
+        verify(userRepository).findByEmail(anyString());
         verify(customerAccountService).createCustomerAccountForoAuth(any());
         // Add assertions for the response if needed
         assertEquals(response.getLastName(), customerAccountResponseModel.getLastName());
         assertEquals(response.getFirstName(), customerAccountResponseModel.getFirstName());
         assertEquals(response.getEmail(), customerAccountResponseModel.getEmail());
-        assertEquals(response.getToken(), customerAccountResponseModel.getToken());
     }
 
     @Test
@@ -259,57 +252,11 @@ class oAuthServiceImplTest {
 
         // Verify interactions
         verify(tokenService).verifyInstagramToken(token);
-        verify(customerAccountRepository, never()).findCustomerAccountByEmail(anyString());
+        verify(userRepository, never()).findByEmail(anyString());
         verify(customerAccountService, never()).createCustomerAccountForoAuth(any());
     }
 
-    @Test
-    public void testFindCustomerByToken_WhenCustomerFound() {
-        // Mock a token
-        String token = "mocked_valid_token";
 
-        // Mock the customer account found by the token
-        CustomerAccount mockCustomerAccount = new CustomerAccount();
-        mockCustomerAccount.setEmail("test@example.com");
-
-        when(customerAccountRepository.findCustomerAccountByToken(token)).thenReturn(mockCustomerAccount);
-
-        // Mock the response model from the mapper
-        CustomerAccountResponseModel mockResponseModel = CustomerAccountResponseModel.builder()
-                .email("test@example.com")
-                .firstName("John")
-                .lastName("Doe")
-                .build();
-
-        when(customerAccountResponseMapper.entityToResponseModel(mockCustomerAccount)).thenReturn(mockResponseModel);
-
-        // Perform the test
-        CustomerAccountResponseModel response = oAuthService.findCustomerByToken(token);
-
-        // Verify interactions and assertions
-        verify(customerAccountRepository).findCustomerAccountByToken(token);
-        verify(customerAccountResponseMapper).entityToResponseModel(mockCustomerAccount);
-
-        assertEquals(response.getLastName(), mockResponseModel.getLastName());
-        assertEquals(response.getFirstName(), mockResponseModel.getFirstName());
-        assertEquals(response.getEmail(), mockResponseModel.getEmail());
-    }
-
-    @Test
-    public void testFindCustomerByToken_WhenCustomerNotFound() {
-        // Mock a token
-        String token = "non_existent_token";
-
-        // Mock the customer account not found by the token
-        when(customerAccountRepository.findCustomerAccountByToken(token)).thenReturn(null);
-
-        // Perform the test and assertions
-        assertThrows(NullPointerException.class, () -> oAuthService.findCustomerByToken(token));
-
-        // Verify interactions
-        verify(customerAccountRepository).findCustomerAccountByToken(token);
-        verifyNoInteractions(customerAccountResponseMapper);
-    }
 
     @Test
     public void testGoogleLogin_WhenInvalidTokenValidation() throws ParseException, JOSEException {
@@ -322,7 +269,7 @@ class oAuthServiceImplTest {
 
         // Verify interactions
         verify(tokenService).verifyGoogleToken(invalidToken);
-        verifyNoInteractions(customerAccountRepository, customerAccountService);
+        verifyNoInteractions(userRepository, customerAccountService);
     }
 
     @Test
@@ -332,9 +279,9 @@ class oAuthServiceImplTest {
         when(tokenService.verifyGoogleToken(validToken)).thenReturn("Token is valid and not expired.");
 
         // Mock an existing customer account
-        CustomerAccount existingCustomerAccount = new CustomerAccount();
+        User existingCustomerAccount = new User();
         existingCustomerAccount.setEmail("test@example.com");
-        when(customerAccountRepository.findCustomerAccountByEmail(anyString())).thenReturn(existingCustomerAccount);
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(existingCustomerAccount));
 
         // Mock service method calls
         CustomerAccountResponseModel customerAccountResponseModel = CustomerAccountResponseModel.builder()
@@ -342,7 +289,6 @@ class oAuthServiceImplTest {
                 .firstName("John")
                 .lastName("Doe")
                 .build();
-        when(customerAccountService.updateCustomerToken(anyString(), anyString())).thenReturn(customerAccountResponseModel);
 
         // Prepare a dummy JWT
         // Simulate token parts and body extraction
@@ -352,13 +298,12 @@ class oAuthServiceImplTest {
 
         // Verify interactions and assertions
         verify(tokenService).verifyGoogleToken(validToken);
-        verify(customerAccountRepository).findCustomerAccountByEmail(anyString());
-        verify(customerAccountService).updateCustomerToken(anyString(), anyString());
+        verify(userRepository).findByEmail(anyString());
+
         // Add assertions for the response if needed
         assertEquals(response.getLastName(), customerAccountResponseModel.getLastName());
         assertEquals(response.getFirstName(), customerAccountResponseModel.getFirstName());
         assertEquals(response.getEmail(), customerAccountResponseModel.getEmail());
-        assertEquals(response.getToken(), customerAccountResponseModel.getToken());
     }
 
     @Test
@@ -368,7 +313,7 @@ class oAuthServiceImplTest {
         when(tokenService.verifyGoogleToken(validToken)).thenReturn("Token is valid and not expired.");
 
         // Mock account not found by email
-        when(customerAccountRepository.findCustomerAccountByEmail(anyString())).thenReturn(null);
+        when(userRepository.findByEmail(anyString())).thenReturn(null);
 
         // Mock service method calls
         CustomerAccountoAuthRequestModel requestModel = CustomerAccountoAuthRequestModel.builder()
@@ -376,7 +321,7 @@ class oAuthServiceImplTest {
                 .firstName("Cristian")
                 .lastName("Barros Ferreira")
                 .token(validToken)
-                .role(String.valueOf(Role.CUSTOMER))
+                .role(ERole.ROLE_CUSTOMER.name())
                 .build();
         CustomerAccountResponseModel customerAccountResponseModel = CustomerAccountResponseModel.builder()
                 .email("cf93082@gmail.com")
@@ -390,13 +335,12 @@ class oAuthServiceImplTest {
 
         // Verify interactions and assertions
         verify(tokenService).verifyGoogleToken(validToken);
-        verify(customerAccountRepository).findCustomerAccountByEmail(anyString());
+        verify(userRepository).findByEmail(anyString());
         verify(customerAccountService).createCustomerAccountForoAuth(requestModel);
         // Add assertions for the response if needed
         assertEquals(response.getLastName(), customerAccountResponseModel.getLastName());
         assertEquals(response.getFirstName(), customerAccountResponseModel.getFirstName());
         assertEquals(response.getEmail(), customerAccountResponseModel.getEmail());
-        assertEquals(response.getToken(), customerAccountResponseModel.getToken());
     }
 
 
