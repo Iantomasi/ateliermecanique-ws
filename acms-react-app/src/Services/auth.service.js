@@ -14,6 +14,16 @@ class AuthService {
             });
     }
 
+    facebookLogin(token){
+        return axios.post(API_URL + 'facebook-login/' + token)
+            .then(response => {
+                if(response.data.token){
+                    sessionStorage.setItem('user',JSON.stringify(response.data));
+                }
+                return response.data;
+            });
+    }
+
     login(email,password){
         return axios
             .post(API_URL + 'signin',{
@@ -29,7 +39,7 @@ class AuthService {
     }
 
     logout(){
-        sessionStorage.removeItem('user');
+        sessionStorage.clear();
         console.log("user logged out");
     }
 

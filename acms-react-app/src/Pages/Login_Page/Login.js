@@ -100,25 +100,22 @@ function Login() {
     };
 
     const handleFacebookLogin = (response) => {
-        sessionStorage.setItem('userToken', response.data.accessToken);
-        sessionStorage.setItem('provider', 'facebook');
-        sessionStorage.setItem('user', JSON.stringify(response.data));
+        const token = response.data.accessToken;
 
-        const userAccess = {
-            firstName: response.data.first_name,
-            lastName: response.data.last_name,
-            email: response.data.email,
-            token: response.data.accessToken
-          }
-        axios.post('http://localhost:8080/api/v1/auth/facebook-login', userAccess)
+        authService.facebookLogin(token)
         .then(res => {
-            res.data.role === "CUSTOMER" ? navigate('/user') : navigate('/admin');
-        })
-        .catch(error => {
-            console.error('Error loging in', error);
-        })
-
-        navigate('/admin');
+                const userRoles = res.roles;
+    
+                if (userRoles.includes('ROLE_CUSTOMER')){
+                    navigate('/user');
+                }
+                else {
+                    alert("User doesn't have required roles.");
+                }
+            })
+            .catch(error => {
+                console.error('Error logging in', error);
+            });
     }
 
     const handleInstagramLogin = (response) => {

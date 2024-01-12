@@ -6,18 +6,18 @@ import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.UserIdentifier;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.RoleRepository;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
-import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request.LoginRequestModel;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.businesslayer.CustomerAccountService;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datamapperlayer.CustomerAccountResponseMapper;
 
 
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountResponseModel;
-import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request.CustomerAccountoAuthRequestModel;
+
 import com.nimbusds.jose.JOSEException;
 import lombok.AllArgsConstructor;
 import org.json.JSONObject;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.text.ParseException;
 import java.util.Base64;
@@ -32,8 +32,10 @@ public class oAuthServiceImpl implements oAuthService{
     final private TokenService tokenService;
     final private UserRepository userRepository;
     final private RoleRepository roleRepository;
-    final private CustomerAccountService customerAccountService;
-    final private CustomerAccountResponseMapper customerAccountResponseMapper;
+
+    @Autowired
+    final private RestTemplate restTemplate;
+
 
     @Override
     public User googleLogin(String JWT) throws ParseException, JOSEException {
@@ -51,10 +53,10 @@ public class oAuthServiceImpl implements oAuthService{
             Optional<User> optionalUser = userRepository.findByEmail(email);
 
             if (optionalUser.isPresent()) {
-                User customerAccount = optionalUser.get();
 
-                System.out.println("User exists");
+                User customerAccount = optionalUser.get();
                 return customerAccount;
+
             } else {
                 // User not found, create a new account
                 String firstName = tokenBody.optString("given_name");
@@ -79,7 +81,6 @@ public class oAuthServiceImpl implements oAuthService{
 
                 userRepository.save(user);
 
-                System.out.println("User Created");
                 // Return the response model for the newly created user
                 return user;
             }
@@ -89,33 +90,74 @@ public class oAuthServiceImpl implements oAuthService{
     }
 
 
-//    @Override
-//    public CustomerAccountResponseModel facebookLogin(LoginRequestModel loginRequestModel) {
-//        String validation = tokenService.verifyFacebookToken(loginRequestModel.getToken());
-//
-//        if(validation.equals("Token is valid and not expired.")){
-//
-//            User account = userRepository.findByEmail(loginRequestModel.getEmail())
-//                    .orElseThrow(()-> new UsernameNotFoundException("User not found with email: "+loginRequestModel.getEmail()));
-//
-//            if(account == null){
-//                CustomerAccountoAuthRequestModel customerAccountoAuthRequestModel = CustomerAccountoAuthRequestModel.builder()
-//                        .email(loginRequestModel.getEmail())
-//                        .firstName(loginRequestModel.getFirstName())
-//                        .lastName(loginRequestModel.getLastName())
-//                        .token(loginRequestModel.getToken())
-//                        .role(ERole.ROLE_CUSTOMER.name())
-//                        .build();
-//                return customerAccountService.createCustomerAccountForoAuth(customerAccountoAuthRequestModel);
-//            }
-//            else {
-//                return customerAccountResponseMapper.entityToResponseModel(account);
-//            }
-//        }
-//        else {
-//            throw new NullPointerException(validation);
-//        }
-//    }
+    @Override
+    public User facebookLogin(String token) {
+        String validation = tokenService.verifyFacebookToken(token);
+
+        if (validation.equals("Token is valid and not expired.")) {
+            String facebookUserProfileUrl = "https://graph.facebook.com/v12.0/me?fields=email,first_name,last_name,picture&access_token=" + token;
+
+            try {
+                // Making a request to the Facebook API to get user information
+                ResponseEntity<String> responseEntity = restTemplate.exchange(
+                        facebookUserProfileUrl,
+                        HttpMethod.GET,
+                        null,
+                        String.class
+                );
+
+                if (responseEntity.getStatusCode() == HttpStatus.OK) {
+                    String responseBody = responseEntity.getBody();
+                    JSONObject userData = new JSONObject(responseBody);
+
+                    // Extracting required information from the Facebook response
+                    String email = userData.optString("email");
+                    String firstName = userData.optString("first_name");
+                    String lastName = userData.optString("last_name");
+
+                    JSONObject pictureData = userData.optJSONObject("picture").optJSONObject("data");
+                    String pictureUrl = pictureData.optString("url");
+
+                    Optional<User> optionalUser = userRepository.findByEmail(email);
+
+                    if (optionalUser.isPresent()) {
+                        // User already exists, return the existing user
+                        return optionalUser.get();
+                    } else {
+
+                        // User not found, create a new account
+                        Set<Role> roles = new HashSet<>();
+                        Role role = roleRepository.findByName(ERole.ROLE_CUSTOMER)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+                        roles.add(role);
+
+
+                        User user = User.builder()
+                                .userIdentifier(new UserIdentifier())
+                                .email(email)
+                                .firstName(firstName)
+                                .lastName(lastName)
+                                .roles(roles)
+                                .picture(pictureUrl)
+                                .build();
+
+                        userRepository.save(user);
+
+
+                        return user;
+                    }
+                }
+            } catch (Exception e) {
+                // Handle exception appropriately
+                e.printStackTrace();
+            }
+        } else {
+            throw new NullPointerException(validation);
+        }
+
+        return null; // Handle this case according to your requirements
+    }
+
 
 //    @Override
 //    public CustomerAccountResponseModel instagramLogin(LoginRequestModel loginRequestModel) {
