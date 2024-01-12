@@ -22,6 +22,10 @@ const UserProfile = () => {
     AuthService.logout();
   };
 
+  const handleError = () => {
+    setUserImage('/userImage.svg');
+  };
+
   return (
     <div className="user-profile flex items-center">
       <div className="link pr-2">
@@ -36,6 +40,7 @@ const UserProfile = () => {
           className="rounded-full"
           width="56"
           height="74"
+          onError={handleError}
         />
       </div>
     </div>
