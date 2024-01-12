@@ -95,23 +95,7 @@ class AppointmentControllerIntegrationTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.appointmentId").value(testAppointmentId));;
     }
-
-    /*
-    * @Test
-    void getVehicleByVehicleId_shouldSucceed() throws Exception {
-        String vehicleId = "validVehicleId";
-        String customerId = "someCustomerId";
-        VehicleResponseModel vehicle = new VehicleResponseModel(vehicleId, customerId, "Toyota", "Camry", "2019", TransmissionType.AUTOMATIC, "9876543210");
-
-        when(vehicleService.getVehicleByVehicleId(customerId, vehicleId)).thenReturn(vehicle);
-
-        mockMvc.perform(get("/api/v1/customers/{customerId}/vehicles/{vehicleId}", customerId, vehicleId))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.vehicleId").value(vehicleId));
-    }*/
-
-
+    
     @Test
     void updateAppointmentStatusAdmin_shouldUpdateStatus() throws Exception {
         // Mock the service layer response
