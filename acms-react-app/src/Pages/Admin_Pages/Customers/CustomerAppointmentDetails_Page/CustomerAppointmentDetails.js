@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import dayjs from 'dayjs';
-import Navbar from '../../../Components/Navigation_Bars/Logged_In/NavBar.js';
-import Footer from '../../../Components/Footer/Footer.js';
-import Sidebar from '../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
-import CustomDateTimePicker from '../../../Components/DateTimePicker/CustomDateTimePicker.js';
+import Navbar from '../../../../Components/Navigation_Bars/Logged_In/NavBar.js';
+import Footer from '../../../../Components/Footer/Footer.js';
+import Sidebar from '../../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
+import CustomDateTimePicker from '../../../../Components/DateTimePicker/CustomDateTimePicker.js';
 
 function AppointmentDetails() {
   const { appointmentId } = useParams();

@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from '../../../Components/Navigation_Bars/Logged_In/NavBar.js';
-import Footer from '../../../Components/Footer/Footer.js';
-import MechanicDisplay from '../../../Components/User_Components/MechanicDisplay.js';
-import CustomerBlock from '../CustomerDetails_Page/CustomerBlock.js';
-import axios from 'axios';
-import adminService from '../../../Services/admin.service.js';
-import userService from '../../../Services/user.service.js';
+import Navbar from '../../../../Components/Navigation_Bars/Logged_In/NavBar.js';
+import Footer from '../../../../Components/Footer/Footer.js';
+import MechanicDisplay from '../../../../Components/User_Components/MechanicDisplay.js';
+import CustomerBlock from './CustomerBlock.js';
+import adminService from '../../../../Services/admin.service.js';
+import userService from '../../../../Services/user.service.js';
 
 function Customers() {
   const [customers, setCustomers] = useState([]);
@@ -19,7 +18,6 @@ function Customers() {
   function getCustomers() {
     adminService.getAllCustomers()
       .then(res => {
-        console.log('API response:', res); 
         if (res.status === 200) {
           setCustomers(res.data);
         }
@@ -31,9 +29,8 @@ function Customers() {
   function getPublic(){
     userService.getAdminBoard()
     .then(res => {
-      console.log('API response:', res); 
       if (res.status === 200) {
-        console.log(res.data.message);
+        console.log(res.data);
       }
     })
     .catch(error => {
@@ -74,7 +71,7 @@ function Customers() {
               </thead>
               <tbody className="text-center">
                 {customers.map((customer) => (
-                  <CustomerBlock key={customer.customerId} customer={customer} />
+                  <CustomerBlock key={customer.id} customer={customer} />
                 ))}
               </tbody>
             </table>

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import Navbar from '../../../Components/Navigation_Bars/Logged_In/NavBar.js';
-import Footer from '../../../Components/Footer/Footer.js';
-import MechanicDisplay from '../../../Components/User_Components/MechanicDisplay.js';
 import axios from 'axios';
-import AppointmentBlock from '../AppointmentSpecifics_Page/AppointmentBlock.js';
 import { useNavigate } from 'react-router-dom';
+import adminService from '../../../../Services/admin.service.js';
+import Navbar from '../../../../Components/Navigation_Bars/Logged_In/NavBar.js';
+import Footer from '../../../../Components/Footer/Footer.js';
+import MechanicDisplay from '../../../../Components/User_Components/MechanicDisplay.js';
+import AppointmentBlock from '../AppointmentDetails_Page/AppointmentBlock.js';
+
 
 function Appointments() {
   const [appointments, setAppointments] = useState([]);
@@ -18,9 +19,8 @@ function Appointments() {
   }, []);
 
   function getAppointments() {
-    axios.get("http://localhost:8080/api/v1/appointments")
+    adminService.getAllAppointments()
       .then(res => {
-        console.log('API response:', res); 
         if (res.status === 200) {
             setAppointments(res.data);
         }

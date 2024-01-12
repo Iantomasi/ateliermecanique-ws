@@ -14,16 +14,18 @@ function User() {
     const fetchCustomer = async () => {
       const fetchedCustomer = AuthService.getCurrentUser();
       setCustomer(fetchedCustomer);
-
-      const hasNullField = Object.values(fetchedCustomer).some(value => value === null);
-
+      
+      const hasNullField = Object.entries(fetchedCustomer)
+        .filter(([key]) => key !== 'picture') // Ignore picture field
+        .some(([key, value]) => value === null);
+  
       if (hasNullField) {
         setShowUserForm(true);
       }
     };
-
+  
     fetchCustomer();
-  }, [showUserForm]); 
+  }, [showUserForm]);
 
   const hideForm = () => {
     setShowUserForm(false);

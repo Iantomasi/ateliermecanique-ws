@@ -1,10 +1,10 @@
-import Navbar from '../../../Components/Navigation_Bars/Logged_In/NavBar.js';
-import Footer from '../../../Components/Footer/Footer.js';
-import MechanicDisplay from '../../../Components/User_Components/MechanicDisplay.js';
+import Navbar from '../../../../Components/Navigation_Bars/Logged_In/NavBar.js';
+import Footer from '../../../../Components/Footer/Footer.js';
+import MechanicDisplay from '../../../../Components/User_Components/MechanicDisplay.js';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import adminService from '../../../Services/admin.service.js';
-import Sidebar from '../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
+import adminService from '../../../../Services/admin.service.js';
+import Sidebar from '../../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
 
 
 

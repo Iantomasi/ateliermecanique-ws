@@ -19,8 +19,6 @@ function Login() {
     const googleButton = useRef(null);
     const REDIRECT_URI = window.location.href;
 
-    const [validation, setValidation] = useState("");
-
     useEffect(() => {
         google.accounts.id.initialize({
             client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID || '',
@@ -28,53 +26,6 @@ function Login() {
         });
     }, []);
 
-    useEffect(() => {
-        const token = sessionStorage.getItem('userToken');
-        const provider = sessionStorage.getItem('provider');
-    
-        if (token) {
-            if (provider === 'google') {
-                axios.get(`http://localhost:8080/api/v1/auth/google-token-verification/${token}`)
-                    .then(res => {
-                        setValidation(res.data);
-                    })
-                    .catch(error => {
-                        console.error('Error logging in', error);
-                    });
-            } else if (provider === 'facebook') {
-                axios.get(`http://localhost:8080/api/v1/auth/facebook-token-verification/${token}`)
-                    .then(res => {
-                        setValidation(res.data); 
-                    })
-                    .catch(error => {
-                        console.error('Error logging in', error);
-                    });
-            } else if (provider === 'instagram') {
-                axios.get(`http://localhost:8080/api/v1/auth/instagram-token-verification/${token}`)
-                    .then(res => {
-                        setValidation(res.data); 
-                    })
-                    .catch(error => {
-                        console.error('Error logging in', error);
-                    });
-            }
-        }
-    }, [sessionStorage.getItem('userToken'), sessionStorage.getItem('provider')]);
-    
-    useEffect(() => {
-        if (validation === "Token is valid and not expired.") {
-            const token = sessionStorage.getItem('userToken');
-    
-            axios.get(`http://localhost:8080/api/v1/auth/${token}`)
-                .then(res => {
-                    res.data.role === "CUSTOMER" ? navigate('/user') : navigate('/admin');
-                })
-                .catch(error => {
-                    console.error('Error logging in', error);
-                });
-        }
-    }, [validation, navigate]);
-    
 
     const handleGoogleLogin = (response) => {
         const jwtToken = response.credential;
@@ -141,8 +92,17 @@ function Login() {
     function handleLogin(event) {
         event.preventDefault();
         authService.login(email, password).then(
-            () => {
-                navigate("/admin");
+            (res) => {
+                const userRoles = res.roles;
+    
+                if (userRoles.includes('ROLE_CUSTOMER')){
+                    navigate('/user');
+                } else if(userRoles.includes('ROLE_ADMIN')){
+                    navigate('/admin');
+                }
+                else {
+                    alert("User doesn't have required roles.");
+                }
             },
             (error) => {
                 const resMessage =

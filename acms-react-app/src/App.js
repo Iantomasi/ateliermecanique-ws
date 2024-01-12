@@ -4,18 +4,19 @@ import Login from './Pages/Login_Page/Login';
 import Home from './Pages/Home_Page/Home'
 import Signup from './Pages/Signup_Page/Signup'
 import Admin from './Pages/Admin_Pages/Admin';
-import Customers from './Pages/Admin_Pages/Customers_Page/Customers';
-import CustomerDetails from './Pages/Admin_Pages/CustomerDetails_Page/CustomerDetails';
-import CustomerVehicles from './Pages/Admin_Pages/CustomerVehicles_Page/CustomerVehicles';
-import CustomerVehicleDetails from './Pages/Admin_Pages/CustomerVehicleDetails_Page/CustomerVehicleDetails';
+import Customers from './Pages/Admin_Pages/Customers/Customers_Page/Customers';
+import CustomerDetails from './Pages/Admin_Pages/Customers/CustomerDetails_Page/CustomerDetails';
+import CustomerVehicles from './Pages/Admin_Pages/Customers/CustomerVehicles_Page/CustomerVehicles';
+import CustomerVehicleDetails from './Pages/Admin_Pages/Customers/CustomerVehicleDetails_Page/CustomerVehicleDetails';
 import AddNewVehicle from './Pages/Admin_Pages/AddNewVehicle_Page/AddNewVehicle';
-import Appointments from './Pages/Admin_Pages/Appointments_Page/Appointments';
+import Appointments from './Pages/Admin_Pages/Appointments/Appointments_Page/Appointments';
 import User from './Pages/User_Pages/User';
-import CustomerAppointments from './Pages/Admin_Pages/CustomerAppointments_Page/CustomerAppointments';
+import CustomerAppointments from './Pages/Admin_Pages/Customers/CustomerAppointments_Page/CustomerAppointments';
 import AppointmentSpecifics from './Pages/Admin_Pages/AppointmentSpecifics_Page/AppointmentSpecifics';
 import Calendar from './Pages/Admin_Pages/AppointmentNew_Page/Calendar';
-import CustomerAppointmentDetails from './Pages/Admin_Pages/CustomerAppointmentDetails_Page/CustomerAppointmentDetails';
+import CustomerAppointmentDetails from './Pages/Admin_Pages/Customers/CustomerAppointmentDetails_Page/CustomerAppointmentDetails';
 import CustomerCalendar from './Pages/Admin_Pages/CustomerAppointmentNew_Page/CustomerCalendar';
+
 
 const router = createBrowserRouter([
   {

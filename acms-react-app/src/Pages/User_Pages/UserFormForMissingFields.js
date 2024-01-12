@@ -1,7 +1,6 @@
-import axios from 'axios';
 import React, { useState,useEffect } from 'react';
 import customerService from '../../Services/customer.service';
-import authService from '../../Services/auth.service';
+
 
 const UserForm = ({customer,hideUserForm }) => {
     const [updatedCustomer, setUpdatedCustomer] = useState({ ...customer });
@@ -26,27 +25,32 @@ const UserForm = ({customer,hideUserForm }) => {
                 });
       }
 
-    const renderInputField = (fieldName, label) => {
-      const formattedLabel = label.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase());
-    
-      const inputType = fieldName.toLowerCase() === 'email' ? 'email' : 'text';
-    
-      return (
-        <div key={fieldName} className="mb-4">
-          <label htmlFor={fieldName} className="block text-gray-700 font-bold mb-2">
-            {formattedLabel}:
-          </label>
-          <input
-            type={inputType}
-            id={fieldName}
-            value={updatedCustomer[fieldName] || ''}
-            onChange={(e) => handleInputChange(fieldName, e.target.value)}
-            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            required
-          />
-        </div>
-      );
-    }
+      const renderInputField = (fieldName, label) => {
+        // Ignore 'picture' field
+        if (fieldName.toLowerCase() === 'picture') {
+          return null;
+        }
+      
+        const formattedLabel = label.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase());
+      
+        const inputType = fieldName.toLowerCase() === 'email' ? 'email' : 'text';
+      
+        return (
+          <div key={fieldName} className="mb-4">
+            <label htmlFor={fieldName} className="block text-gray-700 font-bold mb-2">
+              {formattedLabel}:
+            </label>
+            <input
+              type={inputType}
+              id={fieldName}
+              value={updatedCustomer[fieldName] || ''}
+              onChange={(e) => handleInputChange(fieldName, e.target.value)}
+              className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              required
+            />
+          </div>
+        );
+      };
 
     const nullFields = Object.keys(customer).filter((field) => customer[field] === null);
 

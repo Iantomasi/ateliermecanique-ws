@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import adminService from '../../../../Services/admin.service.js';
 import { useParams } from 'react-router-dom';
+
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../../../Components/Navigation_Bars/Logged_In/NavBar.js';
-import Footer from '../../../Components/Footer/Footer.js';
-import MechanicDisplay from '../../../Components/User_Components/MechanicDisplay.js';
-import Sidebar from '../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
+import Navbar from '../../../../Components/Navigation_Bars/Logged_In/NavBar.js';
+import Footer from '../../../../Components/Footer/Footer.js';
+import Sidebar from '../../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
 import CustomerAppointmentBlock from '../CustomerAppointmentDetails_Page/CustomerAppointmentBlock.js';
 
 function CustomerAppointments() {
@@ -19,7 +19,7 @@ function CustomerAppointments() {
   }, [customerId]);
 
   function getCustomerAppointments() {
-    axios.get(`http://localhost:8080/api/v1/customers/${customerId}/appointments`)     
+    adminService.getAllCustomerAppointments(customerId)  
     .then(res => {
         console.log('API response:', res); 
         if (res.status === 200) {

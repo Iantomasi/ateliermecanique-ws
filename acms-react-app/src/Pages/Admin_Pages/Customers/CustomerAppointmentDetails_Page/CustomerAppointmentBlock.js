@@ -1,11 +1,11 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import {useNavigate } from 'react-router-dom';
+import adminService from '../../../../Services/admin.service';
 
 const CustomerAppointmentBlock = ({ appointment, refreshCustomerAppointments }) => {
   const navigate = useNavigate();
   const handleStatusChange = (isConfirm) => {
-    axios.put(`http://localhost:8080/api/v1/customers/${appointment.customerId}/appointments/${appointment.appointmentId}/updateStatus?isConfirm=${isConfirm}`)
+    adminService.updateAppointmentStatus(appointment.appointmentId, isConfirm)
       .then(response => {
         refreshCustomerAppointments();
       })

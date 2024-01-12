@@ -4,6 +4,7 @@ import com.champlain.ateliermecaniquews.authenticationsubdomain.businesslayer.oA
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.ERole;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.Role;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.UserIdentifier;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.RoleRepository;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request.LoginRequest;
@@ -120,6 +121,7 @@ public class AuthController {
         }
 
         User user = User.builder()
+                .userIdentifier(new UserIdentifier())
                 .firstName(signupRequest.getFirstName())
                 .lastName(signupRequest.getLastName())
                 .phoneNumber(signupRequest.getPhoneNumber())

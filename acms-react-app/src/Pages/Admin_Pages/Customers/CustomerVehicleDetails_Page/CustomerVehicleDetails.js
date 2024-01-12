@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import Navbar from '../../../Components/Navigation_Bars/Logged_In/NavBar.js';
-import Footer from '../../../Components/Footer/Footer.js';
-import MechanicDisplay from '../../../Components/User_Components/MechanicDisplay.js';
-import Sidebar from '../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
+import adminService from '../../../../Services/admin.service.js';
+import Navbar from '../../../../Components/Navigation_Bars/Logged_In/NavBar.js';
+import Footer from '../../../../Components/Footer/Footer.js';
+import Sidebar from '../../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
 import { useNavigate } from 'react-router-dom';
 
 function CustomerVehicleDetails() {
@@ -21,11 +20,9 @@ function CustomerVehicleDetails() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:8080/api/v1/customers/${customerId}/vehicles/${vehicleId}`)
+    adminService.getCustomerVehicleById(customerId, vehicleId)
       .then(res => {
         if (res.status === 200) {
-          console.log(res.data)
           setVehicleDetails(res.data);
         }
       })
@@ -55,11 +52,7 @@ function CustomerVehicleDetails() {
       mileage: formData.get('mileage')
     };
 
-    axios
-      .put(
-        `http://localhost:8080/api/v1/customers/${customerId}/vehicles/${vehicleId}`,
-        updatedCustomerVehicle
-      )
+   adminService.updateCustomerVehicle(customerId, vehicleId, updatedCustomerVehicle)
       .then(res => {
         if (res.status === 200) {
           setVehicleDetails(res.data);
@@ -80,8 +73,7 @@ function CustomerVehicleDetails() {
   }
 
   function executeDelete() {
-    axios
-      .delete(`http://localhost:8080/api/v1/customers/${customerId}/vehicles/${vehicleId}`)
+    adminService.deleteCustomerVehicle(customerId, vehicleId)
       .then(res => {
         if (res.status === 204) {
           alert('Customer Vehicle has been deleted!');
