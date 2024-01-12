@@ -11,7 +11,7 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
 ---
-#H2 Profile
+# H2 Profile
 spring:
   config:
     activate:
@@ -39,8 +39,12 @@ spring:
       mode: always
 
 ---
-#DOCKER Profile
+# DOCKER Profile
 spring:
+  config:
+    activate:
+      on-profile: docker
+
   datasource:
     url: jdbc:mysql://mysql1/ateliermecanique-db
     username: user
@@ -50,17 +54,24 @@ spring:
     hibernate:
       ddl-auto: none
 
-  config:
-    activate:
-      on-profile: docker
-
   sql:
     init:
       platform: mysql
       mode: always
-
-
+#
+#---
+## Security Configuration
+#spring:
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          google:
+#            client-id: 539616712207-be30bib3kb2fgvahdol0l6uvv26ra2u6.apps.googleusercontent.com
+#            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+#            scope:
+#              -email
+#              -profile
 
 server.port: 8080
-
 spring.datasource.hikari.initializationFailTimeout: 60000

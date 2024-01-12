@@ -3,6 +3,8 @@ package com.champlain.ateliermecaniquews.authenticationsubdomain.businesslayer;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.ERole;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.Role;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.UserIdentifier;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.RoleRepository;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request.LoginRequestModel;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.businesslayer.CustomerAccountService;
@@ -19,7 +21,9 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.Base64;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -27,14 +31,15 @@ public class oAuthServiceImpl implements oAuthService{
 
     final private TokenService tokenService;
     final private UserRepository userRepository;
+    final private RoleRepository roleRepository;
     final private CustomerAccountService customerAccountService;
     final private CustomerAccountResponseMapper customerAccountResponseMapper;
+
     @Override
-    public CustomerAccountResponseModel googleLogin(String JWT) throws ParseException, JOSEException {
+    public User googleLogin(String JWT) throws ParseException, JOSEException {
         String validation = tokenService.verifyGoogleToken(JWT);
 
-
-        if (validation.equals("Token is valid and not expired.")){
+        if (validation.equals("Token is valid and not expired.")) {
             String[] tokenParts = JWT.split("\\.");
 
             String encodedBody = tokenParts[1];
@@ -43,85 +48,102 @@ public class oAuthServiceImpl implements oAuthService{
             JSONObject tokenBody = new JSONObject(decodedBody);
             String email = tokenBody.optString("email");
 
-            User customerAccount = userRepository.findByEmail(email)
-                    .orElseThrow(()-> new UsernameNotFoundException("User not found with email: "+email));
+            Optional<User> optionalUser = userRepository.findByEmail(email);
 
-            if(customerAccount == null){
+            if (optionalUser.isPresent()) {
+                User customerAccount = optionalUser.get();
+
+                System.out.println("User exists");
+                return customerAccount;
+            } else {
+                // User not found, create a new account
                 String firstName = tokenBody.optString("given_name");
-                String lastName =tokenBody.optString("family_name");
-                CustomerAccountoAuthRequestModel customerAccountoAuthRequestModel = CustomerAccountoAuthRequestModel.builder()
+                String lastName = tokenBody.optString("family_name");
+                String picture = tokenBody.optString("picture");
+
+                Set<Role> roles = new HashSet<>();
+                Role role = roleRepository.findByName(ERole.ROLE_CUSTOMER)
+                        .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+
+                roles.add(role);
+
+                // Build the request model for creating a new account
+                User user = User.builder()
+                        .userIdentifier(new UserIdentifier())
                         .email(email)
                         .firstName(firstName)
                         .lastName(lastName)
-                        .token(JWT)
-                        .role(ERole.ROLE_CUSTOMER.name())
+                        .roles(roles)
+                        .picture(picture)
                         .build();
-               return customerAccountService.createCustomerAccountForoAuth(customerAccountoAuthRequestModel);
+
+                userRepository.save(user);
+
+                System.out.println("User Created");
+                // Return the response model for the newly created user
+                return user;
             }
-            else {
-                return customerAccountResponseMapper.entityToResponseModel(customerAccount);
-            }
-        }
-        else {
+        } else {
             throw new NullPointerException(validation);
         }
     }
 
-    @Override
-    public CustomerAccountResponseModel facebookLogin(LoginRequestModel loginRequestModel) {
-        String validation = tokenService.verifyFacebookToken(loginRequestModel.getToken());
 
-        if(validation.equals("Token is valid and not expired.")){
+//    @Override
+//    public CustomerAccountResponseModel facebookLogin(LoginRequestModel loginRequestModel) {
+//        String validation = tokenService.verifyFacebookToken(loginRequestModel.getToken());
+//
+//        if(validation.equals("Token is valid and not expired.")){
+//
+//            User account = userRepository.findByEmail(loginRequestModel.getEmail())
+//                    .orElseThrow(()-> new UsernameNotFoundException("User not found with email: "+loginRequestModel.getEmail()));
+//
+//            if(account == null){
+//                CustomerAccountoAuthRequestModel customerAccountoAuthRequestModel = CustomerAccountoAuthRequestModel.builder()
+//                        .email(loginRequestModel.getEmail())
+//                        .firstName(loginRequestModel.getFirstName())
+//                        .lastName(loginRequestModel.getLastName())
+//                        .token(loginRequestModel.getToken())
+//                        .role(ERole.ROLE_CUSTOMER.name())
+//                        .build();
+//                return customerAccountService.createCustomerAccountForoAuth(customerAccountoAuthRequestModel);
+//            }
+//            else {
+//                return customerAccountResponseMapper.entityToResponseModel(account);
+//            }
+//        }
+//        else {
+//            throw new NullPointerException(validation);
+//        }
+//    }
 
-            User account = userRepository.findByEmail(loginRequestModel.getEmail())
-                    .orElseThrow(()-> new UsernameNotFoundException("User not found with email: "+loginRequestModel.getEmail()));
-
-            if(account == null){
-                CustomerAccountoAuthRequestModel customerAccountoAuthRequestModel = CustomerAccountoAuthRequestModel.builder()
-                        .email(loginRequestModel.getEmail())
-                        .firstName(loginRequestModel.getFirstName())
-                        .lastName(loginRequestModel.getLastName())
-                        .token(loginRequestModel.getToken())
-                        .role(ERole.ROLE_CUSTOMER.name())
-                        .build();
-                return customerAccountService.createCustomerAccountForoAuth(customerAccountoAuthRequestModel);
-            }
-            else {
-                return customerAccountResponseMapper.entityToResponseModel(account);
-            }
-        }
-        else {
-            throw new NullPointerException(validation);
-        }
-    }
-
-    @Override
-    public CustomerAccountResponseModel instagramLogin(LoginRequestModel loginRequestModel) {
-        String validation = tokenService.verifyInstagramToken(loginRequestModel.getToken());
-
-        if(validation.equals("Token is valid and not expired.")){
-
-            User account = userRepository.findByEmail(loginRequestModel.getEmail())
-                    .orElseThrow(()-> new UsernameNotFoundException("User not found with email: "+loginRequestModel.getEmail()));;
-
-            if(account == null){
-                CustomerAccountoAuthRequestModel customerAccountoAuthRequestModel = CustomerAccountoAuthRequestModel.builder()
-                        .email(loginRequestModel.getEmail())
-                        .firstName(loginRequestModel.getFirstName())
-                        .lastName(loginRequestModel.getLastName())
-                        .token(loginRequestModel.getToken())
-                        .role(ERole.ROLE_CUSTOMER.name())
-                        .build();
-                return customerAccountService.createCustomerAccountForoAuth(customerAccountoAuthRequestModel);
-            }
-            else {
-              return customerAccountResponseMapper.entityToResponseModel(account);
-            }
-        }
-        else {
-            throw new NullPointerException(validation);
-        }
-    }
+//    @Override
+//    public CustomerAccountResponseModel instagramLogin(LoginRequestModel loginRequestModel) {
+//        String validation = tokenService.verifyInstagramToken(loginRequestModel.getToken());
+//
+//        if(validation.equals("Token is valid and not expired.")){
+//
+//            User account = userRepository.findByEmail(loginRequestModel.getEmail())
+//                    .orElseThrow(()-> new UsernameNotFoundException("User not found with email: "+loginRequestModel.getEmail()));;
+//
+//            if(account == null){
+//                CustomerAccountoAuthRequestModel customerAccountoAuthRequestModel = CustomerAccountoAuthRequestModel.builder()
+//                        .email(loginRequestModel.getEmail())
+//                        .firstName(loginRequestModel.getFirstName())
+//                        .lastName(loginRequestModel.getLastName())
+//                        .token(loginRequestModel.getToken())
+//                        .role(ERole.ROLE_CUSTOMER.name())
+//                        .build();
+//                return customerAccountService.createCustomerAccountForoAuth(customerAccountoAuthRequestModel);
+//            }
+//            else {
+//              return customerAccountResponseMapper.entityToResponseModel(account);
+//            }
+//        }
+//        else {
+//            throw new NullPointerException(validation);
+//        }
+//    }
 
 
 

@@ -4,7 +4,6 @@ import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.ERole;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datamapperlayer.CustomerAccountResponseMapper;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datamapperlayer.CustomerAccountoAuthRequestMapper;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountRequestModel;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountResponseModel;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request.CustomerAccountoAuthRequestModel;
@@ -25,7 +24,6 @@ public class CustomerAccountServiceImpl implements CustomerAccountService{
     final private VehicleService vehicleService;
     final private CustomerAccountResponseMapper customerAccountResponseMapper;
 
-    final private CustomerAccountoAuthRequestMapper customerAccountoAuthRequestMapper;
 
     @Override
     public List<CustomerAccountResponseModel> getAllCustomerAccounts() {
@@ -85,15 +83,6 @@ public class CustomerAccountServiceImpl implements CustomerAccountService{
         else{
             //throw exception
         }
-    }
-
-    @Override
-    public CustomerAccountResponseModel createCustomerAccountForoAuth(CustomerAccountoAuthRequestModel customerAccountoAuthRequestModel) {
-       User account = userRepository.save(customerAccountoAuthRequestMapper.requestModelToEntity(customerAccountoAuthRequestModel));
-        if(account==null){
-            //throw exception
-        }
-        return customerAccountResponseMapper.entityToResponseModel(account);
     }
 
 

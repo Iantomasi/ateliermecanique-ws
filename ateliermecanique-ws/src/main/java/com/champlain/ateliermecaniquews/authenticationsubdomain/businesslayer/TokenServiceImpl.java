@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -18,16 +19,20 @@ import java.util.Collections;
 
 
 @Service
-@AllArgsConstructor
 public class TokenServiceImpl implements TokenService{
 
     private final String jwkUrl = "https://www.googleapis.com/oauth2/v3/certs";
 
-    private final String FACEBOOK_APP_SECRET = "408ed6f70a0674cfc76659eea63c3ea7";
-    private final String FACEBOOK_APP_ID = "888035386206245";
+    @Value("${FACEBOOK_APP_SECRET}")
+    private String FACEBOOK_APP_SECRET;
+
+    @Value("${FACEBOOK_APP_ID}")
+    private String FACEBOOK_APP_ID;
+
 
     @Autowired
-    private final RestTemplate restTemplate;
+    private RestTemplate restTemplate;
+
 
     @Override
     public String verifyGoogleToken(String jwtToken) throws JOSEException, ParseException {

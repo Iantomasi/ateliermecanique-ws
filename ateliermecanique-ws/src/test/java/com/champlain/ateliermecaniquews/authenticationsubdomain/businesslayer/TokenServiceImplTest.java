@@ -33,7 +33,7 @@ class TokenServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        tokenService = new TokenServiceImpl(restTemplate);
+        //tokenService = new TokenServiceImpl(restTemplate);
     }
 
     @Test

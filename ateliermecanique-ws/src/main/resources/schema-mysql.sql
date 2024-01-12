@@ -40,11 +40,12 @@ create table if not exists invoices(
 CREATE TABLE if not exists users (
                                      id INT AUTO_INCREMENT PRIMARY KEY,
                                      user_id VARCHAR(36),
-    email VARCHAR(50) NOT NULL,
-    password VARCHAR(120) NOT NULL,
-    first_name VARCHAR(20) NOT NULL,
-    last_name VARCHAR(40) NOT NULL,
-    phone_number VARCHAR(20) NOT NULL,
+    email VARCHAR(50) ,
+    password VARCHAR(120) ,
+    first_name VARCHAR(20) ,
+    last_name VARCHAR(40) ,
+    phone_number VARCHAR(20) ,
+    picture VARCHAR (200),
     UNIQUE (email)
     );
 

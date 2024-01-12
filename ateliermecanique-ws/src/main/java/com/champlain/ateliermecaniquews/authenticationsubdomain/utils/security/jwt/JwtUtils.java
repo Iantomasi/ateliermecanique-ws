@@ -1,5 +1,7 @@
 package com.champlain.ateliermecaniquews.authenticationsubdomain.utils.security.jwt;
 
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.ERole;
+
 import com.champlain.ateliermecaniquews.authenticationsubdomain.utils.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 
@@ -13,7 +15,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -39,6 +43,24 @@ public class JwtUtils {
                 .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
     }
+
+    public String generateJwtResponseForOAuth(String email) {
+        Claims claims = Jwts.claims().setSubject(email);
+
+        List<String> roles = Collections.singletonList(ERole.ROLE_CUSTOMER.name());
+
+        claims.put("roles", roles);
+
+        String jwt = Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
+                .signWith(key(), SignatureAlgorithm.HS256)
+                .compact();
+
+        return jwt;
+    }
+
 
     private Key key() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));

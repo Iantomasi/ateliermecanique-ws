@@ -19,18 +19,23 @@ import com.nimbusds.jose.JOSEException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.ParseException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -38,60 +43,9 @@ import java.util.stream.Collectors;
 @RequestMapping("api/v1/auth")
 @AllArgsConstructor
 public class AuthController {
-    final private TokenService tokenService;
+
     final private oAuthService oAuthService;
     final private RestTemplate restTemplate;
-    
-    @GetMapping("/google-token-verification/{JWT}")
-    public ResponseEntity<String> verifyGoogleToken(@PathVariable String JWT){
-        try {
-            return ResponseEntity.ok().body(tokenService.verifyGoogleToken(JWT));
-            // Handle the verification result accordingly
-        } catch (JOSEException | ParseException e) {
-            return ResponseEntity.unprocessableEntity().body(e.getMessage());
-        }
-    }
-
-    @PostMapping("/google-login/{JWT}")
-    public ResponseEntity<CustomerAccountResponseModel> googleLogin(@PathVariable String JWT){
-        try {
-            return ResponseEntity.ok().body(oAuthService.googleLogin(JWT));
-        }catch (JOSEException | ParseException e) {
-            return ResponseEntity.unprocessableEntity().build();
-        }
-    }
-
-    @GetMapping("/facebook-token-verification/{accessToken}")
-    public ResponseEntity<String> verifyFacebookToken(@PathVariable String accessToken){
-        try {
-            return ResponseEntity.ok().body(tokenService.verifyFacebookToken(accessToken));
-        } catch (Exception e) {
-            return ResponseEntity.unprocessableEntity().body(e.getMessage());
-        }
-    }
-
-    @PostMapping("/facebook-login")
-    public ResponseEntity<CustomerAccountResponseModel> facebookToken(@RequestBody LoginRequestModel loginRequestModel){
-            return ResponseEntity.ok().body(oAuthService.facebookLogin(loginRequestModel));
-    }
-
-    @GetMapping("/instagram-token-verification/{accessToken}")
-    public ResponseEntity<String> verifyInstagramToken(@PathVariable String accessToken){
-        try {
-            return ResponseEntity.ok().body(tokenService.verifyInstagramToken(accessToken));
-        } catch (Exception e){
-            return ResponseEntity.unprocessableEntity().body(e.getMessage());
-        }
-    }
-
-    @PostMapping("/instagram-login")
-    public ResponseEntity<CustomerAccountResponseModel> instagramLogin(@RequestBody LoginRequestModel loginRequestModel){
-        return ResponseEntity.ok().body(oAuthService.instagramLogin(loginRequestModel));
-    }
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     @Autowired
     final private UserRepository userRepository;
 
@@ -106,6 +60,57 @@ public class AuthController {
 
     @Autowired
     final private JwtUtils jwtUtils;
+
+    @Autowired
+    final private UserDetailsService userDetailsService;
+
+
+
+
+    @PostMapping("/google-login/{JWT}")
+    public ResponseEntity<?> googleLogin(@PathVariable String JWT) {
+        try {
+            User user = oAuthService.googleLogin(JWT);
+
+            UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
+
+            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            String jwt = jwtUtils.generateJwtResponseForOAuth(user.getEmail());
+
+            // Extract roles from user roles and convert to a list of strings
+            List<String> roles = userDetails.getAuthorities().stream()
+                    .map(item -> item.getAuthority())
+                    .collect(Collectors.toList());
+
+            // Include JWTResponse in the response
+            return ResponseEntity.ok().body(new JWTResponse(jwt,
+                    user.getUserIdentifier().getUserId(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getPhoneNumber(),
+                    user.getEmail(),
+                    user.getPicture(),
+                    roles
+            ));
+        } catch (JOSEException | ParseException e) {
+            return ResponseEntity.unprocessableEntity().build();
+        }
+    }
+
+//    @PostMapping("/facebook-login")
+//    public ResponseEntity<?> facebookToken(@RequestBody LoginRequestModel loginRequestModel){
+//            return ResponseEntity.ok().body(oAuthService.facebookLogin(loginRequestModel));
+//    }
+//
+//
+//
+//    @PostMapping("/instagram-login")
+//    public ResponseEntity<?> instagramLogin(@RequestBody LoginRequestModel loginRequestModel){
+//        return ResponseEntity.ok().body(oAuthService.instagramLogin(loginRequestModel));
+//    }
 
 
     @PostMapping("/signin")
@@ -127,6 +132,7 @@ public class AuthController {
                 userDetails.getLastName(),
                 userDetails.getPhoneNumber(),
                 userDetails.getEmail(),
+                null,
                 roles));
     }
 

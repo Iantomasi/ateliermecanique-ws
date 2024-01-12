@@ -22,7 +22,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class User {
 
-    public User(String firstName, String lastName, String phoneNumber, String email, String password, Set<Role> roles) {
+    public User(String firstName, String lastName, String phoneNumber, String email, String password, Set<Role> roles,String picture) {
         this.userIdentifier = new UserIdentifier();
         this.firstName = firstName;
         this.lastName = lastName;
@@ -30,6 +30,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.roles = roles;
+        this.picture = picture;
     }
 
     @Id
@@ -39,24 +40,23 @@ public class User {
     @Embedded
     private UserIdentifier userIdentifier;
 
-    @NotBlank
     @Size(max = 20)
     private String firstName;
 
-    @NotBlank
     @Size(max = 40)
     private String lastName;
 
-    @NotBlank
     @Size(max = 20)
     private String phoneNumber;
 
-    @NotBlank
+
     @Size(max = 50)
     @Email
     private String email;
 
-    @NotBlank
+    @Size(max = 200)
+    private String picture;
+
     @Size(max = 120)
     private String password;
 

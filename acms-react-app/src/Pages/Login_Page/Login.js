@@ -77,29 +77,22 @@ function Login() {
     
 
     const handleGoogleLogin = (response) => {
-
-        sessionStorage.setItem('userToken', response.credential);
-        sessionStorage.setItem('provider', 'google');
         const jwtToken = response.credential;
-
-        //token has 3 parts, the kid is in the first part, each part is separated by a dot
-        // const tokenParts = jwtToken.split('.');
-        // const tokenHeader = JSON.parse(atob(tokenParts[0])); // Decoding base64url-encoded header --- This is the header
-        // console.log(tokenHeader)
-
     
-        axios.post(`http://localhost:8080/api/v1/auth/google-login/${jwtToken}`)
-        .then(res => {
-            res.data.role === "CUSTOMER" ? navigate('/user') : navigate('/admin');
-        })
-        .catch(error => {
-            console.error('Error loging in', error);
-        })
-          
-        const userObject = jwtDecode(response.credential);
-        sessionStorage.setItem('user', JSON.stringify(userObject));
-
-        
+        authService.googleLogin(jwtToken)
+            .then(res => {
+                const userRoles = res.roles;
+    
+                if (userRoles.includes('ROLE_CUSTOMER')){
+                    navigate('/user');
+                }
+                else {
+                    alert("User doesn't have required roles.");
+                }
+            })
+            .catch(error => {
+                console.error('Error logging in', error);
+            });
     };
 
     const handleGoogleButtonClick = () => {
