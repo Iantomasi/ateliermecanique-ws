@@ -8,7 +8,7 @@
         useEffect(() => {
             console.log('Fetching customers...');
             fetch('http://localhost:8080/api/v1/customers', {
-                method: 'GET', // or the correct method for your API
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 },

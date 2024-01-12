@@ -10,7 +10,7 @@ function CommentBox({ setComments }) {
                 rows="3"
                 className="shadow-sm mt-1 block w-full sm:text-sm border border-gray-300 rounded-md p-2"
                 placeholder="Comments..."
-                onChange={(e) => setComments(e.target.value)} // Finish the onChange handler
+                onChange={(e) => setComments(e.target.value)}
             />
         </div>
     );

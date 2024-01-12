@@ -133,7 +133,7 @@ export default function Calendar() {
                                 <CommentBox />
                             </div>
                         </div>
-                            <div className="mt-4"> {/* Add margin-top to separate the buttons from the calendar */}
+                            <div className="mt-4">
                                 <button
                                     className="bg-gray-300 text-gray-700 hover:bg-gray-400 font-semibold py-2 px-4 rounded-l focus:outline-none focus:shadow-outline"
                                     type="button"
