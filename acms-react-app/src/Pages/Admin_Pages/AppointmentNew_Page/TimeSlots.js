@@ -18,7 +18,7 @@ function TimeSlots() {
         var current = moment(start);
 
         while (current <= end) {
-            let timeFormatted = current.format('HH:mm'); // Convert to 24-hour format
+            let timeFormatted = current.format('HH:mm');
             if (result.includes(timeFormatted)) {
                 return null;
             } else {
@@ -28,7 +28,6 @@ function TimeSlots() {
         }
     }
 
-    // Run intervals function only once on component mount
     React.useEffect(() => {
         intervals(intime, outtime);
     }, [intime, outtime]);

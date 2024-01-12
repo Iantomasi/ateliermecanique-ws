@@ -1,12 +1,9 @@
-/* Custom CSS to increase spacing within the time picker */
 .time-picker-container .hour-picker {
-    margin-right: 1rem; /* Adjust this value to spread out the hour picker */
 }
 
 .time-picker-container .minute-picker {
-    margin-right: 1rem; /* Adjust this value if you also want to spread out the minute picker */
+    margin-right: 1rem;
 }
 
 .time-picker-container .am-pm-indicator {
-    /* Additional styles for the AM/PM toggle if needed */
 }

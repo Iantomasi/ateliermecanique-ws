@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 
-function ServicesList({ onSelectService }) { // Add onSelectService as a prop
-    // List of services to be rendered
+function ServicesList({ onSelectService }) {
     const services = [
         "Air conditioning",
         "Muffler",
         "Car Inspection Before Purchase",
         "End of Manufacturer's Warranty",
         "Exhaust System",
-        // ... Add all other services here
         "Paint & body work"
     ];
 
@@ -16,7 +14,7 @@ function ServicesList({ onSelectService }) { // Add onSelectService as a prop
 
     const handleSelectService = (service) => {
         setSelectedService(service);
-        onSelectService(service); // This will call the function passed as a prop
+        onSelectService(service);
     };
 
     return (
@@ -30,7 +28,6 @@ function ServicesList({ onSelectService }) { // Add onSelectService as a prop
                             className="text-yellow-500 hover:text-yellow-700"
                             onClick={() => handleSelectService(service)}
                         >
-                            {/* Button content like an icon or text */}
                         </button>
                     </li>
                 ))}

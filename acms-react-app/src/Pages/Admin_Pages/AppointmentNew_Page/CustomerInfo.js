@@ -10,7 +10,7 @@
             fetch('http://localhost:8080/api/v1/customers', {
                 method: 'GET', // or the correct method for your API
                 headers: {
-                    'Content-Type': 'application/json', // and any other headers your API requires
+                    'Content-Type': 'application/json',
                 },
             })
                 .then(response => {

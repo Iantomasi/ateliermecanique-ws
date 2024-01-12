@@ -69,16 +69,15 @@ const router = createBrowserRouter([
         path:"/admin/appointments/:appointmentId",
         element: <AppointmentSpecifics/>,
       },
-<<<<<<< HEAD
-      { 
-        path:"/admin/customers/:customerId/appointments/:appointmentId",
-        element: <AppointmentSpecifics/>,
-=======
 
+      {
+        path: "/admin/customers/:customerId/appointments/:appointmentId",
+        element: <AppointmentSpecifics/>,
+      },
       {
         path: "/admin/appointments/newAppointment",
         element: <Calendar />,
->>>>>>> e49e7c6 (Added Calendar to front end)
+
       },
       {
         path: "/user",
