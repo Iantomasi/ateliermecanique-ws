@@ -8,6 +8,9 @@ import AppointmentBlock from '../AppointmentDetails_Page/AppointmentBlock.js';
 
 function Appointments() {
   const [appointments, setAppointments] = useState([]);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const hasCancelledAppointments = appointments.some(appointment => appointment.status === 'CANCELLED');
+
 
   useEffect(() => {
     getAppointments();
@@ -23,7 +26,31 @@ function Appointments() {
       })
       .catch(error => {
         console.log(error);
+      })      
+  }
+
+  function confirmDelete() {
+    setShowConfirmation(true);
+  }
+
+  function cancelDelete() {
+    setShowConfirmation(false);
+  }
+
+  function executeDeleteAllCancelledAppointments() {
+    axios.delete("http://localhost:8080/api/v1/appointments/cancelled")
+      .then(res => {
+        if (res.status === 204) {
+          alert('Cancelled Appointments have been deleted!');
+          setShowConfirmation(false);
+          getAppointments(); // Fetch appointments again after deletion
+          //navigate(/admin/appointments);
+        }
       })
+      .catch(err => {
+        console.error('Error deleting cancelled appointments:', err);
+        setShowConfirmation(false);
+      });
   }
 
   return (
@@ -44,8 +71,18 @@ function Appointments() {
               <button className="text-white border-none px-4 py-2 rounded font-bold transition duration-300 hover:scale-110 bg-black">
                 Add+
               </button>
+              {hasCancelledAppointments && (
+                <button
+                  className="bg-red-500 border-none px-4 py-2 rounded font-bold transform transition duration-300 hover:scale-110 ml-auto"
+                  onClick={confirmDelete}
+                  type="button"
+                >
+                  Delete All Cancelled
+                </button>
+              )}
             </div>
           </div>
+
           <div className="w-full overflow-y-scroll max-h-[230px]">
             <table className="w-full table-auto">
               <thead className="bg-white sticky top-0">
@@ -75,6 +112,30 @@ function Appointments() {
           <img src="/appointments.svg" alt="appointment's Image" />
         </div>
       </div>
+      {/* Confirmation Model */}
+      {showConfirmation && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg">
+            <p className="text-xl font-bold mb-4">Are you sure you want to delete all cancelled appointments?</p>
+            <div className="flex justify-end">
+              <button
+                className="text-white bg-red-500 border-none px-4 py-2 rounded font-bold mr-2"
+                onClick={cancelDelete}
+              >
+                No
+              </button>
+              <button
+                className="text-white bg-green-500 border-none px-4 py-2 rounded font-bold"
+                onClick={() => {
+                  executeDeleteAllCancelledAppointments();
+                }}
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <Footer />
     </div>
   );

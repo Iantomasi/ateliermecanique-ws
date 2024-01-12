@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.List;
 
+import static com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Status.PENDING;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
@@ -84,5 +85,28 @@ class AppointmentRepositoryTest {
         // Assert
         assertTrue(foundAppointments.isEmpty());
     }
+
+
+
+    @Test
+    public void findAllAppointmentsByStatus_shouldReturnList() {
+        // Arrange
+        Status targetStatus = PENDING;  // You can change this to the status you want to test
+
+        // Create a new appointment with the target status
+        Appointment appointmentWithTargetStatus = new Appointment();
+        appointmentWithTargetStatus.setAppointmentIdentifier(new AppointmentIdentifier());
+        appointmentWithTargetStatus.setStatus(targetStatus);
+        appointmentRepository.save(appointmentWithTargetStatus);
+
+        // Act
+        List<Appointment> foundAppointments = appointmentRepository.findAllAppointmentsByStatus(targetStatus);
+
+        // Assert
+        assertFalse(foundAppointments.isEmpty());
+        assertEquals(targetStatus, foundAppointments.get(0).getStatus());
+    }
+
+
 
 }

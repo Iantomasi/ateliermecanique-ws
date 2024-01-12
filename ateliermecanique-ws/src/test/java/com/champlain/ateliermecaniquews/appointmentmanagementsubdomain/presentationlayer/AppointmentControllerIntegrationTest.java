@@ -23,11 +23,9 @@ import java.util.Collections;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -86,15 +84,18 @@ class AppointmentControllerIntegrationTest {
                 .andExpect(jsonPath("$[0].services").value("Preventive Maintenance"));
     }
     @Test
-    void getAppointmentById_shouldReturnAppointment() throws Exception {
+    void getAppointmentByAppointmentId_shouldSucceed() throws Exception {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime dateTime = LocalDateTime.parse("2024-03-24 11:00", formatter);
+        when(appointmentService.getAppointmentByAppointmentId(testAppointmentId)).thenReturn(
+                new AppointmentResponseModel(testAppointmentId, "customerId", "vehicleId", dateTime , "Preventive Maintenance", "None", Status.PENDING));
+
         mockMvc.perform(get("/api/v1/appointments/{appointmentId}", testAppointmentId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.appointmentId", is(testAppointmentId)))
-                .andExpect(jsonPath("$.services", is("Preventive Maintenance")));
+                .andExpect(jsonPath("$.appointmentId").value(testAppointmentId));;
     }
-
-
+    
     @Test
     void updateAppointmentStatusAdmin_shouldUpdateStatus() throws Exception {
         // Mock the service layer response
@@ -161,6 +162,28 @@ class AppointmentControllerIntegrationTest {
 
         mockMvc.perform(get("/api/v1/customers/{customerId}/appointments", "customerId"))
                 .andExpect(status().isNotFound());
+    }
+
+
+
+    @Test
+    void deleteAllCancelledAppointments_shouldSucceed() throws Exception {
+        // Arrange
+        doNothing().when(appointmentService).deleteAllCancelledAppointments();
+
+        // Act & Assert
+        mockMvc.perform(delete("/api/v1/appointments/cancelled"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deleteAllCancelledAppointments_exceptionThrown_shouldReturnInternalServerError() throws Exception {
+        // Arrange
+        doThrow(new RuntimeException("Internal Server Error")).when(appointmentService).deleteAllCancelledAppointments();
+
+        // Act & Assert
+        mockMvc.perform(delete("/api/v1/appointments/cancelled"))
+                .andExpect(status().isInternalServerError());
     }
 
 

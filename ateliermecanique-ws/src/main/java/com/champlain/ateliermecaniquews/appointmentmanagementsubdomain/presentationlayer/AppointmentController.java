@@ -26,8 +26,8 @@ public class AppointmentController {
     }
 
     @GetMapping({"/appointments/{appointmentId}", "customers/{customerId}/appointments/{appointmentId}"})
-    public ResponseEntity<AppointmentResponseModel> getAppointmentById(@PathVariable String appointmentId) {
-        AppointmentResponseModel appointment = appointmentService.getAppointmentById(appointmentId);
+    public ResponseEntity<AppointmentResponseModel> getAppointmentByAppointmentId(@PathVariable String appointmentId) {
+        AppointmentResponseModel appointment = appointmentService.getAppointmentByAppointmentId(appointmentId);
         if (appointment == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -54,5 +54,14 @@ public class AppointmentController {
         return ResponseEntity.ok(appointment);
     }
 
+    @DeleteMapping("/appointments/cancelled")
+    public ResponseEntity<Void> deleteAllCancelledAppointments(){
+    try{
+        appointmentService.deleteAllCancelledAppointments();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
 }
