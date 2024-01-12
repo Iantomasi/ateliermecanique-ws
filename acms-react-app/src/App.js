@@ -69,6 +69,10 @@ const router = createBrowserRouter([
         path:"/admin/appointments/:appointmentId",
         element: <AppointmentSpecifics/>,
       },
+      { 
+        path:"/admin/customers/:customerId/appointments/:appointmentId",
+        element: <AppointmentSpecifics/>,
+      },
       {
         path: "/user",
         element: <User/>

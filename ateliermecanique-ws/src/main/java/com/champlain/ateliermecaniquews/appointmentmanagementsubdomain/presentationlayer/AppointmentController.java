@@ -26,8 +26,8 @@ public class AppointmentController {
     }
 
     @GetMapping({"/appointments/{appointmentId}", "customers/{customerId}/appointments/{appointmentId}"})
-    public ResponseEntity<AppointmentResponseModel> getAppointmentById(@PathVariable String appointmentId) {
-        AppointmentResponseModel appointment = appointmentService.getAppointmentById(appointmentId);
+    public ResponseEntity<AppointmentResponseModel> getAppointmentByAppointmentId(@PathVariable String appointmentId) {
+        AppointmentResponseModel appointment = appointmentService.getAppointmentByAppointmentId(appointmentId);
         if (appointment == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

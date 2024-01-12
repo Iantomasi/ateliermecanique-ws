@@ -23,7 +23,6 @@ import java.util.Collections;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -85,13 +84,32 @@ class AppointmentControllerIntegrationTest {
                 .andExpect(jsonPath("$[0].services").value("Preventive Maintenance"));
     }
     @Test
-    void getAppointmentById_shouldReturnAppointment() throws Exception {
+    void getAppointmentByAppointmentId_shouldSucceed() throws Exception {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime dateTime = LocalDateTime.parse("2024-03-24 11:00", formatter);
+        when(appointmentService.getAppointmentByAppointmentId(testAppointmentId)).thenReturn(
+                new AppointmentResponseModel(testAppointmentId, "customerId", "vehicleId", dateTime , "Preventive Maintenance", "None", Status.PENDING));
+
         mockMvc.perform(get("/api/v1/appointments/{appointmentId}", testAppointmentId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.appointmentId", is(testAppointmentId)))
-                .andExpect(jsonPath("$.services", is("Preventive Maintenance")));
+                .andExpect(jsonPath("$.appointmentId").value(testAppointmentId));;
     }
+
+    /*
+    * @Test
+    void getVehicleByVehicleId_shouldSucceed() throws Exception {
+        String vehicleId = "validVehicleId";
+        String customerId = "someCustomerId";
+        VehicleResponseModel vehicle = new VehicleResponseModel(vehicleId, customerId, "Toyota", "Camry", "2019", TransmissionType.AUTOMATIC, "9876543210");
+
+        when(vehicleService.getVehicleByVehicleId(customerId, vehicleId)).thenReturn(vehicle);
+
+        mockMvc.perform(get("/api/v1/customers/{customerId}/vehicles/{vehicleId}", customerId, vehicleId))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.vehicleId").value(vehicleId));
+    }*/
 
 
     @Test

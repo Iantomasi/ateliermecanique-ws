@@ -138,7 +138,7 @@ class AppointmentControllerUnitTest {
                 .appointmentDate(LocalDateTime.parse("2021-01-01 12:00", formatter))
                 .build();
 
-        when(appointmentService.getAppointmentById(appointmentId)).thenReturn(appointment);
+        when(appointmentService.getAppointmentByAppointmentId(appointmentId)).thenReturn(appointment);
 
         // Act & Assert
         mockMvc.perform(get("/api/v1/appointments/{appointmentId}", appointmentId))
@@ -151,7 +151,7 @@ class AppointmentControllerUnitTest {
     void getAppointmentById_notFound_shouldReturnNotFound() throws Exception {
         // Arrange
         String appointmentId = "non-existent-id";
-        when(appointmentService.getAppointmentById(appointmentId)).thenReturn(null);
+        when(appointmentService.getAppointmentByAppointmentId(appointmentId)).thenReturn(null);
 
         // Act & Assert
         mockMvc.perform(get("/api/v1/appointments/{appointmentId}", appointmentId))

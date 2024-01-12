@@ -69,8 +69,8 @@ public class AppointmentServiceImpl implements AppointmentService{
 
     @Override
 
-    public AppointmentResponseModel getAppointmentById(String appointmentId) {
-        Appointment appointment = appointmentRepository.findByAppointmentIdentifier_AppointmentId(appointmentId);
+    public AppointmentResponseModel getAppointmentByAppointmentId(String appointmentId) {
+        Appointment appointment = appointmentRepository.findAppointmentByAppointmentIdentifier_AppointmentId(appointmentId);
 
         if (appointment == null) {
             log.warn("No appointment found for appointment ID: {}", appointmentId);
