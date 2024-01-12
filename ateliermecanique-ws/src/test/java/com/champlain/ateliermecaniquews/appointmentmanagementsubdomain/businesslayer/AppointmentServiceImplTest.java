@@ -273,4 +273,46 @@ class AppointmentServiceImplTest {
         });
     }
 
+
+    @Test
+    void deleteAllCancelledAppointments_shouldSucceed() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime dateTime = LocalDateTime.parse("2024-03-24 11:00", formatter);
+
+        Appointment appointment = new Appointment(
+                "1",
+                "132b41b2-2bec-4b98-b08d-c7c0e03fe33e",
+                "2024-03-24 11:00",
+                "Preventive Maintenance",
+                "None",
+                Status.PENDING
+        );
+        // Arrange
+        List<Appointment> cancelledAppointments = Arrays.asList(
+                new Appointment( "customerId1", "vehicleId1", "2024-03-24 11:00", "Service1", "None", Status.CANCELLED),
+                new Appointment( "customerId2", "vehicleId2", "2024-03-25 14:30", "Service2", "Description2", Status.CANCELLED)
+        );
+
+        when(appointmentRepository.findAllAppointmentsByStatus(Status.CANCELLED)).thenReturn(cancelledAppointments);
+
+        // Act
+        appointmentService.deleteAllCancelledAppointments();
+
+        // Assert
+        verify(appointmentRepository, times(1)).deleteAll(cancelledAppointments);
+    }
+
+    @Test
+    void deleteAllCancelledAppointments_noCancelledAppointments_shouldNotDelete() {
+        // Arrange
+        when(appointmentRepository.findAllAppointmentsByStatus(Status.CANCELLED)).thenReturn(Collections.emptyList());
+
+        // Act
+        appointmentService.deleteAllCancelledAppointments();
+
+        // Assert
+        verify(appointmentRepository, never()).deleteAll(anyList());
+    }
+
+
 }

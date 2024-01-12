@@ -21,11 +21,11 @@ public class FrontEndTesting {
         @BeforeEach()
         void setUp() {          // comment out the driver you don't use before testing
 
-            //WebDriverManager.chromedriver().setup();
-             //Configuration.browser = "chrome";
+            WebDriverManager.chromedriver().setup();
+             Configuration.browser = "chrome";
 
-            WebDriverManager.firefoxdriver().setup();
-            Configuration.browser = "firefox";
+
+
         }
 
         @Test
@@ -368,5 +368,28 @@ public class FrontEndTesting {
 
         $("p").shouldHave(text("APPOINTMENT DETAILS"));
     }
+
+
+    @Test
+    public void deleteAllCancelledAppointments() {
+        open("https://localhost:3000/");
+        $("a[href='/login']").click();
+        sleep(1000);
+        $("button[type='submit']").click();
+        sleep(1000);
+        $("img[src='appointments.svg']").click();
+        sleep(1000);
+
+
+        $$("button").findBy(text("Delete All Cancelled")).click();
+
+        $$("button").findBy(text("Yes")).click();
+
+        sleep(1000);
+        switchTo().alert().accept();
+
+        $("p").shouldHave(text("APPOINTMENTS"));
+    }
+
 
 }

@@ -83,10 +83,6 @@ public class AppointmentServiceImpl implements AppointmentService{
     @Override
     public void deleteAllCancelledAppointments() {
         List<Appointment> cancelledAppointments =  appointmentRepository.findAllAppointmentsByStatus(Status.CANCELLED);
-
-
-
-
         if(!cancelledAppointments.isEmpty()){
             appointmentRepository.deleteAll(cancelledAppointments);
         }

@@ -16,10 +16,9 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Mockito.when;
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(AppointmentController.class)
@@ -119,14 +118,15 @@ class AppointmentControllerUnitTest {
         String customerId = "customer123";
         boolean isConfirm = false;
         when(appointmentService.updateAppointmentStatus(appointmentId, isConfirm))
-                .thenReturn(new AppointmentResponseModel(appointmentId,customerId, null, null, null, null, Status.CANCELLED));
+                .thenReturn(new AppointmentResponseModel(appointmentId, customerId, null, null, null, null, Status.CANCELLED));
 
         // Act & Assert
         mockMvc.perform(put("/api/v1/customers/{customerId}/appointments/{appointmentId}/updateStatus?isConfirm=false", customerId, appointmentId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("CANCELLED"));
     }
-@Test
+
+    @Test
     void getAppointmentById_shouldReturnAppointment() throws Exception {
         // Arrange
         String appointmentId = "1";
@@ -159,5 +159,27 @@ class AppointmentControllerUnitTest {
     }
 
 
+    @Test
+    void deleteAllCancelledAppointments_shouldSucceed() throws Exception {
+        // Arrange
+        doNothing().when(appointmentService).deleteAllCancelledAppointments();
+
+        // Act & Assert
+        mockMvc.perform(delete("/api/v1/appointments/cancelled"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deleteAllCancelledAppointments_exceptionThrown_shouldReturnNoContent() throws Exception {
+        // Arrange
+        doThrow(new RuntimeException("Internal Server Error")).when(appointmentService).deleteAllCancelledAppointments();
+
+        // Act & Assert
+        mockMvc.perform(delete("/api/v1/appointments/cancelled"))
+                .andExpect(status().isInternalServerError());
+    }
 }
+
+
+
 

@@ -56,9 +56,12 @@ public class AppointmentController {
 
     @DeleteMapping("/appointments/cancelled")
     public ResponseEntity<Void> deleteAllCancelledAppointments(){
+    try{
         appointmentService.deleteAllCancelledAppointments();
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
-
 
 }

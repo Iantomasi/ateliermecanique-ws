@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Navbar from '../../../Components/Navigation_Bars/Logged_In/NavBar.js';
 import Footer from '../../../Components/Footer/Footer.js';
 import MechanicDisplay from '../../../Components/User_Components/MechanicDisplay.js';
@@ -9,10 +10,7 @@ function Appointments() {
   const [appointments, setAppointments] = useState([]);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const hasCancelledAppointments = appointments.some(appointment => appointment.status === 'CANCELLED');
-<<<<<<< HEAD
 
-=======
->>>>>>> f213da3 (Implemented front end functionailty)
 
   useEffect(() => {
     getAppointments();
@@ -21,18 +19,14 @@ function Appointments() {
   function getAppointments() {
     axios.get("http://localhost:8080/api/v1/appointments")
       .then(res => {
-        console.log('API response:', res);
+        console.log('API response:', res); 
         if (res.status === 200) {
-          setAppointments(res.data);
+            setAppointments(res.data);
         }
       })
       .catch(error => {
         console.log(error);
-<<<<<<< HEAD
       })      
-=======
-      });
->>>>>>> f213da3 (Implemented front end functionailty)
   }
 
   function confirmDelete() {
@@ -105,11 +99,10 @@ function Appointments() {
               </thead>
               <tbody className="text-center">
                 {appointments.map((appointment) => (
-                  <AppointmentBlock
-                    key={appointment.appointmentId}
-                    appointment={appointment}
-                    refreshAppointments={getAppointments}
-                  />
+                  <AppointmentBlock  
+                  key={appointment.appointmentId}
+                  appointment={appointment}
+                  refreshAppointments={getAppointments}/>
                 ))}
               </tbody>
             </table>
@@ -119,11 +112,7 @@ function Appointments() {
           <img src="/appointments.svg" alt="appointment's Image" />
         </div>
       </div>
-<<<<<<< HEAD
-=======
-
->>>>>>> f213da3 (Implemented front end functionailty)
-      {/* Confirmation Modal */}
+      {/* Confirmation Model */}
       {showConfirmation && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg">
