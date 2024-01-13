@@ -103,8 +103,9 @@ public class AppointmentController {
         return ResponseEntity.ok(appointment);
     }
 
-    @DeleteMapping({"/appointments/{appointmentId}","/customers/{customerId}/appointments/{appointmentId}"})
-    public ResponseEntity<Void> deleteAppointmentByAppointmentId(@PathVariable String appointmentId) {
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/appointments/{appointmentId}")
+    public ResponseEntity<Void> deleteAppointmentByAppointmentIdAdmin(@PathVariable String appointmentId) {
         try {
             appointmentService.deleteAppointmentByAppointmentId(appointmentId);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -112,8 +113,21 @@ public class AppointmentController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-    @PostMapping({"/customers/{customerId}/appointments","/appointments"})
-    public ResponseEntity<AppointmentResponseModel> addAppointmentToCustomerAccount(@PathVariable String customerId, @RequestBody AppointmentRequestModel appointmentRequestModel) {
+
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
+    @DeleteMapping("/customers/{customerId}/appointments/{appointmentId}")
+    public ResponseEntity<Void> deleteAppointmentByAppointmentIdCustomer(@PathVariable String appointmentId) {
+        try {
+            appointmentService.deleteAppointmentByAppointmentId(appointmentId);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
+    @PostMapping("/customers/{customerId}/appointments")
+    public ResponseEntity<AppointmentResponseModel> addAppointmentToCustomerAccountCustomer(@PathVariable String customerId, @RequestBody AppointmentRequestModel appointmentRequestModel) {
         AppointmentResponseModel appointment = appointmentService.addAppointmentToCustomerAccount(customerId, appointmentRequestModel);
         if (appointment == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -121,6 +135,17 @@ public class AppointmentController {
         return ResponseEntity.ok(appointment);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/appointments")
+    public ResponseEntity<AppointmentResponseModel> addAppointmentToCustomerAccountAdmin(@PathVariable String customerId, @RequestBody AppointmentRequestModel appointmentRequestModel) {
+        AppointmentResponseModel appointment = appointmentService.addAppointmentToCustomerAccount(customerId, appointmentRequestModel);
+        if (appointment == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(appointment);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/appointments/cancelled")
     public ResponseEntity<Void> deleteAllCancelledAppointments(){
     try{
@@ -131,6 +156,7 @@ public class AppointmentController {
         }
     }
 
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
     @GetMapping("/availability/{date}")
     public ResponseEntity<Map<String, Boolean>> checkTimeSlotAvailability(@PathVariable LocalDate date) {
         Map<String, Boolean> availability = appointmentService.checkTimeSlotAvailability(date);

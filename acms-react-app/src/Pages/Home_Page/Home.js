@@ -9,9 +9,11 @@ function Home() {
   useEffect(() => {
     userService.getPulicContent()
       .then(response => {
-        if(response.data === "Public Content.") {
-          setPublicContent(true);
-        } 
+        if(response.data){
+          if(response.data === "Public Content.") {
+            setPublicContent(true);
+          } 
+        }
       })
       .catch(error => {
         console.error('Error fetching public content:', error);

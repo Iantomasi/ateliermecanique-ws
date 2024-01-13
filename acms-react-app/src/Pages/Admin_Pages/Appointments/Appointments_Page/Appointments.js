@@ -42,7 +42,7 @@ function Appointments() {
   };
 
   function executeDeleteAllCancelledAppointments() {
-    axios.delete("http://localhost:8080/api/v1/appointments/cancelled")
+    adminService.deleteAllCancelledAppointments()
       .then(res => {
         if (res.status === 204) {
           alert('Cancelled Appointments have been deleted!');

@@ -64,6 +64,10 @@ class adminService{
             `${API_APPOINTMENTS_URL}/${id}/updateStatus?isConfirm=${isConfirmed}`,null,{ headers: authHeader() });
     }
 
+    deleteAllCancelledAppointments(){
+        return axios.delete(API_APPOINTMENTS_URL + `/cancelled`, { headers: authHeader() });
+    }
+
 }
 
 export default new adminService();
