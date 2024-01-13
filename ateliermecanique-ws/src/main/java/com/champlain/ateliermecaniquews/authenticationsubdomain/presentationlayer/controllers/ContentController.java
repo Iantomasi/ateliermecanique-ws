@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("api/v1/test")
-public class TestController {
+@RequestMapping("api/v1/content")
+public class ContentController {
 
     @GetMapping("/all")
     public String allAccess(){
@@ -24,7 +24,7 @@ public class TestController {
     @GetMapping("/admin")
     @PreAuthorize("hasRole('ADMIN')")
     public String adminAccess(){
-        return "Admin Board";
+        return "Admin Content.";
     }
 
 }

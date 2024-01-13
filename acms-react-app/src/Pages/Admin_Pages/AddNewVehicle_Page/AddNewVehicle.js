@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-
 import Navbar from '../../../Components/Navigation_Bars/Logged_In/NavBar.js';
 import Footer from '../../../Components/Footer/Footer.js';
-import MechanicDisplay from '../../../Components/User_Components/MechanicDisplay.js';
 import Sidebar from '../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
+import adminService from '../../../Services/admin.service.js';
 
 function AddNewVehicle() {
     const {customerId} = useParams();
@@ -20,7 +18,7 @@ function AddNewVehicle() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/v1/customers/${customerId}`)
+        adminService.getCustomerById(customerId)
             .then(res => {
                 if (res.status === 200) {
                     setVehicleDetails(res.data);
@@ -51,7 +49,7 @@ function AddNewVehicle() {
             mileage: vehicleDetails.mileage
         };
 
-        axios.post(`http://localhost:8080/api/v1/customers/${customerId}/vehicles`, newVehicle)
+        adminService.addCustomerVehicle(customerId, newVehicle)
             .then(res => {
                 if (res.status === 200) {
                     console.log("Vehicle has been successfully added!");
@@ -104,7 +102,7 @@ function AddNewVehicle() {
                         </form>
                     </div>
                     <div className="flex mt-5 justify-center">
-                        <img src="/yellow-car-sideview-free-vector.jpg" alt="Yellow Car Side" className="w-full md:w-1/3 h-auto" />
+                        <img src="/happy-young-man-and-car.png" alt="Yellow Car Side" className="w-full md:w-1/3 h-auto" />
                     </div>
                 </main>
             </div>

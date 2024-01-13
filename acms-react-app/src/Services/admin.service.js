@@ -32,6 +32,10 @@ class adminService{
         return axios.get(API_CUSTOMERS_URL + `/${customerId}/vehicles/${vehicleId}`, { headers: authHeader() });
     }
 
+    addCustomerVehicle(customerId, vehicle){
+        return axios.post(API_CUSTOMERS_URL + `/${customerId}/vehicles`, vehicle, { headers: authHeader() });
+    }
+    
     updateCustomerVehicle(customerId, vehicleId, vehicle){
         return axios.put(API_CUSTOMERS_URL + `/${customerId}/vehicles/${vehicleId}`, vehicle, { headers: authHeader() });
     }
