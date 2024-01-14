@@ -12,10 +12,11 @@ import AddNewVehicle from './Pages/Admin_Pages/AddNewVehicle_Page/AddNewVehicle'
 import Appointments from './Pages/Admin_Pages/Appointments/Appointments_Page/Appointments';
 import User from './Pages/User_Pages/User';
 import CustomerAppointments from './Pages/Admin_Pages/Customers/CustomerAppointments_Page/CustomerAppointments';
-import AppointmentSpecifics from './Pages/Admin_Pages/AppointmentSpecifics_Page/AppointmentSpecifics';
 import Calendar from './Pages/Admin_Pages/AppointmentNew_Page/Calendar';
-import CustomerAppointmentDetails from './Pages/Admin_Pages/Customers/CustomerAppointmentDetails_Page/CustomerAppointmentDetails';
+import CustomerAppointmentDetails from './Pages/Admin_Pages/Customers/CustomerAppointments_Page/CustomerAppointmentDetails.js';
 import CustomerCalendar from './Pages/Admin_Pages/CustomerAppointmentNew_Page/CustomerCalendar';
+
+import AppointmentDetails from './Pages/Admin_Pages/Appointments/AppointmentDetails_Page/AppointmentDetails';
 
 
 const router = createBrowserRouter([
@@ -70,9 +71,8 @@ const router = createBrowserRouter([
       },
       {
         path:"/admin/appointments/:appointmentId",
-        element: <AppointmentSpecifics/>,
+        element: <AppointmentDetails/>,
       },
-
       {
         path: "/admin/customers/:customerId/appointments/:appointmentId",
         element: <CustomerAppointmentDetails/>,
@@ -86,6 +86,10 @@ const router = createBrowserRouter([
         path: "/admin/customers/:customerId/appointments/newAppointment",
         element: <CustomerCalendar />,
 
+      },
+      { 
+        path:"/admin/customers/:customerId/appointments/:appointmentId",
+        element: <AppointmentDetails/>,
       },
       {
         path: "/user",

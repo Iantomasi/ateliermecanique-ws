@@ -27,9 +27,7 @@ import java.util.Set;
 class CustomerAccountServiceImplTest {
     @Mock
     private UserRepository userRepository;
-
-    @Mock
-    private CustomerAccountoAuthRequestMapper customerAccountoAuthRequestMapper;
+    
 
     @Mock
     private CustomerAccountResponseMapper customerAccountResponseMapper;
@@ -40,7 +38,6 @@ class CustomerAccountServiceImplTest {
     @Mock
     private VehicleService vehicleService;
 
-    private final CustomerAccountoAuthRequestMapper mapper = Mappers.getMapper(CustomerAccountoAuthRequestMapper.class);
 
 
     @Test

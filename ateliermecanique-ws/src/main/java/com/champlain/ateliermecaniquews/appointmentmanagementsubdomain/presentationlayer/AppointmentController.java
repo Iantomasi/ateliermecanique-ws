@@ -3,10 +3,13 @@ package com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presenta
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.businesslayer.AppointmentService;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.utils.security.services.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -44,18 +47,37 @@ public class AppointmentController {
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
     @GetMapping("customers/{customerId}/appointments/{appointmentId}")
-    public ResponseEntity<AppointmentResponseModel> getAppointmentByIdCustomer(@PathVariable String appointmentId,@PathVariable String customerId) {
+    public ResponseEntity<AppointmentResponseModel> getAppointmentByIdCustomer(
+            @PathVariable String appointmentId,
+            @PathVariable String customerId) {
 
-        User user = userRepository.findUserByUserIdentifier_UserId(customerId);
 
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+
+        if (authentication.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("ROLE_CUSTOMER"))) {
+            // Check if it's an admin, and go straight to checking if the user exists
+            User user = userRepository.findUserByUserIdentifier_UserId(customerId);
+
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } else {
+            // It's a customer, check if the authenticated user's ID matches the path variable
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            String authenticatedUserId = userDetails.getUserId();
+
+            if (!authenticatedUserId.equals(customerId)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
         }
 
         AppointmentResponseModel appointment = appointmentService.getAppointmentByAppointmentId(appointmentId);
+
         if (appointment == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+
         return ResponseEntity.ok(appointment);
     }
 
@@ -63,13 +85,36 @@ public class AppointmentController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
     @GetMapping("/customers/{customerId}/appointments")
     public ResponseEntity<List<AppointmentResponseModel>> getAllAppointmentsByCustomerId(@PathVariable String customerId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+
+        if (authentication.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("ROLE_CUSTOMER"))) {
+            // Check if it's an admin, and go straight to checking if the user exists
+            User user = userRepository.findUserByUserIdentifier_UserId(customerId);
+
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } else {
+            // It's a customer, check if the authenticated user's ID matches the path variable
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            String authenticatedUserId = userDetails.getUserId();
+
+            if (!authenticatedUserId.equals(customerId)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+        }
+
         List<AppointmentResponseModel> appointments = appointmentService.getAllAppointmentsByCustomerId(customerId);
+
         if (appointments == null || appointments.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+
         return ResponseEntity.ok(appointments);
     }
 
+<<<<<<< HEAD
     @PutMapping({"/appointments/{appointmentId}","/customers/{customerId}/appointments/{appointmentId}"})
     public ResponseEntity<AppointmentResponseModel> updateAppointmentByAppointmentId(@RequestBody AppointmentRequestModel appointmentRequestModel, @PathVariable String appointmentId) {
         AppointmentResponseModel appointment = appointmentService.updateAppointmentByAppointmentId(appointmentRequestModel, appointmentId);
@@ -79,6 +124,8 @@ public class AppointmentController {
         return ResponseEntity.ok(appointment);
     }
 
+=======
+>>>>>>> 43d1e1f (Finished authenticating front end, only missing tests)
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/appointments/{appointmentId}/updateStatus")
     public ResponseEntity<AppointmentResponseModel> updateAppointmentStatusAdmin(@PathVariable String appointmentId, @RequestParam boolean isConfirm) {
@@ -92,9 +139,25 @@ public class AppointmentController {
     @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
     @PutMapping("/customers/{customerId}/appointments/{appointmentId}/updateStatus")
     public ResponseEntity<AppointmentResponseModel> updateAppointmentStatusCustomer(@PathVariable String customerId,@PathVariable String appointmentId, @RequestParam boolean isConfirm) {
-        User user = userRepository.findUserByUserIdentifier_UserId(customerId);
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+
+        if (authentication.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("ROLE_CUSTOMER"))) {
+            // Check if it's an admin, and go straight to checking if the user exists
+            User user = userRepository.findUserByUserIdentifier_UserId(customerId);
+
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } else {
+            // It's a customer, check if the authenticated user's ID matches the path variable
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            String authenticatedUserId = userDetails.getUserId();
+
+            if (!authenticatedUserId.equals(customerId)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
         }
         AppointmentResponseModel appointment = appointmentService.updateAppointmentStatus(appointmentId, isConfirm);
         if (appointment == null) {

@@ -1,11 +1,23 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import authService from '../../Services/auth.service';
 
 const HomeOption = ({ src, label }) => {
   const navigate = useNavigate();
 
   function navigateToNext() {
-    navigate(`/admin/${label}`);
+    const currentUser = authService.getCurrentUser();
+
+    if (currentUser) {
+      const userRoles = currentUser.roles;
+
+      if (userRoles.includes('ROLE_CUSTOMER')) {
+        navigate(`/customer/${label}`);
+      } else if (userRoles.includes('ROLE_ADMIN')) {
+        navigate(`/admin/${label}`);
+      }
+      // Add more conditions for other roles if needed
+    }
   }
 
   return (

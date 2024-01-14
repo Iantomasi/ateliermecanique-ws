@@ -38,6 +38,22 @@ function Login() {
     }, []); 
 
     useEffect(() => {
+      
+      const currentUser = authService.getCurrentUser();
+  
+      if (currentUser) {
+        const userRoles = currentUser.roles;
+  
+        if (userRoles.includes('ROLE_CUSTOMER')) {
+          navigate('/user');
+        } else if (userRoles.includes('ROLE_ADMIN')) {
+          navigate('/admin');
+        }
+       
+      }
+    }, []);
+
+    useEffect(() => {
         google.accounts.id.initialize({
             client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID || '',
             callback: handleGoogleLogin

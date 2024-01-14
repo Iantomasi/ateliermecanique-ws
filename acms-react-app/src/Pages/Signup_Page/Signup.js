@@ -33,6 +33,22 @@ function Signup() {
         });
     }, []); 
 
+    useEffect(() => {
+      
+        const currentUser = authService.getCurrentUser();
+    
+        if (currentUser) {
+          const userRoles = currentUser.roles;
+    
+          if (userRoles.includes('ROLE_CUSTOMER')) {
+            navigate('/user');
+          } else if (userRoles.includes('ROLE_ADMIN')) {
+            navigate('/admin');
+          }
+         
+        }
+      }, []);
+
     function handleSignup(event) {
         event.preventDefault();
 
