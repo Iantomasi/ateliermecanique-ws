@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebook, faGoogle, faApple } from '@fortawesome/free-brands-svg-icons';
+import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons';
+import { LoginSocialFacebook, LoginSocialInstagram} from 'reactjs-social-login';
 import NavBar from '../../Components/Navigation_Bars/Not_Logged_In/NavBar.js';
 import Footer from '../../Components/Footer/Footer.js';
 import { useNavigate } from 'react-router-dom';
 import authService from '../../Services/auth.service.js';
 import userService from '../../Services/user.service.js';
-
+import axios from 'axios';
 function Signup() {
     
     const navigate = useNavigate();
@@ -18,6 +19,9 @@ function Signup() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [publicContent, setPublicContent] = useState(null);
     const [message, setMessage] = useState('');
+    const googleButton = useRef(null);
+    const REDIRECT_URI = window.location.href;
+    const google = window.google;
 
     useEffect(() => {
       userService.getPulicContent()
@@ -48,6 +52,76 @@ function Signup() {
          
         }
       }, []);
+
+      useEffect(() => {
+        google.accounts.id.initialize({
+            client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID || '',
+            callback: handleGoogleLogin
+        });
+    }, []);
+
+
+    const handleGoogleLogin = (response) => {
+        const jwtToken = response.credential;
+    
+        authService.googleLogin(jwtToken)
+            .then(res => {
+                const userRoles = res.roles;
+    
+                if (userRoles.includes('ROLE_CUSTOMER')){
+                    navigate('/user');
+                }
+                else {
+                    alert("User doesn't have required roles.");
+                }
+            })
+            .catch(error => {
+                console.error('Error logging in', error);
+            });
+    };
+
+    const handleGoogleButtonClick = () => {
+        google.accounts.id.prompt();
+    };
+
+    const handleFacebookLogin = (response) => {
+        const token = response.data.accessToken;
+
+        authService.facebookLogin(token)
+        .then(res => {
+                const userRoles = res.roles;
+    
+                if (userRoles.includes('ROLE_CUSTOMER')){
+                    navigate('/user');
+                }
+                else {
+                    alert("User doesn't have required roles.");
+                }
+            })
+            .catch(error => {
+                console.error('Error logging in', error);
+            });
+    }
+
+    const handleInstagramLogin = (response) => {
+
+        sessionStorage.setItem('userToken', response.data.access_token);
+        sessionStorage.setItem('provider', 'instagram');
+        sessionStorage.setItem('user', JSON.stringify(response.data));
+        
+        //This is just for now, we need to get our app verified by instagram in order to request for the user's email, first name and last name.
+        const userAccess = {
+            token: response.data.access_token
+          }
+
+         axios.post('http://localhost:8080/api/v1/auth/instagram-login', userAccess)
+        .then(res => {
+            res.data.role === "CUSTOMER" ? navigate('/user') : navigate('/admin');
+        })
+        .catch(error => {
+            console.error('Error loging in', error);
+        })
+    }
 
     function handleSignup(event) {
         event.preventDefault();
@@ -96,18 +170,33 @@ function Signup() {
                     <div className="text-center mb-8 mt-5">
                         <p>Or Login With</p>
                         <div className="flex justify-center mt-5">
-                            <button className="border border-black bg-white p-4 pt-6 text-5xl mr-4 rounded w-60">
-                                <FontAwesomeIcon icon={faFacebook} style={{ color: '#1877F2' }} />
-                            </button>
-
-                            <button className="border border-black bg-white p-4 pt-6 text-center text-5xl rounded w-60 flex items-center justify-center mr-4">
-                                <img src="googleIcon.svg" alt="Google Icon" />
-                            </button>
-
-                            <button className="border border-black bg-white p-4 pt-6 text-5xl rounded w-60">
-                                <FontAwesomeIcon icon={faApple} />
-                            </button>
-                        </div>
+                    <LoginSocialFacebook
+                      appId={process.env.REACT_APP_FACEBOOK_APP_ID || ''}
+                      onResolve={handleFacebookLogin}
+                      onReject={(error) => console.log(error)}
+                    >
+                      <button className="border border-black bg-white p-4 pt-6 text-5xl mr-4 rounded w-60 hover:scale-110 hover:cursor-pointer">
+                        <FontAwesomeIcon icon={faFacebook} style={{ color: '#1877F2' }} />
+                      </button>
+                    </LoginSocialFacebook>
+      
+                    <div ref={googleButton} className=" hover:scale-110 hover:cursor-pointer border border-black bg-white p-4 pt-6 text-center text-5xl rounded w-60 flex items-center justify-center mr-4" onClick={handleGoogleButtonClick}>
+                      <img src="/googleIcon.svg" alt="Google Icon"/>
+                    </div>
+      
+                    <LoginSocialInstagram
+                      appId={process.env.REACT_APP_INSTAGRAM_APP_ID || ''}
+                      client_id={process.env.REACT_APP_INSTAGRAM_CLIENT_ID || ''}
+                      client_secret={process.env.REACT_APP_INSTAGRAM_APP_SECRET || ''}
+                      redirect_uri={REDIRECT_URI}
+                      onResolve={handleInstagramLogin}
+                      onReject={(error) => console.log(error)}
+                    >
+                      <button className="border border-black bg-white p-4 pt-6 text-5xl rounded w-60 hover:scale-110 hover:cursor-pointer">
+                        <FontAwesomeIcon icon={faInstagram} />
+                      </button>
+                    </LoginSocialInstagram>
+                  </div>
                     </div>
                 </div>) : (
                     <div className="text-center">
