@@ -54,6 +54,7 @@ public class AppointmentController {
         return ResponseEntity.ok(appointment);
     }
 
+<<<<<<< HEAD
     @DeleteMapping({"/appointments/{appointmentId}","/customers/{customerId}/appointments/{appointmentId}"})
     public ResponseEntity<Void> deleteAppointmentByAppointmentId(@PathVariable String appointmentId) {
         try{
@@ -62,6 +63,15 @@ public class AppointmentController {
         }catch(Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+=======
+    @PostMapping({"/customers/{customerId}/appointments","/appointments"})
+    public ResponseEntity<AppointmentResponseModel> addAppointmentToCustomerAccount(@PathVariable String customerId, @RequestBody AppointmentRequestModel appointmentRequestModel) {
+        AppointmentResponseModel appointment = appointmentService.addAppointmentToCustomerAccount(customerId, appointmentRequestModel);
+        if (appointment == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(appointment);
+>>>>>>> 97dc299 (Add new appointment back end working)
     }
 
     @DeleteMapping("/appointments/cancelled")
