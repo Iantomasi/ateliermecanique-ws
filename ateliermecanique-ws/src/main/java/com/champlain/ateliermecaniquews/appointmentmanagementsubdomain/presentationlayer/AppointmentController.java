@@ -54,6 +54,16 @@ public class AppointmentController {
         return ResponseEntity.ok(appointment);
     }
 
+    @DeleteMapping({"/appointments/{appointmentId}","/customers/{customerId}/appointments/{appointmentId}"})
+    public ResponseEntity<Void> deleteAppointmentByAppointmentId(@PathVariable String appointmentId) {
+        try{
+            appointmentService.deleteAppointmentByAppointmentId(appointmentId);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
     @DeleteMapping("/appointments/cancelled")
     public ResponseEntity<Void> deleteAllCancelledAppointments(){
     try{

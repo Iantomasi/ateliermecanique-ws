@@ -9,6 +9,7 @@ import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -164,6 +165,27 @@ class AppointmentControllerIntegrationTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    void deleteAppointmentByAppointmentId_shouldSucceed() throws Exception {
+        // Arrange
+        String appointmentId = testAppointmentId;
+        doNothing().when(appointmentService).deleteAppointmentByAppointmentId(appointmentId);
+
+        // Act & Assert
+        mockMvc.perform(delete("/api/v1/appointments/{appointmentId}", appointmentId))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deleteAppointmentByAppointmentId_notFound() throws Exception {
+        // Arrange
+        String nonExistentAppointmentId = "nonExistentAppointmentId";
+        doThrow(new NotFoundException("Appointment not found")).when(appointmentService).deleteAppointmentByAppointmentId(nonExistentAppointmentId);
+
+        // Act & Assert
+        mockMvc.perform(delete("/api/v1/appointments/{appointmentId}", nonExistentAppointmentId))
+                .andExpect(status().isNotFound());
+    }
 
 
     @Test

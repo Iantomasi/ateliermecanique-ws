@@ -109,3 +109,12 @@ INSERT INTO appointments (appointment_id, customer_id, vehicle_id, appointment_d
 
 -- Appointment 10 (Mason Rodriguez)
 INSERT INTO appointments (appointment_id, customer_id, vehicle_id, appointment_date, services, comments, status) VALUE ('1008dc5c-d460-443f-8f37-a174284f868l', 'yzab8cd5-3e6f-8796-2abi-96330c6bw164', '08hh8i9d-5ii6-9aj7-dkj8-7j8k9l2n22', '2024-03-24 18:00', 'Brakes', 'None', 'PENDING');
+
+-- Appointment 11 (Mason Rodriguez 2)
+INSERT INTO appointments (appointment_id, customer_id, vehicle_id, appointment_date, services, comments, status) VALUE ('1008dc5c-d460-443f-8f37-a174284f8682', 'yzab8cd5-3e6f-8796-2abi-96330c6bw164', '08hh8i9d-5ii6-9aj7-dkj8-7j8k9l2n22', '2024-04-16 10:00', 'Steering & Suspension', 'None', 'PENDING');
+
+-- Appointment 12 (Mason Rodriguez 3)
+INSERT INTO appointments (appointment_id, customer_id, vehicle_id, appointment_date, services, comments, status) VALUE ('1008dc5c-d460-443f-8f37-a174284f8683', 'yzab8cd5-3e6f-8796-2abi-96330c6bw164', '08hh8i9d-5ii6-9aj7-dkj8-7j8k9l2n22', '2024-06-25 19:00', 'Alignment', 'None', 'PENDING');
+
+-- Appointment 13 (Mason Rodriguez 4)
+INSERT INTO appointments (appointment_id, customer_id, vehicle_id, appointment_date, services, comments, status) VALUE ('1008dc5c-d460-443f-8f37-a174284f8684', 'yzab8cd5-3e6f-8796-2abi-96330c6bw164', '08hh8i9d-5ii6-9aj7-dkj8-7j8k9l2n22', '2024-09-25 19:00', 'Oil Change', 'None', 'PENDING');

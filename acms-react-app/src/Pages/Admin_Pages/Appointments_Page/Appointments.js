@@ -4,7 +4,7 @@ import Navbar from '../../../Components/Navigation_Bars/Logged_In/NavBar.js';
 import Footer from '../../../Components/Footer/Footer.js';
 import MechanicDisplay from '../../../Components/User_Components/MechanicDisplay.js';
 import axios from 'axios';
-import AppointmentBlock from '../AppointmentDetails_Page/AppointmentBlock.js';
+import AppointmentBlock from '../AppointmentSpecifics_Page/AppointmentBlock.js';
 
 function Appointments() {
   const [appointments, setAppointments] = useState([]);
@@ -120,13 +120,14 @@ function Appointments() {
             <p className="text-xl font-bold mb-4">Are you sure you want to delete all cancelled appointments?</p>
             <div className="flex justify-end">
               <button
-                className="text-white bg-red-500 border-none px-4 py-2 rounded font-bold mr-2"
+                className="px-4 py-2 bg-yellow-400 rounded  hover:bg-yellow-500 focus:outline-none focus:ring focus:ring-gray-200 mr-1"
                 onClick={cancelDelete}
               >
                 No
               </button>
+              
               <button
-                className="text-white bg-green-500 border-none px-4 py-2 rounded font-bold"
+                className="px-4 py-2 mr-2 bg-red-500 rounded text-white hover:bg-red-600 focus:outline-none focus:ring focus:ring-red-200 ml-1"
                 onClick={() => {
                   executeDeleteAllCancelledAppointments();
                 }}

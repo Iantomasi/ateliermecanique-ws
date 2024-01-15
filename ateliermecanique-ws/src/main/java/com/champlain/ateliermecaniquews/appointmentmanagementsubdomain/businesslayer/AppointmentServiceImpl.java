@@ -89,5 +89,13 @@ public class AppointmentServiceImpl implements AppointmentService{
 
     }
 
+    @Override
+    public void deleteAppointmentByAppointmentId(String appointmentId) {
+        Appointment appointment = appointmentRepository.findAppointmentByAppointmentIdentifier_AppointmentId(appointmentId);
+        if(appointment != null){
+            appointmentRepository.delete(appointment);
+        }
+    }
+
 
 }

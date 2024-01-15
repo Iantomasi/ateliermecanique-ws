@@ -17,15 +17,10 @@ import static org.mockito.ArgumentMatchers.contains;
 @SpringBootTest
 public class FrontEndTesting {
 
-
         @BeforeEach()
-        void setUp() {          // comment out the driver you don't use before testing
-
+        void setUp() {
             WebDriverManager.chromedriver().setup();
              Configuration.browser = "chrome";
-
-
-
         }
 
         @Test
@@ -40,7 +35,6 @@ public class FrontEndTesting {
             $("p").shouldHave(text("CUSTOMER ACCOUNTS"));
         }
 
-        // GIULIANO 01
         @Test
         public void getCustomerAccountByCustomerId() {
             open("https://localhost:3000/");
@@ -58,7 +52,6 @@ public class FrontEndTesting {
         }
 
 
-        // CRISTIAN 01
         @Test
         public void updateCustomerAccountByCustomerId() {
             open("https://localhost:3000/");
@@ -225,7 +218,7 @@ public class FrontEndTesting {
             $("input[name='make']").setValue("Chevrolet");
             $("input[name='model']").setValue("Cruze");
             $("input[name='year']").setValue("2016");
-            $("select[name='transmissionType']").selectOption("Manual");
+            $("select[name='transmission_type']").selectOption("Manual");
             $("input[name='mileage']").setValue("50000");
 
             $("button[type='submit']").click();
@@ -234,7 +227,6 @@ public class FrontEndTesting {
         }
 
 
-        // MOHIT 01
         @Test
         public void deleteVehicleByVehicleId() {
             open("https://localhost:3000/");
@@ -289,13 +281,8 @@ public class FrontEndTesting {
     }
 
 
-    /*
     @Test
     public void updateAppointmentStatusAdmin(){
-=======
-    @Test
-    public void getAppointmentById() {
->>>>>>> 10fcf8b (All testing and front end done)
         open("https://localhost:3000/");
         $("a[href='/login']").click();
         sleep(1000);
@@ -303,12 +290,12 @@ public class FrontEndTesting {
         sleep(1000);
         $("img[src='appointments.svg']").click();
         sleep(1000);
-<<<<<<< HEAD
         $("p").shouldHave(text("APPOINTMENTS"));
         $$("button").findBy(text("CANCEL")).click();
         sleep(1000);
     }
-     */
+
+
     @Test
     public void getAllAppointmentsByCustomerId(){
         open("https://localhost:3000/");
@@ -352,7 +339,7 @@ public class FrontEndTesting {
 
 
     @Test
-    public void getAppointmentById() {
+    public void getAppointmentByAppointmentId() {
         open("https://localhost:3000/");
         $("a[href='/login']").click();
         sleep(1000);
@@ -361,12 +348,78 @@ public class FrontEndTesting {
         $("img[src='appointments.svg']").click();
         sleep(1000);
 
-        String appointmentId = "1508dc5c-d460-443f-8f37-a174284f868c";
+        String appointmentId = "1008dc5c-d460-443f-8f37-a174284f8684";
         SelenideElement appointmentLink = $$("td").findBy(text(appointmentId));
         appointmentLink.shouldBe(visible).click();
         sleep(1000);
 
         $("p").shouldHave(text("APPOINTMENT DETAILS"));
+    }
+
+    @Test
+    public void deleteAppointmentByAppointmentId() {
+        open("https://localhost:3000/");
+        $("a[href='/login']").click();
+        sleep(1000);
+        $("button[type='submit']").click();
+        sleep(1000);
+        $("img[src='appointments.svg']").click();
+        sleep(1000);
+
+        String appointmentId = "1008dc5c-d460-443f-8f37-a174284f8682";
+        SelenideElement appointmentLink = $$("td").findBy(text(appointmentId));
+        appointmentLink.shouldBe(visible).click();
+        sleep(1000);
+
+        $$("button").findBy(text("delete")).click();
+
+        $(".bg-black").shouldBe(visible);
+        $$("button").findBy(text("Yes")).click();
+
+        sleep(1000);
+        switchTo().alert().accept();
+
+        $("p").shouldHave(text("APPOINTMENTS"));
+    }
+
+    @Test
+    public void deleteAppointmentByAppointmentIdCustomer() {
+        open("https://localhost:3000/");
+        $("a[href='/login']").click();
+        sleep(1000);
+        $("button[type='submit']").click();
+        sleep(1000);
+        $("img[src='customersImage.svg']").click();
+        sleep(1000);
+
+        // mason rodriguez customer
+        String customerId = "yzab8cd5-3e6f-8796-2abi-96330c6bw164";
+        String appointmentIdToDelete = "1008dc5c-d460-443f-8f37-a174284f8683";
+
+        $$("td").findBy(text(customerId)).click();
+        Selenide.sleep(2000);
+
+        $("a[href^='/admin/customers/" + customerId + "/appointments']").click();
+        $("p").shouldHave(text("APPOINTMENTS"));
+        Selenide.sleep(2000);
+
+
+        SelenideElement appointmentLink = $$("td").findBy(text(appointmentIdToDelete));
+        if (appointmentLink.exists()) {
+            appointmentLink.click();
+        } else {
+            throw new NoSuchElementException("Appointment link not found for ID: " + appointmentIdToDelete);
+        }
+
+        $$("button").findBy(text("delete")).click();
+
+        $(".bg-black").shouldBe(visible);
+        $$("button").findBy(text("Yes")).click();
+
+        sleep(1000);
+        switchTo().alert().accept();
+
+        $("p").shouldHave(text("APPOINTMENTS"));
     }
 
 
