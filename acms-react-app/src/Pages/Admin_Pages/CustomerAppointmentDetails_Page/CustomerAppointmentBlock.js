@@ -1,7 +1,9 @@
 import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const CustomerAppointmentBlock = ({ appointment, refreshCustomerAppointments }) => {
+  const navigate = useNavigate();
   const handleStatusChange = (isConfirm) => {
     axios.put(`http://localhost:8080/api/v1/customers/${appointment.customerId}/appointments/${appointment.appointmentId}/updateStatus?isConfirm=${isConfirm}`)
       .then(response => {
@@ -12,9 +14,15 @@ const CustomerAppointmentBlock = ({ appointment, refreshCustomerAppointments }) 
       });
   };
 
+  const handleCustomerAppointmentClick = () => {
+    navigate(`/admin/customers/${appointment.customerId}/appointments/${appointment.appointmentId}`);
+  };
+
   return (
     <tr className='hover:bg-gray-200 hover:cursor-pointer h-10'>
-      <td>{appointment.appointmentId}</td>
+     <td className='hover:cursor-pointer' onClick={handleCustomerAppointmentClick}>
+              {appointment.appointmentId}
+      </td>
       <td>{appointment.appointmentDate}</td>
       <td>{appointment.services}</td>
       <td>{appointment.vehicleId}</td>

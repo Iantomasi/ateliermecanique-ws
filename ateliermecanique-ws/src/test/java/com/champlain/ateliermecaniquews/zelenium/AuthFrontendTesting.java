@@ -16,13 +16,9 @@ public class AuthFrontendTesting {
 
 
     @BeforeEach()
-    void setUp() {          // comment out the driver you don't use before testing
-
+    void setUp() {
         WebDriverManager.chromedriver().setup();
         Configuration.browser = "chrome";
-
-        //WebDriverManager.firefoxdriver().setup();
-        //Configuration.browser = "firefox";
     }
 
     @Test()
