@@ -10,6 +10,7 @@ import CustomerInfo from "./CustomerInfo";
 import CommentBox from "./CommentBox";
 import Navbar from '../../../Components/Navigation_Bars/Logged_In/NavBar.js';
 import Footer from '../../../Components/Footer/Footer.js';
+import { useNavigate } from 'react-router-dom';
 
 export default function Calendar() {
     const days = ["S", "M", "T", "W", "T", "F", "S"];
@@ -20,13 +21,12 @@ export default function Calendar() {
     const [selectedTime, setSelectedTime] = useState('10:00');
     const [selectedService, setSelectedService] = useState(null);
     const [comments, setComments] = useState('');
+    const navigate = useNavigate();
 
     const [customerId, setCustomerId] = useState('');
     const [vehicleId, setVehicleId] = useState('');
 
     const handleSubmit = () => {
-        // Check if customerId or vehicleId is not filled
-
 
         const appointmentData = {
             customerId,
@@ -39,7 +39,6 @@ export default function Calendar() {
         if (!customerId || !vehicleId) {
             console.error("Customer ID and Vehicle ID are required.");
             console.log("Appointment data:", appointmentData)
-            // Optionally, display an error message to the user here
             return;
         }
         console.log("Submitting appointment:", appointmentData);
@@ -59,13 +58,13 @@ export default function Calendar() {
             })
             .then(data => {
                 console.log("Appointment created:", data);
-                // Handle successful submission (e.g., clear form, show success message)
             })
             .catch(error => {
                 console.error("Error creating appointment:", error);
                 console.error("Appointment data:", appointmentData);
-                // Handle submission error (e.g., show error message)
             });
+       navigate('/admin/appointments');
+       //window.location.reload();
     }
 
     const handleCustomerSelect = (customer) => {
@@ -92,6 +91,9 @@ export default function Calendar() {
     return (
         <div>
             <Navbar />
+            <div className="flex justify-center items-center bg-gray-300 w-full py-6">
+                <p className="text-2xl font-bold">New Appointment</p>
+            </div>
                     <div className="flex justify-center items-center h-screen">
                         <div
                             className="bg-gray-50 p-6 rounded shadow-lg"

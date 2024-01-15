@@ -4,13 +4,18 @@ import Navbar from '../../../Components/Navigation_Bars/Logged_In/NavBar.js';
 import Footer from '../../../Components/Footer/Footer.js';
 import MechanicDisplay from '../../../Components/User_Components/MechanicDisplay.js';
 import axios from 'axios';
+<<<<<<< HEAD
 import AppointmentBlock from '../AppointmentSpecifics_Page/AppointmentBlock.js';
+=======
+import AppointmentBlock from '../AppointmentDetails_Page/AppointmentBlock.js';
+import { useNavigate } from 'react-router-dom';
+>>>>>>> 1141d5f (front end bugs)
 
 function Appointments() {
   const [appointments, setAppointments] = useState([]);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const hasCancelledAppointments = appointments.some(appointment => appointment.status === 'CANCELLED');
-
+  const navigate = useNavigate();
 
   useEffect(() => {
     getAppointments();
@@ -36,6 +41,9 @@ function Appointments() {
   function cancelDelete() {
     setShowConfirmation(false);
   }
+  const handleAddAppointmentClick = () => {
+    navigate(`/admin/appointments/newAppointment`);
+  };
 
   function executeDeleteAllCancelledAppointments() {
     axios.delete("http://localhost:8080/api/v1/appointments/cancelled")
@@ -69,7 +77,7 @@ function Appointments() {
                 <input className="w-full rounded border-gray-300 px-4 py-2 focus:outline-none focus:border-indigo-500" type="text" placeholder="Search..." />
                 <span className="text-gray-400 cursor-pointer">&#128269;</span>
               </div>
-              <button className="text-white border-none px-4 py-2 rounded font-bold transition duration-300 hover:scale-110 bg-black">
+              <button className="text-white border-none px-4 py-2 rounded font-bold transition duration-300 hover:scale-110 bg-black" onClick={handleAddAppointmentClick}>
                 Add+
               </button>
               {hasCancelledAppointments && (
