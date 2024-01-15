@@ -1,0 +1,47 @@
+@startuml
+
+actor User
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant LoginPage as "<<View>>\nLoginPage"
+participant OAuthService as "<<Service>>\nOAuthService"
+participant JavaSpringSecurity as "<<Backend>>\nJavaSpringSecurity"
+participant Database as "<<Database>>\nDatabase"
+participant JavaUtils as "<<Utils>>\nJavaUtils"
+
+User -> ReactApplication: Accesses login page
+activate ReactApplication
+
+ReactApplication -> LoginPage: render()
+activate LoginPage
+
+User -> LoginPage: Enters credentials (email, password)
+LoginPage -> OAuthService: initiateLogin(email, password)
+activate OAuthService
+
+OAuthService -> JavaSpringSecurity: authenticate(email, password)
+activate JavaSpringSecurity
+
+JavaSpringSecurity -> Database: Query user by email
+activate Database
+
+Database --> JavaSpringSecurity: User details
+deactivate Database
+
+JavaSpringSecurity --> OAuthService: User authenticated
+deactivate JavaSpringSecurity
+
+OAuthService -> JavaUtils: generateToken(userId, username)
+activate JavaUtils
+
+JavaUtils --> OAuthService: Token generated
+deactivate JavaUtils
+
+OAuthService -> ReactApplication: Set token in session/storage
+deactivate OAuthService
+
+ReactApplication --> User: Redirect to home/dashboard
+deactivate ReactApplication
+deactivate LoginPage
+
+@enduml

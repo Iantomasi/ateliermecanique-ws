@@ -1,0 +1,27 @@
+@startuml
+
+actor User
+
+participant JwtAuthenticationFilter as "<<Filter>>\nJwtAuthenticationFilter"
+participant JwtTokenProvider as "<<Utils>>\nJwtTokenProvider"
+participant JavaSpringSecurity as "<<Backend>>\nJavaSpringSecurity"
+
+User -> JwtAuthenticationFilter: Sends request with token
+activate JwtAuthenticationFilter
+
+JwtAuthenticationFilter -> JwtTokenProvider: Extract token from header
+activate JwtTokenProvider
+
+JwtTokenProvider -> JavaSpringSecurity: Validate token
+activate JavaSpringSecurity
+
+JavaSpringSecurity --> JwtTokenProvider: User authenticated
+deactivate JavaSpringSecurity
+
+JwtTokenProvider --> JwtAuthenticationFilter: Authentication result
+deactivate JwtTokenProvider
+
+JwtAuthenticationFilter --> User: Authentication result
+deactivate JwtAuthenticationFilter
+
+@enduml
