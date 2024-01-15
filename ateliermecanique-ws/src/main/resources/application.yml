@@ -58,20 +58,6 @@ spring:
     init:
       platform: mysql
       mode: always
-#
-#---
-## Security Configuration
-#spring:
-#  security:
-#    oauth2:
-#      client:
-#        registration:
-#          google:
-#            client-id: 539616712207-be30bib3kb2fgvahdol0l6uvv26ra2u6.apps.googleusercontent.com
-#            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
-#            scope:
-#              -email
-#              -profile
 
 server.port: 8080
 spring.datasource.hikari.initializationFailTimeout: 60000
