@@ -16,14 +16,15 @@ jobs:
           distribution: 'adopt'
 
 
-      - name: Change to backend directory
-        run: cd ateliermecanique-ws
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
+        working-directory: ateliermecanique-ws
       - name: Run Gradle build
         run: ./gradlew build
+        working-directory: ateliermecanique-ws
       - name: Run Selenium tests
-        run: ./gradlew build
+        run: ./gradlew build # This might be redundant if your build already runs the tests
+        working-directory: ateliermecanique-ws
 
   frontend:
     needs: backend
