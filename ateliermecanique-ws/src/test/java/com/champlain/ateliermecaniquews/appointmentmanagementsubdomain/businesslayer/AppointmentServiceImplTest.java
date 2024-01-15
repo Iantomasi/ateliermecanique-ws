@@ -5,7 +5,9 @@ import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.AppointmentRepository;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Status;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datamapperlayer.AppointmentResponseMapper;
+import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentRequestModel;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentResponseModel;
+import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccount;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -353,6 +355,56 @@ class AppointmentServiceImplTest {
 
         // Assert
         verify(appointmentRepository, never()).deleteAll(anyList());
+    }
+    @Test
+    void addAppointmentToCustomerAccount_ShouldAddAppointment() {
+        // Arrange
+        String customerId = "testCustomerId";
+        LocalDateTime appointmentDateTime = LocalDateTime.now();
+        AppointmentRequestModel requestModel = AppointmentRequestModel.builder()
+                .customerId(customerId)
+                .vehicleId("testVehicleId")
+                .appointmentDate(appointmentDateTime)
+                .services("Test Service")
+                .comments("No comments")
+                .status(Status.PENDING)
+                .build();
+
+        CustomerAccount customerAccount = new CustomerAccount();
+
+        when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId))
+                .thenReturn(customerAccount);
+
+        Appointment savedAppointment = new Appointment();
+        // set properties of savedAppointment as needed
+
+        when(appointmentRepository.save(any(Appointment.class)))
+                .thenReturn(savedAppointment);
+
+        AppointmentResponseModel expectedResponse = AppointmentResponseModel.builder()
+                .appointmentId("1")
+                .customerId(customerId)
+                .vehicleId("testVehicleId")
+                .appointmentDate(appointmentDateTime)
+                .services("Test Service")
+                .comments("No comments")
+                .status(Status.PENDING)
+                .build();
+
+        when(appointmentResponseMapper.entityToResponseModel(savedAppointment))
+                .thenReturn(expectedResponse);
+
+        // Act
+        AppointmentResponseModel result = appointmentService.addAppointmentToCustomerAccount(customerId, requestModel);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(expectedResponse.getCustomerId(), result.getCustomerId());
+        assertEquals(expectedResponse.getServices(), result.getServices());
+        // Additional assertions as needed
+
+        verify(customerAccountRepository, times(1)).findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
+        verify(appointmentRepository, times(1)).save(any(Appointment.class));
     }
 
 

@@ -1,8 +1,9 @@
     import React, { useState, useEffect } from 'react';
 
-    function CustomerInfo() {
+    function CustomerInfo({ updateCustomerId, updateVehicleId }) {
         const [customers, setCustomers] = useState([]);
-        const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+        const [selectedCustomerId, setSelectedCustomerId] = useState('');
+        const [selectedVehicleId, setSelectedVehicleId] = useState('');
         const [vehicles, setVehicles] = useState([]);
 
         useEffect(() => {
@@ -32,6 +33,8 @@
         const handleCustomerSelect = (event) => {
             const customerId = event.target.value;
             setSelectedCustomerId(customerId);
+            updateCustomerId(customerId);
+
 
             // Log the selected customer ID
             console.log('Selected Customer ID:', customerId);
@@ -47,9 +50,14 @@
                     .then(data => setVehicles(data))
                     .catch(error => console.error('Error fetching vehicles:', error));
             } else {
-                // Clear vehicles if no customer is selected
                 setVehicles([]);
             }
+        };
+
+        const handleVehicleSelect = (event) => {
+            const vehicleId = event.target.value;
+            setSelectedVehicleId(vehicleId);
+            updateVehicleId(vehicleId);
         };
 
         return (
@@ -71,18 +79,21 @@
                     </select>
                 </div>
                 <div>
-                    <label>Vehicle</label>
+                    <label htmlFor="vehicle-select">Vehicle</label>
                     <select
+                        id="vehicle-select"
                         disabled={!selectedCustomerId}
+                        onChange={handleVehicleSelect}
                         style={{ minWidth: '100%', padding: '0.5rem' }}
                     >
                         <option key="default-vehicle" value="">Select a Vehicle</option>
                         {vehicles.map((vehicle) => (
-                            <option key={vehicle.id || vehicle.model} value={vehicle.id}>
+                            <option key={vehicle.vehicleId} value={vehicle.vehicleId}>
                                 {vehicle.model}
                             </option>
                         ))}
                     </select>
+
                 </div>
             </div>
         );

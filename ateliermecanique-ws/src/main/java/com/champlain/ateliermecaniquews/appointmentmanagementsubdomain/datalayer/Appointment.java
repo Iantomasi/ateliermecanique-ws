@@ -28,7 +28,7 @@ public class Appointment {
         private String vehicleId;
 
 
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
         LocalDateTime appointmentDate;
 
         private String services;

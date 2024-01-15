@@ -10,6 +10,7 @@ import CustomerInfo from "./CustomerInfo";
 import CommentBox from "./CommentBox";
 import Navbar from '../../../Components/Navigation_Bars/Logged_In/NavBar.js';
 import Footer from '../../../Components/Footer/Footer.js';
+import { useNavigate } from 'react-router-dom';
 
 export default function Calendar() {
     const days = ["S", "M", "T", "W", "T", "F", "S"];
@@ -20,13 +21,66 @@ export default function Calendar() {
     const [selectedTime, setSelectedTime] = useState('10:00');
     const [selectedService, setSelectedService] = useState(null);
     const [comments, setComments] = useState('');
+    const navigate = useNavigate();
+
+    const [customerId, setCustomerId] = useState('');
+    const [vehicleId, setVehicleId] = useState('');
+
+    const handleSubmit = () => {
+
+        const appointmentData = {
+            customerId,
+            vehicleId,
+            appointmentDate: selectDate.format("YYYY-MM-DD") + 'T' + selectedTime,
+            services: selectedService,
+            comments,
+            status: 'PENDING'
+        };
+        if (!customerId || !vehicleId) {
+            console.error("Customer ID and Vehicle ID are required.");
+            console.log("Appointment data:", appointmentData)
+            return;
+        }
+        console.log("Submitting appointment:", appointmentData);
+
+        const url = `http://localhost:8080/api/v1/customers/${customerId}/appointments`;
+
+        fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(appointmentData)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Appointment created:", data);
+            })
+            .catch(error => {
+                console.error("Error creating appointment:", error);
+                console.error("Appointment data:", appointmentData);
+            });
+       navigate('/admin/appointments');
+       //window.location.reload();
+    }
+
+    const handleCustomerSelect = (customer) => {
+        setCustomerId(customer.id);
+        console.log("Selected Customer:", customer);
+    }
 
     const handleDayClick = (date) => {
         setSelectDate(date);
     };
-
-    const handleSelectService = (service) => {
+    const handleServiceSelect = (service) => {
         setSelectedService(service);
+        console.log("Selected Service:", service);
+    };
+    const handleSelectedTimeChange = (newTime) => {
+        setSelectedTime(newTime);
     };
 
     useEffect(() => {
@@ -37,6 +91,9 @@ export default function Calendar() {
     return (
         <div>
             <Navbar />
+            <div className="flex justify-center items-center bg-gray-300 w-full py-6">
+                <p className="text-2xl font-bold">New Appointment</p>
+            </div>
                     <div className="flex justify-center items-center h-screen">
                         <div
                             className="bg-gray-50 p-6 rounded shadow-lg"
@@ -44,8 +101,11 @@ export default function Calendar() {
                         >
                             <div className="flex flex-col sm:flex-row gap-10 sm:divide-x justify-center items-center">
                                 <div className="flex flex-col gap-4">
-                                    <CustomerInfo />
-                                    <ServiceList />
+                                    <CustomerInfo
+                                        updateCustomerId={setCustomerId}
+                                        updateVehicleId={setVehicleId}
+                                    />
+                                    <ServiceList onSelectService={handleServiceSelect} />
                                 </div>
                             <div className="w-96 h-96 ">
                                 <div className="flex justify-between items-center">
@@ -129,8 +189,8 @@ export default function Calendar() {
                                     Schedule for {selectDate.toDate().toDateString()}
                                 </h1>
                                 <p className="text-gray-400">No meetings for today.</p>
-                                <TimeSlots />
-                                <CommentBox />
+                                <TimeSlots onTimeSelect={handleSelectedTimeChange} />
+                                <CommentBox setComments={setComments}/>
                             </div>
                         </div>
                             <div className="mt-4">
@@ -143,6 +203,7 @@ export default function Calendar() {
                                 <button
                                     className="bg-gray-700 text-white hover:bg-gray-800 font-semibold py-2 px-4 rounded-r focus:outline-none focus:shadow-outline"
                                     type="button"
+                                    onClick={handleSubmit}
                                 >
                                     Confirm
                                 </button>

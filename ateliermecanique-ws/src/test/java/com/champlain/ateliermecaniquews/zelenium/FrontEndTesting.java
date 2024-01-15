@@ -6,13 +6,15 @@ import com.codeborne.selenide.SelenideElement;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 import org.springframework.boot.test.context.SpringBootTest;
 
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
-import static org.mockito.ArgumentMatchers.contains;
 
 @SpringBootTest
 public class FrontEndTesting {
@@ -442,6 +444,50 @@ public class FrontEndTesting {
         switchTo().alert().accept();
 
         $("p").shouldHave(text("APPOINTMENTS"));
+    }
+
+    @Test
+    public void addAppointmentToCustomerAccount(){
+        open("https://localhost:3001/");
+        $("a[href='/login']").click();
+        sleep(2000);
+        $("button[type='submit']").click();
+        sleep(2000);
+        $("img[src='appointments.svg']").click();
+        sleep(2000);
+        $$("button").findBy(text("Add")).click();
+        sleep(2000);
+        String timeToSelect = "09:00";
+        $$("button").findBy(text(timeToSelect)).click();
+        sleep(2000);
+        String dateToSelect = "31";
+        $$("h1").filterBy(text(dateToSelect)).first().click();
+        sleep(2000);
+        // Select a customer from the dropdown
+        String customerName = "John Doe";
+        SelenideElement customerDropdown = $("#customer-select");
+        new Select(customerDropdown).selectByVisibleText(customerName);
+        sleep(2000);
+
+        String vehicleToSelect = "Cruze";
+        SelenideElement vehicleDropdown = $("#vehicle-select");
+        new Select(vehicleDropdown).selectByVisibleText(vehicleToSelect);
+        sleep(2000);
+
+        String servicesToSelect = "Air Conditioning";
+        String buttonSelect = "Select";
+        $$("button").findBy(text(buttonSelect)).click();
+        sleep(2000);
+        SelenideElement commentsTextarea = $("#comments");
+
+        String commentText = "This is a test comment.";
+        commentsTextarea.setValue(commentText);
+        sleep(2000);
+
+        String confirmButtonText = "Confirm";
+        $$("button").findBy(text(confirmButtonText)).click();
+        sleep(10000);
+
     }
 
 

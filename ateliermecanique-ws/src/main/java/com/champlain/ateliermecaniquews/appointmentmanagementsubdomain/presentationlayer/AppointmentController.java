@@ -56,12 +56,20 @@ public class AppointmentController {
 
     @DeleteMapping({"/appointments/{appointmentId}","/customers/{customerId}/appointments/{appointmentId}"})
     public ResponseEntity<Void> deleteAppointmentByAppointmentId(@PathVariable String appointmentId) {
-        try{
+        try {
             appointmentService.deleteAppointmentByAppointmentId(appointmentId);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }catch(Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+    @PostMapping({"/customers/{customerId}/appointments","/appointments"})
+    public ResponseEntity<AppointmentResponseModel> addAppointmentToCustomerAccount(@PathVariable String customerId, @RequestBody AppointmentRequestModel appointmentRequestModel) {
+        AppointmentResponseModel appointment = appointmentService.addAppointmentToCustomerAccount(customerId, appointmentRequestModel);
+        if (appointment == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(appointment);
     }
 
     @DeleteMapping("/appointments/cancelled")

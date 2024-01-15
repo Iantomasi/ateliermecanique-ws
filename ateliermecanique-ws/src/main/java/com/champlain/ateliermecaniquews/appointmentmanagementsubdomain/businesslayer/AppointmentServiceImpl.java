@@ -1,11 +1,14 @@
 package com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.businesslayer;
 
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Appointment;
+import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.AppointmentIdentifier;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.AppointmentRepository;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Status;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datamapperlayer.AppointmentRequestMapper;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datamapperlayer.AppointmentResponseMapper;
+import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentRequestModel;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentResponseModel;
+import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccount;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountRepository;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.VehicleRepository;
 import lombok.AllArgsConstructor;
@@ -65,6 +68,29 @@ public class AppointmentServiceImpl implements AppointmentService{
 
         appointmentRepository.save(appointment);
         return appointmentResponseMapper.entityToResponseModel(appointment);
+    }
+
+    @Override
+    public AppointmentResponseModel addAppointmentToCustomerAccount(String customerId, AppointmentRequestModel appointmentRequestModel) {
+        CustomerAccount customerAccount = customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
+
+        if(customerAccount == null) {
+            log.warn("Customer account not found for customer ID: {}", customerId);
+            return null;
+        }
+
+        Appointment appointment = new Appointment();
+        appointment.setAppointmentIdentifier(new AppointmentIdentifier());
+        appointment.setCustomerId(appointmentRequestModel.getCustomerId());
+        appointment.setVehicleId(appointmentRequestModel.getVehicleId());
+        appointment.setAppointmentDate(appointmentRequestModel.getAppointmentDate());
+        appointment.setServices(appointmentRequestModel.getServices());
+        appointment.setComments(appointmentRequestModel.getComments());
+        appointment.setStatus(Status.PENDING);
+
+        Appointment  savedAppointment = appointmentRepository.save(appointment);
+        return appointmentResponseMapper.entityToResponseModel(savedAppointment);
+
     }
 
     @Override
