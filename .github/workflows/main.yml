@@ -22,9 +22,9 @@ jobs:
       - name: Run Gradle build
         run: ./gradlew build
         working-directory: ateliermecanique-ws
-      - name: Run Selenium tests
-        run: ./gradlew build # This might be redundant if your build already runs the tests
-        working-directory: ateliermecanique-ws
+#      - name: Run Selenium tests
+#        run: ./gradlew build # This might be redundant if your build already runs the tests
+#        working-directory: ateliermecanique-ws
 
   frontend:
     needs: backend
