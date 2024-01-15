@@ -2,6 +2,7 @@ package com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presenta
 
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.businesslayer.AppointmentService;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Status;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,10 @@ class AppointmentControllerUnitTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
 
 
     @MockBean
@@ -199,6 +204,42 @@ class AppointmentControllerUnitTest {
         // Act & Assert
         mockMvc.perform(delete("/api/v1/appointments/cancelled"))
                 .andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    void addAppointmentToCustomerAccount_shouldSucceed() throws Exception {
+        // Arrange
+        String customerId = "testCustomerId";
+        LocalDateTime appointmentDateTime = LocalDateTime.now();
+        AppointmentRequestModel requestModel = AppointmentRequestModel.builder()
+                .customerId(customerId)
+                .vehicleId("testVehicleId")
+                .appointmentDate(appointmentDateTime)
+                .services("Test Service")
+                .comments("No comments")
+                .status(Status.PENDING)
+                .build();
+
+        AppointmentResponseModel responseModel = AppointmentResponseModel.builder()
+                .appointmentId("1")
+                .customerId(customerId)
+                .vehicleId("testVehicleId")
+                .appointmentDate(appointmentDateTime)
+                .services("Test Service")
+                .comments("No comments")
+                .status(Status.PENDING)
+                .build();
+
+        when(appointmentService.addAppointmentToCustomerAccount(eq(customerId), any(AppointmentRequestModel.class)))
+                .thenReturn(responseModel);
+
+        String requestJson = objectMapper.writeValueAsString(requestModel);
+
+        // Act & Assert
+        mockMvc.perform(post("/api/v1/customers/{customerId}/appointments", customerId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk());
     }
 }
 
