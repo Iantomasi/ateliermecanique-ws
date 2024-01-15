@@ -3,6 +3,7 @@ package com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presenta
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.businesslayer.AppointmentService;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Status;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -158,6 +159,27 @@ class AppointmentControllerUnitTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    void deleteAppointmentByAppointmentId_shouldSucceed() throws Exception {
+        // Arrange
+        String appointmentId = "validAppointmentId";
+        doNothing().when(appointmentService).deleteAppointmentByAppointmentId(appointmentId);
+
+        // Act & Assert
+        mockMvc.perform(delete("/api/v1/appointments/{appointmentId}", appointmentId))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deleteAppointmentByAppointmentId_notFound() throws Exception {
+        // Arrange
+        String appointmentId = "nonExistentAppointmentId";
+        doThrow(new NotFoundException("Appointment not found")).when(appointmentService).deleteAppointmentByAppointmentId(appointmentId);
+
+        // Act & Assert
+        mockMvc.perform(delete("/api/v1/appointments/{appointmentId}", appointmentId))
+                .andExpect(status().isNotFound());
+    }
 
     @Test
     void deleteAllCancelledAppointments_shouldSucceed() throws Exception {

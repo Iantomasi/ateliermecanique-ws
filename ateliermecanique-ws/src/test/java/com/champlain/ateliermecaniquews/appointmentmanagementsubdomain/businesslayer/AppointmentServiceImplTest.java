@@ -1,6 +1,7 @@
 package com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.businesslayer;
 
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Appointment;
+import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.AppointmentIdentifier;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.AppointmentRepository;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Status;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datamapperlayer.AppointmentResponseMapper;
@@ -301,6 +302,46 @@ class AppointmentServiceImplTest {
         // Assert
         verify(appointmentRepository, times(1)).deleteAll(cancelledAppointments);
     }
+
+
+    @Test
+    void deleteAppointmentByAppointmentId_shouldSucceed(){
+        // Arrange
+        String appointmentId = "b7024d89-1a5e-4517-3gba-05178u7ar260";
+
+        // Mock the appointment to be deleted
+        Appointment appointmentToDelete = new Appointment(
+                appointmentId,
+                "132b41b2-2bec-4b98-b08d-c7c0e03fe33e",
+                "2024-03-24 11:00",
+                "Preventive Maintenance",
+                "None",
+                Status.PENDING
+        );
+
+        when(appointmentRepository.findAppointmentByAppointmentIdentifier_AppointmentId(appointmentId)).thenReturn(appointmentToDelete);
+
+        // Act
+        appointmentService.deleteAppointmentByAppointmentId(appointmentId);
+
+        // Assert
+        verify(appointmentRepository, times(1)).findAppointmentByAppointmentIdentifier_AppointmentId(appointmentId);
+        verify(appointmentRepository, times(1)).delete(appointmentToDelete);
+    }
+
+    @Test
+    void deleteAppointmentByAppointmentId_appointmentNotFound() {
+        // Arrange
+        String appointmentId = "non-existent-appointment-id";
+        when(appointmentRepository.findAppointmentByAppointmentIdentifier_AppointmentId(appointmentId)).thenReturn(null);
+        // Act
+        appointmentService.deleteAppointmentByAppointmentId(appointmentId);
+        // Assert
+        verify(appointmentRepository, times(1)).findAppointmentByAppointmentIdentifier_AppointmentId(appointmentId);
+        verify(appointmentRepository, never()).delete(any());
+    }
+
+
 
     @Test
     void deleteAllCancelledAppointments_noCancelledAppointments_shouldNotDelete() {

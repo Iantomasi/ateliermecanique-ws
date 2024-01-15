@@ -13,4 +13,5 @@ public interface AppointmentService {
 
     AppointmentResponseModel getAppointmentByAppointmentId(String appointmentId);
     void deleteAllCancelledAppointments();
+    void deleteAppointmentByAppointmentId(String appointmentId);
 }
