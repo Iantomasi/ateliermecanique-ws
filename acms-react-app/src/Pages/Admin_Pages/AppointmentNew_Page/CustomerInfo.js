@@ -79,8 +79,9 @@
                     </select>
                 </div>
                 <div>
-                    <label>Vehicle</label>
+                    <label htmlFor="vehicle-select">Vehicle</label>
                     <select
+                        id="vehicle-select"
                         disabled={!selectedCustomerId}
                         onChange={handleVehicleSelect}
                         style={{ minWidth: '100%', padding: '0.5rem' }}
