@@ -1,0 +1,34 @@
+@startuml
+
+actor User
+
+participant OAuthService as "<<Service>>\nOAuthService"
+participant JavaSpringSecurity as "<<Backend>>\nJavaSpringSecurity"
+participant Database as "<<Database>>\nDatabase"
+participant JavaUtils as "<<Utils>>\nJavaUtils"
+
+User -> OAuthService: AuthenticateUser(email, password)
+activate OAuthService
+
+OAuthService -> JavaSpringSecurity: authenticate(email, password)
+activate JavaSpringSecurity
+
+JavaSpringSecurity -> Database: Query user by email
+activate Database
+
+Database --> JavaSpringSecurity: User details
+deactivate Database
+
+JavaSpringSecurity --> OAuthService: User authenticated
+deactivate JavaSpringSecurity
+
+OAuthService -> JavaUtils: generateToken(userId, username)
+activate JavaUtils
+
+JavaUtils --> OAuthService: Token generated
+deactivate JavaUtils
+
+OAuthService --> User: Return generated token
+deactivate OAuthService
+
+@enduml

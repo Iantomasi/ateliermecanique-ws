@@ -1,0 +1,34 @@
+@startuml
+
+actor User
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant JwtAuthenticationFilter as "<<Filter>>\nJwtAuthenticationFilter"
+participant JwtTokenProvider as "<<Utils>>\nJwtTokenProvider"
+participant JavaSpringSecurity as "<<Backend>>\nJavaSpringSecurity"
+
+User -> ReactApplication: Sends request with token
+activate ReactApplication
+
+ReactApplication -> JwtAuthenticationFilter: Forward request with token
+activate JwtAuthenticationFilter
+
+JwtAuthenticationFilter -> JwtTokenProvider: Extract token from header
+activate JwtTokenProvider
+
+JwtTokenProvider -> JavaSpringSecurity: Validate token
+activate JavaSpringSecurity
+
+JavaSpringSecurity --> JwtTokenProvider: User authenticated
+deactivate JavaSpringSecurity
+
+JwtTokenProvider --> JwtAuthenticationFilter: Authentication result
+deactivate JwtTokenProvider
+
+JwtAuthenticationFilter --> ReactApplication: Authentication result
+deactivate JwtAuthenticationFilter
+
+ReactApplication -> User: Authentication successful
+deactivate ReactApplication
+
+@enduml

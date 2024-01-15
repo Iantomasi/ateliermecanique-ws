@@ -1,0 +1,40 @@
+@startuml
+
+actor User
+
+participant ReactApplication as "<<View>>\nReactApplication"
+participant SignUpPage as "<<View>>\nSignUpPage"
+participant SignUpService as "<<Service>>\nSignUpService"
+participant UserService as "<<Backend>>\nUserService"
+participant Database as "<<Database>>\nDatabase"
+participant MessageResponse as "<<Object>>\nMessageResponse"
+
+User -> ReactApplication: Accesses sign-up page
+activate ReactApplication
+
+ReactApplication -> SignUpPage: render()
+activate SignUpPage
+
+User -> SignUpPage: Fills out signup form
+SignUpPage -> SignUpService: RegisterUser(userInfo)
+activate SignUpService
+
+SignUpService -> UserService: createUser(userInfo)
+activate UserService
+
+UserService -> Database: Insert new user
+activate Database
+
+Database --> UserService: User record created
+deactivate Database
+
+UserService --> SignUpService: User created successfully
+deactivate UserService
+
+SignUpService -> SignUpPage: receiveMessageResponse(messageResponse)
+activate SignUpPage
+
+SignUpPage --> User: Display messageResponse.message
+deactivate SignUpPage
+
+@enduml

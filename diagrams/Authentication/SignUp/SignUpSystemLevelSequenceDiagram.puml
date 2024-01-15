@@ -1,0 +1,34 @@
+@startuml
+
+actor User
+
+participant SignUpService as "<<Service>>\nSignUpService"
+participant UserService as "<<Backend>>\nUserService"
+participant Database as "<<Database>>\nDatabase"
+participant MessageResponse as "<<Object>>\nMessageResponse"
+
+User -> SignUpService: RegisterUser(userInfo)
+activate SignUpService
+
+SignUpService -> UserService: createUser(userInfo)
+activate UserService
+
+UserService -> Database: Insert new user
+activate Database
+
+Database --> UserService: User record created
+deactivate Database
+
+UserService --> SignUpService: User created successfully
+deactivate UserService
+
+SignUpService -> MessageResponse: createSuccessResponse("User has been successfully registered")
+activate MessageResponse
+
+MessageResponse --> SignUpService: Success message response
+deactivate MessageResponse
+
+SignUpService --> User: Return success message
+deactivate SignUpService
+
+@enduml
