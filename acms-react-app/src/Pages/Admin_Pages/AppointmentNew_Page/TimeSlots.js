@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import moment from 'moment';
 import './TimeSlots.css';
 
-function TimeSlots() {
+function TimeSlots({ onTimeSelect }) {
     let intime = "09:00 Am";
     let outtime = "06:00 Pm";
     const [result, setResult] = useState([]);
@@ -35,6 +35,7 @@ function TimeSlots() {
     const handleTimeClick = (time) => {
         setSelectedTime(time);
         console.log('Selected Time:', time);
+        onTimeSelect(time);
     };
 
     return (

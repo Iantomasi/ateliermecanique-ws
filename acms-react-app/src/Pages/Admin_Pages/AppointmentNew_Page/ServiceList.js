@@ -25,9 +25,10 @@ function ServicesList({ onSelectService }) {
                     <li key={index} className="flex items-center mb-2">
                         <span className="flex-1">{service}</span>
                         <button
-                            className="text-yellow-500 hover:text-yellow-700"
+                            className="text-yellow-500 hover:text-yellow-700 ml-2 px-3 py-1 border border-yellow-500 rounded"
                             onClick={() => handleSelectService(service)}
                         >
+                            Select
                         </button>
                     </li>
                 ))}
