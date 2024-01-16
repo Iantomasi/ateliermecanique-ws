@@ -80,7 +80,10 @@ class TokenServiceImplTest {
     @Test
     public void testVerifyGoogleToken_MatchingKeyNotFound() throws JOSEException, ParseException {
         // Mocked JSON response with modified kid values
-        String modifiedKeysResponse = "{ \"keys\": [ { \"kid\": \"some_other_kid_value\", \"use\": \"sig\", \"alg\": \"RS256\", \"n\": \"...\", \"e\": \"AQAB\", \"kty\": \"RSA\" }, { \"use\": \"sig\", \"kid\": \"another_kid_value\", \"kty\": \"RSA\", \"alg\": \"RS256\", \"e\": \"AQAB\", \"n\": \"...\" } ] }";
+        String modifiedKeysResponse = "{ \"keys\": [ { \"kid\": \"some_other_kid_value\","+
+        "\"use\": \"sig\", \"alg\": \"RS256\", \"n\": \"...\", \"e\": \"AQAB\", \"kty\": \"RSA\" },"+
+                "{ \"use\": \"sig\", \"kid\": \"another_kid_value\", \"kty\": \"RSA\", \"alg\": \"RS256\", \"e\": \"AQAB\", \"n\": \"...\" } ] }";
+
 
         // Mock RestTemplate
         when(restTemplate.exchange(anyString(), (HttpMethod) any(), (HttpEntity<?>) any(), (Class<Object>) any()))
