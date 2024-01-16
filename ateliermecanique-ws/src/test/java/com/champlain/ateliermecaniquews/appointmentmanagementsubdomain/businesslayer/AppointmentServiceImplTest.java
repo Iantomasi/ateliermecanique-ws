@@ -1,7 +1,6 @@
 package com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.businesslayer;
 
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Appointment;
-import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.AppointmentIdentifier;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.AppointmentRepository;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Status;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datamapperlayer.AppointmentResponseMapper;
