@@ -11,6 +11,7 @@ import CommentBox from "./CommentBox";
 import Navbar from '../../../Components/Navigation_Bars/Logged_In/NavBar.js';
 import Footer from '../../../Components/Footer/Footer.js';
 import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
 
 export default function Calendar() {
     const days = ["S", "M", "T", "W", "T", "F", "S"];
@@ -22,9 +23,18 @@ export default function Calendar() {
     const [selectedService, setSelectedService] = useState(null);
     const [comments, setComments] = useState('');
     const navigate = useNavigate();
+    const [selectedDate, setSelectedDate] = useState(moment());
 
     const [customerId, setCustomerId] = useState('');
     const [vehicleId, setVehicleId] = useState('');
+    const handleDateChange = (date) => {
+        setSelectedDate(date);
+    };
+    const handleTimeSelect = (time) => {
+        setSelectedTime(time);
+        console.log('Selected Time:', time);
+    };
+
 
     const handleSubmit = () => {
 
@@ -189,7 +199,9 @@ export default function Calendar() {
                                     Schedule for {selectDate.toDate().toDateString()}
                                 </h1>
                                 <p className="text-gray-400">No meetings for today.</p>
-                                <TimeSlots onTimeSelect={handleSelectedTimeChange} />
+                                <TimeSlots
+                                    selectedDate={selectedDate}
+                                    onTimeSelect={handleTimeSelect}/>
                                 <CommentBox setComments={setComments}/>
                             </div>
                         </div>

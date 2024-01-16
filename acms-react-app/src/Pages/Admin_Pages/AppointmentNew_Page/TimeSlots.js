@@ -1,14 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 import moment from 'moment';
 import './TimeSlots.css';
+import axios from 'axios';
 
-function TimeSlots({ onTimeSelect }) {
+function TimeSlots({ selectedDate, onTimeSelect }) {
     let intime = "09:00 Am";
     let outtime = "06:00 Pm";
     const [result, setResult] = useState([]);
     const [selectedTime, setSelectedTime] = useState(null);
+    const [timeSlots, setTimeSlots] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     console.log("Array", result);
+
+    useEffect(() => {
+        setLoading(true);
+        axios.get(`/api/v1/appointments/slots/${selectedDate.format("YYYY-MM-DD")}`)
+            .then(response => {
+                const availableSlots = intervals(intime, outtime).map(slot => ({
+                    time: slot,
+                    available: response.data.includes(slot)
+                }));
+                setTimeSlots(availableSlots);
+            })
+            .catch(error => {
+                console.error('Error fetching time slots:', error);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }, [selectedDate]);
 
     function intervals(startString, endString) {
         var start = moment(startString, 'hh:mm a');

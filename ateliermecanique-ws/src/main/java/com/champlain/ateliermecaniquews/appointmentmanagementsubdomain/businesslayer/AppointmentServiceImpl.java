@@ -15,8 +15,13 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -146,6 +151,40 @@ public class AppointmentServiceImpl implements AppointmentService{
             appointmentRepository.delete(appointment);
         }
     }
+
+    @Override
+    public Map<String, Boolean> checkTimeSlotAvailability(LocalDate date) {
+        // Define the working hours (You can adjust these as needed)
+        LocalTime startTime = LocalTime.of(9, 0); // 9 AM
+        LocalTime endTime = LocalTime.of(18, 0); // 6 PM
+
+        // Initialize a map to hold the availability of each time slot
+        Map<String, Boolean> timeSlotAvailability = new HashMap<>();
+
+        // Populate the map with all time slots set to available (true)
+        LocalTime time = startTime;
+        while (time.isBefore(endTime)) {
+            timeSlotAvailability
+
+                    .put(time.toString(), true);
+            time = time.plusHours(1); // Increment time by one hour
+        }
+        // Retrieve all appointments for the given date
+        List<Appointment> appointments = appointmentRepository.findAllByAppointmentDateBetween(
+                date.atStartOfDay(), date.plusDays(1).atStartOfDay());
+
+        // Mark the time slots as unavailable (false) for each appointment found
+        for (Appointment appointment : appointments) {
+            LocalTime appointmentTime = appointment.getAppointmentDate().toLocalTime();
+            // Assuming appointments are exactly 1 hour long
+            String slot = appointmentTime.truncatedTo(ChronoUnit.HOURS).toString();
+            timeSlotAvailability.put(slot, false);
+        }
+
+        return timeSlotAvailability;
+
+    }
+
 
 
 }

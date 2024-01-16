@@ -3,7 +3,9 @@ package com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.business
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentRequestModel;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentResponseModel;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public interface AppointmentService {
 
@@ -17,4 +19,7 @@ public interface AppointmentService {
     AppointmentResponseModel getAppointmentByAppointmentId(String appointmentId);
     void deleteAllCancelledAppointments();
     void deleteAppointmentByAppointmentId(String appointmentId);
+
+    Map<String, Boolean> checkTimeSlotAvailability(LocalDate date);
 }
+
