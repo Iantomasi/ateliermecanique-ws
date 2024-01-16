@@ -407,5 +407,89 @@ class AppointmentServiceImplTest {
         verify(appointmentRepository, times(1)).save(any(Appointment.class));
     }
 
+    @Test
+    void updateAppointmentByAppointmentId_shouldUpdateSuccessfully() {
+        // Arrange
+        String appointmentId = "existingAppointmentId";
+        LocalDateTime appointmentDateTime = LocalDateTime.now();
+        AppointmentRequestModel requestModel = AppointmentRequestModel.builder()
+                .customerId("testCustomerId")
+                .vehicleId("testVehicleId")
+                .appointmentDate(appointmentDateTime)
+                .services("Test Service")
+                .comments("No comments")
+                .status(Status.PENDING)
+                .build();
+
+        Appointment existingAppointment = new Appointment();
+        // Set properties of existingAppointment as needed
+
+        when(appointmentRepository.findAppointmentByAppointmentIdentifier_AppointmentId(appointmentId))
+                .thenReturn(existingAppointment);
+
+        Appointment savedAppointment = new Appointment();
+
+
+        when(appointmentRepository.save(any(Appointment.class)))
+                .thenReturn(savedAppointment);
+
+        AppointmentResponseModel expectedResponse = AppointmentResponseModel.builder()
+                .appointmentId(appointmentId)
+                .customerId(requestModel.getCustomerId())
+                .vehicleId(requestModel.getVehicleId())
+                .appointmentDate(appointmentDateTime)
+                .services(requestModel.getServices())
+                .comments(requestModel.getComments())
+                .status(requestModel.getStatus())
+                .build();
+
+        when(appointmentResponseMapper.entityToResponseModel(savedAppointment))
+                .thenReturn(expectedResponse);
+
+// Act
+        AppointmentResponseModel result = appointmentService.updateAppointmentByAppointmentId(requestModel, appointmentId);
+
+// Assert
+        assertNotNull(result);
+        assertEquals(expectedResponse.getCustomerId(), result.getCustomerId());
+        assertEquals(expectedResponse.getServices(), result.getServices());
+        assertEquals(expectedResponse.getComments(), result.getComments());
+        assertEquals(expectedResponse.getStatus(), result.getStatus());
+
+        verify(appointmentRepository, times(1)).findAppointmentByAppointmentIdentifier_AppointmentId(appointmentId);
+        verify(appointmentRepository, times(1)).save(existingAppointment);
+
+    }
+
+
+    @Test
+    void updateAppointmentByAppointmentId_whenNotFound_shouldReturnNull() {
+        // Arrange
+        String appointmentId = "nonexistentAppointmentId";
+        LocalDateTime appointmentDateTime = LocalDateTime.now();
+        AppointmentRequestModel requestModel = AppointmentRequestModel.builder()
+                .customerId("testCustomerId")
+                .vehicleId("testVehicleId")
+                .appointmentDate(appointmentDateTime)
+                .services("Test Service")
+                .comments("No comments")
+                .status(Status.PENDING)
+                .build();
+
+        // Set properties of requestModel as needed
+
+        when(appointmentRepository.findAppointmentByAppointmentIdentifier_AppointmentId(appointmentId))
+                .thenReturn(null);
+
+        // Act
+        AppointmentResponseModel result = appointmentService.updateAppointmentByAppointmentId(requestModel, appointmentId);
+
+        // Assert
+        assertNull(result);
+        verify(appointmentRepository, times(1)).findAppointmentByAppointmentIdentifier_AppointmentId(appointmentId);
+        verify(appointmentRepository, never()).save(any(Appointment.class));
+    }
+
+
 
 }

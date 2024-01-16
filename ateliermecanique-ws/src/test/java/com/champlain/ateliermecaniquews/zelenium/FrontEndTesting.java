@@ -490,5 +490,33 @@ public class FrontEndTesting {
 
     }
 
+    @Test
+    public void updateAppointmentByAppointmentId() {
+        open("https://localhost:3000/");
+        $("a[href='/login']").click();
+        sleep(1000);
+        $("button[type='submit']").click();
+        sleep(1000);
+        $("img[src='appointments.svg']").click();
+        sleep(1000);
+
+        String appointmentId = "1008dc5c-d460-443f-8f37-a174284f8684";
+        SelenideElement appointmentLink = $$("td").findBy(text(appointmentId));
+        appointmentLink.shouldBe(visible).click();
+        sleep(1000);
+        $("p").shouldHave(text("APPOINTMENT DETAILS"));
+        SelenideElement commentsTextarea = $("#comments");
+
+        $("input[name='comments']").setValue("Test update comment");
+        sleep(2000);
+
+        String saveButton = "Save";
+        $$("button").findBy(text(saveButton)).click();
+        sleep(10000);
+
+    }
+
+
+
 
 }
