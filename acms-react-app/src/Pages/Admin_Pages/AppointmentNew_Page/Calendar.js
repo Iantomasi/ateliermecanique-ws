@@ -84,7 +84,9 @@ export default function Calendar() {
 
     const handleDayClick = (date) => {
         setSelectDate(date);
+        setSelectedDate(moment(date.format("YYYY-MM-DD"), "YYYY-MM-DD"));
     };
+
     const handleServiceSelect = (service) => {
         setSelectedService(service);
         console.log("Selected Service:", service);
