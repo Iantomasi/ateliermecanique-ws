@@ -11,11 +11,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -303,6 +305,41 @@ class AppointmentControllerUnitTest {
                         .content(requestJson))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    void checkTimeSlotAvailability_shouldReturnAvailability() throws Exception {
+        // Arrange
+        LocalDate testDate = LocalDate.of(2024, 3, 24);
+        Map<String, Boolean> availability = Map.of(
+                "09:00", true,
+                "10:00", false,
+                "11:00", true
+                // Add more slots as needed
+        );
+
+        when(appointmentService.checkTimeSlotAvailability(testDate)).thenReturn(availability);
+
+        // Act & Assert
+        mockMvc.perform(get("/api/v1/availability/{date}", testDate))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.['09:00']", is(true)))
+                .andExpect(jsonPath("$.['10:00']", is(false)))
+                .andExpect(jsonPath("$.['11:00']", is(true)));
+    }
+
+    @Test
+    void checkTimeSlotAvailability_noAvailability_shouldReturnNoContent() throws Exception {
+        LocalDate testDate = LocalDate.of(2024, 3, 24);
+
+        when(appointmentService.checkTimeSlotAvailability(testDate)).thenReturn(Collections.emptyMap());
+
+        mockMvc.perform(get("/api/v1/availability/{date}", testDate))
+                .andExpect(status().isNoContent());
+
+
+    }
+
 
 
 }
