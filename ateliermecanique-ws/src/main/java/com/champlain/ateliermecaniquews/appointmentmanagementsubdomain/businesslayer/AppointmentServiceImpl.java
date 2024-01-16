@@ -71,6 +71,31 @@ public class AppointmentServiceImpl implements AppointmentService{
     }
 
     @Override
+    public AppointmentResponseModel updateAppointmentByAppointmentId(AppointmentRequestModel appointmentRequestModel, String appointmentId) {
+        Appointment appointmentToUpdate = appointmentRepository.findAppointmentByAppointmentIdentifier_AppointmentId(appointmentId);
+
+        if (appointmentToUpdate == null) {
+            return null; // later throw exception
+        }
+
+        // Update appointment details
+        appointmentToUpdate.setCustomerId(appointmentRequestModel.getCustomerId());
+        appointmentToUpdate.setVehicleId(appointmentRequestModel.getVehicleId());
+        appointmentToUpdate.setAppointmentDate(appointmentRequestModel.getAppointmentDate());
+        appointmentToUpdate.setServices(appointmentRequestModel.getServices());
+        appointmentToUpdate.setComments(appointmentRequestModel.getComments());
+
+        // check for non-null status and update after converting to enum
+        Status status = appointmentRequestModel.getStatus();
+        if(status != null){
+            appointmentToUpdate.setStatus(status);
+        }
+
+        Appointment updatedAppointment = appointmentRepository.save(appointmentToUpdate);
+        return appointmentResponseMapper.entityToResponseModel(updatedAppointment);
+    }
+
+    @Override
     public AppointmentResponseModel addAppointmentToCustomerAccount(String customerId, AppointmentRequestModel appointmentRequestModel) {
         CustomerAccount customerAccount = customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
 
@@ -94,7 +119,6 @@ public class AppointmentServiceImpl implements AppointmentService{
     }
 
     @Override
-
     public AppointmentResponseModel getAppointmentByAppointmentId(String appointmentId) {
         Appointment appointment = appointmentRepository.findAppointmentByAppointmentIdentifier_AppointmentId(appointmentId);
 

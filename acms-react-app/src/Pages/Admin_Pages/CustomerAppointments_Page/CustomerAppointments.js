@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../../../Components/Navigation_Bars/Logged_In/NavBar.js';
 import Footer from '../../../Components/Footer/Footer.js';
 import MechanicDisplay from '../../../Components/User_Components/MechanicDisplay.js';
@@ -10,6 +11,8 @@ import CustomerAppointmentBlock from '../CustomerAppointmentDetails_Page/Custome
 function CustomerAppointments() {
   const { customerId } = useParams();
   const [appointments, setAppointments] = useState([]);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
   getCustomerAppointments();
@@ -28,6 +31,11 @@ function CustomerAppointments() {
       })
   }
 
+  const handleAddAppointmentClick = () => {
+    navigate(`/admin/customers/${customerId}/appointments/newAppointment`, customerId);
+  };
+
+
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
@@ -42,7 +50,7 @@ function CustomerAppointments() {
                   <input className="w-full rounded border-gray-300 px-4 py-2 focus:outline-none focus:border-indigo-500" type="text" placeholder="Search..." />
                   <span className="text-gray-400 cursor-pointer">&#128269;</span>
                 </div>
-                <button className="text-white border-none px-4 py-2 rounded font-bold transition duration-300 hover:scale-110 bg-black">
+                <button className="text-white border-none px-4 py-2 rounded font-bold transition duration-300 hover:scale-110 bg-black" onClick={handleAddAppointmentClick}>
                 Add+
               </button>
               </div>

@@ -241,6 +241,70 @@ class AppointmentControllerUnitTest {
                         .content(requestJson))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    void updateAppointmentByAppointmentId_shouldSucceed() throws Exception {
+        // Arrange
+        String appointmentId = "existingAppointmentId";
+        LocalDateTime appointmentDateTime = LocalDateTime.now();
+        AppointmentRequestModel requestModel = AppointmentRequestModel.builder()
+                .customerId("testCustomerId")
+                .vehicleId("testVehicleId")
+                .appointmentDate(appointmentDateTime)
+                .services("Test Service")
+                .comments("No comments")
+                .status(Status.PENDING)
+                .build();
+
+        AppointmentResponseModel responseModel = AppointmentResponseModel.builder()
+                .appointmentId(appointmentId)
+                .customerId("testCustomerId")
+                .vehicleId("testVehicleId")
+                .appointmentDate(appointmentDateTime)
+                .services("Test Service")
+                .comments("No comments")
+                .status(Status.PENDING)
+                .build();
+
+        when(appointmentService.updateAppointmentByAppointmentId(any(AppointmentRequestModel.class), eq(appointmentId)))
+                .thenReturn(responseModel);
+
+        String requestJson = objectMapper.writeValueAsString(requestModel);
+
+        // Act & Assert
+        mockMvc.perform(put("/api/v1/appointments/{appointmentId}", appointmentId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void updateAppointmentByAppointmentId_whenNotFound_shouldReturnNotFound() throws Exception {
+        // Arrange
+        String appointmentId = "nonExistentAppointmentId";
+        LocalDateTime appointmentDateTime = LocalDateTime.now();
+        AppointmentRequestModel requestModel = AppointmentRequestModel.builder()
+                .customerId("testCustomerId")
+                .vehicleId("testVehicleId")
+                .appointmentDate(appointmentDateTime)
+                .services("Test Service")
+                .comments("No comments")
+                .status(Status.PENDING)
+                .build();
+
+        when(appointmentService.updateAppointmentByAppointmentId(any(AppointmentRequestModel.class), eq(appointmentId)))
+                .thenReturn(null);
+
+        String requestJson = objectMapper.writeValueAsString(requestModel);
+
+        // Act & Assert
+        mockMvc.perform(put("/api/v1/appointments/{appointmentId}", appointmentId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isNotFound());
+    }
+
+
 }
 
 

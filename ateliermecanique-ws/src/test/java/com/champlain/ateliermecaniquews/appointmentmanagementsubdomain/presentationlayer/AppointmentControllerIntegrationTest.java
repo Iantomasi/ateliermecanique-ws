@@ -6,6 +6,7 @@ import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.AppointmentIdentifier;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.AppointmentRepository;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Status;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -207,6 +208,67 @@ class AppointmentControllerIntegrationTest {
         mockMvc.perform(delete("/api/v1/appointments/cancelled"))
                 .andExpect(status().isInternalServerError());
     }
+
+    @Test
+    void updateAppointmentByAppointmentId_shouldSucceed() throws Exception {
+        // Arrange
+        String appointmentId = testAppointmentId;
+        String requestJson = """
+            {
+                "customerId": "testCustomerId",
+                "vehicleId": "testVehicleId",
+                "appointmentDate": "2024-03-24T11:00",
+                "services": "Test Service",
+                "comments": "No comments",
+                "status": "PENDING"
+            }""";
+
+        AppointmentResponseModel responseModel = AppointmentResponseModel.builder()
+                .appointmentId(appointmentId)
+                .customerId("testCustomerId")
+                .vehicleId("testVehicleId")
+                .appointmentDate(LocalDateTime.parse("2024-03-24T11:00"))
+                .services("Test Service")
+                .comments("No comments")
+                .status(Status.PENDING)
+                .build();
+
+        when(appointmentService.updateAppointmentByAppointmentId(any(AppointmentRequestModel.class), eq(appointmentId)))
+                .thenReturn(responseModel);
+
+        // Act & Assert
+        mockMvc.perform(put("/api/v1/appointments/{appointmentId}", appointmentId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.services", is("Test Service")));
+    }
+
+    @Test
+    void updateAppointmentByAppointmentId_whenNotFound_shouldReturnNotFound() throws Exception {
+        // Arrange
+        String nonExistentAppointmentId = "nonExistentAppointmentId";
+        String requestJson = """
+            {
+                "customerId": "testCustomerId",
+                "vehicleId": "testVehicleId",
+                "appointmentDate": "2024-03-24T11:00",
+                "services": "Test Service",
+                "comments": "No comments",
+                "status": "PENDING"
+            }""";
+
+        when(appointmentService.updateAppointmentByAppointmentId(any(AppointmentRequestModel.class), eq(nonExistentAppointmentId)))
+                .thenReturn(null);
+
+        // Act & Assert
+        mockMvc.perform(put("/api/v1/appointments/{appointmentId}", nonExistentAppointmentId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isNotFound());
+    }
+
+
 
 
 }

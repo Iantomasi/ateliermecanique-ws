@@ -4,12 +4,8 @@ import Navbar from '../../../Components/Navigation_Bars/Logged_In/NavBar.js';
 import Footer from '../../../Components/Footer/Footer.js';
 import MechanicDisplay from '../../../Components/User_Components/MechanicDisplay.js';
 import axios from 'axios';
-<<<<<<< HEAD
 import AppointmentBlock from '../AppointmentSpecifics_Page/AppointmentBlock.js';
-=======
-import AppointmentBlock from '../AppointmentDetails_Page/AppointmentBlock.js';
 import { useNavigate } from 'react-router-dom';
->>>>>>> 1141d5f (front end bugs)
 
 function Appointments() {
   const [appointments, setAppointments] = useState([]);
