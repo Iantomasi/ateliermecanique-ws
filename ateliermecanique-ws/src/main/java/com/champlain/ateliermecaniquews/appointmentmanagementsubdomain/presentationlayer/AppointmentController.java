@@ -44,6 +44,14 @@ public class AppointmentController {
         return ResponseEntity.ok(appointments);
     }
 
+    @PutMapping({"/appointments/{appointmentId}","/customers/{customerId}/appointments/{appointmentId}"})
+    public ResponseEntity<AppointmentResponseModel> updateAppointmentByAppointmentId(@RequestBody AppointmentRequestModel appointmentRequestModel, @PathVariable String appointmentId) {
+        AppointmentResponseModel appointment = appointmentService.updateAppointmentByAppointmentId(appointmentRequestModel, appointmentId);
+        if (appointment == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(appointment);
+    }
 
     @PutMapping({"/appointments/{appointmentId}/updateStatus","/customers/{customerId}/appointments/{appointmentId}/updateStatus"})
     public ResponseEntity<AppointmentResponseModel> updateAppointmentStatus(@PathVariable String appointmentId, @RequestParam boolean isConfirm) {

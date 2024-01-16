@@ -1,0 +1,117 @@
+.custom-datetime-picker {
+    position: relative;
+    width: 100%;
+  }
+  .custom-datetime-picker .react-datetime-picker__wrapper {
+    width: 100%;
+    padding: 10px 4px;
+    border: 1px solid #ccc;
+    border-radius: 0.375rem; /* This should match your `rounded` class's border-radius */
+    font-size: 1rem;
+  }
+
+.react-calendar {
+    border-radius: 10px;
+    font-family: 'Arial', sans-serif;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    border: none;
+}
+
+/* Header with month and navigation buttons */
+.react-calendar__navigation {
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.react-calendar__navigation button {
+    min-width: 44px;
+    background: none;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+/* Month and year labels */
+.react-calendar__navigation .react-calendar__navigation__label {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Weekday labels (Sun, Mon, etc.) */
+.react-calendar__month-view__weekdays {
+    text-transform: uppercase;
+    color: #757575;
+    font-weight: bold;
+    font-size: 10px;
+}
+
+/* Days */
+.react-calendar__month-view__days {
+    color: #424242;
+}
+
+/* Tiles */
+.react-calendar__tile {
+    max-width: initial;
+    background: none;
+    color: inherit;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 10px 5px;
+    margin: 2px;
+}
+
+/* Hover effect on tiles */
+
+.react-calendar__tile:hover {
+background-color: #e0e0e0;
+cursor: pointer;
+}
+
+/* Active day style (selected day) */
+.react-calendar__tile--active {
+background-color: gold;
+color: black;
+}
+
+/* Active day style when hovered */
+.react-calendar__tile--active:hover {
+background-color: #0056b3;
+}
+
+/* Disable styles for tiles not belonging to the current month */
+.react-calendar__tile--now {
+background-color: #f0f0f0;
+color: black;
+}
+
+/* Today's date style */
+.react-calendar__tile--now:enabled:hover,
+.react-calendar__tile--now:enabled:focus {
+background-color: #e6e6e6;
+}
+
+/* Highlight today's date */
+.react-calendar__tile--now {
+background-color: #ffed86;
+color: black;
+font-weight: bold;
+}
+
+/* Hover effect on today's date */
+.react-calendar__tile--now:hover {
+background-color: #ffe564;
+}
+
+/* Style for neighboring month days */
+.react-calendar__tile--neighboringMonth {
+color: #757575;
+}
+
+
+/* Position the buttons around the time picker */
+.time-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

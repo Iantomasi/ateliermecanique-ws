@@ -16,6 +16,7 @@ import CustomerAppointments from './Pages/Admin_Pages/CustomerAppointments_Page/
 import AppointmentSpecifics from './Pages/Admin_Pages/AppointmentSpecifics_Page/AppointmentSpecifics';
 import Calendar from './Pages/Admin_Pages/AppointmentNew_Page/Calendar';
 import CustomerAppointmentDetails from './Pages/Admin_Pages/CustomerAppointmentDetails_Page/CustomerAppointmentDetails';
+import CustomerCalendar from './Pages/Admin_Pages/CustomerAppointmentNew_Page/CustomerCalendar';
 
 const router = createBrowserRouter([
   {
@@ -79,6 +80,11 @@ const router = createBrowserRouter([
       {
         path: "/admin/appointments/newAppointment",
         element: <Calendar />,
+
+      },
+      {
+        path: "/admin/customers/:customerId/appointments/newAppointment",
+        element: <CustomerCalendar />,
 
       },
       {
