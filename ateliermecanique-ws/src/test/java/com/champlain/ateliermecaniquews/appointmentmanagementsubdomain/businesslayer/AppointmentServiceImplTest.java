@@ -13,11 +13,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -488,6 +490,49 @@ class AppointmentServiceImplTest {
         verify(appointmentRepository, times(1)).findAppointmentByAppointmentIdentifier_AppointmentId(appointmentId);
         verify(appointmentRepository, never()).save(any(Appointment.class));
     }
+
+    @Test
+    void checkTimeSlotAvailability_ShouldReturnCorrectAvailability() {
+        // Arrange
+        LocalDate testDate = LocalDate.of(2024, 3, 24);
+        LocalDateTime startOfDay = testDate.atStartOfDay();
+        LocalDateTime endOfDay = testDate.plusDays(1).atStartOfDay();
+
+        LocalDateTime appointmentDateTime1 = LocalDateTime.of(2024, 3, 24, 10, 0); // 10:00 AM
+        LocalDateTime appointmentDateTime2 = LocalDateTime.of(2024, 3, 24, 12, 0); // 12:00 PM
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String formattedDateTime1 = startOfDay.plusHours(1).format(formatter);
+        String formattedDateTime2 = startOfDay.plusHours(3).format(formatter);
+
+        List<Appointment> appointments = Arrays.asList(
+                new Appointment("customerId1", "vehicleId1", formattedDateTime1, "Service1", "None", Status.PENDING),
+                new Appointment("customerId2", "vehicleId2", formattedDateTime2, "Service2", "Description2", Status.PENDING)
+        );
+
+
+        when(appointmentRepository.findAllByAppointmentDateBetween(startOfDay, endOfDay)).thenReturn(appointments);
+
+
+        // Act
+        Map<String, Boolean> result = appointmentService.checkTimeSlotAvailability(testDate);
+
+        // Assert
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
+        assertEquals(true, result.get("10:00"));
+        assertEquals(true, result.get("12:00"));
+        assertEquals(true, result.get("09:00"));
+        assertEquals(true, result.get("11:00"));
+        assertEquals(true, result.get("13:00"));
+        // ... Assert other time slots as needed
+
+        verify(appointmentRepository, times(1)).findAllByAppointmentDateBetween(startOfDay, endOfDay);
+    }
+
+
+
+
 
 
 

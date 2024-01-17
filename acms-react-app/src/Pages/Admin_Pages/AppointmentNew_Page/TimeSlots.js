@@ -1,56 +1,73 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 import moment from 'moment';
 import './TimeSlots.css';
+import axios from 'axios';
 
-function TimeSlots({ onTimeSelect }) {
-    let intime = "09:00 Am";
-    let outtime = "06:00 Pm";
-    const [result, setResult] = useState([]);
-    const [selectedTime, setSelectedTime] = useState(null);
+function TimeSlots({ selectedDate, onTimeSelect }) {
+    let intime = "09:00 AM";
+    let outtime = "06:00 PM";
+    const [timeSlots, setTimeSlots] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-    console.log("Array", result);
+    function generateTimeSlots(startString, endString) {
+        var start = moment(startString, 'hh:mm A');
+        var end = moment(endString, 'hh:mm A');
+        var slots = [];
 
-    function intervals(startString, endString) {
-        var start = moment(startString, 'hh:mm a');
-        var end = moment(endString, 'hh:mm a');
-        start.minutes(Math.ceil(start.minutes() / 60) * 60);
-
-        var current = moment(start);
-
-        while (current <= end) {
-            let timeFormatted = current.format('HH:mm');
-            if (result.includes(timeFormatted)) {
-                return null;
-            } else {
-                setResult(prevResult => [...prevResult, timeFormatted]);
-                current.add(60, 'minutes');
-            }
+        while (start <= end) {
+            slots.push(start.format('HH:mm'));
+            start.add(60, 'minutes');
         }
+
+        return slots;
     }
 
-    React.useEffect(() => {
-        intervals(intime, outtime);
-    }, [intime, outtime]);
+    useEffect(() => {
+        setLoading(true);
+        const formattedDate = selectedDate.format("YYYY-MM-DD");
+        console.log("Formatted Date for API Call:", formattedDate);
 
-    const handleTimeClick = (time) => {
-        setSelectedTime(time);
-        console.log('Selected Time:', time);
-        onTimeSelect(time);
+        axios.get(`http://localhost:8080/api/v1/availability/${formattedDate}`)
+            .then(response => {
+                console.log("API Response:", response.data);
+                const availableSlots = generateTimeSlots(intime, outtime).map(slot => ({
+                    time: slot,
+                    available: response.data[slot] !== false
+                }));
+                setTimeSlots(availableSlots);
+            })
+            .catch(error => {
+                console.error('Error fetching time slots:', error);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }, [selectedDate]);
+
+
+    const handleTimeClick = (time, available) => {
+        if (available) {
+            onTimeSelect(time);
+        }
     };
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div className='grid grid-cols-2 gap-2'>
-            {result && result.length > 0 ? result.map((time, index) => (
+            {timeSlots.map((slot, index) => (
                 <button
                     key={index}
-                    onClick={() => handleTimeClick(time)}
+                    onClick={() => handleTimeClick(slot.time, slot.available)}
                     className={`p-2 text-center rounded h-10 transition-colors duration-150 ${
-                        selectedTime === time ? 'bg-yellow-500 text-white' : 'bg-gray-200 hover:bg-yellow-100'
+                        slot.available ? 'bg-gray-200 hover:bg-yellow-100' : 'bg-gray-400 cursor-not-allowed'
                     }`}
+                    disabled={!slot.available}
                 >
-                    {time}
+                    {slot.time}
                 </button>
-            )) : null}
+            ))}
         </div>
     );
 
@@ -58,3 +75,4 @@ function TimeSlots({ onTimeSelect }) {
 }
 
 export default TimeSlots;
+

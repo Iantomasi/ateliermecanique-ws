@@ -6,7 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -88,6 +90,15 @@ public class AppointmentController {
     }catch(Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @GetMapping("/availability/{date}")
+    public ResponseEntity<Map<String, Boolean>> checkTimeSlotAvailability(@PathVariable LocalDate date) {
+        Map<String, Boolean> availability = appointmentService.checkTimeSlotAvailability(date);
+        if (availability == null || availability.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(availability);
     }
 
 }
