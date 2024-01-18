@@ -1,5 +1,6 @@
 package com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.businesslayer;
 
+
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Appointment;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.AppointmentIdentifier;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.AppointmentRepository;
@@ -8,8 +9,9 @@ import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datamappe
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datamapperlayer.AppointmentResponseMapper;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentRequestModel;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentResponseModel;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccount;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountRepository;
+
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.VehicleRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +31,7 @@ import java.util.Map;
 public class AppointmentServiceImpl implements AppointmentService{
 
     private AppointmentRepository appointmentRepository;
-    private CustomerAccountRepository customerAccountRepository;
+    private UserRepository userRepository;
     private VehicleRepository vehicleRepository;
     private AppointmentResponseMapper appointmentResponseMapper;
     private AppointmentRequestMapper appointmentRequestMapper;
@@ -101,11 +103,11 @@ public class AppointmentServiceImpl implements AppointmentService{
     }
 
     @Override
-    public AppointmentResponseModel addAppointmentToCustomerAccount(String customerId, AppointmentRequestModel appointmentRequestModel) {
-        CustomerAccount customerAccount = customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
+    public AppointmentResponseModel addAppointmentToCustomerAccount(String userId, AppointmentRequestModel appointmentRequestModel) {
+        User customerAccount = userRepository.findUserByUserIdentifier_UserId(userId);
 
         if(customerAccount == null) {
-            log.warn("Customer account not found for customer ID: {}", customerId);
+            log.warn("Customer account not found for customer ID: {}", userId);
             return null;
         }
 

@@ -4,39 +4,33 @@ import Footer from '../../Components/Footer/Footer.js';
 import HomeOption from '../../Components/General_Components/HomeOption.js';
 import axios from 'axios';
 import UserForm from './UserFormForMissingFields.js';
+import AuthService from '../../Services/auth.service.js';
 
 function User() {
-  const [username, setUsername] = useState('');
   const [customer, setCustomer] = useState({});
   const [showUserForm, setShowUserForm] = useState(false);
 
   useEffect(() => {
-    getCustomer();
-  }, []);
-
-  function getCustomer() {
-    const token = sessionStorage.getItem('userToken');
-
-    axios
-      .get(`http://localhost:8080/api/v1/auth/${token}`)
-      .then((res) => {
-        console.log(res.data);
-        setCustomer(res.data);
-        setUsername(`${res.data.firstName} ${res.data.lastName}`);
-
-        // Check if any field in customer object is null after fetching data
-        const hasNullField = Object.values(res.data).some((value) => value === null);
-        setShowUserForm(hasNullField);
-      })
-      .catch((error) => {
-        console.error('Error fetching customer', error);
-      });
-  }
+    const fetchCustomer = async () => {
+      const fetchedCustomer = AuthService.getCurrentUser();
+      setCustomer(fetchedCustomer);
+      
+      const hasNullField = Object.entries(fetchedCustomer)
+        .filter(([key]) => key !== 'picture') // Ignore picture field
+        .some(([key, value]) => value === null);
+  
+      if (hasNullField) {
+        setShowUserForm(true);
+      }
+    };
+  
+    fetchCustomer();
+  }, [showUserForm]);
 
   const hideForm = () => {
-    getCustomer();
     setShowUserForm(false);
   };
+
 
   return (
     <div className={`bg-white ${showUserForm ? 'bg-gray-900' : ''}`}>
@@ -50,7 +44,7 @@ function User() {
           <div className="flex justify-center mt-5">
             <img src="waveHand.svg" alt="hand" className="max-w-full" />
           </div>
-          <h2 className="text-7xl mt-2 mb-5">Welcome {username}!</h2>
+          <h2 className="text-7xl mt-2 mb-5">Welcome Back {customer.firstName}!</h2>
           <div className="flex flex-col">
             <div className="flex">
               <div className="flex-1 text-center">

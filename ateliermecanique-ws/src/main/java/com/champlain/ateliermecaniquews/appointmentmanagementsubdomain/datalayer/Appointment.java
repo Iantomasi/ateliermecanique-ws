@@ -1,9 +1,7 @@
 package com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer;
 
-import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.TransmissionType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -21,7 +19,7 @@ public class Appointment {
         @Embedded
         private AppointmentIdentifier appointmentIdentifier;
 
-        @Column(name = "customer_id")
+        @Column(name = "user_id")
         private String customerId;
 
         @Column(name = "vehicle_id")

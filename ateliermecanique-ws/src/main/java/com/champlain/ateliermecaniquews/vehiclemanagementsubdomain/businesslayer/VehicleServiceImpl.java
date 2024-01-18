@@ -1,6 +1,6 @@
 package com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.businesslayer;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccount;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountRepository;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.TransmissionType;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.Vehicle;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.VehicleIdentifier;
@@ -25,26 +25,24 @@ public class VehicleServiceImpl implements VehicleService {
 
     final private VehicleResponseMapper vehicleResponseMapper;
 
-    final private VehicleRequestMapper vehicleRequestMapper;
-
-    final private CustomerAccountRepository customerAccountRepository;
+    final private UserRepository userRepository;
 
 
     @Override
-    public List<VehicleResponseModel> getAllVehiclesByCustomerId(String customerId) {
-        List<Vehicle> vehicles = vehicleRepository.findAllVehiclesByCustomerId(customerId);
-        log.info("Fetching vehicles for customer ID: {}", customerId);
+    public List<VehicleResponseModel> getAllVehiclesByCustomerId(String userId) {
+        List<Vehicle> vehicles = vehicleRepository.findAllVehiclesByUserId(userId);
+        log.info("Fetching vehicles for customer ID: {}", userId);
 
 
         // Check if the vehicles list is empty or null
         if (vehicles == null) {
-            log.warn("No vehicles found for customer ID: {} (vehicles is null)", customerId);
+            log.warn("No vehicles found for customer ID: {} (vehicles is null)", userId);
             return Collections.emptyList();
         } else if (vehicles.isEmpty()) {
-            log.warn("No vehicles found for customer ID: {} (vehicles list is empty)", customerId);
+            log.warn("No vehicles found for customer ID: {} (vehicles list is empty)", userId);
             return Collections.emptyList();
         } else {
-            log.info("Number of vehicles found for customer ID {}: {}", customerId, vehicles.size());
+            log.info("Number of vehicles found for customer ID {}: {}", userId, vehicles.size());
         }
 
         List<VehicleResponseModel> vehicleResponseModels = vehicleResponseMapper.entityToResponseModelList(vehicles);
@@ -61,13 +59,13 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public VehicleResponseModel getVehicleByVehicleId(String customerId, String vehicleId) {
+    public VehicleResponseModel getVehicleByVehicleId(String userId, String vehicleId) {
 
-        Vehicle foundVehicle = vehicleRepository.findVehicleByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId);
+        Vehicle foundVehicle = vehicleRepository.findVehicleByUserIdAndVehicleIdentifier_VehicleId(userId, vehicleId);
 
         // Check if the vehicle is null
         if (foundVehicle == null) {
-            log.warn("No vehicle found for customer ID: {} and vehicle ID: {} (vehicle is null)", customerId, vehicleId);
+            log.warn("No vehicle found for customer ID: {} and vehicle ID: {} (vehicle is null)", userId, vehicleId);
             return null;
         }
 
@@ -76,8 +74,8 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public VehicleResponseModel updateVehicleByVehicleId(VehicleRequestModel vehicleRequestModel, String customerId, String vehicleId) {
-        Vehicle vehicleToUpdate = vehicleRepository.findVehicleByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId);
+    public VehicleResponseModel updateVehicleByVehicleId(VehicleRequestModel vehicleRequestModel, String userId, String vehicleId) {
+        Vehicle vehicleToUpdate = vehicleRepository.findVehicleByUserIdAndVehicleIdentifier_VehicleId(userId, vehicleId);
 
         if (vehicleToUpdate == null) {
             return null; // Later throw exception
@@ -102,17 +100,17 @@ public class VehicleServiceImpl implements VehicleService {
 
 
     @Override
-    public VehicleResponseModel addVehicleToCustomerAccount(String customerId, VehicleRequestModel vehicleRequestModel) {
-        CustomerAccount customerAccount = customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
+    public VehicleResponseModel addVehicleToCustomerAccount(String userId, VehicleRequestModel vehicleRequestModel) {
+        User customerAccount = userRepository.findUserByUserIdentifier_UserId(userId);
 
         if(customerAccount == null) {
-            log.warn("Customer account not found for customer ID: {}", customerId);
+            log.warn("User not found for customer ID: {}", userId);
             return null;
         }
 
         Vehicle newVehicle = new Vehicle();
         newVehicle.setVehicleIdentifier(new VehicleIdentifier());
-        newVehicle.setCustomerId(vehicleRequestModel.getCustomerId());
+        newVehicle.setUserId(vehicleRequestModel.getCustomerId());
         newVehicle.setMake(vehicleRequestModel.getMake());
         newVehicle.setModel(vehicleRequestModel.getModel());
         newVehicle.setYear(vehicleRequestModel.getYear());
@@ -125,14 +123,14 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public void deleteAllVehiclesByCustomerId(String customerId) {
-        List<Vehicle> vehicles = vehicleRepository.findAllVehiclesByCustomerId(customerId);
+    public void deleteAllVehiclesByCustomerId(String userId) {
+        List<Vehicle> vehicles = vehicleRepository.findAllVehiclesByUserId(userId);
         vehicles.forEach(vehicle -> { vehicleRepository.delete(vehicle);});
     }
 
     @Override
-    public void deleteVehicleByVehicleId(String customerId, String vehicleId) {
-        Vehicle foundVehicle = vehicleRepository.findVehicleByCustomerIdAndVehicleIdentifier_VehicleId(customerId, vehicleId);
+    public void deleteVehicleByVehicleId(String userId, String vehicleId) {
+        Vehicle foundVehicle = vehicleRepository.findVehicleByUserIdAndVehicleIdentifier_VehicleId(userId, vehicleId);
 
         // Check if the vehicle is null
         if (foundVehicle == null) {

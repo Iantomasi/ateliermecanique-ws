@@ -31,23 +31,25 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    //implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 
-    //implementation 'org.springframework.security:spring-security-oauth2-client:6.2.0'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    // implementation 'org.springframework.security:spring-security-oauth2-jose'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
-    //implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.0.4.RELEASE'
+
     implementation 'mysql:mysql-connector-java:8.0.33'
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     implementation 'com.nimbusds:nimbus-jose-jwt:9.30.2'
     implementation 'org.json:json:20230227'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5' // Use the latest version available
+    implementation 'io.jsonwebtoken:jjwt-gson:0.11.5'
 
     compileOnly 'org.projectlombok:lombok'
 
     runtimeOnly 'mysql:mysql-connector-java'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
@@ -56,7 +58,7 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-    // testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'com.codeborne:selenide:6.17.0'
     testImplementation 'io.github.bonigarcia:webdrivermanager:5.6.2'

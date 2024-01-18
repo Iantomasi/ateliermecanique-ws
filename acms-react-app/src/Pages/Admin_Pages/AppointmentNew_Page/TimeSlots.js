@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import moment from 'moment';
 import './TimeSlots.css';
-import axios from 'axios';
+import userService from "../../../Services/user.service";
 
 function TimeSlots({ selectedDate, onTimeSelect }) {
     let intime = "09:00 AM";
@@ -26,10 +26,9 @@ function TimeSlots({ selectedDate, onTimeSelect }) {
         setLoading(true);
         const formattedDate = selectedDate.format("YYYY-MM-DD");
         console.log("Formatted Date for API Call:", formattedDate);
-
-        axios.get(`http://localhost:8080/api/v1/availability/${formattedDate}`)
+        
+        userService.getAvailabilities(formattedDate)
             .then(response => {
-                console.log("API Response:", response.data);
                 const availableSlots = generateTimeSlots(intime, outtime).map(slot => ({
                     time: slot,
                     available: response.data[slot] !== false

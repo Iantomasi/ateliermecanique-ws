@@ -1,11 +1,10 @@
 package com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.businesslayer;
 
-import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.CustomerAccountoAuthRequestModel;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccount;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datalayer.CustomerAccountRepository;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datamapperlayer.CustomerAccountRequestMapper;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.ERole;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.Role;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datamapperlayer.CustomerAccountResponseMapper;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.datamapperlayer.CustomerAccountoAuthRequestMapper;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountRequestModel;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountResponseModel;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.businesslayer.VehicleService;
@@ -20,15 +19,15 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @SpringBootTest
 class CustomerAccountServiceImplTest {
     @Mock
-    private CustomerAccountRepository customerAccountRepository;
-
-    @Mock
-    private CustomerAccountoAuthRequestMapper customerAccountoAuthRequestMapper;
+    private UserRepository userRepository;
+    
 
     @Mock
     private CustomerAccountResponseMapper customerAccountResponseMapper;
@@ -39,18 +38,21 @@ class CustomerAccountServiceImplTest {
     @Mock
     private VehicleService vehicleService;
 
-    private final CustomerAccountoAuthRequestMapper mapper = Mappers.getMapper(CustomerAccountoAuthRequestMapper.class);
-    private final CustomerAccountRequestMapper mapper2 = Mappers.getMapper(CustomerAccountRequestMapper.class);
+
 
     @Test
     void getAllCustomerAccounts_shouldSucceed() {
-        CustomerAccount customerAccount = new CustomerAccount("Jane", "Doe", "jane@example.com", "1234567890", "testPassword");
 
-        List<CustomerAccount> customerAccounts = Collections.singletonList(customerAccount);
-        when(customerAccountRepository.findAll()).thenReturn(customerAccounts);
+        Set<Role> roles = new HashSet<>();
+        roles.add(new Role(ERole.ROLE_CUSTOMER));
+
+        User account = new User("Jane", "Doe", "jane@example.com", "1234567890", "testPassword",roles);
+
+
+        List<User> customerAccounts = Collections.singletonList(account);
+        when(userRepository.findAll()).thenReturn(customerAccounts);
 
         CustomerAccountResponseModel responseModel = CustomerAccountResponseModel.builder()
-                .customerId("1")
                 .firstName("John")
                 .lastName("Doe")
                 .email("john@example.com")
@@ -65,9 +67,9 @@ class CustomerAccountServiceImplTest {
         assertNotNull(result);
         assertFalse(result.isEmpty());
         assertEquals(responseModels.size(), result.size());
-        assertEquals(responseModels.get(0).getCustomerId(), result.get(0).getCustomerId());
+        assertEquals(responseModels.get(0).getId(), result.get(0));
 
-        verify(customerAccountRepository, times(1)).findAll();
+        verify(userRepository, times(1)).findAll();
         verify(customerAccountResponseMapper, times(1)).entityToResponseModelList(customerAccounts);
     }
 
@@ -75,12 +77,17 @@ class CustomerAccountServiceImplTest {
     void getCustomerAccountByCustomerId_shouldSucceed() {
         //Arrange
         String customerId = "1";
-        CustomerAccount customerAccount = new CustomerAccount("Jane", "Doe", "jane@example.com", "1234567890", "testPassword");
 
-        when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId)).thenReturn(customerAccount);
+        Set<Role> roles = new HashSet<>();
+        roles.add(new Role(ERole.ROLE_CUSTOMER));
+
+
+        User customerAccount = new User("Jane", "Doe", "jane@example.com", "1234567890", "testPassword",roles);
+
+        when(userRepository.findUserByUserIdentifier_UserId(customerId)).thenReturn(customerAccount);
 
         CustomerAccountResponseModel responseModel = CustomerAccountResponseModel.builder()
-                .customerId(customerId)
+                .id(customerId)
                 .firstName("Jane")
                 .lastName("Doe")
                 .email("jane@example.com")
@@ -94,13 +101,13 @@ class CustomerAccountServiceImplTest {
 
         //Assert
         assertNotNull(result);
-        assertEquals(customerId, result.getCustomerId());
+        assertEquals(customerId, result.getId());
         assertEquals("Jane", result.getFirstName());
         assertEquals("Doe", result.getLastName());
         assertEquals("jane@example.com", result.getEmail());
         assertEquals("1234567890", result.getPhoneNumber());
 
-        verify(customerAccountRepository, times(1)).findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
+        verify(userRepository, times(1)).findUserByUserIdentifier_UserId(customerId);
         verify(customerAccountResponseMapper, times(1)).entityToResponseModel(customerAccount);
     }
 
@@ -108,20 +115,20 @@ class CustomerAccountServiceImplTest {
     void getCustomerAccountByInvalidCustomerId_shouldReturnNull() {
         String nonExistentCustomerId = "notARealId";
 
-        when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(nonExistentCustomerId)).thenReturn(null);
+        when(userRepository.findUserByUserIdentifier_UserId(nonExistentCustomerId)).thenReturn(null);
 
         CustomerAccountResponseModel result = customerAccountService.getCustomerAccountByCustomerId(nonExistentCustomerId);
 
         assertNull(result);
 
-        verify(customerAccountRepository, times(1)).findCustomerAccountByCustomerAccountIdentifier_CustomerId(nonExistentCustomerId);
+        verify(userRepository, times(1)).findUserByUserIdentifier_UserId(nonExistentCustomerId);
     }
 
 
     @Test
     void updateCustomerAccountByCustomerId_shouldSucceed() {
         // Arrange
-        String customerId = "555";
+        String userId = "555";
         CustomerAccountRequestModel requestModel = CustomerAccountRequestModel.builder()
                 .firstName("JONNY")
                 .lastName("DoEEE")
@@ -129,37 +136,37 @@ class CustomerAccountServiceImplTest {
                 .phoneNumber("6789998212")
                 .build();
 
-        CustomerAccount existingAccount = new CustomerAccount();
+        User existingAccount = new User();
         existingAccount.setFirstName("John");
         existingAccount.setLastName("Doe");
         existingAccount.setEmail("johndoe@example.com");
         existingAccount.setPhoneNumber("123456789");
 
-        when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId))
+        when(userRepository.findUserByUserIdentifier_UserId(userId))
                 .thenReturn(existingAccount);
-        when(customerAccountRepository.save(any(CustomerAccount.class)))
+        when(userRepository.save(any(User.class)))
                 .thenReturn(existingAccount); // Mock saving the account
 
         CustomerAccountResponseModel expectedResponse = CustomerAccountResponseModel.builder()
-                .customerId(customerId)
+                .id(userId)
                 .firstName("JONNY")
                 .lastName("DoEEE")
                 .email("JONNYDoEEE@example.com")
                 .phoneNumber("6789998212")
                 .build();
 
-        when(customerAccountResponseMapper.entityToResponseModel(any(CustomerAccount.class)))
+        when(customerAccountResponseMapper.entityToResponseModel(any(User.class)))
                 .thenReturn(expectedResponse);
 
         // Act
-        CustomerAccountResponseModel actualResponse = customerAccountService.updateCustomerAccountByCustomerId(customerId, requestModel);
+        CustomerAccountResponseModel actualResponse = customerAccountService.updateCustomerAccountByCustomerId(userId, requestModel);
 
         // Assert
         assertNotNull(actualResponse);
         assertEquals(expectedResponse, actualResponse);
 
         // Verify the interactions
-        verify(customerAccountRepository).save(argThat(account ->
+        verify(userRepository).save(argThat(account ->
                 "JONNY".equals(account.getFirstName()) &&
                         "DoEEE".equals(account.getLastName()) &&
                         "JONNYDoEEE@example.com".equals(account.getEmail()) &&
@@ -178,7 +185,7 @@ class CustomerAccountServiceImplTest {
                 .phoneNumber("6789998212")
                 .build();
 
-        when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(nonExistingCustomerId)).thenReturn(null);
+        when(userRepository.findUserByUserIdentifier_UserId(nonExistingCustomerId)).thenReturn(null);
 
         CustomerAccountResponseModel updatedResponse = customerAccountService.updateCustomerAccountByCustomerId(nonExistingCustomerId, requestModel);
 
@@ -188,31 +195,31 @@ class CustomerAccountServiceImplTest {
     @Test
     void deleteCustomerAccountAndVehiclesByCustomerId_shouldSucceed() {
         // Arrange
-        String customerId = "testCustomerId";
-        CustomerAccount customerAccount = new CustomerAccount();
-        when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId)).thenReturn(customerAccount);
+        String userId = "testCustomerId";
+        User customerAccount = new User();
+        when(userRepository.findUserByUserIdentifier_UserId(userId)).thenReturn(customerAccount);
 
         // Act
-        customerAccountService.deleteCustomerAccountByCustomerId(customerId);
+        customerAccountService.deleteCustomerAccountByCustomerId(userId);
 
         // Assert
-        verify(customerAccountRepository).findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
-        verify(customerAccountRepository).delete(customerAccount);
-        verify(vehicleService).deleteAllVehiclesByCustomerId(customerId);
+        verify(userRepository).findAll();
+        verify(userRepository).delete(customerAccount);
+        verify(vehicleService).deleteAllVehiclesByCustomerId(userId);
     }
 
     @Test
     void deleteCustomerAccountAndVehiclesByInvalidCustomerId_shouldReturnNull() {
         // Arrange
-        String customerId = "nonExistingCustomerId";
-        when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId)).thenReturn(null);
+        String userId = "nonExistingCustomerId";
+        when(userRepository.findUserByUserIdentifier_UserId(userId)).thenReturn(null);
 
         // Act
-        customerAccountService.deleteCustomerAccountByCustomerId(customerId);
+        customerAccountService.deleteCustomerAccountByCustomerId(userId);
 
         // Assert
-        verify(customerAccountRepository).findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
-        verify(customerAccountRepository, never()).delete(any());
+        verify(userRepository).findUserByUserIdentifier_UserId(userId);
+        verify(userRepository, never()).delete(any());
         verify(vehicleService, never()).deleteAllVehiclesByCustomerId(any());
     }
 
@@ -226,9 +233,13 @@ class CustomerAccountServiceImplTest {
                 .role("CUSTOMER")
                 .token("FakeToken")
                 .build();
-        CustomerAccount account = new CustomerAccount("John","Doe","Johndoe@gmail.com",null,null,
-                "FakeToken");
-        when(customerAccountRepository.save(any())).thenReturn(account);
+
+        Set<Role> roles = new HashSet<>();
+        roles.add(new Role(ERole.ROLE_CUSTOMER));
+
+        User account = new User( "John", "Doe", "Johndoe@gmail.com", null, null, roles);
+
+        when(userRepository.save(any())).thenReturn(account);
 
         CustomerAccountResponseModel expectedResponse = CustomerAccountResponseModel.builder()
                 /* build the expected response based on the saved account */
@@ -242,28 +253,10 @@ class CustomerAccountServiceImplTest {
         assertNotNull(actualResponse);
         assertEquals(expectedResponse, actualResponse);
 
-        verify(customerAccountRepository, times(1)).save(any());
+        verify(userRepository, times(1)).save(any());
         verify(customerAccountResponseMapper, times(1)).entityToResponseModel(account);
     }
 
-    @Test
-    void updateCustomerToken_shouldSucceed() {
-        // Arrange
-        String customerId = "testCustomerId";
-        String token = "newTokenValue";
-
-        CustomerAccount customerAccount = new CustomerAccount();
-        when(customerAccountRepository.findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId)).thenReturn(customerAccount);
-
-        // Act
-        customerAccountService.updateCustomerToken(customerId, token);
-
-        // Assert
-        assertEquals(token, customerAccount.getToken());
-
-        verify(customerAccountRepository, times(1)).findCustomerAccountByCustomerAccountIdentifier_CustomerId(customerId);
-        verify(customerAccountRepository, times(1)).save(customerAccount);
-    }
 
     @Test
     void testMappingRequestModelToEntityoAuth() {
@@ -277,35 +270,14 @@ class CustomerAccountServiceImplTest {
                 .build();
 
         // Act
-        CustomerAccount entity = mapper.requestModelToEntity(requestModel);
+        User entity = mapper.requestModelToEntity(requestModel);
 
         // Assert
         assertEquals("John", entity.getFirstName());
         assertEquals("Doe", entity.getLastName());
         assertEquals("john.doe@example.com", entity.getEmail());
-        assertEquals("fakeToken", entity.getToken());
 
     }
 
-    @Test
-    void testMappingRequestModelToEntity() {
-        // Arrange
-        CustomerAccountRequestModel requestModel = CustomerAccountRequestModel.builder()
-                .firstName("John")
-                .lastName("Doe")
-                .email("john.doe@example.com")
-                .phoneNumber("1234567890")
-                .build();
-
-        // Act
-        CustomerAccount entity = mapper2.requestModelToEntity(requestModel);
-
-        // Assert
-        assertEquals("John", entity.getFirstName());
-        assertEquals("Doe", entity.getLastName());
-        assertEquals("john.doe@example.com", entity.getEmail());
-        assertEquals("1234567890", entity.getPhoneNumber());
-
-    }
 }
 
