@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import Navbar from '../../../../Components/Navigation_Bars/Logged_In/NavBar.js';
 import NavBar from '../../../../Components/Navigation_Bars/Not_Logged_In/NavBar.js';
 import Footer from '../../../../Components/Footer/Footer.js';

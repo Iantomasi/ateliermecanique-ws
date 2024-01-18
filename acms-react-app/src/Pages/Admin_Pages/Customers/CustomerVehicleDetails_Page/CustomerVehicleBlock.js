@@ -11,7 +11,7 @@ const CustomerVehicleBlock = ({ vehicle, customerId }) => {
   return (
     <tr className='hover:bg-gray-200 hover:cursor-pointer' onClick={handleClick}>
       <td>{vehicle.vehicleId}</td>
-      <td>{vehicle.customerId}</td>
+      <td>{customerId}</td>
       <td>{vehicle.make}</td>
       <td>{vehicle.model}</td>
       <td>{vehicle.year}</td>

@@ -12,7 +12,7 @@ const HomeOption = ({ src, label }) => {
       const userRoles = currentUser.roles;
 
       if (userRoles.includes('ROLE_CUSTOMER')) {
-        navigate(`/customer/${label}`);
+        navigate(`/user/${label}`);
       } else if (userRoles.includes('ROLE_ADMIN')) {
         navigate(`/admin/${label}`);
       }
