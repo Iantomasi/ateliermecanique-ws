@@ -14,7 +14,7 @@ import User from './Pages/User_Pages/User';
 import CustomerAppointments from './Pages/Admin_Pages/Customers/CustomerAppointments_Page/CustomerAppointments';
 import Calendar from './Pages/Admin_Pages/AppointmentNew_Page/Calendar';
 import CustomerAppointmentDetails from './Pages/Admin_Pages/Customers/CustomerAppointments_Page/CustomerAppointmentDetails.js';
-import CustomerCalendar from './Pages/Admin_Pages/CustomerAppointmentNew_Page/CustomerCalendar';
+import CustomerCalendar from './Pages/Admin_Pages/CustomerAppointmentForm_Page/CustomerCalendar.js';
 
 import AppointmentDetails from './Pages/Admin_Pages/Appointments/AppointmentDetails_Page/AppointmentDetails';
 

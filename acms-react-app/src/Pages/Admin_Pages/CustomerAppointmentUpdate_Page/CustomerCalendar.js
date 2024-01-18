@@ -13,6 +13,7 @@ import Footer from '../../../Components/Footer/Footer.js';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import VehicleSelect from "./VehicleSelect.js";
+import adminService from "../../../Services/admin.service.js";
 
 export default function CustomerCalendar() {
     const days = ["S", "M", "T", "W", "T", "F", "S"];
@@ -28,6 +29,7 @@ export default function CustomerCalendar() {
     const { customerId } = useParams(); // Retrieve customerId from URL    
     const [vehicleId, setVehicleId] = useState('');
     const [vehicles, setVehicles] = useState([]);
+
     const handleSubmit = () => {
 
         const appointmentData = {
@@ -45,30 +47,18 @@ export default function CustomerCalendar() {
         }
         console.log("Submitting appointment:", appointmentData);
 
-        const url = `http://localhost:8080/api/v1/customers/${customerId}/appointments`;
-
-        fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(appointmentData)
-        })
+        adminService.addAppointment(customerId,appointmentData)
             .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+                if (response.status === 200) {
+                    alert("Appointment has been created!")
+                    navigate('/admin/appointments');
                 }
-                return response.json();
-            })
-            .then(data => {
-                console.log("Appointment created:", data);
-                alert("Appointment has been created!")
-
             })
             .catch(error => {
+                alert("Error creating appointment!");
                 console.error("Error creating appointment:", error);
                 console.error("Appointment data:", appointmentData);
             });
-       //navigate('/admin/customers/:customerId/appointments');
-       //window.location.reload();
     }
 
     const handleDayClick = (date) => {

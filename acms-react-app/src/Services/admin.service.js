@@ -55,6 +55,9 @@ class adminService{
         return axios.get(API_APPOINTMENTS_URL, { headers: authHeader() });
     }
 
+    addAppointment(customerId,appointment){
+        return axios.post(API_CUSTOMERS_URL + `/${customerId}/appointments`, appointment, { headers: authHeader() });
+    }
     getAppointmentById(id){
         return axios.get(API_APPOINTMENTS_URL + `/${id}`, { headers: authHeader() });
     }
@@ -64,8 +67,16 @@ class adminService{
             `${API_APPOINTMENTS_URL}/${id}/updateStatus?isConfirm=${isConfirmed}`,null,{ headers: authHeader() });
     }
 
+    updateAppointment(id, appointment){
+        return axios.put(API_APPOINTMENTS_URL + `/${id}`, appointment, { headers: authHeader() });
+    }
+
     deleteAllCancelledAppointments(){
         return axios.delete(API_APPOINTMENTS_URL + `/cancelled`, { headers: authHeader() });
+    }
+
+    deleteAppointment(id){
+        return axios.delete(API_APPOINTMENTS_URL + `/${id}`, { headers: authHeader() });
     }
 
 }

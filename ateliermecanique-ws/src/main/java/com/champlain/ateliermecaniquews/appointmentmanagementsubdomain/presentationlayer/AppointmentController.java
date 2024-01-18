@@ -114,9 +114,9 @@ public class AppointmentController {
         return ResponseEntity.ok(appointments);
     }
 
-<<<<<<< HEAD
-    @PutMapping({"/appointments/{appointmentId}","/customers/{customerId}/appointments/{appointmentId}"})
-    public ResponseEntity<AppointmentResponseModel> updateAppointmentByAppointmentId(@RequestBody AppointmentRequestModel appointmentRequestModel, @PathVariable String appointmentId) {
+    @PutMapping("/appointments/{appointmentId}")
+    public ResponseEntity<AppointmentResponseModel> updateAppointmentByAppointmentIdAdmin(@RequestBody AppointmentRequestModel appointmentRequestModel, @PathVariable String appointmentId) {
+
         AppointmentResponseModel appointment = appointmentService.updateAppointmentByAppointmentId(appointmentRequestModel, appointmentId);
         if (appointment == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -124,8 +124,36 @@ public class AppointmentController {
         return ResponseEntity.ok(appointment);
     }
 
-=======
->>>>>>> 43d1e1f (Finished authenticating front end, only missing tests)
+    @PutMapping("/customers/{customerId}/appointments/{appointmentId}")
+    public ResponseEntity<AppointmentResponseModel> updateAppointmentByAppointmentId(@RequestBody AppointmentRequestModel appointmentRequestModel, @PathVariable String appointmentId, @PathVariable String customerId) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+
+        if (authentication.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("ROLE_CUSTOMER"))) {
+            // Check if it's an admin, and go straight to checking if the user exists
+            User user = userRepository.findUserByUserIdentifier_UserId(customerId);
+
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } else {
+            // It's a customer, check if the authenticated user's ID matches the path variable
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            String authenticatedUserId = userDetails.getUserId();
+
+            if (!authenticatedUserId.equals(customerId)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+        }
+
+        AppointmentResponseModel appointment = appointmentService.updateAppointmentByAppointmentId(appointmentRequestModel, appointmentId);
+        if (appointment == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(appointment);
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/appointments/{appointmentId}/updateStatus")
     public ResponseEntity<AppointmentResponseModel> updateAppointmentStatusAdmin(@PathVariable String appointmentId, @RequestParam boolean isConfirm) {
@@ -179,8 +207,27 @@ public class AppointmentController {
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
     @DeleteMapping("/customers/{customerId}/appointments/{appointmentId}")
-    public ResponseEntity<Void> deleteAppointmentByAppointmentIdCustomer(@PathVariable String appointmentId) {
+    public ResponseEntity<Void> deleteAppointmentByAppointmentIdCustomer(@PathVariable String appointmentId,@PathVariable String customerId) {
         try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+
+            if (authentication.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("ROLE_CUSTOMER"))) {
+                // Check if it's an admin, and go straight to checking if the user exists
+                User user = userRepository.findUserByUserIdentifier_UserId(customerId);
+
+                if (user == null) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                }
+            } else {
+                // It's a customer, check if the authenticated user's ID matches the path variable
+                UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+                String authenticatedUserId = userDetails.getUserId();
+
+                if (!authenticatedUserId.equals(customerId)) {
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+                }
+            }
             appointmentService.deleteAppointmentByAppointmentId(appointmentId);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (Exception e) {
@@ -191,6 +238,27 @@ public class AppointmentController {
     @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
     @PostMapping("/customers/{customerId}/appointments")
     public ResponseEntity<AppointmentResponseModel> addAppointmentToCustomerAccountCustomer(@PathVariable String customerId, @RequestBody AppointmentRequestModel appointmentRequestModel) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+
+        if (authentication.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("ROLE_CUSTOMER"))) {
+            // Check if it's an admin, and go straight to checking if the user exists
+            User user = userRepository.findUserByUserIdentifier_UserId(customerId);
+
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } else {
+            // It's a customer, check if the authenticated user's ID matches the path variable
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            String authenticatedUserId = userDetails.getUserId();
+
+            if (!authenticatedUserId.equals(customerId)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+        }
+
         AppointmentResponseModel appointment = appointmentService.addAppointmentToCustomerAccount(customerId, appointmentRequestModel);
         if (appointment == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

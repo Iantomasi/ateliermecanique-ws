@@ -7,7 +7,7 @@ import CustomerBlock from './CustomerBlock.js';
 import adminService from '../../../../Services/admin.service.js';
 import userService from '../../../../Services/user.service.js';
 
-function Customers() {
+function Customers() {  
   const [customers, setCustomers] = useState([]);
   const [publicContent, setPublicContent] = useState(null);
   const [message, setMessage] = useState('');

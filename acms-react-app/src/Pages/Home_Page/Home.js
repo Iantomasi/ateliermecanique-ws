@@ -25,7 +25,6 @@ function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <NavBar />
-
       <main className="flex-grow flex flex-col justify-center">
         {publicContent === true ? (
           <section className="flex flex-col md:flex-row hero bg-white p-4 md:p-8">

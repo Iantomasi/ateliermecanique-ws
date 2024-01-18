@@ -8,6 +8,7 @@ import NavBar from '../../../../Components/Navigation_Bars/Not_Logged_In/NavBar.
 import Footer from '../../../../Components/Footer/Footer.js';
 import Sidebar from '../../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
 import CustomerAppointmentBlock from './CustomerAppointmentBlock.js';
+import userService from '../../../../Services/user.service.js';
 
 function CustomerAppointments() {
   const { customerId } = useParams();
@@ -17,17 +18,9 @@ function CustomerAppointments() {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    getCustomerAppointments();
-  }, []);
-
-  function getCustomerAppointments() {
-    adminService.getAllCustomerAppointments(customerId)  
-    .then(res => {
-        console.log('API response:', res); 
-        if (res.status === 200) {
-            setAppointments(res.data);
-            setPublicContent(true);
-        }
+    userService.getAdminContent().then(
+      (response) => {
+        setPublicContent(true);
       })
       .catch(error => {
         console.log(error);
@@ -43,6 +36,23 @@ function CustomerAppointments() {
           
           setMessage(error.response.data);
         }
+      })
+  }, []);
+
+  useEffect(() => {
+    getCustomerAppointments();
+  }, []);
+
+  function getCustomerAppointments() {
+    adminService.getAllCustomerAppointments(customerId)  
+    .then(res => {
+        console.log('API response:', res); 
+        if (res.status === 200) {
+            setAppointments(res.data);
+        }
+      })
+      .catch(error => {
+        console.log(error);
       })
   }
 
@@ -96,9 +106,6 @@ function CustomerAppointments() {
                   </tbody>
                   </table>
                 </div>
-                <button className="text-white border-none px-4 py-2 rounded font-bold transition duration-300 hover:scale-110 bg-black" onClick={handleAddAppointmentClick}>
-                Add+
-              </button>
               </div>
             </div>
           </div>

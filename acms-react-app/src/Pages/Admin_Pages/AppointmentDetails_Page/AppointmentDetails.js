@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
 import dayjs from 'dayjs';
 import Navbar from '../../../Components/Navigation_Bars/Logged_In/NavBar.js';
 import Footer from '../../../Components/Footer/Footer.js';
 import Sidebar from '../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
 import CustomDateTimePicker from '../../../Components/DateTimePicker/CustomDateTimePicker.js';
+import adminService from '../../../Services/admin.service.js';
 
 
 function AppointmentDetails() {
@@ -23,7 +23,7 @@ function AppointmentDetails() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/v1/appointments/${appointmentId}`)
+        adminService.getAppointmentById(appointmentId)
             .then(res => {
                 if (res.status === 200) {
                     setAppointmentDetails(res.data);
@@ -48,8 +48,7 @@ function AppointmentDetails() {
       }
     
       function executeDelete() {
-        axios
-          .delete(`http://localhost:8080/api/v1/appointments/${appointmentId}`)
+        adminService.deleteAppointment(appointmentId)
           .then(res => {
             if (res.status === 204) {
               alert('Appointment has been deleted!');
@@ -101,10 +100,7 @@ function AppointmentDetails() {
           status: formData.get('status')
       };
       
-        axios.put(
-          `http://localhost:8080/api/v1/appointments/${appointmentId}`,
-          updatedAppointment
-        )
+        adminService.updateAppointment(appointmentId, updatedAppointment)
         .then(res => {
           if (res.status === 200) {
             setAppointmentDetails(res.data);

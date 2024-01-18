@@ -42,9 +42,6 @@ function AppointmentDetails() {
         return <div>Loading...</div>;
     }
 
-    const handleBackButtonClick = () => {
-        navigate('/admin/appointments');
-    };
     return (
         <div className="flex flex-col min-h-screen">
             {publicContent ?(
@@ -53,12 +50,6 @@ function AppointmentDetails() {
                 <div className="flex">
                     <Sidebar appointmentId={appointmentId} />
                     <main className="flex-grow p-5">
-                        <button
-                            className="mr-5 text-blue-500 hover:underline"
-                            onClick={handleBackButtonClick}
-                        >
-                            Back
-                        </button>
                             <p className="text-4xl font-bold text-center">APPOINTMENT DETAILS</p>
                         {appointmentDetails && (
                             <div className="bg-gray-100 shadow-lg p-5 rounded-md mt-5 relative">

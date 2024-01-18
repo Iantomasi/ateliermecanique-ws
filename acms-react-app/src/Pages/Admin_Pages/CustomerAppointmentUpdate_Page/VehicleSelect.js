@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import adminService from '../../../Services/admin.service';
 
 function VehicleSelect({ customerId, updateVehicleId }) {
     const [selectedVehicleId, setSelectedVehicleId] = useState('');
@@ -7,17 +8,13 @@ function VehicleSelect({ customerId, updateVehicleId }) {
     useEffect(() => {
         // Only fetch vehicles if customerId is available
         if (customerId) {
-            const url = `http://localhost:8080/api/v1/customers/${customerId}/vehicles`;
-            console.log('Fetching vehicles from:', url);
-
-            fetch(url)
-                .then(response => response.json())
-                .then(data => setVehicles(data))
+            adminService.getAllCustomerVehicles(customerId)
+                .then(response=> setVehicles(response.data))
                 .catch(error => console.error('Error fetching vehicles:', error));
         } else {
             setVehicles([]);
         }
-    }, [customerId]); // Dependency array with customerId
+    }, [customerId]); // Only run when customerId changes
 
     const handleVehicleSelect = (event) => {
         const vehicleId = event.target.value;
