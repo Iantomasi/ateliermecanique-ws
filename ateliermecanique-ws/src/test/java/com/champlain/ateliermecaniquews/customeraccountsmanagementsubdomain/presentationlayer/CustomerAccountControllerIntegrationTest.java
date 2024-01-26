@@ -51,7 +51,8 @@ class CustomerAccountControllerIntegrationTest {
         Set<Role> roles = new HashSet<>();
         roles.add(new Role(ERole.ROLE_CUSTOMER));
 
-        testAccount = new User("John", "Doe", "john@example.com", "1234567890", "password123",roles);
+        testAccount = new User("Jane", "Doe", "1234567890", "jane@example.com", "testPassword",roles, null);
+
         testAccount.setUserIdentifier(userIdentifier);
         User savedAccount = userRepository.save(testAccount);
         testAccountId = savedAccount.getUserIdentifier().getUserId(); // Get the UUID

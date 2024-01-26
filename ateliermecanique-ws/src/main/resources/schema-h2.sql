@@ -36,6 +36,7 @@ create table if not exists invoices(
     sum_of_services DECIMAL(15,2)
     );
 
+
 CREATE TABLE if not exists users (
                                      id INT AUTO_INCREMENT PRIMARY KEY,
                                      user_id VARCHAR(36),

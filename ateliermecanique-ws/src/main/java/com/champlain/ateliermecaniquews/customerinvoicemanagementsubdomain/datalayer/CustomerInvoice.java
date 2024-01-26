@@ -1,7 +1,5 @@
 package com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datalayer;
 
-import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.AppointmentIdentifier;
-import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -37,11 +35,12 @@ public class CustomerInvoice {
         this.customerInvoiceIdentifier = new CustomerInvoiceIdentifier();
     }
 
-    public CustomerInvoice(String customerId, String appointmentId, LocalDateTime invoiceDate, String mechanicNotes, Double sumOfServices) {
+    public CustomerInvoice(String customerId, String appointmentId, String invoiceDate, String mechanicNotes, Double sumOfServices) {
         this.customerInvoiceIdentifier = new CustomerInvoiceIdentifier();
         this.customerId = customerId;
         this.appointmentId = appointmentId;
-        this.invoiceDate = invoiceDate;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        this.invoiceDate = LocalDateTime.parse(invoiceDate, formatter);
         this.mechanicNotes = mechanicNotes;
         this.sumOfServices = sumOfServices;
     }

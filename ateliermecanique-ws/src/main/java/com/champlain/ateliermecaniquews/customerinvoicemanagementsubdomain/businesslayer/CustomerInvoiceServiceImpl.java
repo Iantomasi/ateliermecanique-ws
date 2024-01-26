@@ -22,7 +22,6 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService{
     private UserRepository userRepository;
     private VehicleRepository vehicleRepository;
     private CustomerInvoiceResponseMapper customerInvoiceResponseMapper;
-    private CustomerInvoiceRequestMapper customerInvoiceRequestMapper;
 
     @Override
     public List<CustomerInvoiceResponseModel> getAllInvoices() {
