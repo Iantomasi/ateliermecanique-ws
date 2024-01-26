@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import adminService from '../../../Services/admin.service';
-
+import adminService from '../../../../Services/admin.service';
     function CustomerInfo({ updateCustomerId, updateVehicleId }) {
         const [customers, setCustomers] = useState([]);
         const [selectedCustomerId, setSelectedCustomerId] = useState('');

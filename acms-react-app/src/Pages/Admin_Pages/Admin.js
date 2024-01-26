@@ -1,10 +1,10 @@
 import React, { useEffect , useState} from 'react';
 import NavBar from '../../Components/Navigation_Bars/Logged_In/NavBar.js';
 import Navbar from '../../Components/Navigation_Bars/Not_Logged_In/NavBar.js';
+import Sidebar from '../../Components/Navigation_Bars/Sidebar/Sidebar.js';
 import Footer from '../../Components/Footer/Footer.js';
 import HomeOption from '../../Components/General_Components/HomeOption.js';
 import userService from '../../Services/user.service.js';
-
 function Admin() {
 
   const [publicContent, setPublicContent] = useState(null);
