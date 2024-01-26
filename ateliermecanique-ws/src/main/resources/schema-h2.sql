@@ -29,13 +29,13 @@ create table if not exists appointments(
 create table if not exists invoices(
                                        id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                        invoice_id VARCHAR(36),
-    appointment_id VARCHAR(36),
-
     user_id VARCHAR(36),
-    invoice_datetime DATETIME,
-    invoice_mechanicnotes VARCHAR(255),
-    invoice_sumofservices DECIMAL(15,2)
+    appointment_id VARCHAR(36),
+    invoice_date DATETIME,
+    mechanic_notes VARCHAR(255),
+    sum_of_services DECIMAL(15,2)
     );
+
 
 CREATE TABLE if not exists users (
                                      id INT AUTO_INCREMENT PRIMARY KEY,

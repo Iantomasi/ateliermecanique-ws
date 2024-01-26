@@ -1,19 +1,20 @@
 import dayjs from "dayjs";
 import React, { useState, useEffect } from "react";
-import { generateDate, months } from "../AppointmentNew_Page/AppointmentCalendar.js";
-import cn from "../AppointmentNew_Page/cn.js";
+
+import { generateDate, months } from "../../Appointments/AppointmentNew_Page/AppointmentCalendar.js";
+import cn from "../../Appointments/AppointmentNew_Page/cn.js";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import TimePicker from "react-time-picker";
-import TimeSlots from "../AppointmentNew_Page/TimeSlots.js";
-import ServiceList from "../AppointmentNew_Page/ServiceList.js";
-import CustomerInfo from "../AppointmentNew_Page/CustomerInfo.js";
-import CommentBox from "../AppointmentNew_Page/CommentBox.js";
-import Navbar from '../../../Components/Navigation_Bars/Logged_In/NavBar.js';
-import Footer from '../../../Components/Footer/Footer.js';
+import TimeSlots from "../../Appointments/AppointmentNew_Page/TimeSlots.js";
+import ServiceList from "../../Appointments/AppointmentNew_Page/ServiceList.js";
+import CustomerInfo from "../../Appointments/AppointmentNew_Page/CustomerInfo.js";
+import CommentBox from "../../Appointments/AppointmentNew_Page/CommentBox.js";
+import Navbar from '../../../../Components/Navigation_Bars/Logged_In/NavBar.js';
+import Footer from '../../../../Components/Footer/Footer.js';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import VehicleSelect from "./VehicleSelect.js";
-import adminService from "../../../Services/admin.service.js";
+import adminService from "../../../../Services/admin.service.js";
 
 export default function CustomerCalendar() {
     const days = ["S", "M", "T", "W", "T", "F", "S"];

@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Navbar from '../../../Components/Navigation_Bars/Logged_In/NavBar.js';
-import NavBar from '../../../Components/Navigation_Bars/Not_Logged_In/NavBar.js';
-import Footer from '../../../Components/Footer/Footer.js';
-import Sidebar from '../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
-import adminService from '../../../Services/admin.service.js';
-import userService from '../../../Services/user.service.js';
-
+import Navbar from '../../../../Components/Navigation_Bars/Logged_In/NavBar.js';
+import NavBar from '../../../../Components/Navigation_Bars/Not_Logged_In/NavBar.js';
+import Footer from '../../../../Components/Footer/Footer.js';
+import Sidebar from '../../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
+import adminService from '../../../../Services/admin.service.js';
+import userService from '../../../../Services/user.service.js';
 function AddNewVehicle() {
     const {customerId} = useParams();
     const [vehicleDetails, setVehicleDetails] = useState({

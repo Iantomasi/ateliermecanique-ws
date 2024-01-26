@@ -8,16 +8,15 @@ import Customers from './Pages/Admin_Pages/Customers/Customers_Page/Customers';
 import CustomerDetails from './Pages/Admin_Pages/Customers/CustomerDetails_Page/CustomerDetails';
 import CustomerVehicles from './Pages/Admin_Pages/Customers/CustomerVehicles_Page/CustomerVehicles';
 import CustomerVehicleDetails from './Pages/Admin_Pages/Customers/CustomerVehicleDetails_Page/CustomerVehicleDetails';
-import AddNewVehicle from './Pages/Admin_Pages/AddNewVehicle_Page/AddNewVehicle';
+import AddNewVehicle from './Pages/Admin_Pages/Customers/AddNewVehicle_Page/AddNewVehicle.js';
 import Appointments from './Pages/Admin_Pages/Appointments/Appointments_Page/Appointments';
 import User from './Pages/User_Pages/User';
 import CustomerAppointments from './Pages/Admin_Pages/Customers/CustomerAppointments_Page/CustomerAppointments';
-import Calendar from './Pages/Admin_Pages/AppointmentNew_Page/Calendar';
+import Calendar from './Pages/Admin_Pages/Appointments/AppointmentNew_Page/Calendar.js';
 import CustomerAppointmentDetails from './Pages/Admin_Pages/Customers/CustomerAppointments_Page/CustomerAppointmentDetails.js';
-import CustomerCalendar from './Pages/Admin_Pages/CustomerAppointmentUpdate_Page/CustomerCalendar.js';
-
-import AppointmentDetails from './Pages/Admin_Pages/Appointments/AppointmentDetails_Page/AppointmentDetails';
-
+import CustomerCalendar from './Pages/Admin_Pages/Customers/CustomerAppointmentUpdate_Page/CustomerCalendar.js';
+import AppointmentDetails from './Pages/Admin_Pages/Appointments/AppointmentDetails_Page/AppointmentDetails.js';
+import Invoices from './Pages/Admin_Pages/Invoices/Invoices_Page/Invoices.js';
 
 const router = createBrowserRouter([
   {
@@ -90,6 +89,10 @@ const router = createBrowserRouter([
       { 
         path:"/admin/customers/:customerId/appointments/:appointmentId",
         element: <AppointmentDetails/>,
+      },
+      {
+        path:"/admin/invoices",
+        element: <Invoices/>, 
       },
       {
         path: "/user",

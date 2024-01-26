@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import moment from 'moment';
 import './TimeSlots.css';
-import userService from "../../../Services/user.service";
+import userService from "../../../../Services/user.service";
+
 
 function TimeSlots({ selectedDate, onTimeSelect }) {
     let intime = "09:00 AM";

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import adminService from '../../../Services/admin.service';
+import adminService from '../../../../Services/admin.service';
 
 function VehicleSelect({ customerId, updateVehicleId }) {
     const [selectedVehicleId, setSelectedVehicleId] = useState('');

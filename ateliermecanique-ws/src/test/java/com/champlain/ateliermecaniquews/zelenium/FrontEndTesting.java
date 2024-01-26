@@ -517,6 +517,27 @@ public class FrontEndTesting {
     }
 
 
+    @Test
+    public void getAllInvoices() {
+        open("https://localhost:3000/");
+        $("a[href='/login']").click();
+        sleep(1000);
+
+        // Assuming the email input field can be identified by its name attribute
+        $("input[name='email']").setValue("admin@example.com");
+
+        // Assuming the password input field can be identified by its name attribute
+        $("input[type='password']").setValue("Hello!");
+
+        $("button[type='submit']").click();
+        sleep(1000);
+        $("img[src='invoices.svg']").click();
+        sleep(1000);
+        $("p").shouldHave(text("INVOICES"));
+    }
+
+
+
 
 
 }

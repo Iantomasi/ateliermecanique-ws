@@ -7,13 +7,13 @@ import TimeSlots from "./TimeSlots";
 import ServiceList from "./ServiceList";
 import CustomerInfo from "./CustomerInfo";
 import CommentBox from "./CommentBox";
-import Navbar from '../../../Components/Navigation_Bars/Logged_In/NavBar.js';
-import NavBar from "../../../Components/Navigation_Bars/Not_Logged_In/NavBar.js";
-import Footer from '../../../Components/Footer/Footer.js';
+import Navbar from "../../../../Components/Navigation_Bars/Logged_In/NavBar.js";
+import NavBar from "../../../../Components/Navigation_Bars/Not_Logged_In/NavBar.js";
+import Footer from "../../../../Components/Footer/Footer.js";
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
-import adminService from "../../../Services/admin.service.js";
-import userService from "../../../Services/user.service.js";
+import adminService from "../../../../Services/admin.service.js";
+import userService from "../../../../Services/user.service.js";
 
 export default function Calendar() {
     const days = ["S", "M", "T", "W", "T", "F", "S"];

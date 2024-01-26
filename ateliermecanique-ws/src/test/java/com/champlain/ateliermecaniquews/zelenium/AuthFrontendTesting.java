@@ -64,7 +64,7 @@ public class AuthFrontendTesting {
         SelenideElement secondH1 = h1Elements.get(1);
         secondH1.shouldHave(Condition.text("Revitalize your ride with expert care."));
     }
-    //for some reason, on the selenium test's driver, the google div doesn't show when clicking on the google button
+    //for some reason, on the selenium test's driver, the google div doesn't show when clicking on the Google button
 //    @Test
 //    public void googleLogin(){
 //        open("https://localhost:3000/");
