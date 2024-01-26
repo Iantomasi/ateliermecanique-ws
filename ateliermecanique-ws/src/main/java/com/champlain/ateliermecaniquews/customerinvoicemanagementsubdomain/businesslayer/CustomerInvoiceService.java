@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface CustomerInvoiceService {
 
-    List<CustomerInvoiceResponseModel> getAllInvoices(); // test change
+    List<CustomerInvoiceResponseModel> getAllInvoices();
 
 
 
