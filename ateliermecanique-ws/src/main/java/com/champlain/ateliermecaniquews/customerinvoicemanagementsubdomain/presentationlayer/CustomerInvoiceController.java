@@ -17,8 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/test")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/v1")
 @AllArgsConstructor
 public class CustomerInvoiceController {
 
@@ -36,10 +35,10 @@ public class CustomerInvoiceController {
         return ResponseEntity.ok(invoices);
     }
 
-    //@PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
     @GetMapping("/customers/{customerId}/invoices")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
     public ResponseEntity<List<CustomerInvoiceResponseModel>> getAllInvoicesByCustomerId(@PathVariable String customerId) {
-       /*
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 
@@ -59,10 +58,6 @@ public class CustomerInvoiceController {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
         }
-
-        */
-
-
 
         List<CustomerInvoiceResponseModel> invoices = customerInvoiceService.getAllInvoicesByCustomerId(customerId);
 

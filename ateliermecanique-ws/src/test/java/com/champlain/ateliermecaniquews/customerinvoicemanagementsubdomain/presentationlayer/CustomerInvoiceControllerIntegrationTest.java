@@ -6,6 +6,8 @@ import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.AppointmentRepository;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Status;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentResponseModel;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.businesslayer.CustomerInvoiceService;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datalayer.CustomerInvoice;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datalayer.CustomerInvoiceIdentifier;
@@ -27,6 +29,7 @@ import java.util.Collections;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -43,11 +46,17 @@ class CustomerInvoiceControllerIntegrationTest {
     @MockBean
     private CustomerInvoiceService customerInvoiceService;
 
+    @MockBean
+    private UserRepository userRepository;
+
+
     @Autowired
     private CustomerInvoiceRepository customerInvoiceRepository;
 
     private CustomerInvoice testInvoice ;
     private String testInvoiceId;
+    private String testCustomerId;
+    private String testAppointmentId;
 
     @BeforeEach
     void setUp() {
@@ -64,6 +73,18 @@ class CustomerInvoiceControllerIntegrationTest {
         testInvoice.setCustomerInvoiceIdentifier(identifier);
         CustomerInvoice savedInvoice = customerInvoiceRepository.save(testInvoice);
         testInvoiceId = savedInvoice.getCustomerInvoiceIdentifier().getInvoiceId(); // Get the UUID
+        testCustomerId = savedInvoice.getCustomerId();
+        testAppointmentId = savedInvoice.getAppointmentId();
+
+        User mockUser = new User();  // Assuming 'User' is your user entity class
+       // mockUser.setUserId(testCustomerId);
+        mockUser.setFirstName("John");
+        mockUser.setLastName("Doe");
+        mockUser.setEmail("johndoe@example.com");
+        mockUser.setPassword("password");
+       // mockUser.setRole("ROLE_CUSTOMER");
+        when(userRepository.findUserByUserIdentifier_UserId(testCustomerId)).thenReturn(mockUser);
+
     }
 
     @AfterEach
@@ -89,6 +110,33 @@ class CustomerInvoiceControllerIntegrationTest {
                 .andExpect(jsonPath("$[0].sumOfServices").value(100.00));
     }
 
+
+    @Test
+    @WithMockUser(username = "admin@example.com", roles = "ADMIN")
+    void getAllInvoicesByCustomerId_shouldSucceed() throws Exception {
+
+        // Mock the service layer response for customer invoices
+        when(customerInvoiceService.getAllInvoicesByCustomerId(testCustomerId))
+                .thenReturn(Collections.singletonList(
+                        new CustomerInvoiceResponseModel(testInvoiceId, testCustomerId, testAppointmentId, null, "Preventive Maintenance", 100.0)));
+
+        mockMvc.perform(get("/api/v1/customers/{customerId}/invoices", testCustomerId))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(1)));
+    }
+
+
+    @Test
+    @WithMockUser(username = "admin@example.com", roles = "ADMIN")
+    void getAllInvoicesByCustomerId_notFound() throws Exception {
+        // Mock the service layer response for no appointments
+        when(customerInvoiceService.getAllInvoicesByCustomerId(anyString()))
+                .thenReturn(Collections.emptyList());
+
+        mockMvc.perform(get("/api/v1/customers/{customerId}/invoices", "customerId"))
+                .andExpect(status().isNotFound());
+    }
 
 
 
