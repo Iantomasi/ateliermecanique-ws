@@ -17,6 +17,7 @@ import CustomerAppointmentDetails from './Pages/Admin_Pages/Customers/CustomerAp
 import CustomerCalendar from './Pages/Admin_Pages/Customers/CustomerAppointmentUpdate_Page/CustomerCalendar.js';
 import AppointmentDetails from './Pages/Admin_Pages/Appointments/AppointmentDetails_Page/AppointmentDetails.js';
 import Invoices from './Pages/Admin_Pages/Invoices/Invoices_Page/Invoices.js';
+import CustomerInvoices from './Pages/Admin_Pages/Customers/CustomerInvoices_Page/CustomerInvoices.js';
 
 const router = createBrowserRouter([
   {
@@ -93,6 +94,10 @@ const router = createBrowserRouter([
       {
         path:"/admin/invoices",
         element: <Invoices/>, 
+      },
+      {
+        path: "/admin/customers/:customerId/invoices",
+        element: <CustomerInvoices/>,
       },
       {
         path: "/user",

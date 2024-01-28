@@ -1,5 +1,7 @@
 package com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.businesslayer;
 
+import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Appointment;
+import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentResponseModel;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datalayer.CustomerInvoice;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datalayer.CustomerInvoiceRepository;
@@ -14,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,7 +37,7 @@ class CustomerInvoiceServiceImplTest {
     private UserRepository userRepository;
 
     @InjectMocks
-    private CustomerInvoiceServiceImpl customerInvoiceServiceImpl;
+    private CustomerInvoiceServiceImpl customerInvoiceService;
 
     @Captor
     private ArgumentCaptor<CustomerInvoice> customerInvoiceArgumentCaptor;
@@ -71,7 +74,7 @@ class CustomerInvoiceServiceImplTest {
         when(customerInvoiceResponseMapper.entityToResponseModelList(invoices)).thenReturn(responseModels);
 
         // Act
-        List<CustomerInvoiceResponseModel> result = customerInvoiceServiceImpl.getAllInvoices();
+        List<CustomerInvoiceResponseModel> result = customerInvoiceService.getAllInvoices();
 
         // Assert
         assertNotNull(result);
@@ -84,6 +87,68 @@ class CustomerInvoiceServiceImplTest {
     }
 
 
+    @Test
+    void getAllInvoicesByCustomerId_shouldReturnInvoiceResponseModelList() {
+        // Arrange
+        String customerId = "testCustomerId";
+        CustomerInvoice invoice = new CustomerInvoice();
+        List<CustomerInvoice> invoices = Arrays.asList(invoice);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime dateTime = LocalDateTime.parse("2024-03-24 11:00", formatter);
+
+
+        CustomerInvoiceResponseModel responseModel = CustomerInvoiceResponseModel.builder()
+                .invoiceId(invoice.getCustomerInvoiceIdentifier().getInvoiceId().toString())
+                .customerId(invoice.getCustomerId())
+                .appointmentId(invoice.getAppointmentId())
+                .invoiceDate(dateTime)
+                .mechanicNotes(invoice.getMechanicNotes())
+                .sumOfServices(invoice.getSumOfServices())
+                .build();
+
+
+        when(customerInvoiceRepository.findAllInvoicesByCustomerId(customerId)).thenReturn(invoices);
+        when(customerInvoiceResponseMapper.entityToResponseModelList(invoices)).thenReturn(Arrays.asList(responseModel));
+
+        // Act
+        List<CustomerInvoiceResponseModel> result = customerInvoiceService.getAllInvoicesByCustomerId(customerId);
+
+        // Assert
+        assertFalse(result.isEmpty());
+        assertEquals(1, result.size());
+        verify(customerInvoiceRepository).findAllInvoicesByCustomerId(customerId);
+        verify(customerInvoiceResponseMapper).entityToResponseModelList(invoices);
+    }
+
+
+
+    @Test
+    void getAllInvoicesByCustomerId_noAppointments_shouldReturnEmptyList() {
+        String customerId = "someCustomerId";
+        when(customerInvoiceRepository.findAllInvoicesByCustomerId(customerId)).thenReturn(Collections.emptyList());
+
+        List<CustomerInvoiceResponseModel> result = customerInvoiceService.getAllInvoicesByCustomerId(customerId);
+
+        assertTrue(result.isEmpty());
+        verify(customerInvoiceRepository).findAllInvoicesByCustomerId(customerId);
+        verify(customerInvoiceResponseMapper, never()).entityToResponseModelList(any());
+    }
+
+
+    @Test
+    void getAllInvoicesByCustomerId_shouldReturnNull() {
+        String customerId = "testCustomerId";
+        List<CustomerInvoice> invoices = Arrays.asList(new CustomerInvoice());
+        when(customerInvoiceRepository.findAllInvoicesByCustomerId(customerId)).thenReturn(invoices);
+        when(customerInvoiceResponseMapper.entityToResponseModelList(invoices)).thenReturn(null);
+
+        List<CustomerInvoiceResponseModel> result = customerInvoiceService.getAllInvoicesByCustomerId(customerId);
+
+        assertNull(result);
+        verify(customerInvoiceRepository).findAllInvoicesByCustomerId(customerId);
+        verify(customerInvoiceResponseMapper).entityToResponseModelList(invoices);
+    }
 
 
 }

@@ -1,6 +1,9 @@
 package com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.businesslayer;
 
+import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Appointment;
+import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentResponseModel;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
+import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datalayer.CustomerInvoice;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datalayer.CustomerInvoiceRepository;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datamapperlayer.CustomerInvoiceRequestMapper;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datamapperlayer.CustomerInvoiceResponseMapper;
@@ -10,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -27,5 +31,26 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService{
     public List<CustomerInvoiceResponseModel> getAllInvoices() {
         return customerInvoiceResponseMapper.entityToResponseModelList(customerInvoiceRepository.findAll());
 
+    }
+
+    @Override
+    public List<CustomerInvoiceResponseModel> getAllInvoicesByCustomerId(String customerId) {
+        List<CustomerInvoice> invoices = customerInvoiceRepository.findAllInvoicesByCustomerId(customerId);
+        log.info("Fetching invoices for customer ID: {}", customerId);
+
+        // Check if the appointments list is empty or null
+        if (invoices.isEmpty()) {
+            log.warn("No invoices found for customer ID: {} (invoices list is empty)", customerId);
+            return Collections.emptyList();
+        } else {
+            log.info("Number of invoices found for customer ID {}: {}", customerId, invoices.size());
+        }
+        List<CustomerInvoiceResponseModel> invoiceResponseModels = customerInvoiceResponseMapper.entityToResponseModelList(invoices);
+        if (invoiceResponseModels == null) {
+            log.warn("InvoiceResponseModels is null after mapping");
+        } else {
+            log.info("Mapping successful. Number of InvoiceResponseModels: {}", invoiceResponseModels.size());
+        }
+        return invoiceResponseModels;
     }
 }

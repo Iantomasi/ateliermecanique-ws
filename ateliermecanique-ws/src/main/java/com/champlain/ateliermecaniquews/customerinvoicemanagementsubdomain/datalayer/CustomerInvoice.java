@@ -31,7 +31,7 @@ public class CustomerInvoice {
     private String mechanicNotes;
     private Double sumOfServices;
 
-    CustomerInvoice() {
+    public CustomerInvoice() {
         this.customerInvoiceIdentifier = new CustomerInvoiceIdentifier();
     }
 

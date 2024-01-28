@@ -89,6 +89,10 @@ class adminService{
         return axios.get(API_INVOICES_URL, { headers: authHeader() });
     }
 
+    getAllCustomerInvoices(id){
+        return axios.get(API_CUSTOMERS_URL + `/${id}/invoices`, { headers: authHeader() });
+    }
+
 }
 
 export default new adminService();

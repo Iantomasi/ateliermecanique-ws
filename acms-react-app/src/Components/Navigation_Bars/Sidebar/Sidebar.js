@@ -25,7 +25,7 @@ function Sidebar({ customerId }) {
               Appointments
           </div>
         </a>
-        <a href="/invoices">
+        <a href={`/admin/customers/${customerId}/invoices`}>
           <div className="mb-5 hover:bg-gray-100 p-4">
               <i className="invoices-icon"></i>
               Invoices

@@ -523,16 +523,38 @@ public class FrontEndTesting {
         $("a[href='/login']").click();
         sleep(1000);
 
-        // Assuming the email input field can be identified by its name attribute
         $("input[name='email']").setValue("admin@example.com");
-
-        // Assuming the password input field can be identified by its name attribute
         $("input[type='password']").setValue("Hello!");
 
         $("button[type='submit']").click();
         sleep(1000);
         $("img[src='invoices.svg']").click();
         sleep(1000);
+        $("p").shouldHave(text("INVOICES"));
+    }
+
+
+    @Test
+    public void getAllInvoicesByCustomerId() {
+        open("https://localhost:3000/");
+        $("a[href='/login']").click();
+        sleep(1000);
+
+        $("input[name='email']").setValue("admin@example.com");
+        $("input[type='password']").setValue("Hello!");
+
+        $("button[type='submit']").click();
+        sleep(1000);
+
+        $("img[src='customersImage.svg']").click();
+        sleep(9000);
+        String customerId = "yzab8cd5-3e6f-8796-2abi-96330c6bw164";
+        SelenideElement customerLink = $$("td").findBy(text(customerId));
+        customerLink.shouldBe(visible).click();
+        sleep(5000);
+        $("p").shouldHave(text("CUSTOMER ACCOUNT DETAILS"));
+
+        $("a[href^='/admin/customers/" + customerId + "/invoices']").click();
         $("p").shouldHave(text("INVOICES"));
     }
 
