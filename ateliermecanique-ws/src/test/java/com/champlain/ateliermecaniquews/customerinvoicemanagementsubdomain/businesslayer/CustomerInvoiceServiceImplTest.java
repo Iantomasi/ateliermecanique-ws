@@ -1,11 +1,15 @@
 package com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.businesslayer;
 
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Appointment;
+import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Status;
+import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentRequestModel;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentResponseModel;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datalayer.CustomerInvoice;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datalayer.CustomerInvoiceRepository;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datamapperlayer.CustomerInvoiceResponseMapper;
+import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.presentationlayer.CustomerInvoiceRequestModel;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.presentationlayer.CustomerInvoiceResponseModel;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -148,6 +152,78 @@ class CustomerInvoiceServiceImplTest {
         assertNull(result);
         verify(customerInvoiceRepository).findAllInvoicesByCustomerId(customerId);
         verify(customerInvoiceResponseMapper).entityToResponseModelList(invoices);
+    }
+
+
+    @Test
+    void addInvoiceToCustomerAccount_shouldSucceed() {
+        // Arrange
+        String customerId = "testCustomerId";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime dateTime = LocalDateTime.parse("2024-03-24 11:00", formatter);
+        CustomerInvoiceRequestModel requestModel = CustomerInvoiceRequestModel.builder()
+                .customerId(customerId)
+                .appointmentId("testAppointmentId")
+                .invoiceDate(dateTime)
+                .mechanicNotes("Test mechanic notes")
+                .sumOfServices(100.00)
+                .build();
+
+        User customerAccount = new User();
+
+        when(userRepository.findUserByUserIdentifier_UserId(customerId))
+                .thenReturn(customerAccount);
+
+        CustomerInvoice savedInvoice = new CustomerInvoice();
+        when(customerInvoiceRepository.save(any(CustomerInvoice.class)))
+                .thenReturn(savedInvoice);
+
+        CustomerInvoiceResponseModel expectedResponse = CustomerInvoiceResponseModel.builder()
+                .invoiceId("1")
+                .customerId(customerId)
+                .appointmentId("testAppointmentId")
+                .invoiceDate(dateTime)
+                .mechanicNotes("Test mechanic notes")
+                .sumOfServices(100.00)
+                .build();
+
+        when(customerInvoiceResponseMapper.entityToResponseModel(savedInvoice))
+                .thenReturn(expectedResponse);
+
+
+        // Act
+        CustomerInvoiceResponseModel result = customerInvoiceService.addInvoiceToCustomerAccount(customerId, requestModel);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(expectedResponse.getCustomerId(), result.getCustomerId());
+        assertEquals(expectedResponse.getSumOfServices(), result.getSumOfServices());
+        verify(customerInvoiceRepository, times(1)).save(any(CustomerInvoice.class));
+    }
+
+    @Test
+    void addInvoiceToCustomerAccount_CustomerNotFound_shouldReturnNull() {
+        // Arrange
+        String nonExistentCustomerId = "nonExistentCustomerId";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime dateTime = LocalDateTime.parse("2024-03-24 11:00", formatter);
+
+        CustomerInvoiceRequestModel requestModel = CustomerInvoiceRequestModel.builder()
+                .customerId(nonExistentCustomerId)
+                .appointmentId("testAppointmentId")
+                .invoiceDate(dateTime)
+                .mechanicNotes("Test mechanic notes")
+                .sumOfServices(100.00)
+                .build();
+
+        when(userRepository.findUserByUserIdentifier_UserId(nonExistentCustomerId))
+                .thenReturn(null); // Simulate that the user is not found
+
+        // Act
+        CustomerInvoiceResponseModel result = customerInvoiceService.addInvoiceToCustomerAccount(nonExistentCustomerId, requestModel);
+
+        // Assert
+        assertNull(result, "No customer found with corresponding customerId");
     }
 
 

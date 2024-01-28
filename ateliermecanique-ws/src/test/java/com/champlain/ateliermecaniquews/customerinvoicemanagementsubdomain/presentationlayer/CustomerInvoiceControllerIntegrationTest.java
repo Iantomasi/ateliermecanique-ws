@@ -1,17 +1,11 @@
 package com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.presentationlayer;
-
-import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.businesslayer.AppointmentService;
-import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Appointment;
-import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.AppointmentIdentifier;
-import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.AppointmentRepository;
-import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Status;
-import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentResponseModel;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.businesslayer.CustomerInvoiceService;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datalayer.CustomerInvoice;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datalayer.CustomerInvoiceIdentifier;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datalayer.CustomerInvoiceRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,16 +16,20 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 
+import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -137,6 +135,55 @@ class CustomerInvoiceControllerIntegrationTest {
         mockMvc.perform(get("/api/v1/customers/{customerId}/invoices", "customerId"))
                 .andExpect(status().isNotFound());
     }
+
+
+    @Test
+    @WithMockUser(username = "admin@example.com", roles = "ADMIN")
+    void addInvoiceToCustomerAccount_shouldSucceed() throws Exception {
+        // Arrange
+        LocalDateTime dateTime = LocalDateTime.parse("2024-03-24 11:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+
+        String jsonRequest = "{\"customerId\":\"" + testCustomerId + "\",\"appointmentId\":\"testAppointmentId\", \"invoiceDate\":\"" + dateTime + "\",\"mechanicNotes\":\"Test mechanic notes\",\"sumOfServices\":100.00}";
+
+        CustomerInvoiceResponseModel expectedResponse = CustomerInvoiceResponseModel.builder()
+                .invoiceId("1")
+                .customerId(testCustomerId)
+                .appointmentId("testAppointmentId")
+                .invoiceDate(dateTime)
+                .mechanicNotes("Test mechanic notes")
+                .sumOfServices(100.00)
+                .build();
+        when(customerInvoiceService.addInvoiceToCustomerAccount(anyString(), any(CustomerInvoiceRequestModel.class)))
+                .thenReturn(expectedResponse);
+
+        // Act & Assert
+        mockMvc.perform(post("/api/v1/customers/{customerId}/invoices", testCustomerId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonRequest))
+                .andExpect(status().isOk());
+    }
+
+
+
+    @Test
+    @WithMockUser(username = "admin@example.com", roles = "ADMIN")
+    void addInvoiceToCustomerAccount_CustomerNotFound_shouldReturnNotFound() throws Exception {
+        // Arrange
+        String nonExistentCustomerId = "nonExistentCustomerId";
+        LocalDateTime dateTime = LocalDateTime.parse("2024-03-24 11:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+
+        String jsonRequest = "{\"customerId\":\"" + nonExistentCustomerId + "\",\"appointmentId\":\"testAppointmentId\", \"invoiceDate\":\"" + dateTime + "\",\"mechanicNotes\":\"Test mechanic notes\",\"sumOfServices\":100.00}";
+
+        when(customerInvoiceService.addInvoiceToCustomerAccount(anyString(), any(CustomerInvoiceRequestModel.class)))
+                .thenReturn(null);
+
+        // Act & Assert
+        mockMvc.perform(post("/api/v1/customers/{customerId}/invoices", nonExistentCustomerId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonRequest))
+                .andExpect(status().isNotFound());
+    }
+
 
 
 
