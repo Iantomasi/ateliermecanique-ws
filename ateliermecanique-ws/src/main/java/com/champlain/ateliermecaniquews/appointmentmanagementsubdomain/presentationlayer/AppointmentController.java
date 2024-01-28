@@ -114,6 +114,7 @@ public class AppointmentController {
         return ResponseEntity.ok(appointments);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/appointments/{appointmentId}")
     public ResponseEntity<AppointmentResponseModel> updateAppointmentByAppointmentIdAdmin(@RequestBody AppointmentRequestModel appointmentRequestModel, @PathVariable String appointmentId) {
 
@@ -124,6 +125,7 @@ public class AppointmentController {
         return ResponseEntity.ok(appointment);
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
     @PutMapping("/customers/{customerId}/appointments/{appointmentId}")
     public ResponseEntity<AppointmentResponseModel> updateAppointmentByAppointmentId(@RequestBody AppointmentRequestModel appointmentRequestModel, @PathVariable String appointmentId, @PathVariable String customerId) {
 

@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
@@ -31,6 +32,7 @@ class VehicleControllerIntegrationTest {
     private VehicleService vehicleService;
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void getAllVehiclesByCustomerId_shouldSucceed() throws Exception {
         String customerId = "someCustomerId";
         List<VehicleResponseModel> vehicles = Arrays.asList(
@@ -49,6 +51,7 @@ class VehicleControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void getAllVehiclesByCustomerId_noVehicles_shouldReturnNotFound() throws Exception {
         String customerId = "someCustomerId";
         when(vehicleService.getAllVehiclesByCustomerId(customerId)).thenReturn(Collections.emptyList());
@@ -58,6 +61,7 @@ class VehicleControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void getVehicleByVehicleId_shouldSucceed() throws Exception {
         String vehicleId = "validVehicleId";
         String customerId = "someCustomerId";
@@ -72,6 +76,7 @@ class VehicleControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void getVehicleByInvalidVehicleId_shouldReturnNotFound() throws Exception {
         String vehicleId = "invalidVehicleId";
         String customerId = "someCustomerId";
@@ -83,6 +88,7 @@ class VehicleControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void addVehicleToCustomerAccount_shouldSucceed() throws Exception {
         String customerId = "validCustomerId";
         VehicleRequestModel requestModel = new VehicleRequestModel(customerId, "Tesla", "Model 3", "2021", TransmissionType.AUTOMATIC, "10000");
@@ -99,6 +105,7 @@ class VehicleControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void addVehicleToInvalidCustomerAccount_shouldReturnNotFound() throws Exception {
         String invalidCustomerId = "invalidCustomerId";
         VehicleRequestModel requestModel = new VehicleRequestModel(invalidCustomerId, "Tesla", "Model 3", "2021", TransmissionType.AUTOMATIC, "10000");
@@ -112,6 +119,7 @@ class VehicleControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void updateVehicleByVehicleId_shouldSucceed() throws Exception {
         String vehicleId = "validVehicleId";
         String customerId = "someCustomerId";
@@ -129,6 +137,7 @@ class VehicleControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void updateVehicleByInvalidVehicleId_shouldReturnNotFound() throws Exception {
         String vehicleId = "invalidVehicleId";
         String customerId = "someCustomerId";
@@ -144,6 +153,7 @@ class VehicleControllerIntegrationTest {
 
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void deleteVehicleByVehicleId_shouldSucceed() throws Exception {
         String customerId = "existingCustomerId";
         String vehicleId = "existingVehicleId";

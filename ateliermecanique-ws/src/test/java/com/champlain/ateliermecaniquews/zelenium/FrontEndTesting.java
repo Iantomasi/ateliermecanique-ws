@@ -1,3 +1,4 @@
+
 package com.champlain.ateliermecaniquews.zelenium;
 
 import com.codeborne.selenide.Configuration;
@@ -6,9 +7,7 @@ import com.codeborne.selenide.SelenideElement;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -600,4 +599,5 @@ public class FrontEndTesting {
 
 
 }
+
 
