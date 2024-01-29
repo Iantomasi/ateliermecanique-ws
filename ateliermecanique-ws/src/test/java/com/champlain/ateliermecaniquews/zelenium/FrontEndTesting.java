@@ -559,7 +559,45 @@ public class FrontEndTesting {
     }
 
 
+    @Test
+    public void addInvoiceToCustomerAccount(){
+        open("https://localhost:3000/");
+        $("a[href='/login']").click();
+        sleep(1000);
 
+        $("input[name='email']").setValue("admin@example.com");
+        $("input[type='password']").setValue("Hello!");
+
+        $("button[type='submit']").click();
+        sleep(1000);
+
+        $("img[src='invoices.svg']").click();
+        sleep(2000);
+        $$("button").findBy(text("Add")).click();
+        sleep(2000);
+        String timeToSelect = "09:00";
+        // Select a customer from the dropdown
+        String customerName = "Sophia Brown";
+        SelenideElement customerDropdown = $("select[name='customerId']");
+        new Select(customerDropdown).selectByVisibleText(customerName);
+        sleep(2000);
+
+        String appointmentToSelect = "5508dc5c-d460-443f-8f37-a174284f868g";
+        SelenideElement appointmentDropdown = $("select[name='appointmentId']");
+        new Select(appointmentDropdown).selectByVisibleText(appointmentToSelect);
+        sleep(2000);
+
+        $("input[name='invoiceDate']").setValue("2024-01-01T12:00");
+
+        $("textarea[name='mechanicNotes']").setValue("Notes about the service");
+
+        $("input[name='sumOfServices']").setValue("150.00");
+
+        String confirmButtonText = "Add Invoice";
+        $$("button").findBy(text(confirmButtonText)).click();
+        sleep(10000);
+    }
 
 
 }
+
