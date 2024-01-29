@@ -77,11 +77,16 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService{
     }
 
     @Override
+<<<<<<< HEAD
     public CustomerInvoiceResponseModel getInvoiceById(String invoiceId) {
+=======
+    public CustomerInvoiceResponseModel updateCustomerInvoice(String invoiceId, CustomerInvoiceRequestModel customerInvoiceRequestModel) {
+>>>>>>> f86b5c2 (Backend working)
 
         CustomerInvoice invoice = customerInvoiceRepository.findCustomerInvoiceByCustomerInvoiceIdentifier_InvoiceId(invoiceId);
 
         if(invoice == null) {
+<<<<<<< HEAD
             log.warn("No invoice found for invoice ID: {}", invoiceId);
             return null;
         }
@@ -89,4 +94,18 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService{
     }
 
 
+=======
+            log.warn("Invoice not found for invoice ID: {}", invoiceId);
+            return null;
+        }
+        invoice.setCustomerId(customerInvoiceRequestModel.getCustomerId());
+        invoice.setAppointmentId(customerInvoiceRequestModel.getAppointmentId());
+        invoice.setInvoiceDate(customerInvoiceRequestModel.getInvoiceDate());
+        invoice.setMechanicNotes(customerInvoiceRequestModel.getMechanicNotes());
+        invoice.setSumOfServices(customerInvoiceRequestModel.getSumOfServices());
+
+        return customerInvoiceResponseMapper.entityToResponseModel(customerInvoiceRepository.save(invoice));
+    }
+
+>>>>>>> f86b5c2 (Backend working)
 }

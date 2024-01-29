@@ -10,5 +10,9 @@ public interface CustomerInvoiceRepository extends JpaRepository<CustomerInvoice
 
     List<CustomerInvoice> findAllInvoicesByCustomerId(String customerId);
 
+<<<<<<< HEAD
 
+=======
+    CustomerInvoice findCustomerInvoiceByCustomerInvoiceIdentifier_InvoiceId(String invoiceId);
+>>>>>>> f86b5c2 (Backend working)
 }

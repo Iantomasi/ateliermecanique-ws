@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("api/v1")
+//@CrossOrigin("*")
 @AllArgsConstructor
 public class CustomerInvoiceController {
 
@@ -109,16 +110,29 @@ public class CustomerInvoiceController {
         return ResponseEntity.ok(invoice);
     }
 
+<<<<<<< HEAD
     @GetMapping("/invoices/{invoiceId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
     public ResponseEntity<CustomerInvoiceResponseModel> getInvoiceById(@PathVariable String invoiceId) {
 
         CustomerInvoiceResponseModel invoice = customerInvoiceService.getInvoiceById(invoiceId);
+=======
+    @PutMapping("/invoices/{invoiceId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<CustomerInvoiceResponseModel> updateCustomerInvoice(@PathVariable String invoiceId, @RequestBody CustomerInvoiceRequestModel customerInvoiceRequestModel) {
+
+        CustomerInvoiceResponseModel invoice = customerInvoiceService.updateCustomerInvoice(invoiceId, customerInvoiceRequestModel);
+>>>>>>> f86b5c2 (Backend working)
         if (invoice == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.ok(invoice);
     }
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> f86b5c2 (Backend working)
 
 }
