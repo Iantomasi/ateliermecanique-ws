@@ -2,7 +2,6 @@ package com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.presentation
 
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.businesslayer.VehicleService;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.TransmissionType;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -10,7 +9,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -23,7 +21,6 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -127,48 +124,6 @@ class VehicleControllerUnitTest {
         // Assert
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     }
-
-
-//    @Test
-//    @WithMockUser(roles = "ADMIN")
-//    void updateVehicleByVehicleId_shouldSucceed() throws Exception {
-//        // Arrange
-//        String customerId = "someCustomerId";
-//        String vehicleId = "validVehicleId";
-//        SecurityContextHolder.getContext().getAuthentication().getAuthorities().forEach(System.out::println);
-//
-//        VehicleRequestModel vehicleRequestModel = new VehicleRequestModel(customerId, "Ford", "Fiesta", "2021", TransmissionType.AUTOMATIC, "1233211234");
-//        VehicleResponseModel updatedVehicle = new VehicleResponseModel(vehicleId, customerId, "Ford", "Fiesta", "2021", TransmissionType.AUTOMATIC, "1233211234");
-//
-//        when(vehicleService.updateVehicleByVehicleId(vehicleRequestModel, customerId, vehicleId)).thenReturn(updatedVehicle);
-//
-//        // Act & Assert
-//        mockMvc.perform(put("/api/v1/customers/{customerId}/vehicles/{vehicleId}", customerId, vehicleId)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(new ObjectMapper().writeValueAsString(vehicleRequestModel)))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.vehicleId").value(vehicleId))
-//                .andExpect(jsonPath("$.make").value("Ford"));
-//    }
-//
-//    @Test
-//    @WithMockUser(roles = "ADMIN")
-//    void updateVehicleByInvalidVehicleId_shouldReturnNotFound() throws Exception {
-//        // Arrange
-//        String customerId = "someCustomerId";
-//        String vehicleId = "invalidVehicleId";
-//
-//        VehicleRequestModel invalidVehicleRequestModel = new VehicleRequestModel(customerId, "UnknownMake", "UnknownModel", "0000", TransmissionType.MANUAL, "0000000000");
-//
-//        when(vehicleService.updateVehicleByVehicleId(invalidVehicleRequestModel, customerId, vehicleId)).thenReturn(null);
-//
-//        // Act & Assert
-//        mockMvc.perform(put("/api/v1/customers/{customerId}/vehicles/{vehicleId}", customerId, vehicleId)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(new ObjectMapper().writeValueAsString(invalidVehicleRequestModel)))
-//                .andExpect(status().isNotFound());
-//    }
-
 
     @Test
     void deleteVehicleByVehicleId_shouldSucceed() {

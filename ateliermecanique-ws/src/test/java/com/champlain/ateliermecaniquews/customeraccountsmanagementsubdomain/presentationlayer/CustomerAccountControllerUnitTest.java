@@ -34,8 +34,6 @@ class CustomerAccountControllerUnitTest {
     @MockBean
     private CustomerAccountService customerAccountService;
 
-
-
     @Test
     @WithMockUser(username = "admin@example.com", roles = "ADMIN")
     void getAllCustomerAccounts_shouldSucceed() throws Exception {

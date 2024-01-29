@@ -6,7 +6,6 @@ import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.AppointmentIdentifier;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.AppointmentRepository;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Status;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -114,19 +113,6 @@ class AppointmentControllerIntegrationTest {
                 .andExpect(jsonPath("$.status").value("CONFIRMED"));
     }
 
-//    // Test for customer updating appointment status
-//    @Test
-//    @WithMockUser(username = "admin@example.com", roles = "ADMIN")
-//    void updateAppointmentStatusCustomer_shouldUpdateStatus() throws Exception {
-//        // Mock the service layer response
-//        when(appointmentService.updateAppointmentStatus(anyString(), anyBoolean()))
-//                .thenReturn(new AppointmentResponseModel(testAppointmentId, null, null, null, null, null, Status.CANCELLED));
-//
-//        mockMvc.perform(put("/api/v1/customers/{customerId}/appointments/{appointmentId}/updateStatus?isConfirm=false", "b7024d89-1a5e-4517-3gba-05178u7ar260", testAppointmentId))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.status").value("CANCELLED"));
-//    }
-
     // Test for admin updating appointment status when appointment not found
     @Test
     @WithMockUser(username = "admin@example.com", roles = "ADMIN")
@@ -150,20 +136,6 @@ class AppointmentControllerIntegrationTest {
         mockMvc.perform(put("/api/v1/customers/{customerId}/appointments/{appointmentId}/updateStatus?isConfirm=false", "customer123", "nonExistingAppointmentId"))
                 .andExpect(status().isNotFound());
     }
-
-//    @Test
-//    @WithMockUser(username = "admin@example.com", roles = "ADMIN")
-//    void getAllAppointmentsByCustomerId_shouldSucceed() throws Exception {
-//        // Mock the service layer response for customer appointments
-//        when(appointmentService.getAllAppointmentsByCustomerId(anyString()))
-//                .thenReturn(Collections.singletonList(new AppointmentResponseModel(testAppointmentId, "customerId", "vehicleId", null, "Oil Change", "1", Status.PENDING)));
-//
-//        mockMvc.perform(get("/api/v1/customers/{customerId}/appointments", "mnop8q45-3r6s-8792-2abd-96326u6bs160"))
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$", hasSize(1)))
-//                .andExpect(jsonPath("$[0].services").value("Oil Change"));
-//    }
 
     @Test
     @WithMockUser(username = "admin@example.com", roles = "ADMIN")
@@ -283,29 +255,6 @@ class AppointmentControllerIntegrationTest {
                         .content(requestJson))
                 .andExpect(status().isNotFound());
     }
-
-//    @Test
-//    @WithMockUser(username = "admin@example.com", roles = "ADMIN")
-//    void getAppointmentByIdCustomer_shouldReturnAppointment() throws Exception {
-//        // Arrange - Mock the service layer response
-//        when(appointmentService.getAppointmentByAppointmentId(testAppointmentId))
-//                .thenReturn(new AppointmentResponseModel(
-//                        testAppointmentId,
-//                        "customerId",
-//                        "vehicleId",
-//                        LocalDateTime.parse("2024-03-24T11:00"),
-//                        "Preventive Maintenance",
-//                        "None",
-//                        Status.PENDING
-//                ));
-//
-//        // Act & Assert
-//        mockMvc.perform(get("/api/v1/customers/customerId/appointments/{appointmentId}", testAppointmentId))
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.appointmentId").value(testAppointmentId))
-//                .andExpect(jsonPath("$.services").value("Preventive Maintenance"));
-//    }
 
     @Test
     @WithMockUser(username = "admin@example.com", roles = "ADMIN")
