@@ -92,6 +92,9 @@ class adminService{
     getAllCustomerInvoices(id){
         return axios.get(API_CUSTOMERS_URL + `/${id}/invoices`, { headers: authHeader() });
     }
+    addInvoice(customerId,invoice){
+        return axios.post(API_CUSTOMERS_URL + `/${customerId}/invoices`, invoice, { headers: authHeader() });
+    }
 
 }
 

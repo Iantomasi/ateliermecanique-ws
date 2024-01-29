@@ -56,14 +56,7 @@ function CustomerInvoices() {
           console.log(error);
         })
     }
-  
-    /*
-    const handleAddAppointmentClick = () => {
-      navigate(`/admin/customers/${customerId}/invoices/newInvoice`, customerId);
-    };
-    */
-  
-  
+    
     return (
       <div className="flex flex-col min-h-screen">
         {publicContent ?(
@@ -80,9 +73,6 @@ function CustomerInvoices() {
                         <input className="w-full rounded border-gray-300 px-4 py-2 focus:outline-none focus:border-indigo-500" type="text" placeholder="Search..." />
                         <span className="text-gray-400 cursor-pointer">&#128269;</span>
                       </div>
-                      <button className="text-white border-none px-4 py-2 rounded font-bold transition duration-300 hover:scale-110 bg-black">
-                      Add+
-                    </button>
                     </div>
                   </div>
                   <div className="w-full overflow-y-scroll sm:h-96">

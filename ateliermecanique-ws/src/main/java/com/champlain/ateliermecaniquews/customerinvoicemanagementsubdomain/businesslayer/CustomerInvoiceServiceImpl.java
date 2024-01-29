@@ -1,12 +1,14 @@
 package com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.businesslayer;
 
-import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Appointment;
-import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentResponseModel;
+
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datalayer.CustomerInvoice;
+import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datalayer.CustomerInvoiceIdentifier;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datalayer.CustomerInvoiceRepository;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datamapperlayer.CustomerInvoiceRequestMapper;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datamapperlayer.CustomerInvoiceResponseMapper;
+import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.presentationlayer.CustomerInvoiceRequestModel;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.presentationlayer.CustomerInvoiceResponseModel;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.VehicleRepository;
 import lombok.AllArgsConstructor;
@@ -53,4 +55,26 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService{
         }
         return invoiceResponseModels;
     }
+
+    @Override
+    public CustomerInvoiceResponseModel addInvoiceToCustomerAccount(String customerId, CustomerInvoiceRequestModel customerInvoiceRequestModel) {
+        User customerAccount = userRepository.findUserByUserIdentifier_UserId(customerId);
+
+        if(customerAccount == null) {
+            log.warn("Customer account not found for customer ID: {}", customerId);
+            return null;
+        }
+
+        CustomerInvoice invoice = new CustomerInvoice();
+        invoice.setCustomerInvoiceIdentifier(new CustomerInvoiceIdentifier());
+        invoice.setCustomerId(customerInvoiceRequestModel.getCustomerId());
+        invoice.setAppointmentId(customerInvoiceRequestModel.getAppointmentId());
+        invoice.setInvoiceDate(customerInvoiceRequestModel.getInvoiceDate());
+        invoice.setMechanicNotes(customerInvoiceRequestModel.getMechanicNotes());
+        invoice.setSumOfServices(customerInvoiceRequestModel.getSumOfServices());
+
+        CustomerInvoice  savedInvoice = customerInvoiceRepository.save(invoice);
+        return customerInvoiceResponseMapper.entityToResponseModel(savedInvoice);
+    }
+
 }
