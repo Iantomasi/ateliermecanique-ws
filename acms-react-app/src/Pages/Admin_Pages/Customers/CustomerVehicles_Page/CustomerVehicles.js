@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import CustomerVehicleBlock from '../CustomerVehicleDetails_Page/CustomerVehicleBlock.js';
 import adminService from '../../../../Services/admin.service.js';
+import userService from '../../../../Services/user.service.js';
 
 function CustomerVehicles() {
   const { customerId } = useParams();
@@ -21,16 +22,27 @@ function CustomerVehicles() {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    adminService.getAllCustomerVehicles(customerId)
+    userService.getAdminContent()
       .then(res => {
         if (res.status === 200) {
           setPublicContent(true);
-          setVehicles(res.data);
         }
       })
       .catch(error => {
         setPublicContent(false);
         setMessage(error.response.data);
+        console.log(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    adminService.getAllCustomerVehicles(customerId)
+      .then(res => {
+        if (res.status === 200) {
+          setVehicles(res.data);
+        }
+      })
+      .catch(error => {
         console.log(error);
       });
   }, [customerId]);

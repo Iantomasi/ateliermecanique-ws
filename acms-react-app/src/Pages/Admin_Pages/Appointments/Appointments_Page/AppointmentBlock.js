@@ -56,6 +56,7 @@ const AppointmentBlock = ({ appointment, refreshAppointments }) => {
             </td>
             <td>
               <button
+                tag="cancel"
                 onClick={() => handleStatusChange(false)}
                 className="px-4 py-2 mr-2 bg-red-500 rounded text-white hover:bg-red-600 focus:outline-none focus:ring focus:ring-red-200"
               >
