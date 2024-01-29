@@ -7,7 +7,10 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
+import org.openqa.selenium.Alert;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.*;
 
 
@@ -72,6 +75,34 @@ public class AuthFrontendTesting {
         ElementsCollection h1Elements = $$("h1");
         SelenideElement secondH1 = h1Elements.get(1);
         secondH1.shouldHave(Condition.text("Revitalize your ride with expert care."));
+    }
+
+    @Test
+    @Order(2)
+    public void signUp(){
+        open("https://localhost:3000/");
+        $$("button").findBy(text("Sign up")).click();
+        sleep(1000);
+
+        $("input[name='firstName']").setValue("John");
+        $("input[name='lastName']").setValue("Doe");
+        $("input[name='email']").setValue("john.doe@example.com");
+        $("input[name='phoneNumber']").setValue("123456789");
+        $("input[name='password']").setValue("password");
+        $("input[name='confirmPassword']").setValue("password");
+
+        // Submit the form
+        $("button[type='submit']").click();
+
+        Alert alert = switchTo().alert();
+
+        // Verify the alert message (customize as needed)
+        String alertText = alert.getText();
+        assert(alertText.contains("User registered successfully!"));
+
+        alert.accept();
+
+
     }
 }
     //for some reason, on the selenium test's driver, the google div doesn't show when clicking on the Google button
