@@ -5,6 +5,7 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.NoSuchElementException;
@@ -24,13 +25,23 @@ public class FrontEndTesting {
              Configuration.browser = "chrome";
         }
 
+        @AfterEach
+        void logout(){
+            $("a[href='/']").click();
+        }
+
         @Test
         public void getAllCustomerAccounts() {
             open("https://localhost:3000/");
             $("a[href='/login']").click();
             sleep(1000);
+
+            $("input[name='email']").setValue("admin@example.com");
+            $("input[type='password']").setValue("Hello!");
+
             $("button[type='submit']").click();
             sleep(1000);
+
             $("img[src='customersImage.svg']").click();
             sleep(1000);
             $("p").shouldHave(text("CUSTOMER ACCOUNTS"));
@@ -41,8 +52,13 @@ public class FrontEndTesting {
             open("https://localhost:3000/");
             $("a[href='/login']").click();
             sleep(1000);
+
+            $("input[name='email']").setValue("admin@example.com");
+            $("input[type='password']").setValue("Hello!");
+
             $("button[type='submit']").click();
             sleep(1000);
+
             $("img[src='customersImage.svg']").click();
             sleep(1000);
 
@@ -58,8 +74,13 @@ public class FrontEndTesting {
             open("https://localhost:3000/");
             $("a[href='/login']").click();
             sleep(1000);
+
+            $("input[name='email']").setValue("admin@example.com");
+            $("input[type='password']").setValue("Hello!");
+
             $("button[type='submit']").click();
             sleep(1000);
+
             $("img[src='customersImage.svg']").click();
             sleep(1000);
             String accountId = "yzab8cd5-3e6f-8796-2abi-96330c6bw164";
@@ -80,8 +101,13 @@ public class FrontEndTesting {
             open("https://localhost:3000/");
             $("a[href='/login']").click();
             sleep(1000);
+
+            $("input[name='email']").setValue("admin@example.com");
+            $("input[type='password']").setValue("Hello!");
+
             $("button[type='submit']").click();
             sleep(1000);
+
             $("img[src='customersImage.svg']").click();
             sleep(1000);
             String customerId = "lmno8p45-3q6r-8791-2abc-96325t5ar159";
@@ -100,8 +126,13 @@ public class FrontEndTesting {
             open("https://localhost:3000/");
             $("a[href='/login']").click();
             sleep(1000);
+
+            $("input[name='email']").setValue("admin@example.com");
+            $("input[type='password']").setValue("Hello!");
+
             $("button[type='submit']").click();
             sleep(1000);
+
             $("img[src='customersImage.svg']").click();
             sleep(1000);
 
@@ -132,8 +163,13 @@ public class FrontEndTesting {
             open("https://localhost:3000/");
             $("a[href='/login']").click();
             sleep(1000);
+
+            $("input[name='email']").setValue("admin@example.com");
+            $("input[type='password']").setValue("Hello!");
+
             $("button[type='submit']").click();
             sleep(1000);
+
             $("img[src='customersImage.svg']").click();
             sleep(1000);
             String customerId = "aebc4d79-2b6f-4527-3zda-05432x5ar321";
@@ -173,8 +209,13 @@ public class FrontEndTesting {
             open("https://localhost:3000/");
             $("a[href='/login']").click();
             sleep(1000);
+
+            $("input[name='email']").setValue("admin@example.com");
+            $("input[type='password']").setValue("Hello!");
+
             $("button[type='submit']").click();
             sleep(1000);
+
             $("img[src='customersImage.svg']").click();
             sleep(1000);
 
@@ -200,8 +241,13 @@ public class FrontEndTesting {
             open("https://localhost:3000/");
             $("a[href='/login']").click();
             sleep(1000);
+
+            $("input[name='email']").setValue("admin@example.com");
+            $("input[type='password']").setValue("Hello!");
+
             $("button[type='submit']").click();
             sleep(1000);
+
             $("img[src='customersImage.svg']").click();
             sleep(1000);
             String customerId = "lmno8p45-3q6r-8791-2abc-96325t5ar159";
@@ -224,17 +270,21 @@ public class FrontEndTesting {
 
             $("button[type='submit']").click();
             sleep(1000);
-
         }
 
-
+ //ahh
         @Test
         public void deleteVehicleByVehicleId() {
             open("https://localhost:3000/");
             $("a[href='/login']").click();
             sleep(1000);
+
+            $("input[name='email']").setValue("admin@example.com");
+            $("input[type='password']").setValue("Hello!");
+
             $("button[type='submit']").click();
             sleep(1000);
+
             $("img[src='customersImage.svg']").click();
             sleep(1000);
 
@@ -268,13 +318,18 @@ public class FrontEndTesting {
             $("p").shouldHave(text("VEHICLES"));
         }
 
-
     @Test
     public void getAllAppointments() {
         open("https://localhost:3000/");
         $("a[href='/login']").click();
         sleep(1000);
+
+        $("input[name='email']").setValue("admin@example.com");
+        $("input[type='password']").setValue("Hello!");
+
         $("button[type='submit']").click();
+        sleep(1000);
+
         sleep(1000);
         $("img[src='appointments.svg']").click();
         sleep(1000);
@@ -287,12 +342,17 @@ public class FrontEndTesting {
         open("https://localhost:3000/");
         $("a[href='/login']").click();
         sleep(1000);
+
+        $("input[name='email']").setValue("admin@example.com");
+        $("input[type='password']").setValue("Hello!");
+
         $("button[type='submit']").click();
         sleep(1000);
+
         $("img[src='appointments.svg']").click();
         sleep(1000);
         $("p").shouldHave(text("APPOINTMENTS"));
-        $$("button").findBy(text("CANCEL")).click();
+        $("button[tag='cancel']").click();
         sleep(1000);
     }
 
@@ -301,9 +361,14 @@ public class FrontEndTesting {
     public void getAllAppointmentsByCustomerId(){
         open("https://localhost:3000/");
         $("a[href='/login']").click();
-        sleep(5000);
+        sleep(1000);
+
+        $("input[name='email']").setValue("admin@example.com");
+        $("input[type='password']").setValue("Hello!");
+
         $("button[type='submit']").click();
-        sleep(5000);
+        sleep(1000);
+
         $("img[src='customersImage.svg']").click();
         sleep(9000);
         String customerId = "yzab8cd5-3e6f-8796-2abi-96330c6bw164";
@@ -321,7 +386,13 @@ public class FrontEndTesting {
         open("https://localhost:3000/");
         $("a[href='/login']").click();
         sleep(1000);
+
+        $("input[name='email']").setValue("admin@example.com");
+        $("input[type='password']").setValue("Hello!");
+
         $("button[type='submit']").click();
+        sleep(1000);
+
         sleep(1000);
         $("img[src='customersImage.svg']").click();
         sleep(1000);
@@ -344,7 +415,13 @@ public class FrontEndTesting {
         open("https://localhost:3000/");
         $("a[href='/login']").click();
         sleep(1000);
+
+        $("input[name='email']").setValue("admin@example.com");
+        $("input[type='password']").setValue("Hello!");
+
         $("button[type='submit']").click();
+        sleep(1000);
+
         sleep(1000);
         $("img[src='appointments.svg']").click();
         sleep(1000);
@@ -362,7 +439,13 @@ public class FrontEndTesting {
         open("https://localhost:3000/");
         $("a[href='/login']").click();
         sleep(1000);
+
+        $("input[name='email']").setValue("admin@example.com");
+        $("input[type='password']").setValue("Hello!");
+
         $("button[type='submit']").click();
+        sleep(1000);
+
         sleep(1000);
         $("img[src='appointments.svg']").click();
         sleep(1000);
@@ -388,8 +471,13 @@ public class FrontEndTesting {
         open("https://localhost:3000/");
         $("a[href='/login']").click();
         sleep(1000);
+
+        $("input[name='email']").setValue("admin@example.com");
+        $("input[type='password']").setValue("Hello!");
+
         $("button[type='submit']").click();
         sleep(1000);
+
         $("img[src='customersImage.svg']").click();
         sleep(1000);
 
@@ -429,7 +517,13 @@ public class FrontEndTesting {
         open("https://localhost:3000/");
         $("a[href='/login']").click();
         sleep(1000);
+
+        $("input[name='email']").setValue("admin@example.com");
+        $("input[type='password']").setValue("Hello!");
+
         $("button[type='submit']").click();
+        sleep(1000);
+
         sleep(1000);
         $("img[src='appointments.svg']").click();
         sleep(1000);
@@ -447,10 +541,16 @@ public class FrontEndTesting {
 
     @Test
     public void addAppointmentToCustomerAccount(){
-        open("https://localhost:3001/");
+        open("https://localhost:3000/");
         $("a[href='/login']").click();
-        sleep(2000);
+        sleep(1000);
+
+        $("input[name='email']").setValue("admin@example.com");
+        $("input[type='password']").setValue("Hello!");
+
         $("button[type='submit']").click();
+        sleep(1000);
+
         sleep(2000);
         $("img[src='appointments.svg']").click();
         sleep(2000);
@@ -494,8 +594,13 @@ public class FrontEndTesting {
         open("https://localhost:3000/");
         $("a[href='/login']").click();
         sleep(1000);
+
+        $("input[name='email']").setValue("admin@example.com");
+        $("input[type='password']").setValue("Hello!");
+
         $("button[type='submit']").click();
         sleep(1000);
+
         $("img[src='appointments.svg']").click();
         sleep(1000);
 

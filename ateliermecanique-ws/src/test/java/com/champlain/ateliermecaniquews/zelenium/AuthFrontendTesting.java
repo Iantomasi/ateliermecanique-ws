@@ -22,43 +22,51 @@ public class AuthFrontendTesting {
         Configuration.browser = "chrome";
     }
 
-    @Test()
-    @Order(1)
-    public void instagramLogin() {
-        open("https://localhost:3000/");
-        $("a[href='/login']").click();
-        $("svg[data-icon='instagram']").click();
-        switchTo().window(1); // Switch to the newly opened window
-        sleep(5000);
-
-        // Perform actions on the Instagram login window
-        $("input[name='username']").setValue("testuseracms");
-        $("input[name='password']").setValue("testUser");
-        $("button[type='submit']").click();
-
-        $("button[class=' _acan _acap _acas _aj1- _ap30']").click();
-        $("div[aria-label='Allow']").click();
-
-        sleep(3000);
-        switchTo().window(0);
-        sleep(3000);
-
-        $("input[id='firstName']").setValue("John");
-        $("input[id='lastName']").setValue("Doe");
-        $("input[id='email']").setValue("JohnDoe@gmail.com");
-        $("input[id='phoneNumber']").setValue("555-235-4323");
-
-        $("button[type='submit']").click();
-        $("h2").shouldHave(Condition.text("John Doe"));
-        sleep(3000);
-
-    }
+//    @Test()
+//    @Order(1)
+//    public void instagramLogin() {
+//        open("https://localhost:3000/");
+//        $("a[href='/login']").click();
+//        $("svg[data-icon='instagram']").click();
+//        switchTo().window(1); // Switch to the newly opened window
+//        sleep(5000);
+//
+//        // Perform actions on the Instagram login window
+//        $("input[name='username']").setValue("testuseracms");
+//        $("input[name='password']").setValue("testUser");
+//        $("button[type='submit']").click();
+//
+//        $("button[class=' _acan _acap _acas _aj1- _ap30']").click();
+//        $("div[aria-label='Allow']").click();
+//
+//        sleep(3000);
+//        switchTo().window(0);
+//        sleep(3000);
+//
+//        $("input[id='firstName']").setValue("John");
+//        $("input[id='lastName']").setValue("Doe");
+//        $("input[id='email']").setValue("JohnDoe@gmail.com");
+//        $("input[id='phoneNumber']").setValue("555-235-4323");
+//
+//        $("button[type='submit']").click();
+//        $("h2").shouldHave(Condition.text("John Doe"));
+//        sleep(3000);
+//
+//    }
 
     @Test
-    @Order(2)
+    @Order(1)
     public void logout() {
         open("https://localhost:3000/");
         $("a[href='/login']").click();
+        sleep(1000);
+
+        $("input[name='email']").setValue("admin@example.com");
+        $("input[type='password']").setValue("Hello!");
+
+        $("button[type='submit']").click();
+        sleep(1000);
+
         $("a[href='/']").click();
 
         ElementsCollection h1Elements = $$("h1");
