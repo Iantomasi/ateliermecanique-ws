@@ -6,9 +6,12 @@ import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.Tra
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.Vehicle;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.VehicleIdentifier;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.VehicleRepository;
+import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datamapperlayer.VehicleRequestMapper;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datamapperlayer.VehicleResponseMapper;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.presentationlayer.VehicleRequestModel;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.presentationlayer.VehicleResponseModel;
+import org.junit.jupiter.api.BeforeEach;
+import org.mapstruct.factory.Mappers;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -37,6 +40,14 @@ class VehicleServiceImplTest {
     @Mock
     private UserRepository userRepository;
 
+    private VehicleResponseMapper responseMapper;
+    private VehicleRequestMapper requestMapper;
+
+    @BeforeEach
+    void setUp() {
+        responseMapper = Mappers.getMapper(VehicleResponseMapper.class);
+        requestMapper = Mappers.getMapper(VehicleRequestMapper.class);
+    }
 
     @Test
     void getAllVehiclesByCustomerId_shouldReturnVehicleResponseModelList() {
@@ -280,7 +291,98 @@ class VehicleServiceImplTest {
         verify(vehicleRepository, times(3)).delete(any(Vehicle.class));
     }
 
+    @Test
+    void testVehicleConstructor() {
+        // Arrange
+        String userId = "someUserId";
+        String make = "Toyota";
+        String model = "Camry";
+        String year = "2022";
+        TransmissionType transmissionType = TransmissionType.AUTOMATIC;
+        String mileage = "5000";
 
+        // Act
+        Vehicle vehicle = new Vehicle(userId, make, model, year, transmissionType, mileage);
+
+        // Assert
+        assertNotNull(vehicle);
+        assertEquals(userId, vehicle.getUserId());
+        assertEquals(make, vehicle.getMake());
+        assertEquals(model, vehicle.getModel());
+        assertEquals(year, vehicle.getYear());
+        assertEquals(transmissionType, vehicle.getTransmission_type());
+        assertEquals(mileage, vehicle.getMileage());
+    }
+
+
+    @Test
+    void testRequestModelToEntity() {
+        // Arrange
+        VehicleRequestModel requestModel = new VehicleRequestModel(
+                "someUserId", "Toyota", "Camry", "2022", TransmissionType.AUTOMATIC, "5000");
+
+        // Act
+        Vehicle entity = requestMapper.requestModelToEntity(requestModel);
+
+        // Assert
+        assertNotNull(entity);
+        assertEquals(requestModel.getCustomerId(), entity.getUserId());
+        assertEquals(requestModel.getMake(), entity.getMake());
+        assertEquals(requestModel.getModel(), entity.getModel());
+        assertEquals(requestModel.getYear(), entity.getYear());
+        assertEquals(requestModel.getTransmission_type(), entity.getTransmission_type());
+        assertEquals(requestModel.getMileage(), entity.getMileage());
+    }
+
+    @Test
+    void testEntityToResponseModel() {
+        // Arrange
+        Vehicle entity = new Vehicle("someUserId", "Toyota", "Camry", "2022", TransmissionType.AUTOMATIC, "5000");
+
+        // Act
+        VehicleResponseModel responseModel = responseMapper.entityToResponseModel(entity);
+
+        // Assert
+        assertNotNull(responseModel);
+        assertEquals(entity.getUserId(), responseModel.getUserId());
+        assertEquals(entity.getMake(), responseModel.getMake());
+        assertEquals(entity.getModel(), responseModel.getModel());
+        assertEquals(entity.getYear(), responseModel.getYear());
+        assertEquals(entity.getTransmission_type(), responseModel.getTransmission_type());
+        assertEquals(entity.getMileage(), responseModel.getMileage());
+    }
+
+    @Test
+    void testEntityToResponseModelList() {
+        // Arrange
+        Vehicle vehicle1 = new Vehicle("userId1", "Toyota", "Camry", "2022", TransmissionType.AUTOMATIC, "5000");
+        Vehicle vehicle2 = new Vehicle("userId2", "Honda", "Civic", "2021", TransmissionType.MANUAL, "6000");
+        List<Vehicle> entities = Arrays.asList(vehicle1, vehicle2);
+
+        // Act
+        List<VehicleResponseModel> responseModels = responseMapper.entityToResponseModelList(entities);
+
+        // Assert
+        assertNotNull(responseModels);
+        assertEquals(entities.size(), responseModels.size());
+
+        VehicleResponseModel responseModel1 = responseModels.get(0);
+        VehicleResponseModel responseModel2 = responseModels.get(1);
+
+        assertEquals(vehicle1.getUserId(), responseModel1.getUserId());
+        assertEquals(vehicle1.getMake(), responseModel1.getMake());
+        assertEquals(vehicle1.getModel(), responseModel1.getModel());
+        assertEquals(vehicle1.getYear(), responseModel1.getYear());
+        assertEquals(vehicle1.getTransmission_type(), responseModel1.getTransmission_type());
+        assertEquals(vehicle1.getMileage(), responseModel1.getMileage());
+
+        assertEquals(vehicle2.getUserId(), responseModel2.getUserId());
+        assertEquals(vehicle2.getMake(), responseModel2.getMake());
+        assertEquals(vehicle2.getModel(), responseModel2.getModel());
+        assertEquals(vehicle2.getYear(), responseModel2.getYear());
+        assertEquals(vehicle2.getTransmission_type(), responseModel2.getTransmission_type());
+        assertEquals(vehicle2.getMileage(), responseModel2.getMileage());
+    }
 
 
 }

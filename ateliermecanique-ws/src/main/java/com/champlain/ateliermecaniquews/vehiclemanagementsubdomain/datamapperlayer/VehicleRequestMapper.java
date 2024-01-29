@@ -10,5 +10,6 @@ public interface VehicleRequestMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "vehicleIdentifier", ignore = true)
+    @Mapping(source = "customerId", target = "userId")
     Vehicle requestModelToEntity(VehicleRequestModel vehicleRequestModel);
 }

@@ -12,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -33,9 +34,8 @@ class CustomerAccountControllerUnitTest {
     @MockBean
     private CustomerAccountService customerAccountService;
 
-
-
     @Test
+    @WithMockUser(username = "admin@example.com", roles = "ADMIN")
     void getAllCustomerAccounts_shouldSucceed() throws Exception {
         // Arrange
         List<CustomerAccountResponseModel> accounts = Arrays.asList(
@@ -62,11 +62,12 @@ class CustomerAccountControllerUnitTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(accounts.size())))
-                .andExpect(jsonPath("$[0].customerId").value("1"))
-                .andExpect(jsonPath("$[1].customerId").value("2"));
+                .andExpect(jsonPath("$[0].id").value("1"))
+                .andExpect(jsonPath("$[1].id").value("2"));
     }
 
     @Test
+    @WithMockUser(username = "admin@example.com", roles = "ADMIN")
     void getAllCustomerAccounts_noAccounts_shouldReturnNotFound() throws Exception {
         // Arrange
         when(customerAccountService.getAllCustomerAccounts()).thenReturn(Collections.emptyList());
@@ -77,6 +78,7 @@ class CustomerAccountControllerUnitTest {
     }
 
     @Test
+    @WithMockUser(username = "admin@example.com", roles = "ADMIN")
     void getCustomerAccountByCustomerId_shouldSucceed() throws Exception {
         // Arrange
         String validCustomerId = "1";
@@ -94,7 +96,7 @@ class CustomerAccountControllerUnitTest {
         mockMvc.perform(get("/api/v1/customers/{customerId}", validCustomerId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.customerId").value("1"))
+                .andExpect(jsonPath("$.id").value("1"))
                 .andExpect(jsonPath("$.firstName").value("Cristiano"))
                 .andExpect(jsonPath("$.lastName").value("Ronaldo"))
                 .andExpect(jsonPath("$.email").value("cr7@example.com"))
@@ -102,6 +104,7 @@ class CustomerAccountControllerUnitTest {
     }
 
     @Test
+    @WithMockUser(username = "admin@example.com", roles = "ADMIN")
     void getCustomerAccountByInvalidCustomerId_shouldReturnNotFound() throws Exception {
         // Arrange
         String invalidCustomerId = "notGoodBuddy";

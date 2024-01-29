@@ -111,10 +111,8 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest){
-
-
-        if(userRepository.existsByEmail(signupRequest.getEmail())){
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest) {
+        if (userRepository.existsByEmail(signupRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: email is already in use!"));
@@ -126,38 +124,20 @@ public class AuthController {
                 .lastName(signupRequest.getLastName())
                 .phoneNumber(signupRequest.getPhoneNumber())
                 .email(signupRequest.getEmail())
-                .password(encoder.encode(signupRequest.getPassword())).build();
+                .password(encoder.encode(signupRequest.getPassword()))
+                .build();
 
-        Set<String> strRoles = signupRequest.getRole();
         Set<Role> roles = new HashSet<>();
 
 
-        if(strRoles == null){
-            Role userRole = roleRepository.findByName(ERole.ROLE_CUSTOMER)
-                    .orElseThrow(()-> new RuntimeException("Error: Role is not found"));
-            roles.add(userRole);
-        } else {
-            strRoles.forEach(role ->{
+        Role userRole = roleRepository.findByName(ERole.ROLE_CUSTOMER)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+        roles.add(userRole);
 
-                switch (role){
-                    case "admin":
-                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(()-> new RuntimeException("Error: Role is not found"));
-                        roles.add(adminRole);
-                        break;
-
-                    default:
-                        Role userRole = roleRepository.findByName(ERole.ROLE_CUSTOMER)
-                                .orElseThrow(()-> new RuntimeException("Error: Role is not found"));
-                        roles.add(userRole);
-                }
-            });
-        }
         user.setRoles(roles);
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-
     }
 
     private ResponseEntity<?> generateResponse(User user) {

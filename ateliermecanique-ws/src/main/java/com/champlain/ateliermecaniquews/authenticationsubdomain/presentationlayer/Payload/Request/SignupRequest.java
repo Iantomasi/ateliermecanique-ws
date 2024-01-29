@@ -13,6 +13,5 @@ public class SignupRequest {
     private String lastName;
     private String phoneNumber;
     private String email;
-    private Set<String> role;
     private String password;
 }

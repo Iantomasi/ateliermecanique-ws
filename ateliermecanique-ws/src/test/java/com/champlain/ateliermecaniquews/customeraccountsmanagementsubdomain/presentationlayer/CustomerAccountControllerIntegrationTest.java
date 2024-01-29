@@ -4,6 +4,7 @@ import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.ERole;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.Role;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.UserIdentifier;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.RoleRepository;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.businesslayer.CustomerAccountService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashSet;
@@ -40,23 +42,29 @@ class CustomerAccountControllerIntegrationTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
     private User testAccount;
     private String testAccountId;
 
     @BeforeEach
     void setUp() {
-        // Set up data before each test
         UserIdentifier userIdentifier = new UserIdentifier(); // Create a UUID
 
+        Role customerRole = new Role(ERole.ROLE_CUSTOMER);
+        roleRepository.save(customerRole);
+
         Set<Role> roles = new HashSet<>();
-        roles.add(new Role(ERole.ROLE_CUSTOMER));
+        roles.add(customerRole);
 
-        testAccount = new User("Jane", "Doe", "1234567890", "jane@example.com", "testPassword",roles, null);
-
+        testAccount = new User("Jane", "Doe","555-555-5555", "jane@example.com", "testPassword", roles, null);
         testAccount.setUserIdentifier(userIdentifier);
+
         User savedAccount = userRepository.save(testAccount);
         testAccountId = savedAccount.getUserIdentifier().getUserId(); // Get the UUID
     }
+
 
     @AfterEach
     void tearDown() {
@@ -65,23 +73,26 @@ class CustomerAccountControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(username = "admin@example.com", roles = "ADMIN")
     void getAllCustomerAccounts_shouldSucceed() throws Exception {
         mockMvc.perform(get("/api/v1/customers"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].email").value("john@example.com"));
+                .andExpect(jsonPath("$[0].email").value("jane@example.com"));
     }
 
     @Test
+    @WithMockUser(username = "admin@example.com", roles = "ADMIN")
     void getCustomerAccountByCustomerId_shouldSucceed() throws Exception {
         mockMvc.perform(get("/api/v1/customers/{customerId}", testAccountId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.email").value("john@example.com"));
+                .andExpect(jsonPath("$.email").value("jane@example.com"));
     }
 
     @Test
+    @WithMockUser(username = "admin@example.com", roles = "ADMIN")
     void getCustomerAccountByInvalidCustomerId_shouldReturnNotFound() throws Exception {
         String randomUUID =  new UserIdentifier().getUserId();
         mockMvc.perform(get("/api/v1/customers/{customerId}", randomUUID))
@@ -89,6 +100,7 @@ class CustomerAccountControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(username = "admin@example.com", roles = "ADMIN")
     void updateCustomerAccountByCustomerId_shouldSucceed() throws Exception {
         CustomerAccountRequestModel requestModel = CustomerAccountRequestModel.builder()
                 .firstName("Jane")
@@ -106,6 +118,7 @@ class CustomerAccountControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(username = "admin@example.com", roles = "ADMIN")
     void updateCustomerAccountByInvalidCustomerId_shouldReturnNotFound() throws Exception {
         CustomerAccountRequestModel requestModel = CustomerAccountRequestModel.builder()
                 .firstName("Jane")
@@ -122,6 +135,7 @@ class CustomerAccountControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(username = "admin@example.com", roles = "ADMIN")
     void deleteCustomerAccountAndVehiclesByCustomerId_shouldSucceed() {
         // Arrange
         String customerId = "testCustomerId";

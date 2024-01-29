@@ -8,7 +8,6 @@ import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.data
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountRequestModel;
 import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.CustomerAccountResponseModel;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.businesslayer.VehicleService;
-import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -48,7 +47,6 @@ class CustomerAccountServiceImplTest {
 
         User account = new User("Jane", "Doe", "1234567890", "jane@example.com", "testPassword",roles, null);
 
-
         List<User> customerAccounts = Collections.singletonList(account);
         when(userRepository.findAll()).thenReturn(customerAccounts);
 
@@ -67,7 +65,7 @@ class CustomerAccountServiceImplTest {
         assertNotNull(result);
         assertFalse(result.isEmpty());
         assertEquals(responseModels.size(), result.size());
-        assertEquals(responseModels.get(0).getId(), result.get(0));
+        assertEquals(responseModels.get(0).getId(), result.get(0).getId());
 
         verify(userRepository, times(1)).findAll();
         verify(customerAccountResponseMapper, times(1)).entityToResponseModelList(customerAccounts);
@@ -203,7 +201,6 @@ class CustomerAccountServiceImplTest {
         customerAccountService.deleteCustomerAccountByCustomerId(userId);
 
         // Assert
-        verify(userRepository).findAll();
         verify(userRepository).delete(customerAccount);
         verify(vehicleService).deleteAllVehiclesByCustomerId(userId);
     }
@@ -223,62 +220,5 @@ class CustomerAccountServiceImplTest {
         verify(vehicleService, never()).deleteAllVehiclesByCustomerId(any());
     }
 
-   /*
-    @Test
-    void createCustomerAccountForoAuth_shouldSucceed() {
-        // Arrange
-        CustomerAccountoAuthRequestModel requestModel =CustomerAccountoAuthRequestModel.builder()
-                .firstName("John")
-                .lastName("Doe")
-                .email("Johndoe@gmail.com")
-                .role("CUSTOMER")
-                .token("FakeToken")
-                .build();
-
-        Set<Role> roles = new HashSet<>();
-        roles.add(new Role(ERole.ROLE_CUSTOMER));
-
-        User account = new User("Jane", "Doe", "1234567890", "jane@example.com", "testPassword",roles, null);
-
-        when(userRepository.save(any())).thenReturn(account);
-
-        CustomerAccountResponseModel expectedResponse = CustomerAccountResponseModel.builder()
-                //build the expected response based on the saved account
-                .build();
-        when(customerAccountResponseMapper.entityToResponseModel(account)).thenReturn(expectedResponse);
-
-        // Act
-        CustomerAccountResponseModel actualResponse = customerAccountService.createCustomerAccountForoAuth(requestModel);
-
-        // Assert
-        assertNotNull(actualResponse);
-        assertEquals(expectedResponse, actualResponse);
-
-        verify(userRepository, times(1)).save(any());
-        verify(customerAccountResponseMapper, times(1)).entityToResponseModel(account);
-    }
-
-
-    @Test
-    void testMappingRequestModelToEntityoAuth() {
-        // Arrange
-        CustomerAccountoAuthRequestModel requestModel = CustomerAccountoAuthRequestModel.builder()
-                .firstName("John")
-                .lastName("Doe")
-                .email("john.doe@example.com")
-                .token("fakeToken")
-                .role("CUSTOMER")
-                .build();
-
-        // Act
-        User entity = mapper.requestModelToEntity(requestModel);
-
-        // Assert
-        assertEquals("John", entity.getFirstName());
-        assertEquals("Doe", entity.getLastName());
-        assertEquals("john.doe@example.com", entity.getEmail());
-
-    }
-    */
 }
 
