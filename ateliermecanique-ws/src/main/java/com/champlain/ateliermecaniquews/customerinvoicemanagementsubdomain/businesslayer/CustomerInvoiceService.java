@@ -11,5 +11,8 @@ public interface CustomerInvoiceService {
     List<CustomerInvoiceResponseModel> getAllInvoicesByCustomerId(String customerId);
     CustomerInvoiceResponseModel addInvoiceToCustomerAccount(String customerId, CustomerInvoiceRequestModel customerInvoiceRequestModel);
 
+    CustomerInvoiceResponseModel getInvoiceById(String invoiceId);
+
+
 
 }

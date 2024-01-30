@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/test")
+@CrossOrigin("*")
 @AllArgsConstructor
 public class CustomerInvoiceController {
 
@@ -25,7 +26,7 @@ public class CustomerInvoiceController {
     final private UserRepository userRepository;
 
     @GetMapping("/invoices")
-    @PreAuthorize("hasRole('ADMIN')")
+   // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<CustomerInvoiceResponseModel>> getAllInvoicesAdmin() {
         List<CustomerInvoiceResponseModel> invoices = customerInvoiceService.getAllInvoices();
         if (invoices == null || invoices.isEmpty()) {
@@ -103,6 +104,17 @@ public class CustomerInvoiceController {
     @PostMapping("/invoices")
     public ResponseEntity<CustomerInvoiceResponseModel> addInvoiceToCustomerAccountAdmin(@PathVariable String customerId, @RequestBody CustomerInvoiceRequestModel customerInvoiceRequestModel) {
         CustomerInvoiceResponseModel invoice = customerInvoiceService.addInvoiceToCustomerAccount(customerId, customerInvoiceRequestModel);
+        if (invoice == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(invoice);
+    }
+
+    @GetMapping("/invoices/{invoiceId}")
+    //@PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
+    public ResponseEntity<CustomerInvoiceResponseModel> getInvoiceById(@PathVariable String invoiceId) {
+
+        CustomerInvoiceResponseModel invoice = customerInvoiceService.getInvoiceById(invoiceId);
         if (invoice == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
