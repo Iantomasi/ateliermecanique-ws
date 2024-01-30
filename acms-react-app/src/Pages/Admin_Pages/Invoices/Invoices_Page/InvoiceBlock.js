@@ -5,6 +5,9 @@ import adminService from '../../../../Services/admin.service';
 const InvoiceBlock = ({ invoice, refreshInvoices }) => {
     const navigate = useNavigate();
 
+    const handleRowClick = () => {
+        navigate(`/invoice-details/${invoice.invoiceId}`);
+    };
 
     const handleInvoiceClick = () => {
         navigate(`/admin/invoices/${invoice.invoiceId}`);

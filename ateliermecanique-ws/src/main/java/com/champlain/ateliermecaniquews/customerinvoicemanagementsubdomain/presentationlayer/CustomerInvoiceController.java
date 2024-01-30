@@ -16,8 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/test")
-@CrossOrigin("*")
+@RequestMapping("/api/v1")
 @AllArgsConstructor
 public class CustomerInvoiceController {
 
@@ -111,7 +110,7 @@ public class CustomerInvoiceController {
     }
 
     @GetMapping("/invoices/{invoiceId}")
-    //@PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
     public ResponseEntity<CustomerInvoiceResponseModel> getInvoiceById(@PathVariable String invoiceId) {
 
         CustomerInvoiceResponseModel invoice = customerInvoiceService.getInvoiceById(invoiceId);
