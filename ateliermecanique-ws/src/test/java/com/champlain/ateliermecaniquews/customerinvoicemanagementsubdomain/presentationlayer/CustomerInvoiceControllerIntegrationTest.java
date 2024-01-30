@@ -7,6 +7,7 @@ import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datal
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datalayer.CustomerInvoiceIdentifier;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datalayer.CustomerInvoiceRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dockerjava.api.exception.NotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,11 @@ import java.util.Collections;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+<<<<<<< HEAD
 import static org.mockito.Mockito.when;
+=======
+import static org.mockito.Mockito.*;
+>>>>>>> cc8c16e (Front and back end fully implemented with serviceImpl testing and integration test)
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -202,6 +207,7 @@ class CustomerInvoiceControllerIntegrationTest {
     }
 
     @Test
+<<<<<<< HEAD
     @WithMockUser(username = "admin", roles = "ADMIN")
     void updateCustomerInvoice_whenExists_shouldReturnUpdatedInvoice() throws Exception {
         // Arrange
@@ -227,6 +233,32 @@ class CustomerInvoiceControllerIntegrationTest {
                 .andExpect(jsonPath("$.sumOfServices").value(200.00));
     }
 
+=======
+    @WithMockUser(username = "admin@example.com", roles = "ADMIN")
+    void deleteInvoiceByInvoiceId_shouldSucceed() throws Exception {
+        // Arrange
+        String invoiceId = testInvoiceId;
+        doNothing().when(customerInvoiceService).deleteInvoiceByInvoiceId(invoiceId);
+
+        // Act & Assert
+        mockMvc.perform(delete("/api/v1/invoices/{invoiceId}", invoiceId))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @WithMockUser(username = "admin@example.com", roles = "ADMIN")
+    void deleteInvoiceByInvoiceId_notFound() throws Exception {
+        // Arrange
+        String nonExistentInvoiceId = "nonExistentInvoiceId";
+        doThrow(new NotFoundException("Invoice not found")).when(customerInvoiceService).deleteInvoiceByInvoiceId(nonExistentInvoiceId);
+
+        // Act & Assert
+        mockMvc.perform(delete("/api/v1/invoices/{invoiceId}", nonExistentInvoiceId))
+                .andExpect(status().isNotFound());
+    }
+
+
+>>>>>>> cc8c16e (Front and back end fully implemented with serviceImpl testing and integration test)
 
 
 

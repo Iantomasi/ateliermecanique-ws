@@ -104,7 +104,17 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService{
     }
 
     @Override
+<<<<<<< HEAD
     public CustomerInvoiceResponseModel updateCustomerInvoice(String invoiceId, CustomerInvoiceRequestModel customerInvoiceRequestModel) {
+=======
+    public void deleteInvoiceByInvoiceId(String invoiceId) {
+        CustomerInvoice customerInvoice = customerInvoiceRepository.findCustomerInvoiceByCustomerInvoiceIdentifier_InvoiceId(invoiceId);
+        if(customerInvoice != null){
+            customerInvoiceRepository.delete(customerInvoice);
+        }
+    }
+
+>>>>>>> cc8c16e (Front and back end fully implemented with serviceImpl testing and integration test)
 
         CustomerInvoice invoice = customerInvoiceRepository.findCustomerInvoiceByCustomerInvoiceIdentifier_InvoiceId(invoiceId);
 
