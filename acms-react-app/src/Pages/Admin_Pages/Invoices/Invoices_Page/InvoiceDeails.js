@@ -69,7 +69,7 @@ function InvoiceDetails() {
                         <Sidebar />
                         <main className="flex-grow p-5">
                             <div className="text-4xl font-bold text-center">
-                                <p>VEHICLE DETAILS</p>
+                                <p>INVOICE DETAILS</p>
                             </div>
                     {/* Rest of the component layout */}
                         <div className="bg-gray-100 shadow-lg p-5 rounded-md mt-5 relative">

@@ -702,6 +702,29 @@ public class FrontEndTesting {
         sleep(10000);
     }
 
+    @Test
+    public void getInvoiceById(){
+        open("https://localhost:3000/");
+        $("a[href='/login']").click();
+        sleep(1000);
+
+        $("input[name='email']").setValue("admin@example.com");
+        $("input[type='password']").setValue("Hello!");
+
+        $("button[type='submit']").click();
+        sleep(1000);
+
+        $("img[src='invoices.svg']").click();
+        sleep(2000);
+
+        String invoiceId = "662ba5e8-9eb8-41ec-bf89-0080342c89ca";
+
+        SelenideElement invoiceLink = $$("td").findBy(text(invoiceId));
+        invoiceLink.shouldBe(visible).click();
+        sleep(5000);
+
+    }
+
 
 }
 
