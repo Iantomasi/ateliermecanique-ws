@@ -7,6 +7,7 @@ import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentat
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datalayer.CustomerInvoice;
+import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datalayer.CustomerInvoiceIdentifier;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datalayer.CustomerInvoiceRepository;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datamapperlayer.CustomerInvoiceResponseMapper;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.presentationlayer.CustomerInvoiceRequestModel;
@@ -18,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -274,6 +276,47 @@ class CustomerInvoiceServiceImplTest {
         assertNull(actualResponse);
         verify(customerInvoiceRepository, times(1)).findCustomerInvoiceByCustomerInvoiceIdentifier_InvoiceId(testInvoiceId);
         verify(customerInvoiceResponseMapper, never()).entityToResponseModel(any(CustomerInvoice.class));
+    }
+
+    @Test
+    void updateCustomerInvoice_shouldSucceed() {
+        // Arrange
+        CustomerInvoice invoice = new CustomerInvoice();
+        String invoiceId = java.util.UUID.randomUUID().toString();
+
+        String customerId = "test-customer-id";
+        String appointmentId = "test-appointment-id";
+        LocalDateTime invoiceDate = LocalDateTime.now();
+        String mechanicNotes = "Initial Notes";
+        Double sumOfServices = 150.00;
+
+        invoice.setCustomerId(customerId);
+        invoice.setAppointmentId(appointmentId);
+        invoice.setInvoiceDate(invoiceDate);
+        invoice.setMechanicNotes(mechanicNotes);
+        invoice.setSumOfServices(sumOfServices);
+
+        CustomerInvoiceRequestModel requestModel = new CustomerInvoiceRequestModel(
+                "new-customer-id",
+                "new-appointment-id",
+                LocalDateTime.now(),
+                "Updated Notes",
+                200.00
+        );
+
+        when(customerInvoiceRepository.findCustomerInvoiceByCustomerInvoiceIdentifier_InvoiceId(invoiceId)).thenReturn(invoice);
+
+        // Act
+        customerInvoiceService.updateCustomerInvoice(invoiceId, requestModel);
+
+        // Assert
+        verify(customerInvoiceRepository).findCustomerInvoiceByCustomerInvoiceIdentifier_InvoiceId(invoiceId);
+        verify(customerInvoiceRepository).save(invoice);
+
+        assertEquals("new-customer-id", invoice.getCustomerId());
+        assertEquals("new-appointment-id", invoice.getAppointmentId());
+        assertEquals("Updated Notes", invoice.getMechanicNotes());
+        assertEquals(200.00, invoice.getSumOfServices());
     }
 
 
