@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface CustomerInvoiceRepository extends JpaRepository<CustomerInvoice, Integer> {
 
-    //CustomerInvoice findCustomerInvoiceByInvoiceIdentifier_InvoiceId(String invoiceId);
+    CustomerInvoice findCustomerInvoiceByCustomerInvoiceIdentifier_InvoiceId(String invoiceId);
 
     List<CustomerInvoice> findAllInvoicesByCustomerId(String customerId);
+
+
 }

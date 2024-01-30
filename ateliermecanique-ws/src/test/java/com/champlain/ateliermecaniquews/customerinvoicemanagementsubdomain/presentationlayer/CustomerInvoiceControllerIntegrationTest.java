@@ -183,6 +183,24 @@ class CustomerInvoiceControllerIntegrationTest {
                 .content(jsonRequest))
                 .andExpect(status().isNotFound());
     }
+    @Test
+    @WithMockUser(username = "admin@example.com", roles = "ADMIN")
+    void getInvoiceById_shouldReturnInvoice() throws Exception {
+        // Arrange
+        LocalDateTime dateTime = LocalDateTime.parse("2024-02-04 19:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        CustomerInvoiceResponseModel mockResponse = new CustomerInvoiceResponseModel(
+                testInvoiceId, testCustomerId, testAppointmentId, dateTime, "Muffler was fixed", 118.95
+        );
+
+        when(customerInvoiceService.getInvoiceById(testInvoiceId)).thenReturn(mockResponse);
+
+        // Act & Assert
+        mockMvc.perform(get("/api/v1/invoices/{invoiceId}", testInvoiceId))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.invoiceId").value(testInvoiceId))
+                .andExpect(jsonPath("$.mechanicNotes").value("Muffler was fixed"));
+    }
 
 
 

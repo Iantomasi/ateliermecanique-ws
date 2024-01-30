@@ -227,4 +227,54 @@ class CustomerInvoiceServiceImplTest {
     }
 
 
+    @Test
+    void getInvoiceById_shouldReturnInvoiceDetails() {
+        String invoiceDateStr = "2024-02-04 19:00";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime dateTime = LocalDateTime.parse(invoiceDateStr, formatter);
+
+        CustomerInvoice mockInvoice = new CustomerInvoice(
+                "test-customer-id",
+                "test-appointment-id",
+                invoiceDateStr,
+                "Muffler was fixed",
+                118.95
+        );
+
+        CustomerInvoiceResponseModel expectedResponse = CustomerInvoiceResponseModel.builder()
+                .invoiceId(mockInvoice.getCustomerInvoiceIdentifier().getInvoiceId().toString())
+                .customerId(mockInvoice.getCustomerId())
+                .appointmentId(mockInvoice.getAppointmentId())
+                .invoiceDate(dateTime)
+                .mechanicNotes(mockInvoice.getMechanicNotes())
+                .sumOfServices(mockInvoice.getSumOfServices())
+                .build();
+
+        when(customerInvoiceRepository.findCustomerInvoiceByCustomerInvoiceIdentifier_InvoiceId(mockInvoice.getCustomerInvoiceIdentifier().getInvoiceId().toString())).thenReturn(mockInvoice);
+        when(customerInvoiceResponseMapper.entityToResponseModel(mockInvoice)).thenReturn(expectedResponse);
+
+        // Act
+        CustomerInvoiceResponseModel actualResponse = customerInvoiceService.getInvoiceById(mockInvoice.getCustomerInvoiceIdentifier().getInvoiceId().toString());
+
+        // Assert
+        assertNotNull(actualResponse);
+        assertEquals(expectedResponse.getInvoiceId(), actualResponse.getInvoiceId());
+        assertEquals(expectedResponse.getMechanicNotes(), actualResponse.getMechanicNotes());
+
+        verify(customerInvoiceRepository, times(1)).findCustomerInvoiceByCustomerInvoiceIdentifier_InvoiceId(mockInvoice.getCustomerInvoiceIdentifier().getInvoiceId().toString());
+        verify(customerInvoiceResponseMapper, times(1)).entityToResponseModel(mockInvoice);
+    }
+
+    @Test
+    void getInvoiceById_whenInvoiceNotFound_shouldReturnNull() {
+        String testInvoiceId = "non-existent-invoice-id";
+        when(customerInvoiceRepository.findCustomerInvoiceByCustomerInvoiceIdentifier_InvoiceId(testInvoiceId)).thenReturn(null);
+        CustomerInvoiceResponseModel actualResponse = customerInvoiceService.getInvoiceById(testInvoiceId);
+
+        assertNull(actualResponse);
+        verify(customerInvoiceRepository, times(1)).findCustomerInvoiceByCustomerInvoiceIdentifier_InvoiceId(testInvoiceId);
+        verify(customerInvoiceResponseMapper, never()).entityToResponseModel(any(CustomerInvoice.class));
+    }
+
+
 }

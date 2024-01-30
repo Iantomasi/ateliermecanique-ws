@@ -23,7 +23,6 @@ import java.util.List;
 @AllArgsConstructor
 public class CustomerInvoiceServiceImpl implements CustomerInvoiceService{
 
-
     private CustomerInvoiceRepository customerInvoiceRepository;
     private UserRepository userRepository;
     private VehicleRepository vehicleRepository;
@@ -76,5 +75,18 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService{
         CustomerInvoice  savedInvoice = customerInvoiceRepository.save(invoice);
         return customerInvoiceResponseMapper.entityToResponseModel(savedInvoice);
     }
+
+    @Override
+    public CustomerInvoiceResponseModel getInvoiceById(String invoiceId) {
+
+        CustomerInvoice invoice = customerInvoiceRepository.findCustomerInvoiceByCustomerInvoiceIdentifier_InvoiceId(invoiceId);
+
+        if(invoice == null) {
+            log.warn("No invoice found for invoice ID: {}", invoiceId);
+            return null;
+        }
+        return customerInvoiceResponseMapper.entityToResponseModel(invoice);
+    }
+
 
 }

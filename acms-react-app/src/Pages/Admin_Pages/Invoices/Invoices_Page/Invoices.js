@@ -99,6 +99,7 @@ function Invoices() {
                         key={invoice.invoiceId}
                         invoice={invoice}
                         refreshInvoices={getInvoices}
+                        navigate={navigate}
                       />
                     ))}
                   </tbody>
