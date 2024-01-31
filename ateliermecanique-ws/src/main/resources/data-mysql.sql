@@ -111,15 +111,17 @@ INSERT INTO appointments (appointment_id, user_id, vehicle_id, appointment_date,
 -- Appointment 9 (Isabella Gonzalez)
 INSERT INTO appointments (appointment_id, user_id, vehicle_id, appointment_date, services, comments, status) VALUE ('9508dc5c-d460-443f-8f37-a174284f868k', 'vwxy8z45-3a6b-8795-2abh-96329x6bv163', '07gg7h8c-4hh5-89i6-cji7-6i7j8k9l1m11', '2024-06-30 08:00', 'Alignment', 'None', 'PENDING');
 
--- Appointment 11 (Mason Rodriguez 2)
+-- Appointment 10 (Mason Rodriguez 1)
 INSERT INTO appointments (appointment_id, user_id, vehicle_id, appointment_date, services, comments, status) VALUE ('1008dc5c-d460-443f-8f37-a174284f8682', 'yzab8cd5-3e6f-8796-2abi-96330c6bw164', '08hh8i9d-5ii6-9aj7-dkj8-7j8k9l2n22', '2024-04-16 10:00', 'Steering & Suspension', 'None', 'PENDING');
 
--- Appointment 12 (Mason Rodriguez 3)
+-- Appointment 11 (Mason Rodriguez 2)
 INSERT INTO appointments (appointment_id, user_id, vehicle_id, appointment_date, services, comments, status) VALUE ('1008dc5c-d460-443f-8f37-a174284f8683', 'yzab8cd5-3e6f-8796-2abi-96330c6bw164', '08hh8i9d-5ii6-9aj7-dkj8-7j8k9l2n22', '2024-06-25 19:00', 'Alignment', 'None', 'PENDING');
 
--- Appointment 13 (Mason Rodriguez 4)
+-- Appointment 12 (Mason Rodriguez 3)
 INSERT INTO appointments (appointment_id, user_id, vehicle_id, appointment_date, services, comments, status) VALUE ('1008dc5c-d460-443f-8f37-a174284f8684', 'yzab8cd5-3e6f-8796-2abi-96330c6bw164', '08hh8i9d-5ii6-9aj7-dkj8-7j8k9l2n22', '2024-09-25 19:00', 'Oil Change', 'None', 'PENDING');
-INSERT INTO appointments (appointment_id, user_id, vehicle_id, appointment_date, services, comments, status) VALUE ('1008dc5c-d460-443f-8f37-a174284f868l', 'yzab8cd5-3e6f-8796-2abi-96330c6bw164', '08hh8i9d-5ii6-9aj7-dkj8-7j8k9l2n22', '2024-03-24 18:00', 'Brakes', 'None', 'CANCELLED');
+
+-- Appointment 13 (Mason Rodriguez 4)
+INSERT INTO appointments (appointment_id, user_id, vehicle_id, appointment_date, services, comments, status) VALUE ('1008dc5c-d460-443f-8f37-a1747777868l', 'yzab8cd5-3e6f-8796-2abi-96330c6bw164', '08hh8i9d-5ii6-9aj7-dkj8-7j8k9l2n22', '2024-03-24 18:00', 'Brakes', 'None', 'CANCELLED');
 
 
 --ROLES

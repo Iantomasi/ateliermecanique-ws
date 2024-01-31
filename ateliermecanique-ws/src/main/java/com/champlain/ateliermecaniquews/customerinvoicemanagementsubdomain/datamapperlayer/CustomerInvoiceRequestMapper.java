@@ -4,4 +4,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface CustomerInvoiceRequestMapper {
+
+    //maybe to remove?
+
 }
