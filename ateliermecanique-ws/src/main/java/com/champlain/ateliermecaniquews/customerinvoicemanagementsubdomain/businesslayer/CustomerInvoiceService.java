@@ -14,7 +14,11 @@ public interface CustomerInvoiceService {
 
     CustomerInvoiceResponseModel getInvoiceById(String invoiceId);
 
+
     CustomerInvoiceResponseModel updateCustomerInvoice(String invoiceId, CustomerInvoiceRequestModel customerInvoiceRequestModel);
+
+    void deleteInvoiceByInvoiceId(String invoiceId);
+
 
 
 }

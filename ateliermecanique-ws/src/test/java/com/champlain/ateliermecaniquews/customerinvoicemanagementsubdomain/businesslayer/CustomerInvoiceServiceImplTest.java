@@ -328,5 +328,41 @@ class CustomerInvoiceServiceImplTest {
         assertEquals(200.00, invoice.getSumOfServices());
     }
 
+    @Test
+    void deleteInvoiceByInvoiceId_shouldSucceed() {
+        // Arrange
+        String invoiceId = "existingInvoiceId";
+
+        // Mock the invoice to be deleted
+        CustomerInvoice invoiceToDelete = new CustomerInvoice();
+        when(customerInvoiceRepository.findCustomerInvoiceByCustomerInvoiceIdentifier_InvoiceId(invoiceId))
+                .thenReturn(invoiceToDelete);
+
+        // Act
+        customerInvoiceService.deleteInvoiceByInvoiceId(invoiceId);
+
+        // Assert
+        verify(customerInvoiceRepository, times(1))
+                .findCustomerInvoiceByCustomerInvoiceIdentifier_InvoiceId(invoiceId);
+        verify(customerInvoiceRepository, times(1)).delete(invoiceToDelete);
+    }
+
+    @Test
+    void deleteInvoiceByInvoiceId_invoiceNotFound() {
+        // Arrange
+        String invoiceId = "nonExistentInvoiceId";
+        when(customerInvoiceRepository.findCustomerInvoiceByCustomerInvoiceIdentifier_InvoiceId(invoiceId))
+                .thenReturn(null);
+
+        // Act
+        customerInvoiceService.deleteInvoiceByInvoiceId(invoiceId);
+
+        // Assert
+        verify(customerInvoiceRepository, times(1))
+                .findCustomerInvoiceByCustomerInvoiceIdentifier_InvoiceId(invoiceId);
+        verify(customerInvoiceRepository, never()).delete(any());
+    }
+
+
 
 }

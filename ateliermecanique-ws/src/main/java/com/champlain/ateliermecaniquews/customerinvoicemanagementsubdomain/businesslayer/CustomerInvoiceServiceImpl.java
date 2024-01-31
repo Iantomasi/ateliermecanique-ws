@@ -104,6 +104,14 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService{
     }
 
     @Override
+    public void deleteInvoiceByInvoiceId(String invoiceId) {
+        CustomerInvoice customerInvoice = customerInvoiceRepository.findCustomerInvoiceByCustomerInvoiceIdentifier_InvoiceId(invoiceId);
+        if(customerInvoice != null){
+            customerInvoiceRepository.delete(customerInvoice);
+        }
+    }
+
+    @Override
     public CustomerInvoiceResponseModel updateCustomerInvoice(String invoiceId, CustomerInvoiceRequestModel customerInvoiceRequestModel) {
 
         CustomerInvoice invoice = customerInvoiceRepository.findCustomerInvoiceByCustomerInvoiceIdentifier_InvoiceId(invoiceId);

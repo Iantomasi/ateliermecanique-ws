@@ -133,4 +133,47 @@ public class CustomerInvoiceController {
         return ResponseEntity.ok(invoice);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/invoices/{invoiceId}")
+    public ResponseEntity<Void> deleteCustomerInvoiceByCustomerInvoiceIdAdmin(@PathVariable String invoiceId) {
+        try {
+            customerInvoiceService.deleteInvoiceByInvoiceId(invoiceId);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
+    @DeleteMapping("/customers/{customerId}/invoices/{invoiceId}")
+    public ResponseEntity<Void> deleteCustomerInvoiceByCustomerInvoiceIdCustomer(@PathVariable String invoiceId,@PathVariable String customerId) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+
+            if (authentication.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("ROLE_CUSTOMER"))) {
+                // Check if it's an admin, and go straight to checking if the user exists
+                User user = userRepository.findUserByUserIdentifier_UserId(customerId);
+
+                if (user == null) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                }
+            } else {
+                // It's a customer, check if the authenticated user's ID matches the path variable
+                UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+                String authenticatedUserId = userDetails.getUserId();
+
+                if (!authenticatedUserId.equals(customerId)) {
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+                }
+            }
+            customerInvoiceService.deleteInvoiceByInvoiceId(invoiceId);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+
+
 }
