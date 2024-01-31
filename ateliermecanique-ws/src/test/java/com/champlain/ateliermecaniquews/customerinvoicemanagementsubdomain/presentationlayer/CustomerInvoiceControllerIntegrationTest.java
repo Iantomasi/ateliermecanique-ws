@@ -71,6 +71,7 @@ class CustomerInvoiceControllerIntegrationTest {
         testInvoice.setCustomerInvoiceIdentifier(identifier);
         CustomerInvoice savedInvoice = customerInvoiceRepository.save(testInvoice);
         testInvoiceId = savedInvoice.getCustomerInvoiceIdentifier().getInvoiceId(); // Get the UUID
+
         testCustomerId = savedInvoice.getCustomerId();
         testAppointmentId = savedInvoice.getAppointmentId();
 
@@ -82,7 +83,6 @@ class CustomerInvoiceControllerIntegrationTest {
         mockUser.setPassword("password");
        // mockUser.setRole("ROLE_CUSTOMER");
         when(userRepository.findUserByUserIdentifier_UserId(testCustomerId)).thenReturn(mockUser);
-
     }
 
     @AfterEach

@@ -1,9 +1,8 @@
 package com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.businesslayer;
 
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Appointment;
+import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.AppointmentRepository;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Status;
-import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentRequestModel;
-import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentResponseModel;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datalayer.CustomerInvoice;
@@ -12,10 +11,7 @@ import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datam
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.presentationlayer.CustomerInvoiceRequestModel;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.presentationlayer.CustomerInvoiceResponseModel;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
@@ -39,6 +35,9 @@ class CustomerInvoiceServiceImplTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private AppointmentRepository appointmentRepository;
 
     @InjectMocks
     private CustomerInvoiceServiceImpl customerInvoiceService;
@@ -155,33 +154,41 @@ class CustomerInvoiceServiceImplTest {
     }
 
 
+
     @Test
     void addInvoiceToCustomerAccount_shouldSucceed() {
         // Arrange
         String customerId = "testCustomerId";
+        String appointmentId = "testAppointmentId";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime dateTime = LocalDateTime.parse("2024-03-24 11:00", formatter);
         CustomerInvoiceRequestModel requestModel = CustomerInvoiceRequestModel.builder()
                 .customerId(customerId)
-                .appointmentId("testAppointmentId")
+                .appointmentId(appointmentId)
                 .invoiceDate(dateTime)
                 .mechanicNotes("Test mechanic notes")
                 .sumOfServices(100.00)
                 .build();
 
         User customerAccount = new User();
+        Appointment testAppointment = new Appointment(); // Mocked appointment
+        testAppointment.setStatus(Status.COMPLETED);
 
         when(userRepository.findUserByUserIdentifier_UserId(customerId))
                 .thenReturn(customerAccount);
+        when(appointmentRepository.findAppointmentByAppointmentIdentifier_AppointmentId(appointmentId))
+                .thenReturn(testAppointment);
 
         CustomerInvoice savedInvoice = new CustomerInvoice();
         when(customerInvoiceRepository.save(any(CustomerInvoice.class)))
                 .thenReturn(savedInvoice);
+        when(appointmentRepository.save(any(Appointment.class)))
+                .then(AdditionalAnswers.returnsFirstArg()); // Mock the save operation to return the updated appointment
 
         CustomerInvoiceResponseModel expectedResponse = CustomerInvoiceResponseModel.builder()
                 .invoiceId("1")
                 .customerId(customerId)
-                .appointmentId("testAppointmentId")
+                .appointmentId(appointmentId)
                 .invoiceDate(dateTime)
                 .mechanicNotes("Test mechanic notes")
                 .sumOfServices(100.00)
@@ -189,7 +196,6 @@ class CustomerInvoiceServiceImplTest {
 
         when(customerInvoiceResponseMapper.entityToResponseModel(savedInvoice))
                 .thenReturn(expectedResponse);
-
 
         // Act
         CustomerInvoiceResponseModel result = customerInvoiceService.addInvoiceToCustomerAccount(customerId, requestModel);
@@ -199,7 +205,10 @@ class CustomerInvoiceServiceImplTest {
         assertEquals(expectedResponse.getCustomerId(), result.getCustomerId());
         assertEquals(expectedResponse.getSumOfServices(), result.getSumOfServices());
         verify(customerInvoiceRepository, times(1)).save(any(CustomerInvoice.class));
+        verify(appointmentRepository, times(1)).save(testAppointment);
+        assertEquals(Status.COMPLETED, testAppointment.getStatus()); // Verify that the appointment status has been updated
     }
+
 
     @Test
     void addInvoiceToCustomerAccount_CustomerNotFound_shouldReturnNull() {

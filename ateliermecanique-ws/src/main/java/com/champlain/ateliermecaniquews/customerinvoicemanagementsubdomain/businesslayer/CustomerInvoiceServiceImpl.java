@@ -1,6 +1,9 @@
 package com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.businesslayer;
 
 
+import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Appointment;
+import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.AppointmentRepository;
+import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Status;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datalayer.CustomerInvoice;
@@ -14,6 +17,7 @@ import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.Veh
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,6 +31,7 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService{
     private UserRepository userRepository;
     private VehicleRepository vehicleRepository;
     private CustomerInvoiceResponseMapper customerInvoiceResponseMapper;
+    private AppointmentRepository appointmentRepository;
 
     @Override
     public List<CustomerInvoiceResponseModel> getAllInvoices() {
@@ -56,6 +61,7 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService{
     }
 
     @Override
+    @Transactional
     public CustomerInvoiceResponseModel addInvoiceToCustomerAccount(String customerId, CustomerInvoiceRequestModel customerInvoiceRequestModel) {
         User customerAccount = userRepository.findUserByUserIdentifier_UserId(customerId);
 
@@ -73,6 +79,15 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService{
         invoice.setSumOfServices(customerInvoiceRequestModel.getSumOfServices());
 
         CustomerInvoice  savedInvoice = customerInvoiceRepository.save(invoice);
+
+        String appointmentId = customerInvoiceRequestModel.getAppointmentId();
+        Appointment appointment = appointmentRepository.findAppointmentByAppointmentIdentifier_AppointmentId(appointmentId);
+        if (appointment != null) {
+            appointment.setStatus(Status.COMPLETED);
+            appointmentRepository.save(appointment);
+        } else {
+            log.warn("Appointment not found for ID: {}", appointmentId);
+        }
         return customerInvoiceResponseMapper.entityToResponseModel(savedInvoice);
     }
 

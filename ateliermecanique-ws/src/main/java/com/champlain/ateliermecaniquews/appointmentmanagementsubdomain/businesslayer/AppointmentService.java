@@ -1,7 +1,7 @@
 package com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.businesslayer;
 
-import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentRequestModel;
-import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentResponseModel;
+import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.AppointmentRequestModel;
+import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.AppointmentResponseModel;
 
 import java.time.LocalDate;
 import java.util.List;
