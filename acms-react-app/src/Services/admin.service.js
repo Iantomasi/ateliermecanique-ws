@@ -98,6 +98,9 @@ class adminService{
     getInvoiceById(id){
         return axios.get(API_INVOICES_URL + `/${id}`, { headers: authHeader() });
     }
+    deleteInvoice(id){
+        return axios.delete(API_INVOICES_URL + `/${id}`, { headers: authHeader() });
+    }
 
 }
 

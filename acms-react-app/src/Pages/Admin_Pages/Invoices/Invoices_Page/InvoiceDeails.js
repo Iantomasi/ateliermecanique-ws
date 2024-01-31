@@ -18,11 +18,9 @@ function InvoiceDetails() {
         sumOfServices: 0.0
     });
 
-    const [showConfirmation, setShowConfirmation] = useState(false); // If needed for delete confirmation
-    const [publicContent, setPublicContent] = useState(null); // Define publicContent and its setter
+    const [publicContent, setPublicContent] = useState(true); // Define publicContent and its setter
     const [message, setMessage] = useState(''); // Define message and its setter
-
-    // ... other state variables like showConfirmation, publicContent, message ...
+    const [showConfirmation, setShowConfirmation] = useState(false); // State to manage delete confirmation
 
     useEffect(() => {
         adminService.getInvoiceById(invoiceId)
@@ -54,9 +52,27 @@ function InvoiceDetails() {
         // Similar to the updateCustomerVehicle function but for invoices
     }
 
+
+    function confirmDelete() {
+        setShowConfirmation(true);
+    }
+
+    function cancelDelete() {
+        setShowConfirmation(false);
+    }
+
     function deleteInvoice() {
-        // Function to delete the invoice
-        // Similar to the executeDelete function but for invoices
+        adminService.deleteInvoice(invoiceId)
+            .then(res => {
+                if (res.status === 204) {
+                    alert('Invoice has been deleted!');
+                    navigate(`/admin/invoices`);
+                }
+            })
+            .catch(err => {
+                console.error('Error deleting invoice:', err);
+            });
+        setShowConfirmation(false);
     }
 
     // Render the invoice details form
@@ -91,11 +107,29 @@ function InvoiceDetails() {
 
                         <label className="font-bold">Sum Of Service</label>
                         <input className="w-full p-4 rounded border border-gray-400 mb-5" name="sumOfServices" value={invoiceDetails.sumOfServices} onChange={handleInputChange} type="text" required />
+                    
+                        <button className="bg-red-500 text-white px-4 py-2 rounded font-bold" type="button" onClick={confirmDelete}>
+                        Delete Invoice
+                        </button>
                     </form>
                         </div>
-                    {/* Delete confirmation and other UI elements */}
+                        {showConfirmation && (
+                                <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
+                                    <div className="bg-white p-5 rounded-lg shadow-lg">
+                                        <p className="text-lg mb-2">Are you sure you want to delete this invoice?</p>
+                                        <div className="flex justify-center space-x-4">
+                                            <button className="bg-red-500 text-white px-4 py-2 rounded font-bold" onClick={deleteInvoice}>
+                                                Yes
+                                            </button>
+                                            <button className="bg-gray-300 text-gray-700 px-4 py-2 rounded font-bold" onClick={cancelDelete}>
+                                                No
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </main>
-                </div>
+                    </div>
                 </div>
             ) : (
                 <div className="flex-1 text-center">
