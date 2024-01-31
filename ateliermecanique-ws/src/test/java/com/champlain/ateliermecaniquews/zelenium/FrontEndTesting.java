@@ -727,8 +727,12 @@ public class FrontEndTesting {
     }
 
     @Test
+<<<<<<< HEAD
 
     public void updateCustomerInvoice() {
+=======
+    public void deleteInvoiceByInvoiceId() { // rebase comment
+>>>>>>> dbfb5c4 (rebasing onto giuliano)
         open("https://localhost:3000/");
         $("a[href='/login']").click();
         sleep(1000);
