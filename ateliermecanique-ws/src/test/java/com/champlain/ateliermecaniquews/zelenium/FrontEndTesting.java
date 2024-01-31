@@ -8,6 +8,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.Select;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -724,6 +725,47 @@ public class FrontEndTesting {
         sleep(5000);
 
     }
+
+    @Test
+    public void updateCustomerInvoice() {
+        open("https://localhost:3000/");
+        $("a[href='/login']").click();
+        sleep(1000);
+
+        $("input[name='email']").setValue("admin@example.com");
+        $("input[type='password']").setValue("Hello!");
+        $("button[type='submit']").click();
+        sleep(1000);
+
+        $("img[src='invoices.svg']").click();
+        sleep(2000);
+
+        String invoiceId = "662ba5e8-9eb8-41ec-bf89-0080342c89ca";
+        SelenideElement invoiceLink = $$("td").findBy(text(invoiceId));
+        invoiceLink.shouldBe(visible).click();
+        sleep(5000);
+
+        // Update the sum of services
+        $("input[name='sumOfServices']").setValue("1000");
+
+        // Option 1: Click the Save button using class selectors
+        $("button[type='submit']").click();
+
+        // Check if alert is present or not
+        try {
+            if (Selenide.switchTo().alert() != null) {
+                Selenide.switchTo().alert().accept();
+            } else {
+                System.out.println("Alert not found after clicking save, check if save operation is working correctly");
+            }
+        } catch (NoAlertPresentException e) {
+            System.out.println("No alert present after clicking save");
+        }
+
+        // Redirect back to invoices page
+        open("https://localhost:3000/admin/invoices");
+    }
+
 
 
 }

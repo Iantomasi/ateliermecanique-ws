@@ -103,5 +103,21 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService{
         return customerInvoiceResponseMapper.entityToResponseModel(invoice);
     }
 
+    @Override
+    public CustomerInvoiceResponseModel updateCustomerInvoice(String invoiceId, CustomerInvoiceRequestModel customerInvoiceRequestModel) {
 
+        CustomerInvoice invoice = customerInvoiceRepository.findCustomerInvoiceByCustomerInvoiceIdentifier_InvoiceId(invoiceId);
+
+        if(invoice == null) {
+            log.warn("Invoice not found for invoice ID: {}", invoiceId);
+            return null;
+        }
+        invoice.setCustomerId(customerInvoiceRequestModel.getCustomerId());
+        invoice.setAppointmentId(customerInvoiceRequestModel.getAppointmentId());
+        invoice.setInvoiceDate(customerInvoiceRequestModel.getInvoiceDate());
+        invoice.setMechanicNotes(customerInvoiceRequestModel.getMechanicNotes());
+        invoice.setSumOfServices(customerInvoiceRequestModel.getSumOfServices());
+
+        return customerInvoiceResponseMapper.entityToResponseModel(customerInvoiceRepository.save(invoice));
+    }
 }

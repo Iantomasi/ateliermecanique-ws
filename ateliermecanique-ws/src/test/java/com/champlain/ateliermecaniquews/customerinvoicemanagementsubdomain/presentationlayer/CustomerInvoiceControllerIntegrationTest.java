@@ -1,4 +1,5 @@
 package com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.presentationlayer;
+
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.businesslayer.CustomerInvoiceService;
@@ -16,22 +17,17 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 
-import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -46,6 +42,9 @@ class CustomerInvoiceControllerIntegrationTest {
 
     @MockBean
     private UserRepository userRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
 
     @Autowired
@@ -200,6 +199,32 @@ class CustomerInvoiceControllerIntegrationTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.invoiceId").value(testInvoiceId))
                 .andExpect(jsonPath("$.mechanicNotes").value("Muffler was fixed"));
+    }
+
+    @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
+    void updateCustomerInvoice_whenExists_shouldReturnUpdatedInvoice() throws Exception {
+        // Arrange
+        String invoiceId = "existing-invoice-id";
+        CustomerInvoiceRequestModel requestModel = new CustomerInvoiceRequestModel(
+                "updated-customer-id", "updated-appointment-id", LocalDateTime.now(), "Updated Notes", 200.00);
+
+        CustomerInvoiceResponseModel updatedInvoice = new CustomerInvoiceResponseModel(
+                invoiceId, "updated-customer-id", "updated-appointment-id", LocalDateTime.now(), "Updated Notes", 200.00);
+
+        when(customerInvoiceService.updateCustomerInvoice(anyString(), any(CustomerInvoiceRequestModel.class)))
+                .thenReturn(updatedInvoice);
+
+        // Act & Assert
+        mockMvc.perform(put("/api/v1/invoices/{invoiceId}", invoiceId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestModel)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.invoiceId").value(invoiceId))
+                .andExpect(jsonPath("$.customerId").value("updated-customer-id"))
+                .andExpect(jsonPath("$.appointmentId").value("updated-appointment-id"))
+                .andExpect(jsonPath("$.mechanicNotes").value("Updated Notes"))
+                .andExpect(jsonPath("$.sumOfServices").value(200.00));
     }
 
 
