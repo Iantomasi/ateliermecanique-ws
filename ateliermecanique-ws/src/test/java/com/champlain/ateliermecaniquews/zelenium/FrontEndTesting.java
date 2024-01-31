@@ -727,18 +727,14 @@ public class FrontEndTesting {
     }
 
     @Test
-<<<<<<< HEAD
+
     public void updateCustomerInvoice() {
-=======
-    public void deleteInvoiceByInvoiceId() {
->>>>>>> 3be76d0 (Selenium Testing complete)
         open("https://localhost:3000/");
         $("a[href='/login']").click();
         sleep(1000);
 
         $("input[name='email']").setValue("admin@example.com");
         $("input[type='password']").setValue("Hello!");
-<<<<<<< HEAD
         $("button[type='submit']").click();
         sleep(1000);
 
@@ -772,10 +768,14 @@ public class FrontEndTesting {
     }
 
 
-=======
 
-        $("button[type='submit']").click();
+    @Test
+    public void deleteInvoiceByInvoiceId() {
+
+            open("https://localhost:3000/");
+        $("a[href='/login']").click();
         sleep(1000);
+
 
         sleep(1000);
         $("img[src='invoices.svg']").click();
@@ -796,9 +796,6 @@ public class FrontEndTesting {
 
         $("p").shouldHave(text("INVOICES"));
     }
-
->>>>>>> 3be76d0 (Selenium Testing complete)
-
 }
 
 
