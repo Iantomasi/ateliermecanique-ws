@@ -26,11 +26,11 @@ import java.util.Collections;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-<<<<<<< HEAD
+
 import static org.mockito.Mockito.when;
-=======
+
 import static org.mockito.Mockito.*;
->>>>>>> cc8c16e (Front and back end fully implemented with serviceImpl testing and integration test)
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -207,7 +207,6 @@ class CustomerInvoiceControllerIntegrationTest {
     }
 
     @Test
-<<<<<<< HEAD
     @WithMockUser(username = "admin", roles = "ADMIN")
     void updateCustomerInvoice_whenExists_shouldReturnUpdatedInvoice() throws Exception {
         // Arrange
@@ -233,7 +232,7 @@ class CustomerInvoiceControllerIntegrationTest {
                 .andExpect(jsonPath("$.sumOfServices").value(200.00));
     }
 
-=======
+    @Test
     @WithMockUser(username = "admin@example.com", roles = "ADMIN")
     void deleteInvoiceByInvoiceId_shouldSucceed() throws Exception {
         // Arrange
@@ -258,7 +257,7 @@ class CustomerInvoiceControllerIntegrationTest {
     }
 
 
->>>>>>> cc8c16e (Front and back end fully implemented with serviceImpl testing and integration test)
+
 
 
 

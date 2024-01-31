@@ -288,7 +288,6 @@ class CustomerInvoiceServiceImplTest {
     }
 
     @Test
-<<<<<<< HEAD
     void updateCustomerInvoice_shouldSucceed() {
         // Arrange
         CustomerInvoice invoice = new CustomerInvoice();
@@ -329,7 +328,7 @@ class CustomerInvoiceServiceImplTest {
         assertEquals(200.00, invoice.getSumOfServices());
     }
 
-=======
+    @Test
     void deleteInvoiceByInvoiceId_shouldSucceed() {
         // Arrange
         String invoiceId = "existingInvoiceId";
@@ -365,7 +364,5 @@ class CustomerInvoiceServiceImplTest {
     }
 
 
-
->>>>>>> cc8c16e (Front and back end fully implemented with serviceImpl testing and integration test)
 
 }

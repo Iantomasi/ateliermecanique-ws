@@ -13,12 +13,12 @@ public interface CustomerInvoiceService {
 
 
     CustomerInvoiceResponseModel getInvoiceById(String invoiceId);
-<<<<<<< HEAD
+
 
     CustomerInvoiceResponseModel updateCustomerInvoice(String invoiceId, CustomerInvoiceRequestModel customerInvoiceRequestModel);
-=======
+
     void deleteInvoiceByInvoiceId(String invoiceId);
->>>>>>> cc8c16e (Front and back end fully implemented with serviceImpl testing and integration test)
+
 
 
 }
