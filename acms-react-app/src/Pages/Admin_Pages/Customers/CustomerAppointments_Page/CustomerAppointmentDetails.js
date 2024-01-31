@@ -186,7 +186,6 @@ function AppointmentDetails() {
                   <option value="PENDING">Pending</option>
                   <option value="CONFIRMED">Confirmed</option>
                   <option value="CANCELLED">Cancelled</option>
-                  <option value="COMPLETED">Completed</option>
                   </select>
 
                   <div className="flex justify-center space-x-10">
