@@ -27,7 +27,7 @@ public class CustomerInvoiceController {
     final private UserRepository userRepository;
 
     @GetMapping("/invoices")
-   // @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<CustomerInvoiceResponseModel>> getAllInvoicesAdmin() {
         List<CustomerInvoiceResponseModel> invoices = customerInvoiceService.getAllInvoices();
         if (invoices == null || invoices.isEmpty()) {

@@ -1,0 +1,80 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+AddElementTag("microService", $shape=EightSidedShape(), $bgColor="CornflowerBlue", $fontColor="white", $legendText="micro service\neight sided")
+AddElementTag("storage", $shape=RoundedBoxShape(), $bgColor="lightSkyBlue", $fontColor="white")
+AddRelTag("async", $textColor=$ARROW_FONT_COLOR, $lineColor=$ARROW_COLOR, $lineStyle=DashedLine())
+AddRelTag("sync/async", $textColor=$ARROW_FONT_COLOR, $lineColor=$ARROW_COLOR, $lineStyle=DottedLine())
+AddElementTag("external", $shape=RoundedBoxShape(), $bgColor="Gray", $fontColor="white")
+
+Container(app, "Atelier Mecanique CMS", "React", "Provides all of the Garage appointment system functionalities to customer and mechanic via their web browser")
+System_Boundary(c1, "Garage System") {
+    Component(Auth_Controller, "Authentication Controller", "Java, Spring Boot", "Handles authentication-related functionalities")
+    Component(Content_Controller, "Content Controller", "Java, Spring Boot", "Handles authentication-content-related functionalities")
+    Component(Token_Service, "Token Service", "Java, Spring Boot", "Manages tokens\nUser Repository")
+    Component(oAuth_Service, "oAuth Service", "Java, Spring Boot", "Manages oAuth Logins")
+    Component(Appointments_Controller, "Appointments Controller", "Java, Spring Boot", "Receives and redirects appointment-related functionalities")
+
+    Component(Customer_Controller, "Customers Controller", "Java, Spring Boot", "Receives and redirects customer-related tasks")
+    Component(Invoice_Controller, "Invoices Controller", "Java, Spring Boot", "Receives and redirects invoice-related functionalities")
+    Component(Vehicle_Controller, "Vehicles Controller", "Java, Spring Boot", "Receives and redirects vehicle-related operations")
+    Component(Services_Controller, "Services Controller", "Java, Spring Boot", "Receives and redirects service-related functionalities")
+
+    Component(mailer, "Email Service", "Java, Spring Boot", "Handles email functionalities")
+    Component(Invoice_Service, "Invoices Service", "Java, Spring Boot", "Handles invoice-related functionalities")
+    Component(Appointments_Service, "Appointments Service", "Java, Spring Boot", "Handles appointment-related functionalities")
+    Component(Vehicle_Service, "Vehicles Service", "Java, Spring Boot", "Handles with vehicle-related functionalities")
+    Component(Customer_Service, "Customers Service", "Java, Spring Boot", "Handles customer-related functionalities")
+    Component(Services_Service, "Services Service", "Java, Spring Boot", "Handles service-related functionalities")
+
+    Component(Invoice_Repository, "Invoice Repository", "Java, Spring Boot", "Manages invoice data communication")
+    Component(Appointments_Repository, "Appointments Repository", "Java, Spring Boot", "Manages appointment data communication")
+    Component(Vehicle_Repository, "Vehicle Repository", "Java, Spring Boot", "Manages vehicle data communication")
+    Component(Services_Repository, "Services Repository", "Java, Spring Boot", "Manages service data communication")
+    Component(User_Repository, "Users Repository", "Java, Spring Boot", "Manages User data communication")
+    Component(Role_Repository, "Role Repository", "Java, Spring Boot", "Manages Roles communication")
+}
+
+Container(email_service, "E-mail System", "Software System","Sends Emails to customers",$tags = "external")
+Container(auth_service, "Auth System", "Auth-0","Authenticate Users",$tags = "external")
+ContainerDb(db, "Database", "MySQL", "Stores information about appointments, invoices, customers, etc.", $tags = "storage")
+
+Rel_D(Invoice_Repository, db, "Reads and Writes to")
+Rel_D(Appointments_Repository, db, "Reads and Writes to")
+Rel_D(Vehicle_Repository, db, "Reads and Writes to")
+Rel_D(Services_Repository, db, "Reads and Writes to")
+Rel_D(User_Repository, db, "Reads and Writes to")
+
+Rel_D(app,Invoice_Controller,"Makes API calls to","JSON/HTTPS", "async", $tags="async")
+Rel_D(app,Appointments_Controller,"Makes API calls to","JSON/HTTPS", "async", $tags="async")
+Rel_D(app,Vehicle_Controller,"Makes API calls to","JSON/HTTPS", "async", $tags="async")
+Rel_D(app,Customer_Controller,"Makes API calls to","JSON/HTTPS", "async", $tags="async")
+Rel_D(app,Services_Controller,"Makes API calls to","JSON/HTTPS", "async", $tags="async")
+
+Rel_D(Invoice_Controller, Invoice_Service, "Calls")
+Rel_D(Appointments_Controller, Appointments_Service, "Calls")
+Rel_D(Vehicle_Controller, Vehicle_Service, "Calls")
+Rel_D(Customer_Controller, Customer_Service, "Calls")
+Rel_D(Services_Controller, Services_Service, "Calls")
+
+Rel_D(Invoice_Service, Invoice_Repository, "Uses")
+Rel_D(Appointments_Service, Appointments_Repository, "Uses")
+Rel_D(Vehicle_Service, Vehicle_Repository, "Uses")
+Rel_D(Customer_Service, User_Repository, "Uses")
+Rel_D(Services_Service, Services_Repository, "Uses")
+
+Rel_U(mailer,email_service, "Sends emails using")
+Rel_D(Auth_Controller,oAuth_Service,"Authenticates users using")
+
+Rel_U(Customer_Service,mailer,"uses")
+Rel_L(Customer_Service,Vehicle_Service,"uses")
+
+
+Rel_D(oAuth_Service, Token_Service, "Uses")
+Rel_D(oAuth_Service, User_Repository, "Uses")
+Rel_D(oAuth_Service, Role_Repository, "Uses")
+
+Rel_R(app,auth_service,"uses")
+Rel_D(Role_Repository,db,"Reads and Writes to")
+SHOW_LEGEND()
+@enduml

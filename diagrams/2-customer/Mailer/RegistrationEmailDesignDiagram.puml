@@ -7,6 +7,7 @@ participant SignUpPage as "<<View>>\nSignUpPage"
 participant AuthController as "<<Service>>\nAuthController"
 participant UserService as "<<Backend>>\nUserService"
 participant Database as "<<Database>>\nDatabase"
+participant Mailer as "<<Service>>\nMailer"
 
 User -> ReactApplication: Accesses sign-up page
 activate ReactApplication
@@ -30,12 +31,16 @@ deactivate Database
 UserService --> AuthController: User created successfully
 deactivate UserService
 
+AuthController -> Mailer: sendRegistrationEmail(userInfo.email)
+activate Mailer
+
+Mailer --> AuthController: Email sent successfully
+deactivate Mailer
+
 AuthController -> SignUpPage: createSuccessResponse("User has been successfully registered")
 activate SignUpPage
 
-
-
-SignUpPage -> ReactApplication: display successfull message
+SignUpPage -> ReactApplication: display successful message
 activate ReactApplication
 
 ReactApplication --> User: Redirects to login page

@@ -16,6 +16,7 @@ class "<<controller>>\nAuthController" as authController {
     + facebookToken(token: String) : ResponseEntity<?>
     + authenticateUser(loginRequest: LoginRequest) : ResponseEntity<JWTResponse>
     + registerUser(signupRequest: SignupRequest) : ResponseEntity<MessageResponse>
+    + updatePassword (userId: String, password : String) : ResponseEntity<JWTResponse>
     - generateResponse(user: User) : ResponseEntity<?>
 }
 
@@ -79,21 +80,6 @@ class "<<entity>>\nUserIdentifier" as userIdentifier {
     - userId: String
 }
 
-' LoginRequest class
-class "\nLoginRequest" as loginRequest {
-    + email: String
-    + password: String
-}
-
-' SignupRequest class
-class "\nSignupRequest" as signupRequest {
-    + firstName: String
-    + lastName: String
-    + phoneNumber: String
-    + email: String
-    + role: Set<String>
-    + password: String
-}
 
 ' JWTResponse class
 class "\nJWTResponse" as jwtResponse {
@@ -130,6 +116,7 @@ class "<<utils>>\nJwtUtils" as jwtUtils {
     + generateJwtResponseForOAuth(email: String): String
     + getEmailFromJwtToken(token: String): String
     + validateJwtToken(authToken: String): boolean
+    + generateResetToken(userId: String, email: String) : String
 }
 
 ' UserDetailsImpl class
@@ -176,47 +163,25 @@ class "<<utils>>\nWebSecurityConfig" as webSecurityConfig {
 
 authController --|> oAuthService: uses
 oAuthService --|> tokenServiceOAuth: uses
-tokenServiceOAuth -- userDetailsServiceImpl: uses
-userDetailsServiceImpl -- userDetailsImpl: uses
+tokenServiceOAuth --|> userDetailsServiceImpl: uses
+userDetailsServiceImpl --|> userDetailsImpl: uses
 userDetailsImpl --|> roleClass: uses
 authController --|> userDetailsServiceImpl: uses
 userDetailsServiceImpl --|> userRepository: uses
-userDetailsServiceImpl --|> userDetailsImpl: creates
-authController --|> userDetailsImpl: creates
-authController --|> authEntryPointJwt: creates
-authController --|> authTokenFilter: creates
-authController --|> userRepository: creates
-authController --|> authenticationManager: creates
-authController --|> roleClass: creates
-authController --|> loginRequest: creates
-authController --|> signupRequest: creates
+authController --|> userDetailsImpl: uses
+authController --|> userRepository: uses
 authController --|> jwtResponse: creates
 authController --|> messageResponse: creates
-authEntryPointJwt --|> httpServletRequest: creates
-authEntryPointJwt --|> httpServletResponse: creates
-authEntryPointJwt --|> authenticationException: creates
-authTokenFilter --|> httpServletRequest: creates
-authTokenFilter --|> httpServletResponse: creates
-authTokenFilter --|> filterChain: creates
-jwtUtils --|> authentication: creates
-jwtUtils --|> key: creates
-jwtUtils --|> claims: creates
-jwtUtils --|> roles: creates
-userDetailsImpl --|> authorities: creates
+authController --|> jwtUtils: uses
+authController --|> roleRepository: uses
 userDetailsImpl --|> userModified: creates
 userModified --|> userIdentifier: contains
 userModified --|> roleClass: contains
 userModified --|> ERole: contains
-userDetailsServiceImpl --|> userRepository: creates
-webSecurityConfig --|> userDetailsServiceImpl: creates
+webSecurityConfig --|> userDetailsServiceImpl: uses
 webSecurityConfig --|> authEntryPointJwt: creates
 webSecurityConfig --|> authTokenFilter: creates
-webSecurityConfig --|> daoAuthenticationProvider: creates
-webSecurityConfig --|> passwordEncoder: creates
-webSecurityConfig --|> authenticationConfiguration: creates
-webSecurityConfig --|> httpSecurity: creates
-webSecurityConfig --|> corsConfigurationSource: creates
-webSecurityConfig --|> roleRepository: creates
+webSecurityConfig --|> roleRepository: uses
 webSecurityConfig --|> jwtUtils: uses
 
 @enduml
