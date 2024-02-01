@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import moment from 'moment';
 import './TimeSlots.css';
-import userService from "../../../../Services/user.service";
+import customerService from "../../../../Services/customer.service";
 
 
 function TimeSlots({ selectedDate, onTimeSelect }) {
@@ -28,7 +28,7 @@ function TimeSlots({ selectedDate, onTimeSelect }) {
         const formattedDate = selectedDate.format("YYYY-MM-DD");
         console.log("Formatted Date for API Call:", formattedDate);
         
-        userService.getAvailabilities(formattedDate)
+        customerService.getAvailabilities(formattedDate)
             .then(response => {
                 const availableSlots = generateTimeSlots(intime, outtime).map(slot => ({
                     time: slot,

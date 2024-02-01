@@ -5,7 +5,7 @@ actor User
 participant AuthController as "<<Service>>\nAuthController"
 participant UserService as "<<Backend>>\nUserService"
 participant Database as "<<Database>>\nDatabase"
-participant MessageResponse as "<<Object>>\nMessageResponse"
+participant Mailer as "<<Service>>\nMailer"
 
 User -> AuthController: RegisterUser(userInfo)
 activate AuthController
@@ -22,11 +22,11 @@ deactivate Database
 UserService --> AuthController: User created successfully
 deactivate UserService
 
-AuthController -> MessageResponse: createSuccessResponse("User has been successfully registered")
-activate MessageResponse
+AuthController -> Mailer: sendRegistrationEmail(userInfo.email)
+activate Mailer
 
-MessageResponse --> AuthController: Success message response
-deactivate MessageResponse
+Mailer --> AuthController: Email sent successfully
+deactivate Mailer
 
 AuthController --> User: Return success message
 deactivate AuthController

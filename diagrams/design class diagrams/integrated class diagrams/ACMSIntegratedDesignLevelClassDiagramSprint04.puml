@@ -245,212 +245,179 @@ enum "Status" as status {
 ' Authentication Components
 ' Authentication Components
 package "Authentication Components" <<authentication>> {
-    ' AuthController for handling authentication endpoints
-    class "<<controller>>\nAuthController" as authController {
-        + logout(token: String) : ResponseEntity<String>
-        + googleLogin(JWT: String) : ResponseEntity<?>
-        + facebookToken(token: String) : ResponseEntity<?>
-        + authenticateUser(loginRequest: LoginRequest) : ResponseEntity<JWTResponse>
-        + registerUser(signupRequest: SignupRequest) : ResponseEntity<MessageResponse>
-        - generateResponse(user: User) : ResponseEntity<?>
-    }
+' AuthController for handling authentication endpoints
+class "<<controller>>\nAuthController" as authController {
+    + logout(token: String) : ResponseEntity<String>
+    + googleLogin(JWT: String) : ResponseEntity<?>
+    + facebookToken(token: String) : ResponseEntity<?>
+    + authenticateUser(loginRequest: LoginRequest) : ResponseEntity<JWTResponse>
+    + registerUser(signupRequest: SignupRequest) : ResponseEntity<MessageResponse>
+    - generateResponse(user: User) : ResponseEntity<?>
+}
 
-    ' UserRepository interface for managing user data
-    interface "<<repository>>\nUserRepository" as userRepository {
-        + findByUsername(username: String) : User
-        + save(user: User) : User
-        + deleteByUsername(username: String) : void
-        + findByEmail(email: String) : Optional<User>
-        + findAllByRoles_Name(roleName: String) : List<User>
-        + findUserByUserIdentifier_UserId(userId: String) : User
-        + existsByEmail(email: String) : Boolean
-    }
 
-    ' RoleRepository interface for managing roles
-    interface "<<repository>>\nRoleRepository" as roleRepository {
-        + findByName(name: ERole) : Optional<Role>
-    }
+' UserRepository interface for managing user data
+interface "<<repository>>\nUserRepository" as userRepository {
+    + findByUsername(username: String) : User
+    + save(user: User) : User
+    + deleteByUsername(username: String) : void
+    + findByEmail(email: String) : Optional<User>
+    + findAllByRoles_Name(roleName: String) : List<User>
+    + findUserByUserIdentifier_UserId(userId: String) : User
+    + existsByEmail(email: String) : Boolean
+}
 
-    ' OAuth service interface
-    interface "<<service>>\noAuthService" as oAuthService {
-        + googleLogin(JWT: String): User
-        + facebookLogin(token: String): User
-    }
+' RoleRepository interface for managing roles
+interface "<<repository>>\nRoleRepository" as roleRepository {
+    + findByName(name: ERole) : Optional<Role>
+}
 
-    ' TokenService interface for OAuth
-    interface "<<service>>\nTokenService" as tokenServiceOAuth {
-        + verifyGoogleToken(jwtToken: String): String
-        + verifyFacebookToken(accessToken: String): String
-        + verifyInstagramToken(accessToken: String): String
-    }
+' OAuth service interface
+interface "<<service>>\noAuthService" as oAuthService {
+    + googleLogin(JWT: String): User
+    + facebookLogin(token: String): User
+}
 
-    ' ERole enum for roles
-    enum "<<entity>>\nERole" as ERole {
-        ROLE_CUSTOMER
-        ROLE_ADMIN
-    }
+' TokenService interface for OAuth
+interface "<<service>>\nTokenService" as tokenServiceOAuth {
+    + verifyGoogleToken(jwtToken: String): String
+    + verifyFacebookToken(accessToken: String): String
+    + verifyInstagramToken(accessToken: String): String
+}
 
-    ' Role class
-    class "<<entity>>\nRole" as roleClass {
-        - id: int
-        - name: ERole
-    }
+' ERole enum for roles
+enum "<<entity>>\nERole" as ERole {
+    ROLE_CUSTOMER
+    ROLE_ADMIN
+}
 
-    ' User class with modifications
-    class "<<entity>>\nUser" as userModified {
-        - id: Integer
-        - userIdentifier: UserIdentifier
-        - firstName: String
-        - lastName: String
-        - phoneNumber: String
-        - email: String
-        - picture: String
-        - password: String
-        - roles: Set<Role>
-    }
+' Role class
+class "<<entity>>\nRole" as roleClass {
+    - id: int
+    - name: ERole
+}
 
-    ' UserIdentifier embedded class
-    class "<<entity>>\nUserIdentifier" as userIdentifier {
-        - userId: String
-    }
+' User class with modifications
+class "<<entity>>\nUser" as userModified {
+    - id: Integer
+    - userIdentifier: UserIdentifier
+    - firstName: String
+    - lastName: String
+    - phoneNumber: String
+    - email: String
+    - picture: String
+    - password: String
+    - roles: Set<Role>
+}
 
-    ' LoginRequest class
-    class "\nLoginRequest" as loginRequest {
-        + email: String
-        + password: String
-    }
+' UserIdentifier embedded class
+class "<<entity>>\nUserIdentifier" as userIdentifier {
+    - userId: String
+}
 
-    ' SignupRequest class
-    class "\nSignupRequest" as signupRequest {
-        + firstName: String
-        + lastName: String
-        + phoneNumber: String
-        + email: String
-        + role: Set<String>
-        + password: String
-    }
 
-    ' JWTResponse class
-    class "\nJWTResponse" as jwtResponse {
-        + token: String
-        + type: String
-        + id: String
-        + firstName: String
-        + lastName: String
-        + phoneNumber: String
-        + email: String
-        + picture: String
-        + roles: List<String>
-    }
+' JWTResponse class
+class "\nJWTResponse" as jwtResponse {
+    + token: String
+    + type: String
+    + id: String
+    + firstName: String
+    + lastName: String
+    + phoneNumber: String
+    + email: String
+    + picture: String
+    + roles: List<String>
+}
 
-    ' MessageResponse class
-    class "<<entity>>\nMessageResponse" as messageResponse {
-        + MessageResponse(message: String)
-    }
+' MessageResponse class
+class "<<entity>>\nMessageResponse" as messageResponse {
+    + MessageResponse(message: String)
+}
 
-    ' AuthEntryPointJwt class
-    class "<<utils>>\nAuthEntryPointJwt" as authEntryPointJwt {
-        + commence(request: HttpServletRequest, response: HttpServletResponse, authException: AuthenticationException): void
-    }
+' AuthEntryPointJwt class
+class "<<utils>>\nAuthEntryPointJwt" as authEntryPointJwt {
+    + commence(request: HttpServletRequest, response: HttpServletResponse, authException: AuthenticationException): void
+}
 
-    ' AuthTokenFilter class
-    class "<<utils>>\nAuthTokenFilter" as authTokenFilter {
-        + doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain): void
-        + parseJwt(request: HttpServletRequest): String
-    }
+' AuthTokenFilter class
+class "<<utils>>\nAuthTokenFilter" as authTokenFilter {
+    + doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain): void
+    + parseJwt(request: HttpServletRequest): String
+}
 
-    ' JwtUtils class
-    class "<<utils>>\nJwtUtils" as jwtUtils {
-        + generateJwtToken(authentication: Authentication): String
-        + generateJwtResponseForOAuth(email: String): String
-        + getEmailFromJwtToken(token: String): String
-        + validateJwtToken(authToken: String): boolean
-    }
+' JwtUtils class
+class "<<utils>>\nJwtUtils" as jwtUtils {
+    + generateJwtToken(authentication: Authentication): String
+    + generateJwtResponseForOAuth(email: String): String
+    + getEmailFromJwtToken(token: String): String
+    + validateJwtToken(authToken: String): boolean
+}
 
-    ' UserDetailsImpl class
-    class "<<utils>>\nUserDetailsImpl" as userDetailsImpl {
-        - id: Integer
-        - userId: String
-        - email: String
-        - firstName: String
-        - lastName: String
-        - phoneNumber: String
-        - password: String
-        - authorities: Collection<? extends GrantedAuthority>
-        + UserDetailsImpl(id: Integer, UUID: String, firstName: String, lastName: String, phoneNumber: String, email: String, password: String, authorities: Collection<? extends GrantedAuthority>)
-        + build(user: User): UserDetailsImpl
-        + getAuthorities(): Collection<? extends GrantedAuthority>
-        + getPassword(): String
-        + getUsername(): String
-        + isAccountNonExpired(): boolean
-        + isAccountNonLocked(): boolean
-        + isCredentialsNonExpired(): boolean
-        + isEnabled(): boolean
-        + equals(o: Object): boolean
-    }
+' UserDetailsImpl class
+class "<<utils>>\nUserDetailsImpl" as userDetailsImpl {
+    - id: Integer
+    - userId: String
+    - email: String
+    - firstName: String
+    - lastName: String
+    - phoneNumber: String
+    - password: String
+    - authorities: Collection<? extends GrantedAuthority>
+    + UserDetailsImpl(id: Integer, UUID: String, firstName: String, lastName: String, phoneNumber: String, email: String, password: String, authorities: Collection<? extends GrantedAuthority>)
+    + build(user: User): UserDetailsImpl
+    + getAuthorities(): Collection<? extends GrantedAuthority>
+    + getPassword(): String
+    + getUsername(): String
+    + isAccountNonExpired(): boolean
+    + isAccountNonLocked(): boolean
+    + isCredentialsNonExpired(): boolean
+    + isEnabled(): boolean
+    + equals(o: Object): boolean
+}
 
-    ' UserDetailsServiceImpl class
-    class "<<utils>>\nUserDetailsServiceImpl" as userDetailsServiceImpl {
-        - userRepository: UserRepository
-        + loadUserByUsername(email: String): UserDetails
-    }
+' UserDetailsServiceImpl class
+class "<<utils>>\nUserDetailsServiceImpl" as userDetailsServiceImpl {
+    - userRepository: UserRepository
+    + loadUserByUsername(email: String): UserDetails
+}
 
-    ' WebSecurityConfig class
-    class "<<utils>>\nWebSecurityConfig" as webSecurityConfig {
-        - userDetailsService: UserDetailsServiceImpl
-        - unauthorizedHandler: AuthEntryPointJwt
-        + authenticationJwtTokenFilter(): AuthTokenFilter
-        + authenticationProvider(): DaoAuthenticationProvider
-        + passwordEncoder(): PasswordEncoder
-        + authenticationManager(authConfig: AuthenticationConfiguration): AuthenticationManager
-        + filterChain(http: HttpSecurity): SecurityFilterChain
-        + corsConfigurationSource(): CorsConfigurationSource
-    }
+' WebSecurityConfig class
+class "<<utils>>\nWebSecurityConfig" as webSecurityConfig {
+    - userDetailsService: UserDetailsServiceImpl
+    - unauthorizedHandler: AuthEntryPointJwt
+    + authenticationJwtTokenFilter(): AuthTokenFilter
+    + authenticationProvider(): DaoAuthenticationProvider
+    + passwordEncoder(): PasswordEncoder
+    + authenticationManager(authConfig: AuthenticationConfiguration): AuthenticationManager
+    + filterChain(http: HttpSecurity): SecurityFilterChain
+    + corsConfigurationSource(): CorsConfigurationSource
+}
 
-    ' Relationships
-    authController --|> oAuthService: uses
-    oAuthService --|> tokenServiceOAuth: uses
-    tokenServiceOAuth -- userDetailsServiceImpl: uses
-    userDetailsServiceImpl -- userDetailsImpl: uses
-    userDetailsImpl --|> roleClass: uses
-    authController --|> userDetailsServiceImpl: uses
-    userDetailsServiceImpl --|> userRepository: uses
-    userDetailsServiceImpl --|> userDetailsImpl: creates
-    authController --|> userDetailsImpl: creates
-    authController --|> authEntryPointJwt: creates
-    authController --|> authTokenFilter: creates
-    authController --|> userRepository: creates
-    authController --|> authenticationManager: creates
-    authController --|> roleClass: creates
-    authController --|> loginRequest: creates
-    authController --|> signupRequest: creates
-    authController --|> jwtResponse: creates
-    authController --|> messageResponse: creates
-    authEntryPointJwt --|> httpServletRequest: creates
-    authEntryPointJwt --|> httpServletResponse: creates
-    authEntryPointJwt --|> authenticationException: creates
-    authTokenFilter --|> httpServletRequest: creates
-    authTokenFilter --|> httpServletResponse: creates
-    authTokenFilter --|> filterChain: creates
-    jwtUtils --|> authentication: creates
-    jwtUtils --|> key: creates
-    jwtUtils --|> claims: creates
-    jwtUtils --|> roles: creates
-    userDetailsImpl --|> authorities: creates
-    userDetailsImpl --|> userModified: creates
-    userModified --|> userIdentifier: contains
-    userModified --|> roleClass: contains
-    userModified --|> ERole: contains
-    webSecurityConfig --|> userDetailsServiceImpl: creates
-    webSecurityConfig --|> authEntryPointJwt: creates
-    webSecurityConfig --|> authTokenFilter: creates
-    webSecurityConfig --|> daoAuthenticationProvider: creates
-    webSecurityConfig --|> passwordEncoder: creates
-    webSecurityConfig --|> authenticationConfiguration: creates
-    webSecurityConfig --|> httpSecurity: creates
-    webSecurityConfig --|> corsConfigurationSource: creates
-    webSecurityConfig --|> roleRepository: creates
-    webSecurityConfig --|> jwtUtils: uses
+' Relationships
+
+authController --|> oAuthService: uses
+oAuthService --|> tokenServiceOAuth: uses
+tokenServiceOAuth --|> userDetailsServiceImpl: uses
+userDetailsServiceImpl --|> userDetailsImpl: uses
+userDetailsImpl --|> roleClass: uses
+authController --|> userDetailsServiceImpl: uses
+userDetailsServiceImpl --|> userRepository: uses
+authController --|> userDetailsImpl: uses
+authController --|> userRepository: uses
+authController --|> jwtResponse: creates
+authController --|> messageResponse: creates
+authController --|> jwtUtils: uses
+authController --|> roleRepository: uses
+userDetailsImpl --|> userModified: creates
+userModified --|> userIdentifier: contains
+userModified --|> roleClass: contains
+userModified --|> ERole: contains
+webSecurityConfig --|> userDetailsServiceImpl: uses
+webSecurityConfig --|> authEntryPointJwt: creates
+webSecurityConfig --|> authTokenFilter: creates
+webSecurityConfig --|> roleRepository: uses
+webSecurityConfig --|> jwtUtils: uses
+
 }
 
 
