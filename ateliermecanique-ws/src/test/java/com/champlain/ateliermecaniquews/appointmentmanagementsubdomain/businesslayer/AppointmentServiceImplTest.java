@@ -525,7 +525,6 @@ class AppointmentServiceImplTest {
         assertEquals(true, result.get("09:00"));
         assertEquals(true, result.get("11:00"));
         assertEquals(true, result.get("13:00"));
-        // ... Assert other time slots as needed
 
         verify(appointmentRepository, times(1)).findAllByAppointmentDateBetween(startOfDay, endOfDay);
     }
