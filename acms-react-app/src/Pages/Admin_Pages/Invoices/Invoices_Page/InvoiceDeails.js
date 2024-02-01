@@ -48,8 +48,17 @@ function InvoiceDetails() {
     function updateInvoice(event) {
         event.preventDefault();
 
-        // Update the invoice with the new details
-        // Similar to the updateCustomerVehicle function but for invoices
+        adminService.updateInvoice(invoiceId, invoiceDetails)
+            .then(res => {
+                if (res.status === 200) {
+                    alert('Invoice has been updated!');
+                    navigate(`/admin/invoices`);
+                }
+            })
+            .catch(err => {
+                console.error('Error updating invoice:', err);
+            });
+
     }
 
 
@@ -107,7 +116,8 @@ function InvoiceDetails() {
 
                         <label className="font-bold">Sum Of Service</label>
                         <input className="w-full p-4 rounded border border-gray-400 mb-5" name="sumOfServices" value={invoiceDetails.sumOfServices} onChange={handleInputChange} type="text" required />
-                    
+
+                        <button className="bg-blue-500 text-white px-4 py-2 rounded font-bold" type="submit"> Update Invoice </button>
                         <button className="bg-red-500 text-white px-4 py-2 rounded font-bold" type="button" onClick={confirmDelete}>
                         Delete Invoice
                         </button>
