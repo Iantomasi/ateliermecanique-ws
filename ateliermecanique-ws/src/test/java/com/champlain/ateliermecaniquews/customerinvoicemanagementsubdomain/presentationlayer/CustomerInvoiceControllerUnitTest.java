@@ -1,5 +1,8 @@
 package com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.presentationlayer;
 
+import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Status;
+import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentRequestModel;
+import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentResponseModel;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.UserIdentifier;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.utils.security.services.UserDetailsImpl;
@@ -13,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
@@ -288,6 +292,152 @@ class CustomerInvoiceControllerUnitTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
-    
+    @Test
+    void testGetInvoiceById_Found_AdminRole() {
+        // Arrange
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        CustomerInvoiceResponseModel invoice = CustomerInvoiceResponseModel.builder()
+                .invoiceId("1")
+                .customerId("1")
+                .appointmentId("1")
+                .invoiceDate(LocalDateTime.parse("2021-01-01 12:00", formatter))
+                .mechanicNotes("notes")
+                .sumOfServices(100.0)
+                .build();
+
+        when(customerInvoiceService.getInvoiceById("1")).thenReturn(invoice);
+
+        // Act
+        ResponseEntity<CustomerInvoiceResponseModel> response = customerInvoiceController.getInvoiceById("1");
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(invoice, response.getBody());
+    }
+
+
+    @Test
+    void testGetInvoiceById_NotFound() {
+        // Arrange
+        when(customerInvoiceService.getInvoiceById("nonExistentId")).thenReturn(null);
+
+        // Act
+        ResponseEntity<CustomerInvoiceResponseModel> response = customerInvoiceController.getInvoiceById("nonExistentId");
+
+        // Assert
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+
+    @Test
+    void testUpdateCustomerInvoice_Found() {
+        // Arrange
+        CustomerInvoiceRequestModel requestModel = new CustomerInvoiceRequestModel("123", "456", LocalDateTime.now(), "Updated notes", 200.0);
+
+        CustomerInvoiceResponseModel updatedInvoice = CustomerInvoiceResponseModel.builder()
+                .invoiceId("1")
+                .customerId("123")
+                .appointmentId("456")
+                .invoiceDate(LocalDateTime.now())
+                .mechanicNotes("Updated notes")
+                .sumOfServices(200.0)
+                .build();
+
+        when(customerInvoiceService.updateCustomerInvoice(eq("1"), any(CustomerInvoiceRequestModel.class))).thenReturn(updatedInvoice);
+
+        // Act
+        ResponseEntity<CustomerInvoiceResponseModel> response = customerInvoiceController.updateCustomerInvoice("1", requestModel);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(updatedInvoice, response.getBody());
+    }
+
+
+    @Test
+    void testUpdateCustomerInvoice_NotFound() {
+        // Arrange
+        CustomerInvoiceRequestModel requestModel = new CustomerInvoiceRequestModel("123", "456", LocalDateTime.now(), "Updated notes", 200.0);
+
+        when(customerInvoiceService.updateCustomerInvoice(eq("nonExistentId"), any(CustomerInvoiceRequestModel.class))).thenReturn(null);
+
+        // Act
+        ResponseEntity<CustomerInvoiceResponseModel> response = customerInvoiceController.updateCustomerInvoice("nonExistentId", requestModel);
+
+        // Assert
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+
+    @Test
+    void testDeleteCustomerInvoiceByCustomerInvoiceIdAdmin_Success() {
+        // Arrange
+        doNothing().when(customerInvoiceService).deleteInvoiceByInvoiceId("1");
+
+        // Act
+        ResponseEntity<Void> response = customerInvoiceController.deleteCustomerInvoiceByCustomerInvoiceIdAdmin("1");
+
+        // Assert
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+    }
+
+
+    @Test
+    void testDeleteCustomerInvoiceByCustomerInvoiceIdAdmin_NotFound() {
+        // Arrange
+        doThrow(new RuntimeException("Invoice not found")).when(customerInvoiceService).deleteInvoiceByInvoiceId("nonExistentId");
+
+        // Act
+        ResponseEntity<Void> response = customerInvoiceController.deleteCustomerInvoiceByCustomerInvoiceIdAdmin("nonExistentId");
+
+        // Assert
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    void testDeleteInvoiceByInvoiceIdCustomer_CustomerRole_AuthenticatedUserIdNotMatching() {
+        // Arrange
+        Authentication authentication = mock(Authentication.class);
+        doReturn(Collections.singletonList(new SimpleGrantedAuthority("ROLE_CUSTOMER")))
+                .when(authentication).getAuthorities();
+
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_CUSTOMER"));
+
+        UserDetailsImpl userDetails = new UserDetailsImpl(1,new UserIdentifier().getUserId(),"John","Vegas","444","john@email.com","pass",authorities);
+        when(authentication.getPrincipal()).thenReturn(userDetails);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // Act
+        ResponseEntity<Void> response = customerInvoiceController.deleteCustomerInvoiceByCustomerInvoiceIdCustomer("appointmentId", "customerId");
+
+        // Assert
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+    }
+
+
+    @Test
+    void testDeleteInvoiceByInvoiceIdCustomer_CustomerRole_AuthenticatedUserIdMatching() {
+        // Arrange
+        Authentication authentication = mock(Authentication.class);
+        doReturn(Collections.singletonList(new SimpleGrantedAuthority("ROLE_CUSTOMER")))
+                .when(authentication).getAuthorities();
+
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_CUSTOMER"));
+
+        UserDetailsImpl userDetails = new UserDetailsImpl(1,new UserIdentifier().getUserId(),"John","Vegas","444","john@email.com","pass",authorities);
+        when(authentication.getPrincipal()).thenReturn(userDetails);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // Act
+        ResponseEntity<Void> response = customerInvoiceController.deleteCustomerInvoiceByCustomerInvoiceIdCustomer("appointmentId", userDetails.getUserId());
+
+        // Assert
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        verify(customerInvoiceService, times(1)).deleteInvoiceByInvoiceId(anyString());
+    }
+
+
 }
 

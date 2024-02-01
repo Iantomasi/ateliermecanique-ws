@@ -1,4 +1,4 @@
-package com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer;
+package com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer;
 
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;

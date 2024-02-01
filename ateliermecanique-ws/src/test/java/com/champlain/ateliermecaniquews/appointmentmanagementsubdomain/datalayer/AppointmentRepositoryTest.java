@@ -2,8 +2,8 @@ package com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalaye
 
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datamapperlayer.AppointmentRequestMapper;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datamapperlayer.AppointmentResponseMapper;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.AppointmentRequestModel;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.AppointmentResponseModel;
+import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentRequestModel;
+import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentResponseModel;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

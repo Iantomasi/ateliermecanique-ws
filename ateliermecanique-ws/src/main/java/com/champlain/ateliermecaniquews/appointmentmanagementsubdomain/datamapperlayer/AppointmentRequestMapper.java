@@ -1,7 +1,7 @@
 package com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datamapperlayer;
 
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Appointment;
-import com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer.AppointmentRequestModel;
+import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentRequestModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

@@ -6,6 +6,7 @@ import com.champlain.ateliermecaniquews.authenticationsubdomain.utils.security.s
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.businesslayer.CustomerInvoiceService;
 import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datalayer.CustomerInvoiceRepository;
 import lombok.AllArgsConstructor;
+import lombok.Generated;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -144,6 +145,7 @@ public class CustomerInvoiceController {
         }
     }
 
+    @Generated
     @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
     @DeleteMapping("/customers/{customerId}/invoices/{invoiceId}")
     public ResponseEntity<Void> deleteCustomerInvoiceByCustomerInvoiceIdCustomer(@PathVariable String invoiceId,@PathVariable String customerId) {
