@@ -1,4 +1,4 @@
-package com.champlain.ateliermecaniquews.customeraccountsmanagementsubdomain.presentationlayer;
+package com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer;
 
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.businesslayer.AppointmentService;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
