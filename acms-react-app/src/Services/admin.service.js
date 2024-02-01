@@ -88,7 +88,9 @@ class adminService{
     getAllInvoices(){
         return axios.get(API_INVOICES_URL, { headers: authHeader() });
     }
-
+    updateInvoice(id, invoice){
+        return axios.put(API_INVOICES_URL + `/${id}`, invoice, { headers: authHeader() });
+    }
     getAllCustomerInvoices(id){
         return axios.get(API_CUSTOMERS_URL + `/${id}/invoices`, { headers: authHeader() });
     }
