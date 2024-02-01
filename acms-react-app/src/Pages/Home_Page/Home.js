@@ -30,7 +30,7 @@ function Home() {
           <section className="flex flex-col md:flex-row hero bg-white p-4 md:p-8">
             <div className="flex flex-col justify-center md:w-1/2 lg:w-2/5">
               <h1 className="text-3xl md:text-4xl lg:text-5xl">
-                Revitalize your ride with expert care.
+                Revitalize your ride with expert care. SPRINT 4
               </h1>
               <button className="text-base md:text-lg bg-yellow-400 py-2 px-6 font-bold rounded mt-4 md:mt-6 lg:mt-8 transform transition duration-300 hover:scale-110">
                 Book now
