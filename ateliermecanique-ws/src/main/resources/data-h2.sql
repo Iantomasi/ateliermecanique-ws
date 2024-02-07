@@ -5,43 +5,43 @@
 
 -- User 1 (John Doe)
 INSERT INTO users (user_id, email, password, first_name, last_name, phone_number)
-VALUES ('b7024d89-1a5e-4517-3gba-05178u7ar260', 'johndoe@example.com', '$2a$10$A/d6EXvgk/nd8PWGlbyUXeCv3qccFJEFKMHG/WkNye9cCychhn1lG', 'John', 'Doe', '123456789');
+VALUES ('b7024d89-1a5e-4517-3gba-05178u7ar260', 'johndoe@example.com', '$2a$10$YwMjkpuigjQYb/7RjCtJnOXKkJ8BQkHzODy7Ly6hI6xny2BQG1EoC', 'John', 'Doe', '123456789');
 
 -- User 2 (Alice Smith)
 INSERT INTO users (user_id, email, password, first_name, last_name, phone_number)
-VALUES ('aebc4d79-2b6f-4527-3zda-05432x5ar321', 'alice.smith@example.com', '$2a$10$A/d6EXvgk/nd8PWGlbyUXeCv3qccFJEFKMHG/WkNye9cCychhn1lG', 'Alice', 'Smith', '987654321');
+VALUES ('aebc4d79-2b6f-4527-3zda-05432x5ar321', 'alice.smith@example.com', '$2a$10$YwMjkpuigjQYb/7RjCtJnOXKkJ8BQkHzODy7Ly6hI6xny2BQG1EoC', 'Alice', 'Smith', '987654321');
 
 -- User 3 (Emma Johnson)
 INSERT INTO users (user_id, email, password, first_name, last_name, phone_number)
-VALUES ('cdff4g82-9e8h-7532-1qws-75321v5ar963', 'emma.johnson@example.com', '$2a$10$A/d6EXvgk/nd8PWGlbyUXeCv3qccFJEFKMHG/WkNye9cCychhn1lG', 'Emma', 'Johnson', '555666777');
+VALUES ('cdff4g82-9e8h-7532-1qws-75321v5ar963', 'emma.johnson@example.com', '$2a$10$YwMjkpuigjQYb/7RjCtJnOXKkJ8BQkHzODy7Ly6hI6xny2BQG1EoC', 'Emma', 'Johnson', '555666777');
 
 -- User 4 (Michael Williams)
 INSERT INTO users (user_id, email, password, first_name, last_name, phone_number)
-VALUES ('eggh9i83-7j8k-4567-4tyu-98765z5ar741', 'michaelw@example.com', '$2a$10$A/d6EXvgk/nd8PWGlbyUXeCv3qccFJEFKMHG/WkNye9cCychhn1lG', 'Michael', 'Williams', '111222333');
+VALUES ('eggh9i83-7j8k-4567-4tyu-98765z5ar741', 'michaelw@example.com', '$2a$10$YwMjkpuigjQYb/7RjCtJnOXKkJ8BQkHzODy7Ly6hI6xny2BQG1EoC', 'Michael', 'Williams', '111222333');
 
 -- User 5 (Sophia Brown)
 INSERT INTO users (user_id, email, password, first_name, last_name, phone_number)
-VALUES ('lmno8p45-3q6r-8791-2abc-96325t5ar159', 'sophia.b@example.com', '$2a$10$A/d6EXvgk/nd8PWGlbyUXeCv3qccFJEFKMHG/WkNye9cCychhn1lG', 'Sophia', 'Brown', '444555666');
+VALUES ('lmno8p45-3q6r-8791-2abc-96325t5ar159', 'sophia.b@example.com', '$2a$10$YwMjkpuigjQYb/7RjCtJnOXKkJ8BQkHzODy7Ly6hI6xny2BQG1EoC', 'Sophia', 'Brown', '444555666');
 
 -- User 6 (Oliver Garcia)
 INSERT INTO users (user_id, email, password, first_name, last_name, phone_number)
-VALUES ('mnop8q45-3r6s-8792-2abd-96326u6bs160', 'oliver.g@example.com', '$2a$10$A/d6EXvgk/nd8PWGlbyUXeCv3qccFJEFKMHG/WkNye9cCychhn1lG', 'Oliver', 'Garcia', '777888999');
+VALUES ('mnop8q45-3r6s-8792-2abd-96326u6bs160', 'oliver.g@example.com', '$2a$10$YwMjkpuigjQYb/7RjCtJnOXKkJ8BQkHzODy7Ly6hI6xny2BQG1EoC', 'Oliver', 'Garcia', '777888999');
 
 -- User 7 (Ava Martinez)
 INSERT INTO users (user_id, email, password, first_name, last_name, phone_number)
-VALUES ('qrs8t45-3u6v-8793-2abe-96327v6bt161', 'ava.martinez@example.com', '$2a$10$A/d6EXvgk/nd8PWGlbyUXeCv3qccFJEFKMHG/WkNye9cCychhn1lG', 'Ava', 'Martinez', '123987456');
+VALUES ('qrs8t45-3u6v-8793-2abe-96327v6bt161', 'ava.martinez@example.com', '$2a$10$YwMjkpuigjQYb/7RjCtJnOXKkJ8BQkHzODy7Ly6hI6xny2BQG1EoC', 'Ava', 'Martinez', '123987456');
 
 -- User 8 (Ethan Lopez)
 INSERT INTO users (user_id, email, password, first_name, last_name, phone_number)
-VALUES ('tuvw8x45-3y6z-8794-2abf-96328w6bu162', 'ethanl@example.com', '$2a$10$A/d6EXvgk/nd8PWGlbyUXeCv3qccFJEFKMHG/WkNye9cCychhn1lG', 'Ethan', 'Lopez', '654789321');
+VALUES ('tuvw8x45-3y6z-8794-2abf-96328w6bu162', 'ethanl@example.com', '$2a$10$YwMjkpuigjQYb/7RjCtJnOXKkJ8BQkHzODy7Ly6hI6xny2BQG1EoC', 'Ethan', 'Lopez', '654789321');
 
 -- User 9 (Isabella Gonzalez)
 INSERT INTO users (user_id, email, password, first_name, last_name, phone_number)
-VALUES ('vwxy8z45-3a6b-8795-2abh-96329x6bv163', 'isabella.g@example.com', '$2a$10$A/d6EXvgk/nd8PWGlbyUXeCv3qccFJEFKMHG/WkNye9cCychhn1lG', 'Isabella', 'Gonzalez', '987654123');
+VALUES ('vwxy8z45-3a6b-8795-2abh-96329x6bv163', 'isabella.g@example.com', '$2a$10$YwMjkpuigjQYb/7RjCtJnOXKkJ8BQkHzODy7Ly6hI6xny2BQG1EoC', 'Isabella', 'Gonzalez', '987654123');
 
 -- User 10 (Mason Rodriguez)
 INSERT INTO users (user_id, email, password, first_name, last_name, phone_number)
-VALUES ('yzab8cd5-3e6f-8796-2abi-96330c6bw164', 'masonr@example.com', '$2a$10$A/d6EXvgk/nd8PWGlbyUXeCv3qccFJEFKMHG/WkNye9cCychhn1lG', 'Mason', 'Rodriguez', '321654987');
+VALUES ('yzab8cd5-3e6f-8796-2abi-96330c6bw164', 'masonr@example.com', '$2a$10$YwMjkpuigjQYb/7RjCtJnOXKkJ8BQkHzODy7Ly6hI6xny2BQG1EoC', 'Mason', 'Rodriguez', '321654987');
 
 --   Vehicle 1 (John Doe)
 INSERT INTO vehicles (vehicle_id, user_id, make, model, year, transmission_type, mileage)
@@ -132,7 +132,7 @@ INSERT INTO roles (name) VALUES ('ROLE_ADMIN');
 
 -- ADMIN ACCOUNT
 INSERT INTO users (user_id,email, password, first_name, last_name, phone_number)
-VALUES ('f47ac10b-58cc-4372-a567-0e02b2c3d479','admin@example.com', '$2a$10$A/d6EXvgk/nd8PWGlbyUXeCv3qccFJEFKMHG/WkNye9cCychhn1lG', 'Jean', 'Jacques', '438-993-2345');
+VALUES ('f47ac10b-58cc-4372-a567-0e02b2c3d479','admin@example.com', '$2a$10$YwMjkpuigjQYb/7RjCtJnOXKkJ8BQkHzODy7Ly6hI6xny2BQG1EoC', 'Jean', 'Jacques', '438-993-2345');
 
 --ADDING USERS TO ROLES
 INSERT INTO user_roles (user_id, role_id)
