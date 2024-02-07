@@ -10,6 +10,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.5",
+    "crypto-js": "^4.2.0",
     "dayjs": "^1.11.10",
     "jwt-decode": "^4.0.0",
     "mkcert": "^3.2.0",
