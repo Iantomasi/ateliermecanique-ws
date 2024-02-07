@@ -49,6 +49,15 @@ CREATE TABLE if not exists users (
     UNIQUE (email)
     );
 
+CREATE TABLE if not exists reviews (
+                                      id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                      review_id VARCHAR(36),
+    customer_name VARCHAR(255),
+    comment VARCHAR(255),
+    rating INTEGER
+
+);
+
 CREATE TABLE if not exists roles (
                                      id INT AUTO_INCREMENT PRIMARY KEY,
                                      name VARCHAR(20) NOT NULL

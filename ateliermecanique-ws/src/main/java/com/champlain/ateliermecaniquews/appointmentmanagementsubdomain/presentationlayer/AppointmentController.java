@@ -25,7 +25,7 @@ public class AppointmentController {
     final private UserRepository userRepository;
 
     @GetMapping("/appointments")
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<AppointmentResponseModel>> getAllAppointmentsAdmin() {
         List<AppointmentResponseModel> appointments = appointmentService.getAllAppointments();
         if (appointments == null || appointments.isEmpty()) {

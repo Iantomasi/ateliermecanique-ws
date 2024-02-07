@@ -228,3 +228,16 @@ VALUES ((SELECT id FROM users WHERE email = 'masonr@example.com'),
 
 
 
+
+
+                    INSERT INTO reviews (review_id, customer_name, comment, rating) VALUES
+                                                                                       ('db5aa7b7-305d-4f02-b839-4a2b38f4ef9c', 'John Doe', 'Great product, highly recommended!', 4.5),
+                                                                                       ('6c2ff1cb-396a-4c7d-8db4-d93180d73207', 'Jane Smith', 'The service was excellent, will definitely come back again.', 5.0),
+                                                                                       ('2d3e4bf1-59cf-498d-98ff-3a86d2ff1aa2', 'Alice Johnson', 'Could be better, but not bad overall.', 3.5),
+                                                                                       ('7c895ca8-9f8c-4c3d-a927-ee76a47b4c1a', 'Michael Brown', 'Average experience, nothing exceptional.', 3.0),
+                                                                                       ('a3b06725-4d5e-431f-9e05-f1bfe2cde29a', 'Emily Davis', 'Disappointing service, would not recommend.', 2.0),
+                                                                                       ('9b2fd373-cd94-4a3d-b6b3-3df176c69b28', 'David Wilson', 'Good value for money, satisfied with the purchase.', 4.0),
+                                                                                       ('e7d9ef2e-7cd3-45dc-bfc8-fbf502bdcb73', 'Sarah Thompson', 'Excellent customer service, very helpful staff.', 5.0),
+                                                                                       ('fd2eb320-81b8-4387-857a-5e5b95c82d0e', 'Robert Martinez', 'Poor quality product, regret buying it.', 1.5),
+                                                                                       ('a12d78a4-9298-4267-9e67-2a4b7cc4a63e', 'Jessica Garcia', 'Average experience, nothing too special.', 3.0),
+                                                                                       ('0c92cb82-4984-441e-82b1-5fcf7810dd85', 'Christopher Rodriguez', 'The product met my expectations, happy with the purchase.', 4.5);
