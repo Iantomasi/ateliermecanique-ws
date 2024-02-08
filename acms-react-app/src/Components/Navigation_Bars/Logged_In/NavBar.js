@@ -14,7 +14,7 @@ function Navbar() {
     <header className="bg-white">
       <nav className="flex justify-between items-center p-4">
         <div className="flex">
-          <h1 className="text-4xl font-bold">atelier mecanique</h1>
+          <h1 className="text-4xl font-bold">Atelier Mecanique</h1>
         </div>
 
         <div className="flex items-center">
@@ -25,7 +25,7 @@ function Navbar() {
           <div className="flex items-center">
             <a href="#" className="text-black px-4">About</a>
             <a href="#" className="text-black px-4">Services</a>
-            <a href="#" className="text-black px-4">Contact</a>
+            <a href="/contact" className="text-black px-4">Contact</a>
           </div>
         </div>
 
