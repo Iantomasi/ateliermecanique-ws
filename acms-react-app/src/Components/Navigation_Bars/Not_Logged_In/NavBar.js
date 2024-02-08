@@ -16,14 +16,14 @@ function Navbar() {
         {/* Left-aligned content */}
         <div className="flex items-center">
           <img src="logo.svg" alt="app logo" className="mr-2" />
-          <h1 className="text-4xl font-bold">atelier mecanique</h1>
+          <h1 className="text-4xl font-bold">Atelier Mecanique</h1>
         </div>
 
         {/* Middle-aligned links */}
         <div className="flex justify-center mt-4 sm:mt-0">
           <a href="#" className="text-gray-700 hover:text-gray-900 px-2 py-1">About</a>
           <a href="#" className="text-gray-700 hover:text-gray-900 px-2 py-1">Services</a>
-          <a href="#" className="text-gray-700 hover:text-gray-900 px-2 py-1">Contact</a>
+          <a href="/contact" className="text-gray-700 hover:text-gray-900 px-2 py-1">Contact</a>
         </div>
 
         {/* Right-aligned links */}

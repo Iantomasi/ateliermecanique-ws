@@ -20,6 +20,7 @@ import Invoices from './Pages/Admin_Pages/Invoices/Invoices_Page/Invoices.js';
 import CustomerInvoices from './Pages/Admin_Pages/Customers/CustomerInvoices_Page/CustomerInvoices.js';
 import AddNewInvoice from './Pages/Admin_Pages/Invoices/Invoices_Page/AddNewInvoice.js';
 import InvoiceDetails from './Pages/Admin_Pages/Invoices/Invoices_Page/InvoiceDeails.js';
+import Contact from './Pages/Contact_Pages/Contact.js';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path : "/",
         element: <Home/>
+      },
+      {
+        path : "/contact",
+        element: <Contact/>
       },
       {
         path : "/login",
