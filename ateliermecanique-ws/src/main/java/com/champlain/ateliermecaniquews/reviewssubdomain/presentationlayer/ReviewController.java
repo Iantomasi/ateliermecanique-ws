@@ -5,6 +5,7 @@ import com.champlain.ateliermecaniquews.reviewssubdomain.businesslayer.ReviewsSe
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,7 @@ public class ReviewController {
 
 
     @GetMapping("/reviews")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ReviewResponseModel>> getAllReviews() {
         List<ReviewResponseModel> reviews = reviewsService.getAllReviews();
         if (reviews == null || reviews.isEmpty()) {
