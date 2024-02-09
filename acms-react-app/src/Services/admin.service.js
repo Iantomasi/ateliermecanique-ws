@@ -104,6 +104,12 @@ class adminService{
         return axios.delete(API_INVOICES_URL + `/${id}`, { headers: authHeader() });
     }
 
+
+    //reviews
+    getAllReviews(){
+        return axios.get(API_BASE_URL + `/api/v1/reviews`, { headers: authHeader() });
+    }
+
 }
 
 export default new adminService();

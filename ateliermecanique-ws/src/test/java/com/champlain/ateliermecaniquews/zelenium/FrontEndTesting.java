@@ -795,6 +795,48 @@ public class FrontEndTesting {
 
         $("p").shouldHave(text("INVOICES"));
     }
+
+
+    //REVIEWS
+
+//    @Test
+//    public void getAllInvoices() {
+//        open("https://localhost:3000/");
+//        $("a[href='/login']").click();
+//        sleep(1000);
+//
+//        $("input[name='email']").setValue("admin@example.com");
+//        $("input[type='password']").setValue("Hello!");
+//
+//        $("button[type='submit']").click();
+//        sleep(1000);
+//        $("img[src='invoices.svg']").click();
+//        sleep(1000);
+//        $("p").shouldHave(text("INVOICES"));
+//    }
+
+
+
+    @Test
+    public void getAllReviews(){
+
+        open("https://localhost:3000/");
+        $("a[href='/login']").click();
+        sleep(1000);
+
+        $("input[name='email']").setValue("admin@example.com");
+        $("input[type='password']").setValue("Hello!");
+
+        $("button[type='submit']").click();
+        sleep(1000);
+
+
+        sleep(1000);
+        $("img[src='reviews.svg']").click();
+        sleep(1000);
+        $("p").shouldHave(text("REVIEW"));
+
+    }
 }
 
 
