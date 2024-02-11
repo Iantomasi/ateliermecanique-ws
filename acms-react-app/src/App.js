@@ -20,11 +20,9 @@ import Invoices from './Pages/Admin_Pages/Invoices/Invoices_Page/Invoices.js';
 import CustomerInvoices from './Pages/Admin_Pages/Customers/CustomerInvoices_Page/CustomerInvoices.js';
 import AddNewInvoice from './Pages/Admin_Pages/Invoices/Invoices_Page/AddNewInvoice.js';
 import InvoiceDetails from './Pages/Admin_Pages/Invoices/Invoices_Page/InvoiceDeails.js';
-<<<<<<< HEAD
 import Contact from './Pages/Contact_Pages/Contact.js';
-=======
 import Reviews from './Pages/Admin_Pages/Reviews/Reviews_Page/Reviews.js';
->>>>>>> d127e0e (Front end done and testing done)
+import ReviewDetails from './Pages/Admin_Pages/Reviews/Reviews_Page/ReviewDetails.js';
 
 const router = createBrowserRouter([
   {
@@ -120,13 +118,18 @@ const router = createBrowserRouter([
         path: "/admin/invoices/:invoiceId",
         element: <InvoiceDetails/>,
       },
-      {
-        path: "/user",
-        element: <User/>
-      },
+      
       {
         path: "/admin/reviews",
         element: <Reviews/>
+      },
+      {
+        path: "/admin/reviews/:reviewId",
+        element: <ReviewDetails/>
+      },
+      {
+        path: "/user",
+        element: <User/>
       }
 
     ]

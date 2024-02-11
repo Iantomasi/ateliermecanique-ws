@@ -1,6 +1,6 @@
 package com.champlain.ateliermecaniquews.reviewssubdomain.datamapperlayer;
 
-import com.champlain.ateliermecaniquews.reviewssubdomain.datalayer.Reviews;
+import com.champlain.ateliermecaniquews.reviewssubdomain.datalayer.Review;
 import com.champlain.ateliermecaniquews.reviewssubdomain.presentationlayer.ReviewResponseModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -11,7 +11,11 @@ import java.util.List;
 public interface ReviewResponseMapper {
 
     @Mapping(expression = "java(review.getReviewIdentifier().getReviewId())", target = "reviewId")
-    ReviewResponseModel entityToReviewResponseModel(Reviews review);
+    @Mapping(target = "customerId", source = "review.customerId")
+    @Mapping(target = "appointmentId", source = "review.appointmentId")
 
-    List<ReviewResponseModel> entityToReviewResponseModelList(List<Reviews> reviews);
+    ReviewResponseModel entityToResponseModel(Review review);
+
+    List<ReviewResponseModel> entityToResponseModelList(List<Review> reviews);
+
 }

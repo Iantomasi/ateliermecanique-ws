@@ -4,7 +4,8 @@ import com.champlain.ateliermecaniquews.reviewssubdomain.presentationlayer.Revie
 
 import java.util.List;
 
-public interface ReviewsService {
+public interface ReviewService {
 
     List<ReviewResponseModel> getAllReviews();
+    ReviewResponseModel getReviewByReviewId(String reviewId);
 }

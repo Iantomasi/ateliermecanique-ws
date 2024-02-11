@@ -6,16 +6,18 @@ import NavBar from '../../../../Components/Navigation_Bars/Not_Logged_In/NavBar.
 import Footer from '../../../../Components/Footer/Footer.js';
 import Sidebar from '../../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
 
-function InvoiceDetails() {
-    const { invoiceId } = useParams();
+function ReviewDetails() {
+    const { reviewId } = useParams();
     const navigate = useNavigate();
-    const [invoiceDetails, setInvoiceDetails] = useState({
-        invoiceId: '',
+    const [reviewDetails, setReviewDetails] = useState({
+        reviewId: '',
         customerId: '',
         appointmentId: '',
-        invoiceDate: '',
-        mechanicNotes: '',
-        sumOfServices: 0.0
+        comment: '',
+        rating: 0.0,
+        reviewDate: '',
+        mechanicReply: ''
+
     });
 
     const [publicContent, setPublicContent] = useState(true); // Define publicContent and its setter
@@ -23,20 +25,21 @@ function InvoiceDetails() {
     const [showConfirmation, setShowConfirmation] = useState(false); // State to manage delete confirmation
 
     useEffect(() => {
-        adminService.getInvoiceById(invoiceId)
+        adminService.getReviewById(reviewId)
             .then(res => {
                 if (res.status === 200) {
                     setPublicContent(true);
-                    setInvoiceDetails(res.data);
+                    setReviewDetails(res.data);
                 }
             })
             .catch(error => {
                 setPublicContent(false);
                 setMessage(error.response.data);
-                console.error('Error fetching invoice details', error);
+                console.error('Error fetching review details', error);
             });
-    }, [invoiceId]);
+    }, [reviewId]);
 
+    /*
     function handleInputChange(event) {
         const { name, value } = event.target;
         setInvoiceDetails(prevState => ({
@@ -83,8 +86,9 @@ function InvoiceDetails() {
             });
         setShowConfirmation(false);
     }
+    */
 
-    // Render the invoice details form
+    // Render the review details form
     return (
         <div className="flex flex-col min-h-screen">
             {publicContent ? (
@@ -94,41 +98,33 @@ function InvoiceDetails() {
                         <Sidebar />
                         <main className="flex-grow p-5">
                             <div className="text-4xl font-bold text-center">
-                                <p>INVOICE DETAILS</p>
+                                <p>REVIEW DETAILS</p>
                             </div>
                     {/* Rest of the component layout */}
-                        <div className="bg-gray-100 shadow-lg p-5 rounded-md mt-5 relative">
-                    <form className="customervehicle-user-details-form" onSubmit={updateInvoice}>
-                        <label className="font-bold">Invoice Id</label>
-                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="invoiceId" value={invoiceDetails.invoiceId} onChange={handleInputChange} type="text" required />
-
+                    <div className="bg-gray-100 shadow-lg p-5 rounded-md mt-5 relative">
+                    {/*<form className="customervehicle-user-details-form" onSubmit={updateInvoice}> */}
+                    <form className="customervehicle-user-details-form">
                         <label className="font-bold">Customer Id</label>
-                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="customerId" value={invoiceDetails.customerId} onChange={handleInputChange} type="text" required />
+                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="reviewId" value={reviewDetails.customerId} type="text" required />
 
                         <label className="font-bold">Appointment Id</label>
-                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="appointment" value={invoiceDetails.appointmentId} onChange={handleInputChange} type="text" required />
+                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="reviewId" value={reviewDetails.appointmentId} type="text" required />
 
-                        <label className="font-bold">Invoice Date</label>
-                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="invoiceDate" value={invoiceDetails.invoiceDate} onChange={handleInputChange} type="text" required />
+                        <label className="font-bold">Comments</label>
+                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="reviewId" value={reviewDetails.comment} type="text" required />
 
-                        <label className="font-bold">Mechanic Notes</label>
-                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="mechanicNotes" value={invoiceDetails.mechanicNotes} onChange={handleInputChange} type="text" required />
+                        <label className="font-bold">Rating</label>
+                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="reviewId" value={reviewDetails.rating} type="text" required />
 
-                        <label className="font-bold">Sum Of Service</label>
-                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="sumOfServices" value={invoiceDetails.sumOfServices} onChange={handleInputChange} type="text" required />
+                        <label className="font-bold">Date & Time</label>
+                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="reviewId" value={reviewDetails.reviewDate} type="text" required />
 
-                        <div className="flex justify-center space-x-10">
-
-<button className="bg-yellow-400 border-none px-4 py-2 rounded font-bold transform transition duration-300 hover:scale-110" type="submit">
-  Save
-</button>
-<button className="bg-red-500 border-none px-4 py-2 rounded font-bold transform transition duration-300 hover:scale-110" onClick={confirmDelete} type="button">
-  Delete
-</button>
- </div>
+                      
+                        <label className="font-bold">Reply</label>
+                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="reviewId" value={reviewDetails.mechanicReply} type="text" placeholder="No reply"/>
                     </form>
                         </div>
-                        {showConfirmation && (
+                        {/*showConfirmation && (
                                 <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
                                     <div className="bg-white p-5 rounded-lg shadow-lg">
                                         <p className="text-lg mb-2">Are you sure you want to delete this invoice?</p>
@@ -136,13 +132,13 @@ function InvoiceDetails() {
                                             <button className="bg-red-500 text-white px-4 py-2 rounded font-bold" onClick={deleteInvoice}>
                                                 Yes
                                             </button>
-                                            <button className="bg-yellow-400 text-gray-700 px-4 py-2 rounded font-bold" onClick={cancelDelete}>
+                                            <button className="bg-gray-300 text-gray-700 px-4 py-2 rounded font-bold" onClick={cancelDelete}>
                                                 No
                                             </button>
                                         </div>
                                     </div>
                                 </div>
-                            )}
+                        )*/}
                         </main>
                     </div>
                 </div>
@@ -156,4 +152,4 @@ function InvoiceDetails() {
     );
 }
 
-export default InvoiceDetails;
+export default ReviewDetails;
