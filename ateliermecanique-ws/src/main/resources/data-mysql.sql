@@ -85,7 +85,7 @@ VALUES ('08hh8i9d-5ii6-9aj7-dkj8-7j8k9l2n22', 'yzab8cd5-3e6f-8796-2abi-96330c6bw
 
 
 -- Appointment 1 (John Doe)
-INSERT INTO appointments (appointment_id, user_id, vehicle_id, appointment_date, services, comments, status) VALUE ('1508dc5c-d460-443f-8f37-a174284f868c', 'b7024d89-1a5e-4517-3gba-05178u7ar260', '132b41b2-2bec-4b98-b08d-c7c0e03fe33e', '2024-03-24 11:00', 'Preventive Maintenance', 'None', 'PENDING');
+    INSERT INTO appointments (appointment_id, user_id, vehicle_id, appointment_date, services, comments, status) VALUE ('1508dc5c-d460-443f-8f37-a174284f868c', 'b7024d89-1a5e-4517-3gba-05178u7ar260', '132b41b2-2bec-4b98-b08d-c7c0e03fe33e', '2024-03-24 11:00', 'Preventive Maintenance', 'None', 'COMPLETED');
 
 -- Appointment 2 (Alice Smith)
 INSERT INTO appointments (appointment_id, user_id, vehicle_id, appointment_date, services, comments, status) VALUE ('2508dc5c-d460-443f-8f37-a174284f868d', 'aebc4d79-2b6f-4527-3zda-05432x5ar321', '0f8c5e36-9e94-4c6d-921d-29d7e2e923b5', '2024-01-02 16:00', 'Air conditioning', 'None', 'COMPLETED');
@@ -200,44 +200,37 @@ VALUES ((SELECT id FROM users WHERE email = 'masonr@example.com'),
 
 
 -- Invoice 3 (Emma Johnson)
- INSERT INTO invoices (invoice_id, user_id, appointment_id, invoice_date, mechanic_notes,  sum_of_services) VALUE ('662ba5e8-9eb8-41ec-bf89-0080342c91ca', 'cdff4g82-9e8h-7532-1qws-75321v5ar963', '3508dc5c-d460-443f-8f37-a174284f868e', '2024-02-16 19:30', 'Muffler was fixed', 115.00);
+-- INSERT INTO invoices (invoice_id, user_id, appointment_id, invoice_date, mechanic_notes,  sum_of_services) VALUE ('662ba5e8-9eb8-41ec-bf89-0080342c91ca', 'cdff4g82-9e8h-7532-1qws-75321v5ar963', '3508dc5c-d460-443f-8f37-a174284f868e', '2024-02-16 19:30', 'Muffler was fixed', 115.00);
 
 -- Invoice 4 (Michael Williams)
- INSERT INTO invoices (invoice_id, user_id, appointment_id, invoice_date, mechanic_notes,  sum_of_services) VALUE ('662ba5e8-9eb8-41ec-bf89-0080342c92ca', 'eggh9i83-7j8k-4567-4tyu-98765z5ar741', '4508dc5c-d460-443f-8f37-a174284f868f', '2024-03-14 21:00', 'Manufacturer Warranty Reinstated', 89.00);
+-- INSERT INTO invoices (invoice_id, user_id, appointment_id, invoice_date, mechanic_notes,  sum_of_services) VALUE ('662ba5e8-9eb8-41ec-bf89-0080342c92ca', 'eggh9i83-7j8k-4567-4tyu-98765z5ar741', '4508dc5c-d460-443f-8f37-a174284f868f', '2024-03-14 21:00', 'Manufacturer Warranty Reinstated', 89.00);
 
 -- Invoice 5 (Sophia Brown)
- INSERT INTO invoices (invoice_id, user_id, appointment_id, invoice_date, mechanic_notes,  sum_of_services) VALUE ('662ba5e8-9eb8-41ec-bf89-0080342c93ca', 'lmno8p45-3q6r-8791-2abc-96325t5ar159', '5508dc5c-d460-443f-8f37-a174284f868g', '2024-01-22 17:00', 'Exhaust System Tweaked', 100.00);
+-- INSERT INTO invoices (invoice_id, user_id, appointment_id, invoice_date, mechanic_notes,  sum_of_services) VALUE ('662ba5e8-9eb8-41ec-bf89-0080342c93ca', 'lmno8p45-3q6r-8791-2abc-96325t5ar159', '5508dc5c-d460-443f-8f37-a174284f868g', '2024-01-22 17:00', 'Exhaust System Tweaked', 100.00);
 
 -- Invoice 6 (Oliver Garcia)
- INSERT INTO invoices (invoice_id, user_id, appointment_id, invoice_date, mechanic_notes,  sum_of_services) VALUE ('662ba5e8-9eb8-41ec-bf89-0080342c94ca', 'mnop8q45-3r6s-8792-2abd-96326u6bs160', '6508dc5c-d460-443f-8f37-a174284f868h', '2024-05-19 22:00', 'Engine and Transmission Installation Successful', 120.00);
+-- INSERT INTO invoices (invoice_id, user_id, appointment_id, invoice_date, mechanic_notes,  sum_of_services) VALUE ('662ba5e8-9eb8-41ec-bf89-0080342c94ca', 'mnop8q45-3r6s-8792-2abd-96326u6bs160', '6508dc5c-d460-443f-8f37-a174284f868h', '2024-05-19 22:00', 'Engine and Transmission Installation Successful', 120.00);
 
 
 -- Invoice 7 (Ava Martinez)
- INSERT INTO invoices (invoice_id, user_id, appointment_id, invoice_date, mechanic_notes,  sum_of_services) VALUE ('662ba5e8-9eb8-41ec-bf89-0080342c95ca', 'qrs8t45-3u6v-8793-2abe-96327v6bt161', '7508dc5c-d460-443f-8f37-a174284f868i', '2024-03-25 11:00', 'Steering & Suspension Done, Test again next check up', 125.00);
+-- INSERT INTO invoices (invoice_id, user_id, appointment_id, invoice_date, mechanic_notes,  sum_of_services) VALUE ('662ba5e8-9eb8-41ec-bf89-0080342c95ca', 'qrs8t45-3u6v-8793-2abe-96327v6bt161', '7508dc5c-d460-443f-8f37-a174284f868i', '2024-03-25 11:00', 'Steering & Suspension Done, Test again next check up', 125.00);
 
 
 -- Invoice 8 (Ethan Lopez)
- INSERT INTO invoices (invoice_id, user_id, appointment_id, invoice_date, mechanic_notes,  sum_of_services) VALUE ('662ba5e8-9eb8-41ec-bf89-0080342c96ca', 'tuvw8x45-3y6z-8794-2abf-96328w6bu162', '8508dc5c-d460-443f-8f37-a174284f868j', '2024-03-27 12:45', 'Injection', 105.00);
+-- INSERT INTO invoices (invoice_id, user_id, appointment_id, invoice_date, mechanic_notes,  sum_of_services) VALUE ('662ba5e8-9eb8-41ec-bf89-0080342c96ca', 'tuvw8x45-3y6z-8794-2abf-96328w6bu162', '8508dc5c-d460-443f-8f37-a174284f868j', '2024-03-27 12:45', 'Injection', 105.00);
 
 
 -- Invoice 9 (Isabella Gonzalez)
- INSERT INTO invoices (invoice_id, user_id, appointment_id, invoice_date, mechanic_notes,  sum_of_services) VALUE ('662ba5e8-9eb8-41ec-bf89-0080342c97ca', 'vwxy8z45-3a6b-8795-2abh-96329x6bv163', '9508dc5c-d460-443f-8f37-a174284f868k', '2024-01-02 13:00', 'Alignment done', 75.00);
+-- INSERT INTO invoices (invoice_id, user_id, appointment_id, invoice_date, mechanic_notes,  sum_of_services) VALUE ('662ba5e8-9eb8-41ec-bf89-0080342c97ca', 'vwxy8z45-3a6b-8795-2abh-96329x6bv163', '9508dc5c-d460-443f-8f37-a174284f868k', '2024-01-02 13:00', 'Alignment done', 75.00);
 
 -- Invoice 10 (Mason Rodriguez)
- INSERT INTO invoices (invoice_id, user_id, appointment_id, invoice_date, mechanic_notes,  sum_of_services) VALUE ('662ba5e8-9eb8-41ec-bf89-0080342c98cf', 'yzab8cd5-3e6f-8796-2abi-96330c6bw164', '1008dc5c-d460-443f-8f37-a174284f868l', '2024-02-04 19:00', 'Muffler was fixed', 118.95);
+-- INSERT INTO invoices (invoice_id, user_id, appointment_id, invoice_date, mechanic_notes,  sum_of_services) VALUE ('662ba5e8-9eb8-41ec-bf89-0080342c98cf', 'yzab8cd5-3e6f-8796-2abi-96330c6bw164', '1008dc5c-d460-443f-8f37-a174284f868l', '2024-02-04 19:00', 'Muffler was fixed', 118.95);
 
 
 
+-- Review 1 (John Doe)
+INSERT INTO reviews (review_id, user_id, appointment_id, comment, rating, review_date, mechanic_reply) VALUE ('3994efe6-a0d3-48e8-ba53-e80c5b6ad331', 'b7024d89-1a5e-4517-3gba-05178u7ar260', '1508dc5c-d460-443f-8f37-a174284f868c', 'Did a great job!', 5.0, '2024-01-02 19:00', null);
 
+-- Review 2 (Alice Smith)
+INSERT INTO reviews (review_id, user_id, appointment_id, comment, rating, review_date, mechanic_reply) VALUE ('3994efe6-a0d3-48e8-ba53-e80c5b6ad332', 'aebc4d79-2b6f-4527-3zda-05432x5ar321', '2508dc5c-d460-443f-8f37-a174284f868d', 'Great service!', 4.5, '2024-01-02 20:00', 'We are delighted to hear that our service was to your liking!');
 
-                    INSERT INTO reviews (review_id, customer_name, comment, rating) VALUES
-                                                                                       ('db5aa7b7-305d-4f02-b839-4a2b38f4ef9c', 'John Doe', 'Great product, highly recommended!', 4.5),
-                                                                                       ('6c2ff1cb-396a-4c7d-8db4-d93180d73207', 'Jane Smith', 'The service was excellent, will definitely come back again.', 5.0),
-                                                                                       ('2d3e4bf1-59cf-498d-98ff-3a86d2ff1aa2', 'Alice Johnson', 'Could be better, but not bad overall.', 3.5),
-                                                                                       ('7c895ca8-9f8c-4c3d-a927-ee76a47b4c1a', 'Michael Brown', 'Average experience, nothing exceptional.', 3.0),
-                                                                                       ('a3b06725-4d5e-431f-9e05-f1bfe2cde29a', 'Emily Davis', 'Disappointing service, would not recommend.', 2.0),
-                                                                                       ('9b2fd373-cd94-4a3d-b6b3-3df176c69b28', 'David Wilson', 'Good value for money, satisfied with the purchase.', 4.0),
-                                                                                       ('e7d9ef2e-7cd3-45dc-bfc8-fbf502bdcb73', 'Sarah Thompson', 'Excellent customer service, very helpful staff.', 5.0),
-                                                                                       ('fd2eb320-81b8-4387-857a-5e5b95c82d0e', 'Robert Martinez', 'Poor quality product, regret buying it.', 1.5),
-                                                                                       ('a12d78a4-9298-4267-9e67-2a4b7cc4a63e', 'Jessica Garcia', 'Average experience, nothing too special.', 3.0),
-                                                                                       ('0c92cb82-4984-441e-82b1-5fcf7810dd85', 'Christopher Rodriguez', 'The product met my expectations, happy with the purchase.', 4.5);

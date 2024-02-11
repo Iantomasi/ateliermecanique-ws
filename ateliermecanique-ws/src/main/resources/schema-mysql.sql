@@ -5,7 +5,6 @@ create table if not exists vehicles(
                                         id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                         vehicle_id VARCHAR(36),
     user_id VARCHAR(36),
-
     make VARCHAR(255),
     model VARCHAR(255),
     year VARCHAR(5),
@@ -18,7 +17,7 @@ create table if not exists appointments(
                                            id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                            appointment_id VARCHAR(36),
     user_id VARCHAR(36),
-                                           vehicle_id VARCHAR(36),
+    vehicle_id VARCHAR(36),
     appointment_date DATETIME,
     services VARCHAR(255),
     comments VARCHAR(255),
@@ -36,6 +35,18 @@ create table if not exists invoices(
     sum_of_services DECIMAL(15,2)
     );
 
+CREATE TABLE if not exists reviews (
+                                       id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                       review_id VARCHAR(36),
+    user_id VARCHAR(36),
+    appointment_id VARCHAR(36),
+    comment VARCHAR(255),
+    rating DECIMAL(15,2),
+    review_date DATETIME,
+    mechanic_reply VARCHAR(255)
+    );
+
+
 
 CREATE TABLE if not exists users (
                                      id INT AUTO_INCREMENT PRIMARY KEY,
@@ -48,15 +59,6 @@ CREATE TABLE if not exists users (
     picture VARCHAR (200),
     UNIQUE (email)
     );
-
-CREATE TABLE if not exists reviews (
-                                      id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                      review_id VARCHAR(36),
-    customer_name VARCHAR(255),
-    comment VARCHAR(255),
-    rating INTEGER
-
-);
 
 CREATE TABLE if not exists roles (
                                      id INT AUTO_INCREMENT PRIMARY KEY,

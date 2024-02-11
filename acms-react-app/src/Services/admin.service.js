@@ -6,6 +6,7 @@ const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8080
 const API_CUSTOMERS_URL = `${API_BASE_URL}/api/v1/customers`;
 const API_APPOINTMENTS_URL = `${API_BASE_URL}/api/v1/appointments`;
 const API_INVOICES_URL = `${API_BASE_URL}/api/v1/invoices`
+const API_REVIEWS_URL = `${API_BASE_URL}/api/v1/reviews`
 
 class adminService{
 
@@ -107,7 +108,11 @@ class adminService{
 
     //reviews
     getAllReviews(){
-        return axios.get(API_BASE_URL + `/api/v1/reviews`, { headers: authHeader() });
+        return axios.get(API_REVIEWS_URL, { headers: authHeader() });
+    }
+
+    getReviewById(id){
+        return axios.get(API_REVIEWS_URL + `/${id}`, { headers: authHeader() });
     }
 
 }

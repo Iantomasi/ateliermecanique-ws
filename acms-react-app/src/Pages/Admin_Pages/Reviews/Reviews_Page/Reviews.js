@@ -49,11 +49,14 @@ function Reviews(){
                             <div className="flex p-2 bg-gray-300 w-full">
                                 <p className="text-2xl font-bold mx-auto">REVIEWS</p>
                                 <div className="flex items-center space-x-4">
-                                    <div className="relative flex">
-                                        <input type="text" className="w-72 h-10 pl-2 pr-8 rounded-lg border-2 border-gray-400" placeholder="Search for a review" />
-                                        <button className="absolute right-0 bg-yellow-400 h-10 px-4 rounded-lg font-bold">Search</button>
-                                        <span className="absolute right-10 text-gray-400">🔍</span>
-                                    </div>
+                                <div className="relative flex">
+                    <input
+                      className="w-full rounded border-gray-300 px-4 py-2 focus:outline-none focus:border-indigo-500"
+                      type="text"
+                      placeholder="Search..."
+                    />
+                    <span className="text-gray-400 cursor-pointer">&#128269;</span>
+                  </div>
                                 </div>
                             </div>
 
@@ -62,9 +65,11 @@ function Reviews(){
                                     <thead className="bg-white sticky top-0">
                                     <tr>
                                         <th>ID</th>
-                                        <th>Customer</th>
-                                        <th>Comments</th>
-                                        <th>Rating</th>
+                                        <th>CUSTOMER</th>
+                                        <th>APPOINTMENT</th>
+                                        <th>COMMENTS</th>
+                                        <th>RATING</th>
+                                        <th>DATE & TIME</th>
                                     </tr>
                                     </thead>
                                     <tbody className="text-center">
