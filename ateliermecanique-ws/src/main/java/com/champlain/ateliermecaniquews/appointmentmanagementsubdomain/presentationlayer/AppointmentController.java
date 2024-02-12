@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -237,9 +238,9 @@ public class AppointmentController {
         }
     }
 
-    @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
+   @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
     @PostMapping("/customers/{customerId}/appointments")
-    public ResponseEntity<AppointmentResponseModel> addAppointmentToCustomerAccountCustomer(@PathVariable String customerId, @RequestBody AppointmentRequestModel appointmentRequestModel) {
+    public ResponseEntity<AppointmentResponseModel> addAppointmentToCustomerAccountCustomer(@PathVariable String customerId, @RequestBody AppointmentRequestModel appointmentRequestModel)  {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -261,7 +262,7 @@ public class AppointmentController {
             }
         }
 
-        AppointmentResponseModel appointment = appointmentService.addAppointmentToCustomerAccount(customerId, appointmentRequestModel);
+        AppointmentResponseModel appointment = appointmentService.addAppointmentToCustomerAccount(customerId, appointmentRequestModel); //appointmentRequestModel -> addAppointmentRequest
         if (appointment == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

@@ -357,7 +357,7 @@ class AppointmentServiceImplTest {
         // Assert
         verify(appointmentRepository, never()).deleteAll(anyList());
     }
-    @Test
+   @Test
     void addAppointmentToCustomerAccount_ShouldAddAppointment() {
         // Arrange
         String userId = "testCustomerId";
@@ -529,6 +529,9 @@ class AppointmentServiceImplTest {
 
         verify(appointmentRepository, times(1)).findAllByAppointmentDateBetween(startOfDay, endOfDay);
     }
+
+
+
 
 
 

@@ -7,16 +7,19 @@ import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Status;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datamapperlayer.AppointmentRequestMapper;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datamapperlayer.AppointmentResponseMapper;
+//import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AddAppointmentRequest;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentRequestModel;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentResponseModel;
 
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
+import com.champlain.ateliermecaniquews.emailsubdomain.businesslayer.EmailService;
 import com.champlain.ateliermecaniquews.vehiclemanagementsubdomain.datalayer.VehicleRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -35,6 +38,8 @@ public class AppointmentServiceImpl implements AppointmentService{
     private VehicleRepository vehicleRepository;
     private AppointmentResponseMapper appointmentResponseMapper;
     private AppointmentRequestMapper appointmentRequestMapper;
+
+   private  EmailService emailService;
 
     @Override
     public List<AppointmentResponseModel> getAllAppointments() {
@@ -124,6 +129,7 @@ public class AppointmentServiceImpl implements AppointmentService{
         return appointmentResponseMapper.entityToResponseModel(savedAppointment);
 
     }
+
 
     @Override
     public AppointmentResponseModel getAppointmentByAppointmentId(String appointmentId) {

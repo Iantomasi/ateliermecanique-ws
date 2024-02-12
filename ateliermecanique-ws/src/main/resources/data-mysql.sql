@@ -43,6 +43,11 @@ VALUES ('vwxy8z45-3a6b-8795-2abh-96329x6bv163', 'isabella.g@example.com', '$2a$1
 INSERT INTO users (user_id, email, password, first_name, last_name, phone_number)
 VALUES ('yzab8cd5-3e6f-8796-2abi-96330c6bw164', 'masonr@example.com', '$2a$10$YwMjkpuigjQYb/7RjCtJnOXKkJ8BQkHzODy7Ly6hI6xny2BQG1EoC', 'Mason', 'Rodriguez', '321654987');
 
+-- User 11 (Mohit Shankar)
+INSERT INTO users (user_id, email, password, first_name, last_name, phone_number)
+VALUES ('b9924d89-1g4e-7817-3gba-06378b7am459', 'mohitshanker2015@gmail.com', '$2a$10$A/d6EXvgk/nd8PWGlbyUXeCv3qccFJEFKMHG/WkNye9cCychhn1lG', 'Mohit', 'Shankar', '4389798893');
+
+
 --   Vehicle 1 (John Doe)
 INSERT INTO vehicles (vehicle_id, user_id, make, model, year, transmission_type, mileage)
 VALUES ('132b41b2-2bec-4b98-b08d-c7c0e03fe33e', 'b7024d89-1a5e-4517-3gba-05178u7ar260', 'Chevrolet', 'Cruze', '2016', 'MANUAL', '50000');
@@ -83,6 +88,9 @@ VALUES ('07gg7h8c-4hh5-89i6-cji7-6i7j8k9l1m11', 'vwxy8z45-3a6b-8795-2abh-96329x6
 INSERT INTO vehicles (vehicle_id, user_id, make, model, year, transmission_type, mileage)
 VALUES ('08hh8i9d-5ii6-9aj7-dkj8-7j8k9l2n22', 'yzab8cd5-3e6f-8796-2abi-96330c6bw164', 'Volkswagen', 'Jetta', '2019', 'MANUAL', '22000');
 
+--Vehicle 11 (Mohit Shankar)
+INSERT INTO vehicles (vehicle_id, user_id, make, model, year, transmission_type, mileage)
+VALUES ('244b56g7-2bic-7n88-g04d-j9v4t07ne50e', 'b9924d89-1g4e-7817-3gba-06378b7am459', 'Chevrolet', 'Cruze', '2016', 'MANUAL', '50000');
 
 -- Appointment 1 (John Doe)
     INSERT INTO appointments (appointment_id, user_id, vehicle_id, appointment_date, services, comments, status) VALUE ('1508dc5c-d460-443f-8f37-a174284f868c', 'b7024d89-1a5e-4517-3gba-05178u7ar260', '132b41b2-2bec-4b98-b08d-c7c0e03fe33e', '2024-03-24 11:00', 'Preventive Maintenance', 'None', 'COMPLETED');
@@ -189,6 +197,11 @@ INSERT INTO user_roles (user_id, role_id)
 VALUES ((SELECT id FROM users WHERE email = 'masonr@example.com'),
         (SELECT id FROM roles WHERE name = 'ROLE_CUSTOMER'));
 
+
+-- Adding user 11 (Mohit Shankar) to ROLE_CUSTOMER
+INSERT INTO user_roles (user_id, role_id)
+VALUES ((SELECT id FROM users WHERE email = 'mohitshanker2015@gmail.com'),
+        (SELECT id FROM roles WHERE name = 'ROLE_CUSTOMER'));
 
 
 -- Invoice 1 (John Doe)

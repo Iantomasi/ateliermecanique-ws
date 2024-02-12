@@ -14,7 +14,7 @@ public interface AppointmentService {
     List<AppointmentResponseModel> getAllAppointmentsByCustomerId(String customerId);
     AppointmentResponseModel updateAppointmentStatus(String appointmentId, boolean isConfirm);
     AppointmentResponseModel updateAppointmentByAppointmentId(AppointmentRequestModel appointmentRequestModel, String appointmentId);
-    AppointmentResponseModel addAppointmentToCustomerAccount(String customerId, AppointmentRequestModel appointmentRequestModel); //testing
+    AppointmentResponseModel addAppointmentToCustomerAccount(String customerId, AppointmentRequestModel appointmentRequestModel);
 
     AppointmentResponseModel getAppointmentByAppointmentId(String appointmentId);
     void deleteAllCancelledAppointments();
