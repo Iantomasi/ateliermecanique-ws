@@ -16,7 +16,7 @@ function ReviewDetails() {
         comment: '',
         rating: 0.0,
         reviewDate: '',
-        mechanicReply: ''
+       /* mechanicReply: ''*/
 
     });
 
@@ -39,6 +39,30 @@ function ReviewDetails() {
             });
     }, [reviewId]);
 
+    function updateReview(event) {
+        event.preventDefault();
+
+        adminService.updateReview(reviewId, reviewDetails)
+            .then(res => {
+                if (res.status === 200) {
+                    alert('Review: ' + reviewId + ' has been updated!');
+                    navigate(`/admin/reviews`);
+                }
+            })
+            .catch(err => {
+                console.error('Error updating review:', err);
+            });
+
+    }
+
+    function handleInputChange(event) {
+        const { name, value } = event.target;
+        setReviewDetails(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    }
+
     /*
     function handleInputChange(event) {
         const { name, value } = event.target;
@@ -48,21 +72,7 @@ function ReviewDetails() {
         }));
     }
 
-    function updateInvoice(event) {
-        event.preventDefault();
 
-        adminService.updateInvoice(invoiceId, invoiceDetails)
-            .then(res => {
-                if (res.status === 200) {
-                    alert('Invoice has been updated!');
-                    navigate(`/admin/invoices`);
-                }
-            })
-            .catch(err => {
-                console.error('Error updating invoice:', err);
-            });
-
-    }
 
 
     function confirmDelete() {
@@ -102,26 +112,28 @@ function ReviewDetails() {
                             </div>
                     {/* Rest of the component layout */}
                     <div className="bg-gray-100 shadow-lg p-5 rounded-md mt-5 relative">
-                    {/*<form className="customervehicle-user-details-form" onSubmit={updateInvoice}> */}
-                    <form className="customervehicle-user-details-form">
+                    <form className="customervehicle-user-details-form" onSubmit={updateReview}>
                         <label className="font-bold">Customer Id</label>
-                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="reviewId" value={reviewDetails.customerId} type="text" required />
+                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="customerId" value={reviewDetails.customerId} onChange={handleInputChange} type="text" required />
 
                         <label className="font-bold">Appointment Id</label>
-                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="reviewId" value={reviewDetails.appointmentId} type="text" required />
+                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="appointmentId" value={reviewDetails.appointmentId} onChange={handleInputChange }type="text" required />
 
                         <label className="font-bold">Comments</label>
-                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="reviewId" value={reviewDetails.comment} type="text" required />
+                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="comment" value={reviewDetails.comment} onChange={handleInputChange} type="text" required />
 
                         <label className="font-bold">Rating</label>
-                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="reviewId" value={reviewDetails.rating} type="text" required />
+                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="rating" value={reviewDetails.rating} onChange={handleInputChange} type="text" required />
 
                         <label className="font-bold">Date & Time</label>
-                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="reviewId" value={reviewDetails.reviewDate} type="text" required />
+                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="reviewDate" value={reviewDetails.reviewDate} onChange={handleInputChange} type="text" required />
 
                       
                         <label className="font-bold">Reply</label>
                         <input className="w-full p-4 rounded border border-gray-400 mb-5" name="reviewId" value={reviewDetails.mechanicReply} type="text" placeholder="No reply"/>
+                        <button className="bg-yellow-400 border-none px-4 py-2 rounded font-bold transform transition duration-300 hover:scale-110" type="submit">
+                            Save
+                        </button>
                     </form>
                         </div>
                         {/*showConfirmation && (
