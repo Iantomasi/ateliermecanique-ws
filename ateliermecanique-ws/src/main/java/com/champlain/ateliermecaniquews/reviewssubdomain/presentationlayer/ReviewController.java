@@ -45,7 +45,7 @@ public class ReviewController {
     }
 
     @PutMapping("/reviews/{reviewId}")
-    //@PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
+    @PreAuthorize(" hasRole('CUSTOMER')")
     public ResponseEntity<ReviewResponseModel> updateReview(@PathVariable String reviewId, @RequestBody ReviewRequestModel reviewRequestModel) {
 
         ReviewResponseModel review = reviewService.updateReview(reviewId, reviewRequestModel);
