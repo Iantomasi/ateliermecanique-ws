@@ -115,6 +115,10 @@ class adminService{
         return axios.get(API_REVIEWS_URL + `/${id}`, { headers: authHeader() });
     }
 
+    updateReview(id, review){
+        return axios.put(API_REVIEWS_URL + `/${id}`, review, { headers: authHeader() });
+    }
+
 }
 
 export default new adminService();

@@ -845,6 +845,34 @@ public class FrontEndTesting {
 
     }
 
+    @Test
+    public void updateReview() {
+        open("https://localhost:3000/");
+        $("a[href='/login']").click();
+        sleep(1000);
+
+        $("input[name='email']").setValue("admin@example.com");
+        $("input[type='password']").setValue("Hello!");
+
+        $("button[type='submit']").click();
+        sleep(1000);
+
+
+        sleep(1000);
+        $("img[src='reviews.svg']").click();
+        sleep(1000);
+
+        String reviewId = "3994efe6-a0d3-48e8-ba53-e80c5b6ad331";
+
+        SelenideElement reviewLink = $$("td").findBy(text(reviewId));
+        reviewLink.shouldBe(visible).click();
+        sleep(5000);
+
+        $("input[name='comment']").setValue("This is a new comment");
+
+        $("button[type='submit']").click();
+    }
+
 
 
 }

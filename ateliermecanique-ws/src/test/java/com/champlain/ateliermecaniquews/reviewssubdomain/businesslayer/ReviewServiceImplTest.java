@@ -4,6 +4,7 @@ import com.champlain.ateliermecaniquews.reviewssubdomain.datalayer.Review;
 import com.champlain.ateliermecaniquews.reviewssubdomain.datalayer.ReviewRepository;
 import com.champlain.ateliermecaniquews.reviewssubdomain.datamapperlayer.ReviewRequestMapper;
 import com.champlain.ateliermecaniquews.reviewssubdomain.datamapperlayer.ReviewResponseMapper;
+import com.champlain.ateliermecaniquews.reviewssubdomain.presentationlayer.ReviewRequestModel;
 import com.champlain.ateliermecaniquews.reviewssubdomain.presentationlayer.ReviewResponseModel;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -124,5 +125,43 @@ class ReviewServiceImplTest {
 
         verify(reviewRepository, times(1)).findReviewByReviewIdentifier_ReviewId(reviewId);
         verify(reviewResponseMapper, never()).entityToResponseModel(any(Review.class));
+    }
+
+    @Test
+    void updateReview_shouldSucceed() {
+
+        // Arrange
+        String reviewId = "reviewId1";
+        Review review = new Review();
+
+        String customerId = "test-customer-id";
+        String appointmentId = "test-appointment-id";
+        LocalDateTime reviewDate = LocalDateTime.parse("2024-01-02T19:00"); //2024-01-02T19:00;
+        String comment = "Initial Notes";
+        Double rating = 150.00;
+
+        ReviewRequestModel requestModel = new ReviewRequestModel(
+                "test-customer-id",
+                "test-appointment-id",
+                "Initial Notes",
+                150.00,
+                LocalDateTime.parse("2024-01-02T19:00")
+
+        );
+        when(reviewRepository.findReviewByReviewIdentifier_ReviewId(reviewId)).thenReturn(review);
+
+        // Act
+        reviewService.updateReview(reviewId, requestModel);
+
+        // Assert
+        verify(reviewRepository).findReviewByReviewIdentifier_ReviewId(reviewId);
+        verify(reviewRepository).save(review);
+
+        assertEquals(customerId, review.getCustomerId());
+        assertEquals(appointmentId, review.getAppointmentId());
+        assertEquals(reviewDate, review.getReviewDate());
+        assertEquals(comment, review.getComment());
+        assertEquals(rating, review.getRating());
+
     }
 }

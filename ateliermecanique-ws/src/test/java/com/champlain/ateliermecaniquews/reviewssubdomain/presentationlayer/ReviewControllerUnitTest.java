@@ -29,6 +29,8 @@ class ReviewControllerUnitTest {
 
     private ReviewResponseModel testReview;
 
+    private ReviewRequestModel testReviewRequest;
+
     @BeforeEach
     void setUp() {
         testReview = ReviewResponseModel.builder()
@@ -79,5 +81,25 @@ class ReviewControllerUnitTest {
         ResponseEntity<ReviewResponseModel> response = reviewController.getReviewById("nonexistentReviewId");
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    void updateReview_shouldReturnUpdatedReview() {
+
+        testReviewRequest = ReviewRequestModel.builder()
+                .customerId("testCustomerId")
+                .appointmentId("testAppointmentId")
+                .comment("Great service")
+                .rating(5.0)
+                .reviewDate(LocalDateTime.now())
+                .build();
+
+        when(reviewService.updateReview("testReviewId", testReviewRequest)).thenReturn(testReview);
+
+        ResponseEntity<ReviewResponseModel> response = reviewController.updateReview("testReviewId", testReviewRequest);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(testReview, response.getBody());
+
     }
 }

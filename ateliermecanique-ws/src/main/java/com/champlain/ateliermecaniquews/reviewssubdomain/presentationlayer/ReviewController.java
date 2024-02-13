@@ -8,10 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -41,6 +38,17 @@ public class ReviewController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
     public ResponseEntity<ReviewResponseModel> getReviewById(@PathVariable String reviewId) {
         ReviewResponseModel review = reviewService.getReviewByReviewId(reviewId);
+        if (review == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(review);
+    }
+
+    @PutMapping("/reviews/{reviewId}")
+    @PreAuthorize(" hasRole('CUSTOMER')")
+    public ResponseEntity<ReviewResponseModel> updateReview(@PathVariable String reviewId, @RequestBody ReviewRequestModel reviewRequestModel) {
+
+        ReviewResponseModel review = reviewService.updateReview(reviewId, reviewRequestModel);
         if (review == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
