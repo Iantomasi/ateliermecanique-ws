@@ -39,6 +39,20 @@ function ReviewDetails() {
             });
     }, [reviewId]);
 
+    function deleteReview() {
+        adminService.deleteReview(reviewId)
+            .then(res => {
+                if (res.status === 204) {
+                    alert('Review has been deleted!');
+                }
+            })
+            .catch(err => {
+                alert('You can only delete your own reviews.');
+            });
+        setShowConfirmation(false);
+    }
+    
+
     function updateReview(event) {
         event.preventDefault();
 
@@ -63,17 +77,6 @@ function ReviewDetails() {
         }));
     }
 
-    /*
-    function handleInputChange(event) {
-        const { name, value } = event.target;
-        setInvoiceDetails(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-    }
-
-
-
 
     function confirmDelete() {
         setShowConfirmation(true);
@@ -82,22 +85,7 @@ function ReviewDetails() {
     function cancelDelete() {
         setShowConfirmation(false);
     }
-
-    function deleteInvoice() {
-        adminService.deleteInvoice(invoiceId)
-            .then(res => {
-                if (res.status === 204) {
-                    alert('Invoice has been deleted!');
-                    navigate(`/admin/invoices`);
-                }
-            })
-            .catch(err => {
-                console.error('Error deleting invoice:', err);
-            });
-        setShowConfirmation(false);
-    }
-    */
-
+ 
     // Render the review details form
     return (
         <div className="flex flex-col min-h-screen">
@@ -131,17 +119,22 @@ function ReviewDetails() {
                       
                         <label className="font-bold">Reply</label>
                         <input className="w-full p-4 rounded border border-gray-400 mb-5" name="reviewId" value={reviewDetails.mechanicReply} type="text" placeholder="No reply"/>
+                        <div className="flex justify-center space-x-10">
                         <button className="bg-yellow-400 border-none px-4 py-2 rounded font-bold transform transition duration-300 hover:scale-110" type="submit">
                             Save
                         </button>
+                        <button className="bg-red-500 border-none px-4 py-2 rounded font-bold transform transition duration-300 hover:scale-110" onClick={confirmDelete} type="button">
+                        Delete
+                        </button>
+                        </div>
                     </form>
                         </div>
-                        {/*showConfirmation && (
+                        {showConfirmation && (
                                 <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
                                     <div className="bg-white p-5 rounded-lg shadow-lg">
-                                        <p className="text-lg mb-2">Are you sure you want to delete this invoice?</p>
+                                        <p className="text-lg mb-2">Are you sure you want to delete this review?</p>
                                         <div className="flex justify-center space-x-4">
-                                            <button className="bg-red-500 text-white px-4 py-2 rounded font-bold" onClick={deleteInvoice}>
+                                            <button className="bg-red-500 text-white px-4 py-2 rounded font-bold" onClick={deleteReview}>
                                                 Yes
                                             </button>
                                             <button className="bg-gray-300 text-gray-700 px-4 py-2 rounded font-bold" onClick={cancelDelete}>
@@ -150,7 +143,7 @@ function ReviewDetails() {
                                         </div>
                                     </div>
                                 </div>
-                        )*/}
+                        )}
                         </main>
                     </div>
                 </div>

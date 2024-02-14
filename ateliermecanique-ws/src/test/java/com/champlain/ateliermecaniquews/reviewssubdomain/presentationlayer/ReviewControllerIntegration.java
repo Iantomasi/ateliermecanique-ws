@@ -1,6 +1,14 @@
 package com.champlain.ateliermecaniquews.reviewssubdomain.presentationlayer;
 
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
+import com.champlain.ateliermecaniquews.customerinvoicemanagementsubdomain.datalayer.CustomerInvoice;
 import com.champlain.ateliermecaniquews.reviewssubdomain.businesslayer.ReviewService;
+import com.champlain.ateliermecaniquews.reviewssubdomain.datalayer.Review;
+import com.champlain.ateliermecaniquews.reviewssubdomain.datalayer.ReviewIdentifier;
+import com.champlain.ateliermecaniquews.reviewssubdomain.datalayer.ReviewRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,56 +16,94 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.List;
 
+import static net.bytebuddy.matcher.ElementMatchers.is;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 class ReviewControllerIntegrationTest {
-
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
     private ReviewService reviewService;
 
-    private ReviewResponseModel testReview;
+    @MockBean
+    private UserRepository userRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
+
+    private Review testReview;
+    private String testReviewId;
+    private String testCustomerId;
 
     @BeforeEach
     void setUp() {
-        // Setup a test review to use in the tests
-        testReview = ReviewResponseModel.builder()
-                .reviewId("testReviewId")
-                .customerId("testCustomerId")
-                .appointmentId("testAppointmentId")
-                .comment("Great service")
-                .rating(5.0)
-                .reviewDate(LocalDateTime.now())
-                .mechanicReply("Thank you for your feedback!")
-                .build();
+        ReviewIdentifier identifier = new ReviewIdentifier();
+        testReview = new Review(
+
+                "testCustomerId",
+                "testAppointmentId",
+                "This is a great service!",
+                5.0,
+                "2024-02-04 19:00",
+                "This is a great service!"
+        );
+        testReview.setReviewIdentifier(identifier);
+        Review savedReview = reviewRepository.save(testReview);
+        testReviewId = savedReview.getReviewIdentifier().getReviewId(); // Get the UUID
+        testCustomerId = savedReview.getCustomerId();
+
+
+        User mockUser = new User();  // Assuming 'User' is your user entity class
+        // mockUser.setUserId(testCustomerId);
+        mockUser.setFirstName("John");
+        mockUser.setLastName("Doe");
+        mockUser.setEmail("johndoe@example.com");
+        mockUser.setPassword("password");
+        // mockUser.setRole("ROLE_CUSTOMER");
+        when(userRepository.findUserByUserIdentifier_UserId(testCustomerId)).thenReturn(mockUser);
+    }
+
+    @AfterEach
+    void tearDown() {
+        reviewRepository.deleteAll();
     }
 
     @Test
     @WithMockUser(username = "admin@example.com", roles = "ADMIN")
     void getAllReviews_shouldReturnReviews() throws Exception {
-        // Arrange
-        when(reviewService.getAllReviews()).thenReturn(List.of(testReview));
+        when(reviewService.getAllReviews()).thenReturn(Collections.singletonList(
+                new ReviewResponseModel(
+                        testReviewId,
+                        testReview.getCustomerId(),
+                        testReview.getAppointmentId(),
+                        testReview.getComment(),
+                        testReview.getRating(),
+                        testReview.getReviewDate(),
+                        testReview.getMechanicReply()
+                )));
 
-        // Act & Assert
         mockMvc.perform(get("/api/v1/reviews"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].reviewId").value(testReview.getReviewId()));
-
-        verify(reviewService).getAllReviews();
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].reviewId").value(testReviewId));
     }
 
     @Test
@@ -75,17 +121,26 @@ class ReviewControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "admin@example.com", roles = "ADMIN")
-    void getReviewById_shouldReturnReview() throws Exception {
+    void getReviewById_ReviewExists_shouldReturnReview() throws Exception {
         // Arrange
-        when(reviewService.getReviewByReviewId(testReview.getReviewId())).thenReturn(testReview);
+        ReviewResponseModel responseModel = new ReviewResponseModel(
+                testReviewId,
+                testReview.getCustomerId(),
+                testReview.getAppointmentId(),
+                testReview.getComment(),
+                testReview.getRating(),
+                testReview.getReviewDate(),
+                testReview.getMechanicReply()
+        );
+
+        when(reviewService.getReviewByReviewId(testReviewId)).thenReturn(responseModel);
 
         // Act & Assert
-        mockMvc.perform(get("/api/v1/reviews/{reviewId}", testReview.getReviewId()))
+        mockMvc.perform(get("/api/v1/reviews/{reviewId}", testReviewId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.reviewId").value(testReview.getReviewId()));
-
-        verify(reviewService).getReviewByReviewId(testReview.getReviewId());
+                .andExpect(jsonPath("$.reviewId").value(testReviewId));
+        verify(reviewService).getReviewByReviewId(testReviewId);
     }
 
     @Test
@@ -100,4 +155,31 @@ class ReviewControllerIntegrationTest {
 
         verify(reviewService).getReviewByReviewId("nonexistentReviewId");
     }
+
+    @Test
+    @WithMockUser(username = "admin@example.com", roles = "ADMIN")
+    void deleteReviewById_asAdmin_shouldDeleteReview() throws Exception {
+        // Arrange
+        String reviewIdToDelete = "testReviewId";
+        doNothing().when(reviewService).deleteReviewByReviewId(reviewIdToDelete);
+
+        // Act & Assert
+        mockMvc.perform(delete("/api/v1/reviews/{reviewId}", reviewIdToDelete))
+                .andExpect(status().isNoContent());
+
+        verify(reviewService).deleteReviewByReviewId(reviewIdToDelete);
+    }
+
+    @Test
+    @WithMockUser(username = "michaelw@example.com", roles = "CUSTOMER")
+    void deleteReviewById_asCustomerNotOwner_shouldThrowServerError() throws Exception {
+        // Arrange
+        String reviewId = "testReviewId";
+
+        // Act & Assert
+        mockMvc.perform(delete("/api/v1/reviews/{reviewId}", reviewId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is5xxServerError());
+    }
 }
+

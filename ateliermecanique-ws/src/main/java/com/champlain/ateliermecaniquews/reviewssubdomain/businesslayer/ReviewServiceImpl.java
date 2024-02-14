@@ -36,11 +36,6 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
 
-
-
-
-
-
     @Override
     public ReviewResponseModel updateReview(String reviewId, ReviewRequestModel reviewResponseModel) {
         Review review = reviewRepository.findReviewByReviewIdentifier_ReviewId(reviewId);
@@ -56,4 +51,18 @@ public class ReviewServiceImpl implements ReviewService {
         review.setReviewDate(reviewResponseModel.getReviewDate());
         return reviewResponseMapper.entityToResponseModel(reviewRepository.save(review));
     }
+
+    @Override
+    public void deleteReviewByReviewId(String reviewId) {
+        Review review = reviewRepository.findReviewByReviewIdentifier_ReviewId(reviewId);
+        if(review != null){
+            reviewRepository.delete(review);
+        }
+    }
+
+    @Override
+    public boolean isOwnerOfReview(String authenticatedUserId, String reviewId) {
+        return reviewRepository.findReviewByReviewIdentifier_ReviewIdAndCustomerId(reviewId, authenticatedUserId).isPresent();
+    }
+
 }

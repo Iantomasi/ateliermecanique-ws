@@ -130,6 +130,14 @@ const router = createBrowserRouter([
       {
         path: "/user",
         element: <User/>
+      },
+      {
+        path: "/user/reviews",
+        element: <Reviews/>
+      },
+      {
+        path: "/user/reviews/:reviewId",
+        element: <ReviewDetails/>
       }
 
     ]

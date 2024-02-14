@@ -9,9 +9,8 @@ public interface ReviewService {
 
     List<ReviewResponseModel> getAllReviews();
     ReviewResponseModel getReviewByReviewId(String reviewId);
-
-
-
-
     ReviewResponseModel updateReview(String reviewId, ReviewRequestModel reviewResponseModel);
+
+    void deleteReviewByReviewId(String reviewId);
+    boolean isOwnerOfReview(String authenticatedUserId, String reviewId);
 }
