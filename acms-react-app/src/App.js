@@ -23,6 +23,7 @@ import InvoiceDetails from './Pages/Admin_Pages/Invoices/Invoices_Page/InvoiceDe
 import Contact from './Pages/Contact_Pages/Contact.js';
 import Reviews from './Pages/Admin_Pages/Reviews/Reviews_Page/Reviews.js';
 import ReviewDetails from './Pages/Admin_Pages/Reviews/Reviews_Page/ReviewDetails.js';
+import ResetPasswordRequest from './Pages/ResetPasswordRequest_Page/ResetPasswordRequest.js';
 
 const router = createBrowserRouter([
   {
@@ -138,6 +139,11 @@ const router = createBrowserRouter([
       {
         path: "/user/reviews/:reviewId",
         element: <ReviewDetails/>
+      },
+      {
+        path: "/reset-password-request",
+        element: <ResetPasswordRequest/>
+
       }
 
     ]
