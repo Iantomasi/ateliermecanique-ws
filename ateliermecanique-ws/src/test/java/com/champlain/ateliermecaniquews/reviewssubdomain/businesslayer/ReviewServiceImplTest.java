@@ -164,4 +164,63 @@ class ReviewServiceImplTest {
         assertEquals(rating, review.getRating());
 
     }
+
+    @Test
+    void updateReview_reviewNotFound_shouldLogWarningAndReturnNull() {
+        // Arrange
+        String nonExistentReviewId = "nonExistentReviewId";
+        ReviewRequestModel requestModel = new ReviewRequestModel(
+                "customerId",
+                "appointmentId",
+                "This is a comment",
+                5.0,
+                LocalDateTime.now()
+        );
+
+        when(reviewRepository.findReviewByReviewIdentifier_ReviewId(nonExistentReviewId)).thenReturn(null);
+
+        // Act
+        ReviewResponseModel result = reviewService.updateReview(nonExistentReviewId, requestModel);
+
+        // Assert
+        assertNull(result);
+        verify(reviewRepository, times(1)).findReviewByReviewIdentifier_ReviewId(nonExistentReviewId);
+        verify(reviewRepository, never()).save(any(Review.class));
+    }
+
+    @Test
+    void deleteReviewByReviewId_shouldSucceed() {
+        // Arrange
+        String reviewId = "existingReviewId";
+
+        // Mock the review to be deleted
+        Review reviewToDelete = new Review();
+        when(reviewRepository.findReviewByReviewIdentifier_ReviewId(reviewId))
+                .thenReturn(reviewToDelete);
+
+        // Act
+        reviewService.deleteReviewByReviewId(reviewId);
+
+        // Assert
+        verify(reviewRepository, times(1))
+                .findReviewByReviewIdentifier_ReviewId(reviewId);
+        verify(reviewRepository, times(1)).delete(reviewToDelete);
+    }
+
+    @Test
+    void deleteReviewByReviewId_reviewNotFound() {
+        // Arrange
+        String reviewId = "nonExistentReviewId";
+        when(reviewRepository.findReviewByReviewIdentifier_ReviewId(reviewId))
+                .thenReturn(null);
+
+        // Act
+        reviewService.deleteReviewByReviewId(reviewId);
+
+        // Assert
+        verify(reviewRepository, times(1))
+                .findReviewByReviewIdentifier_ReviewId(reviewId);
+        verify(reviewRepository, never()).delete(any());
+    }
+
 }

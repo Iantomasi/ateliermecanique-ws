@@ -3,6 +3,7 @@ package com.champlain.ateliermecaniquews.reviewssubdomain.presentationlayer;
 
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.utils.security.services.UserDetailsImpl;
 import com.champlain.ateliermecaniquews.reviewssubdomain.businesslayer.ReviewService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -54,5 +55,39 @@ public class ReviewController {
         }
         return ResponseEntity.ok(review);
     }
+
+    @DeleteMapping("/reviews/{reviewId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
+    public ResponseEntity<Void> deleteReviewById(@PathVariable String reviewId) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            boolean isCustomer = authentication.getAuthorities().stream()
+                    .anyMatch(a -> a.getAuthority().equals("ROLE_CUSTOMER"));
+
+            if (!isCustomer) {
+                // If it's an admin, no need to check the user against the review
+                reviewService.deleteReviewByReviewId(reviewId);
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            } else {
+                // It's a customer, verify ownership of the review
+                UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+                String authenticatedUserId = userDetails.getUserId();
+                // Assuming ReviewService or UserRepository can validate ownership
+                boolean isOwner = reviewService.isOwnerOfReview(authenticatedUserId, reviewId);
+                if (isOwner) {
+                    reviewService.deleteReviewByReviewId(reviewId);
+                    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+                } else {
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+                }
+            }
+        } catch (Exception e) {
+            // Consider logging the exception
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+
 
 }

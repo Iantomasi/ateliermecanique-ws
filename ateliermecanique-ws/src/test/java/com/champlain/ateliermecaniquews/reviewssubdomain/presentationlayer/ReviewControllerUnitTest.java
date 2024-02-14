@@ -1,5 +1,7 @@
 package com.champlain.ateliermecaniquews.reviewssubdomain.presentationlayer;
 
+import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.UserIdentifier;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.utils.security.services.UserDetailsImpl;
 import com.champlain.ateliermecaniquews.reviewssubdomain.businesslayer.ReviewService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,14 +11,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ReviewControllerUnitTest {
@@ -102,4 +109,45 @@ class ReviewControllerUnitTest {
         assertEquals(testReview, response.getBody());
 
     }
+
+    @Test
+    void updateReview_reviewNotFound_shouldReturnNotFound() {
+        testReviewRequest = ReviewRequestModel.builder()
+                .customerId("testCustomerId")
+                .appointmentId("testAppointmentId")
+                .comment("Updated service comment")
+                .rating(4.0)
+                .reviewDate(LocalDateTime.now())
+                .build();
+
+        when(reviewService.updateReview("nonexistentReviewId", testReviewRequest)).thenReturn(null);
+
+        ResponseEntity<ReviewResponseModel> response = reviewController.updateReview("nonexistentReviewId", testReviewRequest);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals(null, response.getBody());
+    }
+
+    @Test
+    void deleteReviewById_CustomerRole_Unauthorized() {
+        // Arrange
+        Authentication authentication = mock(Authentication.class);
+        doReturn(Collections.singletonList(new SimpleGrantedAuthority("ROLE_CUSTOMER")))
+                .when(authentication).getAuthorities();
+
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_CUSTOMER"));
+
+        UserDetailsImpl userDetails = new UserDetailsImpl(1, new UserIdentifier().getUserId(), "John", "Vegas", "444", "john@email.com", "pass", authorities);
+        when(authentication.getPrincipal()).thenReturn(userDetails);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        when(reviewService.isOwnerOfReview(anyString(), anyString())).thenReturn(false);
+
+        // Act
+        ResponseEntity<Void> response = reviewController.deleteReviewById("testReviewId");
+
+        // Assert
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+    }
+
 }
