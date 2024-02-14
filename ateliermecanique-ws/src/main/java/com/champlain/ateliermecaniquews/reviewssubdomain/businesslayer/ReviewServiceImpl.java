@@ -11,6 +11,7 @@ import com.champlain.ateliermecaniquews.reviewssubdomain.presentationlayer.Revie
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -49,7 +50,18 @@ public class ReviewServiceImpl implements ReviewService {
         review.setComment(reviewResponseModel.getComment());
         review.setRating(reviewResponseModel.getRating());
         review.setReviewDate(reviewResponseModel.getReviewDate());
+        review.setMechanicReply(reviewResponseModel.getMechanicReply());
         return reviewResponseMapper.entityToResponseModel(reviewRepository.save(review));
+    }
+
+    @Override
+    @Transactional
+    public ReviewResponseModel updateMechanicReply(String reviewId, String mechanicReply) {
+        return reviewRepository.findOptionalReviewByReviewIdentifier_ReviewId(reviewId).map(review -> {
+            review.setMechanicReply(mechanicReply);
+            Review updatedReview = reviewRepository.save(review);
+            return reviewResponseMapper.entityToResponseModel(updatedReview);
+        }).orElse(null);
     }
 
     @Override

@@ -23,6 +23,7 @@ import InvoiceDetails from './Pages/Admin_Pages/Invoices/Invoices_Page/InvoiceDe
 import Contact from './Pages/Contact_Pages/Contact.js';
 import Reviews from './Pages/Admin_Pages/Reviews/Reviews_Page/Reviews.js';
 import ReviewDetails from './Pages/Admin_Pages/Reviews/Reviews_Page/ReviewDetails.js';
+import ReviewDetailsAdmin from './Pages/Admin_Pages/Reviews/Reviews_Page/ReviewDetailsAdmin.js';
 
 const router = createBrowserRouter([
   {
