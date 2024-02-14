@@ -14,6 +14,7 @@ import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlaye
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.controllers.AuthController;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.utils.security.jwt.JwtUtils;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.utils.security.services.UserDetailsImpl;
+import com.champlain.ateliermecaniquews.emailsubdomain.businesslayer.EmailService;
 import com.nimbusds.jose.JOSEException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +27,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.mail.MessagingException;
 import java.text.ParseException;
 import java.util.*;
 
@@ -45,6 +47,9 @@ class AuthControllerTest {
     private JwtUtils jwtUtils;
 
     @Mock
+    private EmailService emailService;
+
+    @Mock
     private UserDetailsService userDetailsService;
 
 
@@ -62,7 +67,7 @@ class AuthControllerTest {
         when(jwtUtils.generateJwtToken(authentication)).thenReturn("mockedJwtToken");
 
         // Call the method
-        AuthController authController = new AuthController(null, null, null, authenticationManager, null, null, jwtUtils, null);
+        AuthController authController = new AuthController(null, null, null, authenticationManager, null, null, jwtUtils, null,null);
         ResponseEntity<?> responseEntity = authController.authenticateUser(loginRequest);
 
         // Verify interactions and assertions
@@ -82,7 +87,7 @@ class AuthControllerTest {
     }
 
     @Test
-    void registerUser_WhenValidSignupRequest_ShouldReturnSuccessMessage() {
+    void registerUser_WhenValidSignupRequest_ShouldReturnSuccessMessage() throws MessagingException {
         // Mock data
         SignupRequest signupRequest = SignupRequest.builder()
                 .firstName("John")
@@ -105,7 +110,7 @@ class AuthControllerTest {
         when(passwordEncoder.encode(signupRequest.getPassword())).thenReturn("encodedPassword");
 
         // Call the method
-        AuthController authController = new AuthController(null, null, userRepository, null, roleRepository, passwordEncoder, null, null);
+        AuthController authController = new AuthController(null, null, userRepository, null, roleRepository, passwordEncoder, null, null,emailService);
         ResponseEntity<?> responseEntity = authController.registerUser(signupRequest);
 
         // Verify interactions and assertions
@@ -118,7 +123,7 @@ class AuthControllerTest {
     }
 
     @Test
-    void registerUser_WhenEmailAlreadyInUse_ShouldReturnBadRequest() {
+    void registerUser_WhenEmailAlreadyInUse_ShouldReturnBadRequest() throws MessagingException {
         // Mock data
         SignupRequest signupRequest = SignupRequest.builder()
                 .firstName("John")
@@ -131,7 +136,7 @@ class AuthControllerTest {
         when(userRepository.existsByEmail(signupRequest.getEmail())).thenReturn(true);
 
         // Call the method
-        AuthController authController = new AuthController(null, null, userRepository, null, null, null, null, null);
+        AuthController authController = new AuthController(null, null, userRepository, null, null, null, null, null,null);
         ResponseEntity<?> responseEntity = authController.registerUser(signupRequest);
 
         // Verify interactions and assertions
@@ -228,7 +233,7 @@ class AuthControllerTest {
     }
 
     @Test
-    void facebookToken_WhenValidToken_ShouldReturnJWTResponse() {
+    void facebookToken_WhenValidToken_ShouldReturnJWTResponse() throws MessagingException {
         // Mock
         when(oAuthService.facebookLogin(anyString())).thenReturn(createUser());
         when(userDetailsService.loadUserByUsername(anyString())).thenReturn(createUserDetails(createUser()));

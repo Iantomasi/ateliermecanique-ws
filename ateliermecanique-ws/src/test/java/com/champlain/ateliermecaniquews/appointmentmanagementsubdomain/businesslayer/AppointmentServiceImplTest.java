@@ -8,6 +8,7 @@ import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentat
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentResponseModel;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.User;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
+import com.champlain.ateliermecaniquews.emailsubdomain.businesslayer.EmailService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -26,6 +27,8 @@ import static org.mockito.Mockito.*;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 
+import javax.mail.MessagingException;
+
 @SpringBootTest
 class AppointmentServiceImplTest {
 
@@ -37,6 +40,9 @@ class AppointmentServiceImplTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private EmailService emailService;
 
     @InjectMocks
     private AppointmentServiceImpl appointmentService;
@@ -357,11 +363,12 @@ class AppointmentServiceImplTest {
         // Assert
         verify(appointmentRepository, never()).deleteAll(anyList());
     }
-   @Test
-    void addAppointmentToCustomerAccount_ShouldAddAppointment() {
+    @Test
+    void addAppointmentToCustomerAccount_ShouldAddAppointment() throws MessagingException {
         // Arrange
         String userId = "testCustomerId";
-        LocalDateTime appointmentDateTime = LocalDateTime.now();
+        String appointmentDateString = "2024-02-14T08:00"; // Example appointment date string in the desired format
+        LocalDateTime appointmentDateTime = LocalDateTime.parse(appointmentDateString, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
         AppointmentRequestModel requestModel = AppointmentRequestModel.builder()
                 .customerId(userId)
                 .vehicleId("testVehicleId")
@@ -377,7 +384,8 @@ class AppointmentServiceImplTest {
                 .thenReturn(customerAccount);
 
         Appointment savedAppointment = new Appointment();
-        // set properties of savedAppointment as needed
+        savedAppointment.setAppointmentDate(appointmentDateTime); // Set the appointment date
+        // set other properties of savedAppointment as needed
 
         when(appointmentRepository.save(any(Appointment.class)))
                 .thenReturn(savedAppointment);
@@ -386,7 +394,7 @@ class AppointmentServiceImplTest {
                 .appointmentId("1")
                 .customerId(userId)
                 .vehicleId("testVehicleId")
-                .appointmentDate(appointmentDateTime)
+                .appointmentDate(appointmentDateTime) // Use the same appointmentDateTime
                 .services("Test Service")
                 .comments("No comments")
                 .status(Status.PENDING)
@@ -407,6 +415,7 @@ class AppointmentServiceImplTest {
         verify(userRepository, times(1)).findUserByUserIdentifier_UserId(userId);
         verify(appointmentRepository, times(1)).save(any(Appointment.class));
     }
+
 
     @Test
     void updateAppointmentByAppointmentId_shouldUpdateSuccessfully() {

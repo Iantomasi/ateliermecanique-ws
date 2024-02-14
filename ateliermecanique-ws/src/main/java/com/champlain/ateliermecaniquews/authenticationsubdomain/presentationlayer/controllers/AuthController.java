@@ -13,9 +13,11 @@ import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlaye
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Response.MessageResponse;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.utils.security.jwt.JwtUtils;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.utils.security.services.UserDetailsImpl;
+import com.champlain.ateliermecaniquews.emailsubdomain.businesslayer.EmailService;
 import com.nimbusds.jose.JOSEException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.mapstruct.ap.shaded.freemarker.core.ReturnInstruction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,10 +30,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.mail.MessagingException;
 import java.text.ParseException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -59,6 +60,7 @@ public class AuthController {
     @Autowired
     final private UserDetailsService userDetailsService;
 
+    final private EmailService emailService;
 
 
 
@@ -66,15 +68,23 @@ public class AuthController {
     public ResponseEntity<?> googleLogin(@PathVariable String JWT) {
         try {
             User user = oAuthService.googleLogin(JWT);
+            Map<String, String> parameters = new HashMap<>();
+            parameters.put("customerName", user.getFirstName()+" "+user.getLastName());
+
+            emailService.sendEmail(user.getEmail(),"Account Registration","registration.html",parameters);
             return generateResponse(user);
-        } catch (JOSEException | ParseException e) {
+        } catch (JOSEException | ParseException | MessagingException e) {
             return ResponseEntity.unprocessableEntity().build();
         }
     }
 
     @PostMapping("/facebook-login/{token}")
-    public ResponseEntity<?> facebookToken(@PathVariable String token) {
+    public ResponseEntity<?> facebookToken(@PathVariable String token) throws MessagingException {
         User user = oAuthService.facebookLogin(token);
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("customerName", user.getFirstName()+" "+user.getLastName());
+
+        emailService.sendEmail(user.getEmail(),"Account Registration","registration.html",parameters);
         return generateResponse(user);
     }
 
@@ -111,7 +121,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest) throws MessagingException {
         if (userRepository.existsByEmail(signupRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
@@ -136,6 +146,11 @@ public class AuthController {
 
         user.setRoles(roles);
         userRepository.save(user);
+
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("customerName", user.getFirstName()+" "+user.getLastName());
+
+        emailService.sendEmail(user.getEmail(),"Account Registration","registration.html",parameters);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
