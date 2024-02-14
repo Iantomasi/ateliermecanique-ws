@@ -118,6 +118,10 @@ class adminService{
     updateReview(id, review){
         return axios.put(API_REVIEWS_URL + `/${id}`, review, { headers: authHeader() });
     }
+    updateMechanicReply(id, mechanicReply) {
+        return axios.put(API_REVIEWS_URL + `/${id}/reply`, { mechanicReply }, { headers: authHeader() });
+    }
+    
     deleteReview(id){
         return axios.delete(API_REVIEWS_URL + `/${id}`, { headers: authHeader() });
     }

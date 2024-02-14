@@ -6,6 +6,7 @@ import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.reposi
 import com.champlain.ateliermecaniquews.authenticationsubdomain.utils.security.services.UserDetailsImpl;
 import com.champlain.ateliermecaniquews.reviewssubdomain.businesslayer.ReviewService;
 import lombok.AllArgsConstructor;
+import lombok.Generated;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,7 +47,7 @@ public class ReviewController {
     }
 
     @PutMapping("/reviews/{reviewId}")
-    @PreAuthorize(" hasRole('CUSTOMER')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
     public ResponseEntity<ReviewResponseModel> updateReview(@PathVariable String reviewId, @RequestBody ReviewRequestModel reviewRequestModel) {
 
         ReviewResponseModel review = reviewService.updateReview(reviewId, reviewRequestModel);
@@ -87,7 +88,16 @@ public class ReviewController {
         }
     }
 
-
+    @PutMapping("/{reviewId}/reply")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Generated
+    public ResponseEntity<ReviewResponseModel> updateMechanicReply(@PathVariable String reviewId, @RequestBody String mechanicReply) {
+        ReviewResponseModel updatedReview = reviewService.updateMechanicReply(reviewId, mechanicReply);
+        if (updatedReview == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedReview);
+    }
 
 
 }
