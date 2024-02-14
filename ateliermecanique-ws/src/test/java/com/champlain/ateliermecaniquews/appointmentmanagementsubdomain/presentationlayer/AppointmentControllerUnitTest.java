@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import javax.mail.MessagingException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -115,7 +116,7 @@ class AppointmentControllerUnitTest {
     }
 
     @Test
-    void testAddAppointmentToCustomerAccountAdmin() {
+    void testAddAppointmentToCustomerAccountAdmin() throws MessagingException {
         AppointmentRequestModel appointmentRequestModel =new AppointmentRequestModel("123","123",LocalDateTime.now(),"services","comments",Status.CONFIRMED);
 
 
@@ -141,7 +142,7 @@ class AppointmentControllerUnitTest {
     }
 
     @Test
-    void testAddAppointmentToCustomerAccountAdmin_NotFound() {
+    void testAddAppointmentToCustomerAccountAdmin_NotFound() throws MessagingException {
         AppointmentRequestModel appointmentRequestModel =new AppointmentRequestModel("123","123",LocalDateTime.now(),"services","comments",Status.CONFIRMED);
 
         // Mock the behavior of the appointmentService
@@ -268,7 +269,7 @@ class AppointmentControllerUnitTest {
     }
 
     @Test
-    void testAddAppointmentToCustomerAccountCustomer_AdminRole_CustomerNotFound() {
+    void testAddAppointmentToCustomerAccountCustomer_AdminRole_CustomerNotFound() throws MessagingException {
         // Arrange
         Authentication authentication = mock(Authentication.class);
         doReturn(Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN")))
@@ -288,7 +289,7 @@ class AppointmentControllerUnitTest {
     }
 
     @Test
-    void testAddAppointmentToCustomerAccountCustomer_AdminRole_CustomerFound() {
+    void testAddAppointmentToCustomerAccountCustomer_AdminRole_CustomerFound() throws MessagingException {
         // Arrange
 
         AppointmentResponseModel appointment = AppointmentResponseModel.builder()
@@ -322,7 +323,7 @@ class AppointmentControllerUnitTest {
     }
 
     @Test
-    void testAddAppointmentToCustomerAccountCustomer_CustomerRole_AuthenticatedUserIdNotMatching() {
+    void testAddAppointmentToCustomerAccountCustomer_CustomerRole_AuthenticatedUserIdNotMatching() throws MessagingException {
         // Arrange
         Authentication authentication = mock(Authentication.class);
         doReturn(Collections.singletonList(new SimpleGrantedAuthority("ROLE_CUSTOMER")))
@@ -346,7 +347,7 @@ class AppointmentControllerUnitTest {
     }
 
     @Test
-    void testAddAppointmentToCustomerAccountCustomer_CustomerRole_AuthenticatedUserIdMatching() {
+    void testAddAppointmentToCustomerAccountCustomer_CustomerRole_AuthenticatedUserIdMatching() throws MessagingException {
         // Arrange
 
         AppointmentResponseModel appointment = AppointmentResponseModel.builder()
@@ -383,7 +384,7 @@ class AppointmentControllerUnitTest {
     }
 
     @Test
-    void testAddAppointmentToCustomerAccountCustomer_CustomerRole_NotFound() {
+    void testAddAppointmentToCustomerAccountCustomer_CustomerRole_NotFound() throws MessagingException {
         // Arrange
         Authentication authentication = mock(Authentication.class);
         doReturn(Collections.singletonList(new SimpleGrantedAuthority("ROLE_CUSTOMER")))

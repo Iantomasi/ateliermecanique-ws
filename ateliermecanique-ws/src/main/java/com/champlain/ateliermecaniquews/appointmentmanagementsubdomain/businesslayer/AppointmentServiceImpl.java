@@ -7,7 +7,6 @@ import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datalayer.Status;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datamapperlayer.AppointmentRequestMapper;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.datamapperlayer.AppointmentResponseMapper;
-//import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AddAppointmentRequest;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentRequestModel;
 import com.champlain.ateliermecaniquews.appointmentmanagementsubdomain.presentationlayer.AppointmentResponseModel;
 
@@ -108,7 +107,7 @@ public class AppointmentServiceImpl implements AppointmentService{
     }
 
     @Override
-    public AppointmentResponseModel addAppointmentToCustomerAccount(String userId, AppointmentRequestModel appointmentRequestModel) {
+    public AppointmentResponseModel addAppointmentToCustomerAccount(String userId, AppointmentRequestModel appointmentRequestModel) throws MessagingException {
         User customerAccount = userRepository.findUserByUserIdentifier_UserId(userId);
 
         if(customerAccount == null) {
@@ -126,6 +125,13 @@ public class AppointmentServiceImpl implements AppointmentService{
         appointment.setStatus(Status.PENDING);
 
         Appointment  savedAppointment = appointmentRepository.save(appointment);
+
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("appointmentDate", savedAppointment.getAppointmentDate().toString());
+        parameters.put("services", savedAppointment.getServices());
+        parameters.put("comments", savedAppointment.getComments());
+
+        emailService.sendEmail(customerAccount.getEmail(),"Appointment Scheduled - ACMS","appointment.html",parameters);
         return appointmentResponseMapper.entityToResponseModel(savedAppointment);
 
     }

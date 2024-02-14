@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Atelier Mécanique!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333333;
+        }
+        p {
+            color: #666666;
+        }
+        .logo {
+            width: 150px;
+            margin: 0 auto;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #4caf50;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .language-section {
+            border-top: 1px solid #ccc;
+            margin-top: 20px;
+            padding-top: 20px;
+        }
+        .language-section h1 {
+            color: #333333;
+        }
+        .language-section p {
+            color: #666666;
+        }
+        .language-section .btn {
+            background-color: #337ab7;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <img src="https://yourdomain.com/path/to/logo.png" alt="Atelier Mécanique Logo" class="logo">
+    <h1>Welcome to Atelier Mécanique!</h1>
+    <p>Dear <span th:text="${customerName}">[Customer Name]</span>,</p>
+    <p>Thank you for registering an account with Atelier Mécanique. We're thrilled to have you on board!</p>
+    <p>You can now enjoy our services and stay updated with the latest offers and promotions.</p>
+    <p>If you have any questions or need assistance, feel free to contact us.</p>
+    <a href="https://react-atelier.onrender.com/login" class="btn">Login to Your Account</a>
+    <p>Best Regards,<br> The Atelier Mécanique Team</p>
+</div>
+
+<div class="container language-section">
+    <h1>Bienvenue à l'Atelier Mécanique !</h1>
+    <p>Cher(e) <span th:text="${customerName}">[Nom du client]</span>,</p>
+    <p>Merci de vous être inscrit(e) sur Atelier Mécanique. Nous sommes ravis de vous accueillir parmi nous !</p>
+    <p>Vous pouvez désormais profiter de nos services et rester informé(e) des dernières offres et promotions.</p>
+    <p>Si vous avez des questions ou avez besoin d'assistance, n'hésitez pas à nous contacter.</p>
+    <a href="https://react-atelier.onrender.com/login" class="btn">Connectez-vous à votre compte</a>
+    <p>Cordialement,<br> L'équipe de l'Atelier Mécanique</p>
+</div>
+
+</body>
+</html>

@@ -240,7 +240,7 @@ public class AppointmentController {
 
    @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
     @PostMapping("/customers/{customerId}/appointments")
-    public ResponseEntity<AppointmentResponseModel> addAppointmentToCustomerAccountCustomer(@PathVariable String customerId, @RequestBody AppointmentRequestModel appointmentRequestModel)  {
+    public ResponseEntity<AppointmentResponseModel> addAppointmentToCustomerAccountCustomer(@PathVariable String customerId, @RequestBody AppointmentRequestModel appointmentRequestModel) throws MessagingException {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -271,7 +271,7 @@ public class AppointmentController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/appointments")
-    public ResponseEntity<AppointmentResponseModel> addAppointmentToCustomerAccountAdmin(@PathVariable String customerId, @RequestBody AppointmentRequestModel appointmentRequestModel) {
+    public ResponseEntity<AppointmentResponseModel> addAppointmentToCustomerAccountAdmin(@PathVariable String customerId, @RequestBody AppointmentRequestModel appointmentRequestModel) throws MessagingException {
         AppointmentResponseModel appointment = appointmentService.addAppointmentToCustomerAccount(customerId, appointmentRequestModel);
         if (appointment == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
