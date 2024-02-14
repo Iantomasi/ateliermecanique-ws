@@ -9,6 +9,7 @@ import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.reposi
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request.LoginRequest;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request.ResetPasswordEmailRequest;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request.ResetPasswordRequest;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request.SignupRequest;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Response.JWTResponse;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Response.MessageResponse;
@@ -18,10 +19,10 @@ import com.champlain.ateliermecaniquews.emailsubdomain.businesslayer.EmailServic
 import com.nimbusds.jose.JOSEException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.mapstruct.ap.shaded.freemarker.core.ReturnInstruction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,7 +31,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.mail.MessagingException;
@@ -176,6 +176,27 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
         }
     }
+
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        String email = userDetails.getEmail();
+
+        User user = userRepository.findUserByEmail(email);
+        if(user == null){
+            String message = "No account exists with email: " + email;
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
+        }
+        user.setPassword(encoder.encode(request.getPassword()));
+        userRepository.save(user);
+
+        return ResponseEntity.ok().build();
+
+    }
+
 
     private ResponseEntity<JWTResponse> generateResponse(User user) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());

@@ -34,10 +34,8 @@ function ResetPasswordRequest() {
             })
             .catch(error => {
                 if (error.response.data) {
-                    // If there is a response from the server and it contains data
                     alert("Error: " + error.response.data);
                 } else {
-                    // If there is no response or no data in the response
                     alert("An unexpected error occurred.");
                 }
             });

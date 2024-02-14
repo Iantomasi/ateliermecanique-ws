@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResetPasswordEmailRequest {
-    private String email;
+public class ResetPasswordRequest {
+    private String password;
 }

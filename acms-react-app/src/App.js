@@ -24,7 +24,9 @@ import Contact from './Pages/Contact_Pages/Contact.js';
 import Reviews from './Pages/Admin_Pages/Reviews/Reviews_Page/Reviews.js';
 import ReviewDetails from './Pages/Admin_Pages/Reviews/Reviews_Page/ReviewDetails.js';
 import ReviewDetailsAdmin from './Pages/Admin_Pages/Reviews/Reviews_Page/ReviewDetailsAdmin.js';
-import ResetPasswordRequest from './Pages/ResetPasswordRequest_Page/ResetPasswordRequest.js';
+import ResetPasswordRequest from './Pages/ResetPassword_Pages/ResetPasswordRequest.js';
+import ResetPassword from './Pages/ResetPassword_Pages/ResetPassword.js';
+
 
 
 const router = createBrowserRouter([
@@ -145,7 +147,10 @@ const router = createBrowserRouter([
       {
         path: "/reset-password-request",
         element: <ResetPasswordRequest/>
-
+      },
+      {
+        path: "/reset-password/:token",
+        element: <ResetPassword/>
       }
 
     ]
