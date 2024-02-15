@@ -1,6 +1,7 @@
 package com.champlain.ateliermecaniquews.reviewssubdomain.businesslayer;
 
 import com.champlain.ateliermecaniquews.reviewssubdomain.datalayer.Review;
+import com.champlain.ateliermecaniquews.reviewssubdomain.datalayer.ReviewIdentifier;
 import com.champlain.ateliermecaniquews.reviewssubdomain.datalayer.ReviewRepository;
 import com.champlain.ateliermecaniquews.reviewssubdomain.datamapperlayer.ReviewRequestMapper;
 import com.champlain.ateliermecaniquews.reviewssubdomain.datamapperlayer.ReviewResponseMapper;
@@ -307,8 +308,63 @@ class ReviewServiceImplTest {
         assertFalse(isOwner);
     }
 
+    @Test
+    void addReview_shouldSucceed() {
+        // Arrange
+        ReviewRequestModel requestModel = new ReviewRequestModel(
+                "customerId1",
+                "appointmentId1",
+                "Great service",
+                5.0,
+                LocalDateTime.now(),
+                null // Assuming mechanicReply is not set during review submission
+        );
 
+        Review savedReview = new Review();
+        savedReview.setReviewIdentifier(new ReviewIdentifier()); // Assuming this generates a new ID
+        savedReview.setCustomerId(requestModel.getCustomerId());
+        savedReview.setAppointmentId(requestModel.getAppointmentId());
+        savedReview.setComment(requestModel.getComment());
+        savedReview.setRating(requestModel.getRating());
+        savedReview.setReviewDate(requestModel.getReviewDate()); // This would actually be set in the service to LocalDateTime.now()
+        savedReview.setMechanicReply(requestModel.getMechanicReply());
 
+        ReviewResponseModel expectedResponseModel = new ReviewResponseModel(
+                savedReview.getReviewIdentifier().getReviewId(),
+                savedReview.getCustomerId(),
+                savedReview.getAppointmentId(),
+                savedReview.getComment(),
+                savedReview.getRating(),
+                savedReview.getReviewDate(),
+                savedReview.getMechanicReply()
+        );
 
+        when(reviewRepository.save(any(Review.class))).thenReturn(savedReview);
+        when(reviewResponseMapper.entityToResponseModel(any(Review.class))).thenReturn(expectedResponseModel);
 
+        // Act
+        ReviewResponseModel actualResponseModel = reviewService.addReview(requestModel);
+
+        // Assert
+        ArgumentCaptor<Review> reviewCaptor = ArgumentCaptor.forClass(Review.class);
+        verify(reviewRepository).save(reviewCaptor.capture());
+        Review capturedReview = reviewCaptor.getValue();
+
+        assertEquals(requestModel.getCustomerId(), capturedReview.getCustomerId());
+        assertEquals(requestModel.getAppointmentId(), capturedReview.getAppointmentId());
+        assertEquals(requestModel.getComment(), capturedReview.getComment());
+        assertEquals(requestModel.getRating(), capturedReview.getRating());
+        // Note: Direct comparison of LocalDateTime.now() might not be accurate due to processing time
+        assertNotNull(capturedReview.getReviewDate());
+        assertEquals(requestModel.getMechanicReply(), capturedReview.getMechanicReply());
+
+        assertEquals(expectedResponseModel, actualResponseModel);
+    }
 }
+
+
+
+
+
+
+
