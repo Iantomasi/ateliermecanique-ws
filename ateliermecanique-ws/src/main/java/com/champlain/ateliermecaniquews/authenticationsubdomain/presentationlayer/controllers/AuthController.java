@@ -31,6 +31,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.mail.MessagingException;
@@ -196,7 +197,6 @@ public class AuthController {
         return ResponseEntity.ok().build();
 
     }
-
 
     private ResponseEntity<JWTResponse> generateResponse(User user) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());

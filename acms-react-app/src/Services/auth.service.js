@@ -41,7 +41,6 @@ class AuthService {
     resetPassword(password){
         return axios.post(`${API_URL}reset-password`, {password},{ headers: authHeader() });
     }
-
     getCurrentUser(){
         return JSON.parse(sessionStorage.getItem('user'));
     }

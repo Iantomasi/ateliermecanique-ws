@@ -26,8 +26,6 @@ import ReviewDetails from './Pages/Admin_Pages/Reviews/Reviews_Page/ReviewDetail
 import ResetPasswordRequest from './Pages/ResetPassword_Pages/ResetPasswordRequest.js';
 import ResetPassword from './Pages/ResetPassword_Pages/ResetPassword.js';
 
-
-
 const router = createBrowserRouter([
   {
     children  :[
