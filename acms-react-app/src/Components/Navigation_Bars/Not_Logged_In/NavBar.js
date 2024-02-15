@@ -21,8 +21,9 @@ function Navbar() {
 
         {/* Middle-aligned links */}
         <div className="flex justify-center mt-4 sm:mt-0">
+
           <a href="/about" className="text-gray-700 hover:text-gray-900 px-2 py-1">About</a>
-          <a href="#" className="text-gray-700 hover:text-gray-900 px-2 py-1">Services</a>
+          <a href="/services" className="text-gray-700 hover:text-gray-900 px-2 py-1">Services</a>
           <a href="/contact" className="text-gray-700 hover:text-gray-900 px-2 py-1">Contact</a>
         </div>
 

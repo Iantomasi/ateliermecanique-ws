@@ -176,7 +176,7 @@ class ReviewControllerIntegrationTest {
     @WithMockUser(username = "michaelw@example.com", roles = "CUSTOMER")
     void deleteReviewByReviewId_CustomerNotOwner_ReturnsForbidden() throws Exception {
         String reviewId = "reviewId1";
-        String customerId = "customerId"; // This should be different from the authenticated user ID
+        String customerId = "customerId";
 
         // Setup the behavior of the review service
         when(reviewService.isOwnerOfReview(anyString(), eq(reviewId))).thenReturn(false);

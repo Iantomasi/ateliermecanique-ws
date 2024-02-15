@@ -496,6 +496,86 @@ class "InvoiceIdentifier" as invoiceIdentifier {
 
 }
 
+' Invoice Container
+package "Review Components" <<review>> {
+' ReviewController
+class "<<controller>>\nReviewController" as reviewController {
+    - ReviewService : reviewService
+    + getAllReviews() : ResponseEntity<List<ReviewResponseModel>>
+    + getReviewByReviewId(String reviewId) : ResponseEntity<ReviewResponseModel>
+    + updateReview(String reviewId, ReviewRequestModel reviewRequestModel) : ResponseEntity<ReviewResponseModel>
+    + updateMechanicReply(String reviewId, String mechanicReply) : ResponseEntity<ReviewResponseModel>
+    + addReview(ReviewRequestModel reviewRequestModel) : ResponseEntity<ReviewResponseModel>
+    + deleteReviewByReviewId(String reviewId) : ResponseEntity<Void>
+    + isOwnerOfReview(String authenticatedUserId, String reviewId) : ResponseEntity<Boolean>
+}
+
+' ReviewService interface
+interface "ReviewService" as reviewService {
+    + getAllReviews() : List<ReviewResponseModel>
+    + getReviewByReviewId(String reviewId) : ReviewResponseModel
+    + updateReview(String reviewId, ReviewRequestModel reviewRequestModel) : ReviewResponseModel
+    + updateMechanicReply(String reviewId, String mechanicReply) : ReviewResponseModel
+    + addReview(ReviewRequestModel reviewRequestModel) : ReviewResponseModel
+    + deleteReviewByReviewId(String reviewId) : void
+    + isOwnerOfReview(String authenticatedUserId, String reviewId) : boolean
+}
+
+' ReviewServiceImpl class
+class "<<service>>\nReviewServiceImpl" as reviewServiceImpl {
+    - reviewRepository : ReviewRepository
+    - reviewResponseMapper : ReviewResponseMapper
+    - reviewRequestMapper : ReviewRequestMapper
+    + getAllReviews() : List<ReviewResponseModel>
+    + getReviewByReviewId(String reviewId) : ReviewResponseModel
+    + updateReview(String reviewId, ReviewRequestModel reviewRequestModel) : ReviewResponseModel
+    + updateMechanicReply(String reviewId, String mechanicReply) : ReviewResponseModel
+    + addReview(ReviewRequestModel reviewRequestModel) : ReviewResponseModel
+    + deleteReviewByReviewId(String reviewId) : void
+    + isOwnerOfReview(String authenticatedUserId, String reviewId) : boolean
+}
+reviewServiceImpl .up.|> reviewService
+
+' ReviewRepository interface
+interface "<<repository>>\nReviewRepository" as reviewRepository {
+        + findByReviewId(String reviewId): Review
+        + findAll(): List<Review>
+        + save(Review review) : Review
+        + deleteByReviewId(String reviewId) : void
+}
+
+' ReviewResponseMapper class
+class "<<mapper>>\nReviewResponseMapper" as reviewResponseMapper {
+    + entityToResponseModel(Review review) : ReviewResponseModel
+    + entityListToResponseModelList(List<Review> reviews) : List<ReviewResponseModel>
+}
+
+' ReviewRequestMapper class
+class "<<mapper>>\nReviewRequestMapper" as reviewRequestMapper {
+    + requestToEntity(ReviewRequestModel requestModel) : Review
+}
+
+' Review class
+class "<<entity>>\nReview" as review {
+    - id : Integer
+    - reviewId : String
+    - userId : String
+    - appointmentId : String
+    - comment : String
+    - rating : Decimal
+    - reviewDate : DateTime
+    - mechanicReply : String
+}
+
+' ReviewIdentifier class
+class "ReviewIdentifier" as reviewIdentifier {
+    - reviewId : String
+    + getReviewId() : String
+}
+
+}
+
+
 
 ' Customer Relationships
 customerController --> customerService : uses
@@ -533,6 +613,17 @@ invoiceServiceImpl --> invoiceResponseMapper : uses
 invoiceServiceImpl --> invoiceRequestMapper : uses
 invoice --> invoiceIdentifier : contains
 invoice --> customerIdentifier : has
+
+
+' Review Relationships
+reviewController --> reviewService : uses
+reviewServiceImpl --> reviewRepository : uses
+reviewServiceImpl --> reviewResponseMapper : uses
+reviewServiceImpl --> reviewRequestMapper : uses
+review --> reviewIdentifier : contains
+review --> customerIdentifier : has
+review --> appointmentIdentifier : has
+
 
 
 ' Relationships within Authentication Components
