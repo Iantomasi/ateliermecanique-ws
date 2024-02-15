@@ -109,7 +109,7 @@ public class ReviewController {
             // Return the review details with a 201 Created status
             return ResponseEntity.status(HttpStatus.CREATED).body(addedReview);
         } else {
-            // Handle the case where the review couldn't be added
+            // Handle the case where the review couldn't be added by the user
             // This could be due to a validation error or an issue with the service
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

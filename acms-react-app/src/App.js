@@ -26,7 +26,7 @@ import ReviewDetails from './Pages/Admin_Pages/Reviews/Reviews_Page/ReviewDetail
 
 import ResetPasswordRequest from './Pages/ResetPassword_Pages/ResetPasswordRequest.js';
 import ResetPassword from './Pages/ResetPassword_Pages/ResetPassword.js';
-
+import AddReview from './Pages/Admin_Pages/Customers/AddNewReview_Page/AddNewReview.js';
 
 import ReviewDetailsAdmin from './Pages/Admin_Pages/Reviews/Reviews_Page/ReviewDetailsAdmin.js';
 import Services from './Pages/Services_Pages/Services.js';
@@ -166,6 +166,10 @@ const router = createBrowserRouter([
       {
         path: "/reset-password/:token",
         element: <ResetPassword/>
+      },
+      {
+        path: "/reviews/newReview",
+        element: <AddReview/>
       }
 
     ]
