@@ -66,13 +66,15 @@ function About(){
           Whether it's routine maintenance, repairs, or friendly advice, you can count on us for top-notch care.
         </p>
       </div>
-      <div className="mt-10"> {/* Align the Trusted by to the right */}
-              <h3 className="text-xl font-semibold mb-4">Trusted by</h3>
-              <img src={autoValueLogo} alt="Auto Value" className="w-20 h-auto mx-auto md:mx-0" /> {/* Adjusted size */}
-    </div>
   </div>
   </div>
 </section>
+<section className="my-10 px-10">
+          <div className="flex flex-col items-center"> 
+            <h3 className="text-xl font-semibold mb-4">Trusted by</h3>
+            <img src={autoValueLogo} alt="Auto Value" className="w-20 h-auto" /> 
+          </div>
+        </section>
       </main>
       <Footer />
     </div>
