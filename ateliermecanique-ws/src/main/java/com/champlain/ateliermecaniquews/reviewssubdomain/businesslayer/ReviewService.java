@@ -11,6 +11,8 @@ public interface ReviewService {
     ReviewResponseModel getReviewByReviewId(String reviewId);
     ReviewResponseModel updateReview(String reviewId, ReviewRequestModel reviewResponseModel);
     ReviewResponseModel updateMechanicReply(String reviewId, String mechanicReply);
+
+    ReviewResponseModel addReview(ReviewRequestModel reviewRequestModel);
     void deleteReviewByReviewId(String reviewId);
     boolean isOwnerOfReview(String authenticatedUserId, String reviewId);
 }
