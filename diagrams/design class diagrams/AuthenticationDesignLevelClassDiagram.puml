@@ -16,7 +16,8 @@ class "<<controller>>\nAuthController" as authController {
     + facebookToken(token: String) : ResponseEntity<?>
     + authenticateUser(loginRequest: LoginRequest) : ResponseEntity<JWTResponse>
     + registerUser(signupRequest: SignupRequest) : ResponseEntity<MessageResponse>
-    + updatePassword (userId: String, password : String) : ResponseEntity<JWTResponse>
+    + resetPassword (password : ResetPasswordRequest) : ResponseEntity<String>
+    + resetPasswordRequest (email : ResetPasswordEmailRequest) : ResponseEntity<String>
     - generateResponse(user: User) : ResponseEntity<?>
 }
 
@@ -81,34 +82,6 @@ class "<<entity>>\nUserIdentifier" as userIdentifier {
 }
 
 
-' JWTResponse class
-class "\nJWTResponse" as jwtResponse {
-    + token: String
-    + type: String
-    + id: String
-    + firstName: String
-    + lastName: String
-    + phoneNumber: String
-    + email: String
-    + picture: String
-    + roles: List<String>
-}
-
-' MessageResponse class
-class "<<entity>>\nMessageResponse" as messageResponse {
-    + MessageResponse(message: String)
-}
-
-' AuthEntryPointJwt class
-class "<<utils>>\nAuthEntryPointJwt" as authEntryPointJwt {
-    + commence(request: HttpServletRequest, response: HttpServletResponse, authException: AuthenticationException): void
-}
-
-' AuthTokenFilter class
-class "<<utils>>\nAuthTokenFilter" as authTokenFilter {
-    + doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain): void
-    + parseJwt(request: HttpServletRequest): String
-}
 
 ' JwtUtils class
 class "<<utils>>\nJwtUtils" as jwtUtils {
@@ -119,69 +92,15 @@ class "<<utils>>\nJwtUtils" as jwtUtils {
     + generateResetToken(userId: String, email: String) : String
 }
 
-' UserDetailsImpl class
-class "<<utils>>\nUserDetailsImpl" as userDetailsImpl {
-    - id: Integer
-    - userId: String
-    - email: String
-    - firstName: String
-    - lastName: String
-    - phoneNumber: String
-    - password: String
-    - authorities: Collection<? extends GrantedAuthority>
-    + UserDetailsImpl(id: Integer, UUID: String, firstName: String, lastName: String, phoneNumber: String, email: String, password: String, authorities: Collection<? extends GrantedAuthority>)
-    + build(user: User): UserDetailsImpl
-    + getAuthorities(): Collection<? extends GrantedAuthority>
-    + getPassword(): String
-    + getUsername(): String
-    + isAccountNonExpired(): boolean
-    + isAccountNonLocked(): boolean
-    + isCredentialsNonExpired(): boolean
-    + isEnabled(): boolean
-    + equals(o: Object): boolean
-}
-
-' UserDetailsServiceImpl class
-class "<<utils>>\nUserDetailsServiceImpl" as userDetailsServiceImpl {
-    - userRepository: UserRepository
-    + loadUserByUsername(email: String): UserDetails
-}
-
-' WebSecurityConfig class
-class "<<utils>>\nWebSecurityConfig" as webSecurityConfig {
-    - userDetailsService: UserDetailsServiceImpl
-    - unauthorizedHandler: AuthEntryPointJwt
-    + authenticationJwtTokenFilter(): AuthTokenFilter
-    + authenticationProvider(): DaoAuthenticationProvider
-    + passwordEncoder(): PasswordEncoder
-    + authenticationManager(authConfig: AuthenticationConfiguration): AuthenticationManager
-    + filterChain(http: HttpSecurity): SecurityFilterChain
-    + corsConfigurationSource(): CorsConfigurationSource
-}
-
 ' Relationships
-
-authController --|> oAuthService: uses
-oAuthService --|> tokenServiceOAuth: uses
-tokenServiceOAuth --|> userDetailsServiceImpl: uses
-userDetailsServiceImpl --|> userDetailsImpl: uses
-userDetailsImpl --|> roleClass: uses
-authController --|> userDetailsServiceImpl: uses
-userDetailsServiceImpl --|> userRepository: uses
-authController --|> userDetailsImpl: uses
-authController --|> userRepository: uses
-authController --|> jwtResponse: creates
-authController --|> messageResponse: creates
-authController --|> jwtUtils: uses
-authController --|> roleRepository: uses
-userDetailsImpl --|> userModified: creates
-userModified --|> userIdentifier: contains
-userModified --|> roleClass: contains
-userModified --|> ERole: contains
-webSecurityConfig --|> userDetailsServiceImpl: uses
-webSecurityConfig --|> authEntryPointJwt: creates
-webSecurityConfig --|> authTokenFilter: creates
-webSecurityConfig --|> roleRepository: uses
-webSecurityConfig --|> jwtUtils: uses
+authController -- userModified : uses
+authController -- userRepository : uses
+authController -- oAuthService: uses
+oAuthService -- tokenServiceOAuth: uses
+authController -- jwtUtils: uses
+authController -- roleRepository: uses
+userModified -- userIdentifier: contains
+userModified -- roleClass: contains
+userModified -- ERole: contains
 
 @enduml
