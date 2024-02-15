@@ -3,11 +3,14 @@ import NavBar from '../../Components/Navigation_Bars/Not_Logged_In/NavBar.js';
 import Footer from '../../Components/Footer/Footer.js';
 import userService from '../../Services/user.service.js';
 import authService from '../../Services/auth.service.js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 function ResetPasswordRequest() {
     const [email, setEmail] = useState("");
     const [publicContent, setPublicContent] = useState(null);
     const [message, setMessage] = useState('');
+    const [resetEmailSent, setResetEmailSent] = useState(false);
 
     useEffect(() => {
         userService.getPulicContent()
@@ -29,7 +32,7 @@ function ResetPasswordRequest() {
         authService.resetPasswordRequest(email)
             .then(response => { 
                 if(response.status === 200) {
-                    alert("Password reset request sent. Please check your email.");
+                    setResetEmailSent(true);
                 }
             })
             .catch(error => {
@@ -40,34 +43,41 @@ function ResetPasswordRequest() {
                 }
             });
     }
-    
-
 
     return (
-        <div className="flex flex-col   min-h-screen">
+        <div className="flex flex-col min-h-screen">
             <NavBar />
             <main className="flex-grow flex items-center justify-center">
                 {publicContent === true ? (
                     <div className="container mx-auto max-w-md mt-10 border rounded-xl p-10 border-black shadow-xl">
-                        <h1 className="text-3xl  mb-6">Reset Password</h1>
-                        <form onSubmit={handleResetPasswordRequest}>
-                            <input
-                                className="w-full px-4 py-2 mb-4 rounded border bg-gray-100 focus:border-gray-500 focus:outline-none"
-                                type="email"
-                                placeholder="Enter your email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            />
-                            <button
-                                className="w-full px-4 py-2 bg-gray-200 text-black border-none rounded hover:bg-gray-400"
-                                type="submit"
-                            >
-                                Reset Password
-                            </button>
-                        </form>
-                        {message && (
-                            <p className="mt-4 text-red-500">{message}</p>
+                        {resetEmailSent ? (
+                            <div className="text-center">
+                                <FontAwesomeIcon icon={faCheckCircle} className="text-green-500 text-5xl mb-4" />
+                                <p className="text-xl mb-4">Password reset request sent. Please check your email.</p>
+                            </div>
+                        ) : (
+                            <>
+                                <h1 className="text-3xl mb-6">Reset Password</h1>
+                                <form onSubmit={handleResetPasswordRequest}>
+                                    <input
+                                        className="w-full px-4 py-2 mb-4 rounded border bg-gray-100 focus:border-gray-500 focus:outline-none"
+                                        type="email"
+                                        placeholder="Enter your email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                    />
+                                    <button
+                                        className="w-full px-4 py-2 bg-gray-200 text-black border-none rounded hover:bg-gray-400"
+                                        type="submit"
+                                    >
+                                        Reset Password
+                                    </button>
+                                </form>
+                                {message && (
+                                    <p className="mt-4 text-red-500">{message}</p>
+                                )}
+                            </>
                         )}
                     </div>
                 ) : (

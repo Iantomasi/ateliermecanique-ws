@@ -6,7 +6,6 @@ services:
       - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - REACT_APP_BACKEND_URL=https://atelier-java.onrender.com
     depends_on:
       mysql1:
         condition: service_healthy
