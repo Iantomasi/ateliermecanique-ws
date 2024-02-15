@@ -24,7 +24,7 @@ function Navbar() {
 
           <div className="flex items-center">
             <a href="/about" className="text-black px-4">About</a>
-            <a href="#" className="text-black px-4">Services</a>
+            <a href="/services" className="text-black px-4">Services</a>
             <a href="/contact" className="text-black px-4">Contact</a>
           </div>
         </div>

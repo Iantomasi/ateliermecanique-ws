@@ -29,6 +29,8 @@ import ResetPassword from './Pages/ResetPassword_Pages/ResetPassword.js';
 
 
 import ReviewDetailsAdmin from './Pages/Admin_Pages/Reviews/Reviews_Page/ReviewDetailsAdmin.js';
+import Services from './Pages/Services_Pages/Services.js';
+
 
 
 import About from './Pages/About_Pages/About.js';
@@ -48,6 +50,10 @@ const router = createBrowserRouter([
       {
         path : "/about",
         element: <About/>
+      },
+      {
+        path : "/services",
+        element: <Services/>
       },
       {
         path : "/login",

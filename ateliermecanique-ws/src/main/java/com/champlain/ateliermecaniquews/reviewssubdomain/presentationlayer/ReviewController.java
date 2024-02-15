@@ -73,7 +73,6 @@ public class ReviewController {
                 // It's a customer, verify ownership of the review
                 UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
                 String authenticatedUserId = userDetails.getUserId();
-                // Assuming ReviewService or UserRepository can validate ownership
                 boolean isOwner = reviewService.isOwnerOfReview(authenticatedUserId, reviewId);
                 if (isOwner) {
                     reviewService.deleteReviewByReviewId(reviewId);
@@ -83,7 +82,6 @@ public class ReviewController {
                 }
             }
         } catch (Exception e) {
-            // Consider logging the exception
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

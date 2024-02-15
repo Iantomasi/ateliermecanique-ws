@@ -1,0 +1,34 @@
+@startuml
+title UpdateMechanicReply System Sequence Diagram (Admin)
+
+actor Mechanic
+
+participant ReviewController as "<<Controller>>\nReviewController"
+participant ReviewService as "<<Service>>\nReviewService"
+participant ReviewRepository as "<<Repository>>\nReviewRepository"
+participant Database as "<<Database>>\nDatabase"
+
+Mechanic -> ReviewController: PUT /api/v1/reviews/{reviewId}/reply
+activate ReviewController
+
+ReviewController -> ReviewService: updateMechanicReply(reviewId, mechanicReply)
+activate ReviewService
+
+ReviewService -> ReviewRepository: updateMechanicReply(reviewId, mechanicReply)
+activate ReviewRepository
+
+ReviewRepository -> Database: UPDATE reviews SET mechanicReply = mechanicReply WHERE reviewId = reviewId
+activate Database
+
+Database --> ReviewRepository: UpdateConfirmation
+deactivate Database
+
+ReviewRepository --> ReviewService: UpdateConfirmation
+deactivate ReviewRepository
+
+ReviewService --> ReviewController: ReviewResponseModel
+deactivate ReviewService
+
+ReviewController --> Mechanic: ReviewResponseModel
+deactivate ReviewController
+@enduml
