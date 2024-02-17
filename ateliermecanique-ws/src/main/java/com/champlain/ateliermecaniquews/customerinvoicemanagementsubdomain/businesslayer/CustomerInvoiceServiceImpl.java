@@ -128,7 +128,4 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService{
 
         return customerInvoiceResponseMapper.entityToResponseModel(customerInvoiceRepository.save(invoice));
     }
-
-
-
 }

@@ -17,7 +17,6 @@ function Login() {
     const google = window.google;
     const navigate = useNavigate();
     const googleButton = useRef(null);
-    const REDIRECT_URI = window.location.href;
 
 
     const [publicContent, setPublicContent] = useState(null);
@@ -145,7 +144,7 @@ function Login() {
                 <form className="text-center max-w-md mx-auto pb-16" onSubmit={handleLogin}>
                   <input className="w-full h-16 px-4 my-4 rounded border bg-gray-100 focus:border-gray-500 focus:outline-none" type="email" placeholder="Enter your email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                   <input className="w-full h-16 px-4 my-4 rounded border bg-gray-100 focus:border-gray-500 focus:outline-none" type="password" placeholder="Enter your password"  value={password} onChange={(e) => setPassword(e.target.value)} required />
-                  <a className="text-blue-500" href='/reset-password-request'>Forgot Password?</a>
+                  <a className="text-blue-500" href='#'>Forgot Password?</a>
                   <button className="w-full h-16 px-4 my-4 bg-gray-200 text-black border-none cursor-pointer transition duration-300 hover:bg-gray-400 rounded" type='submit'>Login</button>
                 </form>
                 <div className="text-center mb-8 mt-5">

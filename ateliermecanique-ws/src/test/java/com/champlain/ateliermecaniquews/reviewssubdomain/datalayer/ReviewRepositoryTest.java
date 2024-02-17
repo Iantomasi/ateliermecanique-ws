@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,15 +25,11 @@ class ReviewRepositoryTest {
     @Autowired
     private ReviewRepository reviewRepository;
 
-    @Autowired
-    private TestEntityManager entityManager;
-
     private final ReviewRequestMapper requestMapper = Mappers.getMapper(ReviewRequestMapper.class);
     private final ReviewResponseMapper responseMapper = Mappers.getMapper(ReviewResponseMapper.class);
 
     private String savedReviewId;
     private String savedCustomerId;
-    private Review savedReview2;
 
 
 
@@ -47,14 +42,11 @@ class ReviewRepositoryTest {
         Review savedReview = reviewRepository.save(newReview);
         savedReviewId = savedReview.getReviewIdentifier().getReviewId();
         savedCustomerId = savedReview.getCustomerId();
-        Review newReview2 = new Review();
-        savedReview2 = entityManager.persist(newReview2);
     }
 
     @AfterEach
     void tearDown() {
         reviewRepository.deleteAll();
-        entityManager.clear();
     }
 
     @Test
@@ -124,14 +116,14 @@ class ReviewRepositoryTest {
 
         // Then
         assertNotNull(responseModels);
-        assertEquals(4, responseModels.size());
+        assertEquals(3, responseModels.size());
 
-        ReviewResponseModel response1 = responseModels.get(2);
+        ReviewResponseModel response1 = responseModels.get(1);
         assertEquals(review1.getCustomerId(), response1.getCustomerId());
         assertEquals(review1.getComment(), response1.getComment());
         assertEquals(review1.getRating(), response1.getRating());
 
-        ReviewResponseModel response2 = responseModels.get(3);
+        ReviewResponseModel response2 = responseModels.get(2);
         assertEquals(review2.getCustomerId(), response2.getCustomerId());
         assertEquals(review2.getComment(), response2.getComment());
         assertEquals(review2.getRating(), response2.getRating());
@@ -197,18 +189,6 @@ class ReviewRepositoryTest {
         // Assert
         assertFalse(foundReviewOpt.isPresent(), "Review should not be found with non-existing reviewId and customerId");
     }
-
-
-    @Test
-    void findOptionalReviewByReviewIdentifier_ReviewId_ReviewExists() {
-        // Execute
-        Optional<Review> foundReview = reviewRepository.findOptionalReviewByReviewIdentifier_ReviewId(savedReview2.getReviewIdentifier().getReviewId());
-
-        // Verify
-        assertTrue(foundReview.isPresent(), "Review should be found");
-        assertEquals(savedReview2.getId(), foundReview.get().getId(), "Found review should have the same ID as the saved review");
-    }
-
 
 
 }

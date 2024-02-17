@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -150,35 +149,5 @@ class ReviewControllerUnitTest {
         // Assert
         assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
     }
-
-    @Test
-    void addReview_failure_shouldReturnBadRequest() {
-        // Arrange
-        ReviewRequestModel requestModel = new ReviewRequestModel(
-                "testCustomerId",
-                "testAppointmentId",
-                "Poor service", // Assume this fails validation
-                2.0,
-                LocalDateTime.now(),
-                null
-        );
-
-        when(reviewService.addReview(requestModel)).thenReturn(null); // Simulate failure
-
-        // Act
-        ResponseEntity<ReviewResponseModel> response = reviewController.addReview(requestModel);
-
-        // Assert
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertNull(response.getBody()); // Expect no body for a BAD_REQUEST
-
-        verify(reviewService, times(1)).addReview(requestModel);
-    }
-
-
-
-
-
-
 
 }

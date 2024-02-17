@@ -14,9 +14,6 @@ function Reviews(){
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [publicContent, setPublicContent] = useState(null);
     const [message, setMessage] = useState('');
-    const handleCustomerClick = () => {
-        navigate(`/reviews/newReview`);
-      };
 
     useEffect(() => {
         getReviews();
@@ -59,10 +56,6 @@ function Reviews(){
                       placeholder="Search..."
                     />
                     <span className="text-gray-400 cursor-pointer">&#128269;</span>
-
-                    <button className="text-white border-none px-4 py-2 rounded font-bold transition duration-300 hover:scale-110 bg-black" onClick={() =>{handleCustomerClick()}}>
-                      Add+
-                    </button>
                   </div>
                                 </div>
                             </div>

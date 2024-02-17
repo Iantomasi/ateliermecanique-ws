@@ -18,6 +18,4 @@ public class ReviewRequestModel {
     private Double rating;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
     LocalDateTime reviewDate;
-    private String mechanicReply;
-
 }

@@ -8,8 +8,6 @@ import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.UserId
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.RoleRepository;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request.LoginRequest;
-import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request.ResetPasswordEmailRequest;
-import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request.ResetPasswordRequest;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request.SignupRequest;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Response.JWTResponse;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Response.MessageResponse;
@@ -23,13 +21,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -50,16 +44,10 @@ class AuthControllerTest {
     private oAuthService oAuthService;
 
     @Mock
-    private UserRepository userRepository;
-
-    @Mock
     private JwtUtils jwtUtils;
 
     @Mock
     private EmailService emailService;
-
-    @Mock
-    private PasswordEncoder encoder;
 
     @Mock
     private UserDetailsService userDetailsService;
@@ -260,113 +248,6 @@ class AuthControllerTest {
         JWTResponse jwtResponse = (JWTResponse) responseEntity.getBody();
         assertNotNull(jwtResponse.getEmail());
     }
-
-    @Test
-    public void testResetPasswordRequest() throws Exception {
-        // Prepare test data
-        String email = "test@example.com";
-        ResetPasswordEmailRequest emailRequest = new ResetPasswordEmailRequest(email);
-        User user = new User();
-        user.setEmail(email);
-
-        // Mock repository behavior
-        when(userRepository.existsByEmail(email)).thenReturn(true);
-        when(userRepository.findUserByEmail(email)).thenReturn(user);
-
-        // Mock JWT generation
-        String jwtToken = "mocked_jwt_token";
-        when(jwtUtils.generateJwtResponseForOAuth(email)).thenReturn(jwtToken);
-
-        // Call the method under test
-        ResponseEntity<String> response = authController.resetPasswordRequest(emailRequest);
-
-        // Verify email service interaction
-        verify(emailService).sendEmail(eq(email), eq("Password Reset"), eq("passwordReset.html"), anyMap());
-
-        // Verify response
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNull(response.getBody());
-    }
-
-    @Test
-    public void testResetPasswordRequest_NotFound() throws Exception {
-        // Prepare test data
-        String email = "test@example.com";
-        ResetPasswordEmailRequest emailRequest = new ResetPasswordEmailRequest(email);
-
-        // Mock repository behavior
-        when(userRepository.existsByEmail(email)).thenReturn(false);
-
-        // Call the method under test
-        ResponseEntity<String> response = authController.resetPasswordRequest(emailRequest);
-
-        // Verify response
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertEquals("No account exists with email: " + email, response.getBody());
-    }
-
-    @Test
-    void testResetPassword_CustomerRole_SuccessfulReset() {
-        // Arrange
-        Authentication authentication = mock(Authentication.class);
-
-
-        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_CUSTOMER"));
-
-        UserDetailsImpl userDetails = new UserDetailsImpl(1, new UserIdentifier().getUserId(), "John", "Vegas", "444", "john@email.com", "pass", authorities);
-        when(authentication.getPrincipal()).thenReturn(userDetails);
-
-        User user = User.builder()
-                .userIdentifier(new UserIdentifier())
-                .firstName("John")
-                .lastName("Doe")
-                .email(userDetails.getEmail())
-                .password("oldPassword") // Old password
-                .build();
-        when(userRepository.findUserByEmail(userDetails.getEmail())).thenReturn(user);
-
-        String newPassword = "newPassword";
-        ResetPasswordRequest resetPasswordRequest = new ResetPasswordRequest(newPassword);
-        String encodedPassword = "encodedPassword"; // Encoded password
-        when(encoder.encode(newPassword)).thenReturn(encodedPassword);
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        // Act
-        ResponseEntity<String> response = authController.resetPassword(resetPasswordRequest);
-
-        // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-
-        // Verify that the password is updated
-        verify(userRepository).save(argThat(savedUser -> savedUser.getPassword().equals(encodedPassword)));
-    }
-
-    @Test
-    void testResetPassword_CustomerRole_NotFound() {
-        // Arrange
-        Authentication authentication = mock(Authentication.class);
-      
-
-        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_CUSTOMER"));
-
-        UserDetailsImpl userDetails = new UserDetailsImpl(1, new UserIdentifier().getUserId(), "John", "Vegas", "444", "john@email.com", "pass", authorities);
-        when(authentication.getPrincipal()).thenReturn(userDetails);
-
-        User user = null; // No user found for the authenticated email
-        when(userRepository.findUserByEmail(userDetails.getEmail())).thenReturn(user);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        // Act
-        ResponseEntity<String> response = authController.resetPassword(new ResetPasswordRequest("newPassword"));
-
-        // Assert
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertEquals("No account exists with email: " + userDetails.getEmail(), response.getBody());
-    }
-
 
 
 
