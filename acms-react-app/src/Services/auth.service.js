@@ -1,5 +1,4 @@
 import axios from 'axios';
-import authHeader from './auth-header';
 
 const API_URL = `${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8080'}/api/v1/auth/`;
 
@@ -34,13 +33,6 @@ class AuthService {
         });
     }
 
-    resetPasswordRequest(email){
-        return axios.post(`${API_URL}reset-password-request`, {email});
-    }
-
-    resetPassword(password){
-        return axios.post(`${API_URL}reset-password`, {password},{ headers: authHeader() });
-    }
     getCurrentUser(){
         return JSON.parse(sessionStorage.getItem('user'));
     }

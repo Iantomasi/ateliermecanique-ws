@@ -65,7 +65,12 @@ public class WebSecurityConfig{
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.anyRequest().permitAll()
+                        auth.
+                                requestMatchers("/api/v1/auth/**").permitAll()
+                                .requestMatchers("/api/v1/content/**").permitAll()
+                                .requestMatchers("/api/v1/reviews").permitAll()
+                                .requestMatchers("/api/v1/test/**").permitAll() // Added this line
+                                .anyRequest().authenticated()
                 )
                                         .csrf(AbstractHttpConfigurer::disable);
 
@@ -81,7 +86,7 @@ public class WebSecurityConfig{
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("https://localhost:3000", "https://react-atelier.onrender.com"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://atelier-mecanique.servishop.com.br"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
