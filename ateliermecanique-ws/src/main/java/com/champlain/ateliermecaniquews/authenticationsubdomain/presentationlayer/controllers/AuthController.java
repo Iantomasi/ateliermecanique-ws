@@ -8,6 +8,8 @@ import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.UserId
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.RoleRepository;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.repositories.UserRepository;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request.LoginRequest;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request.ResetPasswordEmailRequest;
+import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request.ResetPasswordRequest;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Request.SignupRequest;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Response.JWTResponse;
 import com.champlain.ateliermecaniquews.authenticationsubdomain.presentationlayer.Payload.Response.MessageResponse;
@@ -17,9 +19,10 @@ import com.champlain.ateliermecaniquews.emailsubdomain.businesslayer.EmailServic
 import com.nimbusds.jose.JOSEException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.mapstruct.ap.shaded.freemarker.core.ReturnInstruction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,6 +31,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.mail.MessagingException;
@@ -65,7 +69,7 @@ public class AuthController {
 
 
     @PostMapping("/google-login/{JWT}")
-    public ResponseEntity<?> googleLogin(@PathVariable String JWT) {
+    public ResponseEntity<JWTResponse> googleLogin(@PathVariable String JWT) {
         try {
             User user = oAuthService.googleLogin(JWT);
             Map<String, String> parameters = new HashMap<>();
@@ -79,7 +83,7 @@ public class AuthController {
     }
 
     @PostMapping("/facebook-login/{token}")
-    public ResponseEntity<?> facebookToken(@PathVariable String token) throws MessagingException {
+    public ResponseEntity<JWTResponse> facebookToken(@PathVariable String token) throws MessagingException {
         User user = oAuthService.facebookLogin(token);
         Map<String, String> parameters = new HashMap<>();
         parameters.put("customerName", user.getFirstName()+" "+user.getLastName());
@@ -98,7 +102,7 @@ public class AuthController {
 
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest){
+    public ResponseEntity<JWTResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest){
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),loginRequest.getPassword()));
 
@@ -121,7 +125,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest) throws MessagingException {
+    public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signupRequest) throws MessagingException {
         if (userRepository.existsByEmail(signupRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
@@ -155,7 +159,46 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
-    private ResponseEntity<?> generateResponse(User user) {
+    @PostMapping("/reset-password-request")
+    public ResponseEntity<String> resetPasswordRequest(@RequestBody ResetPasswordEmailRequest emailRequest) throws Exception {
+        if(userRepository.existsByEmail(emailRequest.getEmail())){
+            User user = userRepository.findUserByEmail(emailRequest.getEmail());
+
+            String jwt = jwtUtils.generateJwtResponseForOAuth(emailRequest.getEmail());
+
+            Map<String, String> parameters = new HashMap<>();
+            parameters.put("token",jwt);
+
+            emailService.sendEmail(user.getEmail(),"Password Reset","passwordReset.html",parameters);
+
+            return ResponseEntity.ok().build();
+        } else {
+            String message = "No account exists with email: " + emailRequest.getEmail();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
+        }
+    }
+
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        String email = userDetails.getEmail();
+
+        User user = userRepository.findUserByEmail(email);
+        if(user == null){
+            String message = "No account exists with email: " + email;
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
+        }
+        user.setPassword(encoder.encode(request.getPassword()));
+        userRepository.save(user);
+
+        return ResponseEntity.ok().build();
+
+    }
+
+    private ResponseEntity<JWTResponse> generateResponse(User user) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

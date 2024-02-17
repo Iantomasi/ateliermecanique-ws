@@ -10,7 +10,7 @@ function Footer() {
         <a href="#" className="text-white hover:text-gray-300 px-2">FAQ</a>
       </nav>
       <p className="text-xs md:text-sm">Based in Montreal, Canada</p>
-      <p className="text-xs md:text-sm">&copy; 2023 All rights reserved. Powered by RightHandsome, Inc.</p>
+      <p className="text-xs md:text-sm">&copy; 2023 All rights reserved. Powered by RightHandsome, Inc. SPRINT4</p>
     </footer>
   );
 }

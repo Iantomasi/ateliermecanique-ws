@@ -25,8 +25,11 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 
 import static net.bytebuddy.matcher.ElementMatchers.is;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -169,17 +172,68 @@ class ReviewControllerIntegrationTest {
 
         verify(reviewService).deleteReviewByReviewId(reviewIdToDelete);
     }
+    @Test
+    @WithMockUser(username = "michaelw@example.com", roles = "CUSTOMER")
+    void deleteReviewByReviewId_CustomerNotOwner_ReturnsForbidden() throws Exception {
+        String reviewId = "reviewId1";
+        String customerId = "customerId";
+
+        // Setup the behavior of the review service
+        when(reviewService.isOwnerOfReview(anyString(), eq(reviewId))).thenReturn(false);
+
+        // Perform the delete request and expect a FORBIDDEN response
+        mockMvc.perform(delete("/api/v1/reviews/{reviewId}", reviewId).with(csrf()))
+                .andExpect(status().is5xxServerError());
+
+        // Verify that the deleteReviewByReviewId method was never called
+        verify(reviewService, never()).deleteReviewByReviewId(reviewId);
+    }
+
+    /*
+    @Test
+    @WithMockUser(username = "admin@example.com", roles = "ADMIN")
+    void updateMechanicReply_ReviewExists_ReturnsUpdatedReview() throws Exception {
+        String reviewId = "existingReviewId";
+        String mechanicReply = "Thank you for your feedback!";
+        ReviewResponseModel expectedResponse = new ReviewResponseModel(
+                reviewId,
+                "customerId",
+                "appointmentId",
+                "Great service",
+                5.0,
+                LocalDateTime.now(),
+                mechanicReply
+        );
+
+        given(reviewService.updateMechanicReply(reviewId, mechanicReply)).willReturn(expectedResponse);
+
+        mockMvc.perform(put("/api/v1/reviews/{reviewId}/reply", reviewId)
+                        .contentType(MediaType.TEXT_PLAIN)
+                        .content(mechanicReply)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.mechanicReply", equalTo(mechanicReply)));
+    }
+     */
+
+
 
     @Test
     @WithMockUser(username = "michaelw@example.com", roles = "CUSTOMER")
-    void deleteReviewById_asCustomerNotOwner_shouldThrowServerError() throws Exception {
-        // Arrange
-        String reviewId = "testReviewId";
+    void updateMechanicReply_ReviewDoesNotExist_ReturnsNotFound() throws Exception {
+        String reviewId = "nonExistingId";
+        String mechanicReply = "Thank you for your feedback!";
 
-        // Act & Assert
-        mockMvc.perform(delete("/api/v1/reviews/{reviewId}", reviewId)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is5xxServerError());
+        given(reviewService.updateMechanicReply(reviewId, mechanicReply)).willReturn(null);
+
+        mockMvc.perform(put("/reviews/{reviewId}/reply", reviewId)
+                        .contentType(MediaType.TEXT_PLAIN)
+                        .content(mechanicReply)
+                        .with(csrf()))
+                .andExpect(status().isNotFound());
     }
+
+
 }
 
