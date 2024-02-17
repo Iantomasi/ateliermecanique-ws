@@ -24,6 +24,16 @@ import Contact from './Pages/Contact_Pages/Contact.js';
 import Reviews from './Pages/Admin_Pages/Reviews/Reviews_Page/Reviews.js';
 import ReviewDetails from './Pages/Admin_Pages/Reviews/Reviews_Page/ReviewDetails.js';
 
+import ResetPasswordRequest from './Pages/ResetPassword_Pages/ResetPasswordRequest.js';
+import ResetPassword from './Pages/ResetPassword_Pages/ResetPassword.js';
+import AddReview from './Pages/Admin_Pages/Customers/AddNewReview_Page/AddNewReview.js';
+import Services from './Pages/Services_Pages/Services.js';
+
+
+
+import About from './Pages/About_Pages/About.js';
+
+
 const router = createBrowserRouter([
   {
     children  :[
@@ -34,6 +44,14 @@ const router = createBrowserRouter([
       {
         path : "/contact",
         element: <Contact/>
+      },
+      {
+        path : "/about",
+        element: <About/>
+      },
+      {
+        path : "/services",
+        element: <Services/>
       },
       {
         path : "/login",
@@ -138,6 +156,18 @@ const router = createBrowserRouter([
       {
         path: "/user/reviews/:reviewId",
         element: <ReviewDetails/>
+      },
+      {
+        path: "/reset-password-request",
+        element: <ResetPasswordRequest/>
+      },
+      {
+        path: "/reset-password/:token",
+        element: <ResetPassword/>
+      },
+      {
+        path: "/reviews/newReview",
+        element: <AddReview/>
       }
 
     ]

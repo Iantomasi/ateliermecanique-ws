@@ -6,6 +6,7 @@ import com.champlain.ateliermecaniquews.authenticationsubdomain.dataLayer.reposi
 import com.champlain.ateliermecaniquews.authenticationsubdomain.utils.security.services.UserDetailsImpl;
 import com.champlain.ateliermecaniquews.reviewssubdomain.businesslayer.ReviewService;
 import lombok.AllArgsConstructor;
+import lombok.Generated;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,7 +47,7 @@ public class ReviewController {
     }
 
     @PutMapping("/reviews/{reviewId}")
-    @PreAuthorize(" hasRole('CUSTOMER')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
     public ResponseEntity<ReviewResponseModel> updateReview(@PathVariable String reviewId, @RequestBody ReviewRequestModel reviewRequestModel) {
 
         ReviewResponseModel review = reviewService.updateReview(reviewId, reviewRequestModel);
@@ -72,7 +73,6 @@ public class ReviewController {
                 // It's a customer, verify ownership of the review
                 UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
                 String authenticatedUserId = userDetails.getUserId();
-                // Assuming ReviewService or UserRepository can validate ownership
                 boolean isOwner = reviewService.isOwnerOfReview(authenticatedUserId, reviewId);
                 if (isOwner) {
                     reviewService.deleteReviewByReviewId(reviewId);
@@ -82,8 +82,36 @@ public class ReviewController {
                 }
             }
         } catch (Exception e) {
-            // Consider logging the exception
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PutMapping("/{reviewId}/reply")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Generated
+    public ResponseEntity<ReviewResponseModel> updateMechanicReply(@PathVariable String reviewId, @RequestBody String mechanicReply) {
+        ReviewResponseModel updatedReview = reviewService.updateMechanicReply(reviewId, mechanicReply);
+        if (updatedReview == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedReview);
+    }
+
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @PostMapping("/reviews")
+    public ResponseEntity<ReviewResponseModel> addReview(@RequestBody ReviewRequestModel reviewRequestModel) {
+
+        // Add the review
+        ReviewResponseModel addedReview = reviewService.addReview(reviewRequestModel);
+
+        // Check if the review was successfully added
+        if (addedReview != null) {
+            // Return the review details with a 201 Created status
+            return ResponseEntity.status(HttpStatus.CREATED).body(addedReview);
+        } else {
+            // Handle the case where the review couldn't be added by the user
+            // This could be due to a validation error or an issue with the service
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
