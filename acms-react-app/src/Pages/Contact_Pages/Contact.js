@@ -46,7 +46,7 @@ function Contact() {
       <main className="flex-grow flex flex-col justify-center">
         {publicContent === true ? ( 
         <section className="flex flex-col hero bg-white">
-            <div className="flex flex-col md:flex-row md:ml-10 md:mr-10 lg:ml-32 lg:mr-32 md:-mt-20">
+            <div className="flex flex-col md:flex-row md:ml-10 md:mr-10 lg:ml-32 lg:mr-32 md:-mt-10">
                 <div className="flex flex-col justify-center md:w-1/2 lg:w-2/5">
                     <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold">
                         contact us
@@ -81,7 +81,7 @@ function Contact() {
             </div>
         </section>
                 
-        ) : (
+         ) : (
           <div className="text-center">
             {publicContent === false ? <h1 className='text-4xl'>{message.status} {message.error} </h1> : 'Error'}
             {message && (
@@ -90,7 +90,7 @@ function Contact() {
               </>
             )}
           </div>
-        )} 
+        )}  
       </main>
       <Footer />
     </div>
