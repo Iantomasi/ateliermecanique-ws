@@ -103,144 +103,84 @@ export default function Calendar() {
         }
     }, [selectDate, currentDate]);
     return (
-        <div className="flex flex-col min-h-screen">
-            {publicContent ? (
-            <div>
-                <Navbar />
-                <div className="flex justify-center items-center bg-gray-300 w-full py-6">
-                    <p className="text-2xl font-bold">New Appointment</p>
-                </div>
-                        <div className="flex justify-center items-center h-screen">
-                            <div
-                                className="bg-gray-50 p-6 rounded shadow-lg"
-                                style={{ maxWidth: '1500px', maxHeight: '750px' }}
-                            >
-                                <div className="flex flex-col sm:flex-row gap-10 sm:divide-x justify-center items-center">
-                                    <div className="flex flex-col gap-4">
-                                        <CustomerInfo
-                                            updateCustomerId={setCustomerId}
-                                            updateVehicleId={setVehicleId}
-                                        />
-                                        <ServiceList onSelectService={handleServiceSelect} />
-                                    </div>
-                                <div className="w-96 h-96 ">
-                                    <div className="flex justify-between items-center">
+        <div className="flex flex-col min-h-screen"> {/* Flex container with min height of screen */}
+            <div className="flex-grow"> {/* Content grows to fill available space */}
+                {publicContent ? (
+                    <div>
+                        <Navbar />
+                        <div className="flex justify-center items-center bg-gray-300 w-full py-6">
+                            <p className="text-2xl font-bold">New Appointment</p>
+                        </div>
+                            <div className="flex flex-col sm:flex-row gap-10 sm:divide-x divide-gray-200 justify-center items-center">
+                                <div className="flex flex-col gap-4">
+                                    <CustomerInfo updateCustomerId={setCustomerId} updateVehicleId={setVehicleId} />
+                                    <ServiceList onSelectService={handleServiceSelect} />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <div className="flex justify-between items-center mb-4">
                                         <h1 className="select-none font-semibold">
                                             {months[today.month()]}, {today.year()}
                                         </h1>
-                                        <div className="flex gap-10 items-center ">
-                                            <GrFormPrevious
-                                                className="w-5 h-5 cursor-pointer hover:scale-105 transition-all"
-                                                onClick={() => {
-                                                    setToday(today.month(today.month() - 1));
-                                                }}
-                                            />
-                                            <h1
-                                                className=" cursor-pointer hover:scale-105 transition-all"
-                                                onClick={() => {
-                                                    setToday(currentDate);
-                                                }}
-                                            >
+                                        <div className="flex gap-4 items-center">
+                                            <GrFormPrevious className="w-5 h-5 cursor-pointer hover:scale-105 transition-all" onClick={() => setToday(today.subtract(1, 'month'))} />
+                                            <h1 className="cursor-pointer hover:scale-105 transition-all" onClick={() => setToday(currentDate)}>
                                                 Today
                                             </h1>
-                                            <GrFormNext
-                                                className="w-5 h-5 cursor-pointer hover:scale-105 transition-all"
-                                                onClick={() => {
-                                                    setToday(today.month(today.month() + 1));
-                                                }}
-                                            />
+                                            <GrFormNext className="w-5 h-5 cursor-pointer hover:scale-105 transition-all" onClick={() => setToday(today.add(1, 'month'))} />
                                         </div>
                                     </div>
-                                    <div className="grid grid-cols-7 ">
-                                        {days.map((day, index) => {
-                                            return (
+                                    <div className="grid grid-cols-7 gap-4">
+                                        {days.map((day, index) => (
+                                            <h1 key={index} className="text-sm text-center font-medium text-gray-500 select-none">
+                                                {day}
+                                            </h1>
+                                        ))}
+                                    </div>
+                                    <div className="grid grid-cols-7 gap-4">
+                                        {generateDate(today.month(), today.year()).map(({ date, currentMonth, today: isToday }, index) => (
+                                            <div key={index} className="p-2 text-center grid place-content-center text-sm" onClick={() => handleDayClick(date)}>
                                                 <h1
-                                                    key={index}
-                                                    className="text-sm text-center h-14 w-14 grid place-content-center text-gray-500 select-none"
+                                                    className={`h-10 w-10 rounded-full grid place-content-center hover:bg-black hover:text-white transition-all cursor-pointer select-none ${
+                                                        currentMonth ? 'text-gray-700' : 'text-gray-400'
+                                                    } ${isToday ? 'bg-yellow-500 text-white' : ''} ${
+                                                        selectDate.toDate().toDateString() === date.toDate().toDateString() ? 'bg-black text-white' : ''
+                                                    }`}
                                                 >
-                                                    {day}
+                                                    {date.date()}
                                                 </h1>
-                                            );
-                                        })}
+                                            </div>
+                                        ))}
                                     </div>
-                                    <div className=" grid grid-cols-7 ">
-                                        {generateDate(today.month(), today.year()).map(
-                                            ({ date, currentMonth, today }, index) => {
-                                                return (
-                                                    <div
-                                                        key={index}
-                                                        className="p-2 text-center h-14 grid place-content-center text-sm border-t"
-                                                        onClick={() => handleDayClick(date)}
-                                                    >
-                                                        <h1
-                                                            className={cn(
-                                                                currentMonth ? "" : "text-gray-400",
-                                                                today
-                                                                    ? "bg-yellow-500 text-white"
-                                                                    : "",
-                                                                selectDate
-                                                                    .toDate()
-                                                                    .toDateString() ===
-                                                                date.toDate().toDateString()
-                                                                    ? "bg-black text-white"
-                                                                    : "",
-                                                                "h-10 w-10 rounded-full grid place-content-center hover:bg-black hover:text-white transition-all cursor-pointer select-none"
-                                                            )}
-                                                            onClick={() => {
-                                                                setSelectDate(date);
-                                                            }}
-                                                        >
-                                                            {date.date()}
-                                                        </h1>
-                                                    </div>
-                                                );
-                                            }
-                                        )}
-                                    </div>
-
-
                                 </div>
-                                <div className="h-96 w-96 sm:px-5">
-                                    <h1 className=" font-semibold">
-                                        Schedule for {selectDate.toDate().toDateString()}
-                                    </h1>
-                                    <p className="text-gray-400">No meetings for today.</p>
-                                    <TimeSlots
-                                        selectedDate={selectedDate}
-                                        onTimeSelect={handleTimeSelect}/>
-                                    <CommentBox setComments={setComments}/>
+                                <div className="flex-1 min-w-0 sm:px-5">
+                                    <h1 className="font-semibold mb-4">Schedule for {selectDate.toDate().toDateString()}</h1>
+                                    <TimeSlots selectedDate={selectedDate} onTimeSelect={handleTimeSelect} />
+                                    <CommentBox setComments={setComments} />
                                 </div>
                             </div>
-                                <div className="mt-4">
-                                    <button
-                                        className="bg-gray-300 text-gray-700 hover:bg-gray-400 font-semibold py-2 px-4 rounded-l focus:outline-none focus:shadow-outline"
-                                        type="button"
-                                    >
-                                        Cancel
-                                    </button>
-                                    <button
-                                        className="bg-gray-700 text-white hover:bg-gray-800 font-semibold py-2 px-4 rounded-r focus:outline-none focus:shadow-outline"
-                                        type="button"
-                                        onClick={handleSubmit}
-                                    >
-                                        Confirm
-                                    </button>
-                                </div>
+                            <div className="flex justify-center space-x-2 mt-4">
+                                <button className="bg-gray-300 text-gray-700 hover:bg-gray-400 font-semibold py-2 px-4 rounded-l focus:outline-none focus:shadow-outline" type="button">
+                                    Cancel
+                                </button>
+                                <button className="bg-gray-700 text-white hover:bg-gray-800 font-semibold py-2 px-4 rounded-r focus:outline-none focus:shadow-outline" type="button" onClick={handleSubmit}>
+                                    Confirm
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </div>) : (
-                    <div className="text-center">
-                        <NavBar/>
-                      {publicContent === false ? <h1 className='text-4xl'>{message.status} {message.error} </h1> : 'Error'}
-                      {message && (
+            ) : (
+                <div className="text-center">
+                    <NavBar />
+                    {publicContent === false ? <h1 className='text-4xl'>{message.status} {message.error}</h1> : 'Error'}
+                    {message && (
                         <>
-                          <h3>{message.message}</h3>
+                            <h3>{message.message}</h3>
                         </>
-                      )}
-                    </div>
-                  )}
-            <Footer/>
-        </div>
+                    )}
+                </div>
 
+            )}
+            <Footer />
+        </div>
+        </div>
     );
 }
