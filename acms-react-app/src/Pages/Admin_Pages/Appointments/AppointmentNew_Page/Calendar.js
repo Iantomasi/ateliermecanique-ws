@@ -137,14 +137,14 @@ export default function Calendar() {
                                         ))}
                                     </div>
                                     <div className="grid grid-cols-7 gap-4">
-                                        {generateDate(today.month(), today.year()).map(({ date, currentMonth, today: isToday }, index) => (
-                                            <div key={index} className="p-2 text-center grid place-content-center text-sm" onClick={() => handleDayClick(date)}>
+                                        {generateDate(today.month(), today.year()).map(({ date, currentMonth, today: isToday, isPast }, index) => (
+                                            <div key={index} className={`p-2 text-center grid place-content-center text-sm ${isPast ? 'text-gray-400 cursor-not-allowed' : 'cursor-pointer'}`} onClick={() => !isPast && handleDayClick(date)}>
                                                 <h1
-                                                    className={`h-10 w-10 rounded-full grid place-content-center hover:bg-black hover:text-white transition-all cursor-pointer select-none ${
+                                                    className={`h-10 w-10 rounded-full grid place-content-center hover:bg-black hover:text-white transition-all select-none ${
                                                         currentMonth ? 'text-gray-700' : 'text-gray-400'
                                                     } ${isToday ? 'bg-yellow-500 text-white' : ''} ${
                                                         selectDate.toDate().toDateString() === date.toDate().toDateString() ? 'bg-black text-white' : ''
-                                                    }`}
+                                                    } ${isPast ? 'bg-gray-200' : ''}`}
                                                 >
                                                     {date.date()}
                                                 </h1>
