@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../../../../Components/Navigation_Bars/Logged_In/NavBar.js';
 import Footer from '../../../../Components/Footer/Footer.js';
 import adminService from '../../../../Services/admin.service.js';
+import CustomDateTimePicker from '../../../../Components/DateTimePicker/CustomDateTimePicker.js';
+import dayjs from 'dayjs';
 
 function AddNewInvoice() {
     const navigate = useNavigate();
@@ -121,15 +123,13 @@ function AddNewInvoice() {
                                 ))}
                             </select>
 
-                            <label className="font-bold">Invoice Date (yyyy-MM-ddTHH:mm)</label>
-                            <input 
-                                type="text" 
-                                name="invoiceDate" 
-                                value={invoiceDetails.invoiceDate} 
-                                onChange={handleInputChange} 
-                                className="w-full p-4 rounded border border-gray-400 mb-5"
-                                required
-                            />
+                            <label className="font-bold">Invoice Date</label>
+<CustomDateTimePicker
+    value={invoiceDetails.invoiceDate}
+    onChange={(date) => setInvoiceDetails({ ...invoiceDetails, invoiceDate: date })}
+    className="w-full mb-5"
+    required
+/>
 
                             <label className="font-bold">Mechanic Notes</label>
                             <textarea 

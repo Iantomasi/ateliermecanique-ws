@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../../../../Components/Navigation_Bars/Logged_In/NavBar.js';
-import NavBar from '../../../../Components/Navigation_Bars/Not_Logged_In/NavBar.js';
 import Footer from '../../../../Components/Footer/Footer.js';
 import Sidebar from '../../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
 import { useParams } from 'react-router-dom';
@@ -8,31 +7,65 @@ import { useNavigate } from 'react-router-dom';
 import CustomerVehicleBlock from '../CustomerVehicleDetails_Page/CustomerVehicleBlock.js';
 import adminService from '../../../../Services/admin.service.js';
 import userService from '../../../../Services/user.service.js';
+import authService from '../../../../Services/auth.service.js'; 
 
 function CustomerVehicles() {
   const { customerId } = useParams();
   const [vehicles, setVehicles] = useState([]);
   const navigate = useNavigate();
 
+  
+  // Adjusted handleCustomerClick method
   const handleCustomerClick = (customerId) => {
-    navigate(`/admin/customers/${customerId}/vehicles/newVehicle`);
+    const currentUser = authService.getCurrentUser();
+
+    if (currentUser) {
+      const userRoles = currentUser.roles;
+
+      // Assuming 'ROLE_ADMIN' and 'ROLE_CUSTOMER' are your role identifiers
+      if (userRoles.includes('ROLE_ADMIN')) {
+        navigate(`/admin/customers/${customerId}/vehicles/newVehicle`);
+      } else if (userRoles.includes('ROLE_CUSTOMER')) {
+        navigate(`/user/customers/${customerId}/vehicles/newVehicle`);
+      } else {
+        // Handle case for unauthorized or unexpected roles
+        console.error("Unauthorized or no role found");
+        // Optionally navigate to an error page or display a message
+      }
+    } else {
+      // Handle case where there is no current user logged in
+      console.error("No user logged in");
+      // Optionally navigate to login page or display a message
+    }
   };
 
   const [publicContent, setPublicContent] = useState(null);
   const [message, setMessage] = useState('');
 
+
   useEffect(() => {
-    userService.getAdminContent()
-      .then(res => {
-        if (res.status === 200) {
+    const fetchContent = async () => {
+      try {
+        const currentUser = authService.getCurrentUser();
+        // Assuming getCurrentUser returns a full user object with a roles array
+        const userRole = currentUser.roles.includes('ROLE_ADMIN') ? 'admin' : 'customer';
+    
+        const response = userRole === 'admin' 
+          ? await userService.getAdminContent() 
+          : await userService.getUserBoard();
+  
+        if (response.status === 200) {
           setPublicContent(true);
         }
-      })
-      .catch(error => {
+      } catch (error) {
         setPublicContent(false);
-        setMessage(error.response.data);
+        // Improved error handling
+        setMessage(error.response ? error.response.data : 'An error occurred');
         console.log(error);
-      });
+      }
+    };
+  
+    fetchContent();
   }, []);
 
   useEffect(() => {
@@ -93,14 +126,14 @@ function CustomerVehicles() {
           </div>
           <div className="w-full flex justify-between">
             <div className="flex justify-around w-full">
-              <img src='/blue-car.svg' alt='car' className="w-1/3 h-auto" />
-              <img src='/car.svg' alt='car' className="w-1/3 h-auto" />
-              <img src='/moto.svg' alt='car' className="w-1/3 h-auto" />
+              <img src='/blue-car.svg' alt='car' className="w-1/3 h-2/3" />
+              <img src='/car.svg' alt='car' className="w-1/3 h-2/3" />
+              <img src='/moto.svg' alt='car' className="w-1/4 h-2/3" />
             </div>
           </div>
         </div>) : (
         <div className="flex-1 text-center">
-          <NavBar />
+          <Navbar />
           {publicContent === false ? (
             <h1 className='text-4xl'>{message.status} {message.error} </h1>
           ) : (

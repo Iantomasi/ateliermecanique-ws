@@ -2,23 +2,27 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import authService from '../../Services/auth.service';
 
-const HomeOption = ({ src, label }) => {
+const HomeOption = ({ src, label, dynamicPath }) => {
   const navigate = useNavigate();
 
   function navigateToNext() {
     const currentUser = authService.getCurrentUser();
 
-    if (currentUser) {
-      const userRoles = currentUser.roles;
+    if (!currentUser) return; // Ensure there is a current user
 
+    const userRoles = currentUser.roles;
+
+    if (dynamicPath) {
+      navigate(dynamicPath(currentUser));
+    } else {
       if (userRoles.includes('ROLE_CUSTOMER')) {
         navigate(`/user/${label}`);
       } else if (userRoles.includes('ROLE_ADMIN')) {
         navigate(`/admin/${label}`);
       }
-      // Add more conditions for other roles if needed
     }
   }
+
 
   return (
     <div

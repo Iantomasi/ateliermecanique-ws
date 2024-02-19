@@ -10,7 +10,7 @@ function AddReview() {
         customerId: '',
         appointmentId: '',
         comment: '',
-        rating: 0.0,
+        rating: 1.0,
         reviewDate: '',
         mechanicReply: ''
     });
@@ -35,7 +35,7 @@ function AddReview() {
                 if (response.status === 201) { // Assuming 201 Created is the response for a successful add
                     console.log("Review successfully added!");
                     alert("Thank you for your review!");
-                    navigate('/reviews'); // Adjust as necessary to navigate to the appropriate page
+                    navigate(-1); // Adjust as necessary to navigate to the appropriate page
                 }
             })
             .catch(error => {

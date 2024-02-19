@@ -6,6 +6,8 @@ import Footer from '../../../../Components/Footer/Footer.js';
 import Sidebar from '../../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
 import adminService from '../../../../Services/admin.service.js';
 import userService from '../../../../Services/user.service.js';
+import authService from '../../../../Services/auth.service.js';
+
 function AddNewVehicle() {
     const {customerId} = useParams();
     const [vehicleDetails, setVehicleDetails] = useState({
@@ -20,18 +22,32 @@ function AddNewVehicle() {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    userService.getAdminContent()
-      .then(response => {
-        if(response.data === "Admin Content.") {
-          setPublicContent(true);
-        } 
-      })
-      .catch(error => {
-        console.error('Error fetching public content:', error);
+    const currentUser = authService.getCurrentUser();
+    if (currentUser) {
+        const userRoles = currentUser.roles;
+        if (userRoles.includes('ROLE_ADMIN')) {
+            userService.getAdminContent().then(response => {
+                setPublicContent(true);
+            }).catch(error => {
+                setPublicContent(false);
+                setMessage(error.response ? error.response.data : 'An error occurred');
+                console.error(error);
+            });
+        } else if (userRoles.includes('ROLE_CUSTOMER')) {
+            userService.getUserBoard().then(response => {
+                setPublicContent(true);
+            }).catch(error => {
+                setPublicContent(false);
+                setMessage(error.response ? error.response.data : 'An error occurred');
+                console.error(error);
+            });
+        }
+    } else {
+        // Redirect or handle the case where there is no current user
+        setMessage({ message: "No current user. Please login." });
         setPublicContent(false);
-        setMessage(error.response.data);
-      });
-  }, []); 
+    }
+}, []);
 
 
 
@@ -74,8 +90,7 @@ function AddNewVehicle() {
                 if (res.status === 200) {
                     console.log("Vehicle has been successfully added!");
                     alert("Vehicle has been added!")
-                    navigate(`/admin/customers/${customerId}/vehicles`);
-                }
+                    navigate(-1);                }
             })
             .catch(error => {
                 console.error("Error adding new vehicle", error);

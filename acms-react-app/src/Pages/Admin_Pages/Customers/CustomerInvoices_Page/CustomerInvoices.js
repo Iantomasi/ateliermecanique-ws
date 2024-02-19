@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import adminService from '../../../../Services/admin.service.js';
 import userService from '../../../../Services/user.service.js';
+import authService from '../../../../Services/auth.service.js';
 import Navbar from '../../../../Components/Navigation_Bars/Logged_In/NavBar.js';
-import NavBar from '../../../../Components/Navigation_Bars/Not_Logged_In/NavBar.js';
 import Footer from '../../../../Components/Footer/Footer.js';
 import CustomerInvoiceBlock from './CustomerInvoiceBlock.js';
 import Sidebar from '../../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
@@ -19,29 +19,32 @@ function CustomerInvoices() {
     const [message, setMessage] = useState('');
   
     useEffect(() => {
-      userService.getAdminContent().then(
-        (response) => {
-          setPublicContent(true);
-        })
-        .catch(error => {
+      const fetchContent = async () => {
+        try {
+          const currentUser = authService.getCurrentUser();
+          if (!currentUser) throw new Error("No user logged in");
+  
+          const userRole = currentUser.roles.includes('ROLE_ADMIN') ? 'admin' : 'customer';
+  
+          const response = userRole === 'admin' 
+            ? await userService.getAdminContent() 
+            : await userService.getUserBoard();
+  
+          if (response.status === 200) {
+            setPublicContent(true);
+          }
+        } catch (error) {
           console.log(error);
           setPublicContent(false);
-          if (error.response && error.response.status === 403) {
-            
-            setMessage({
-              status: 403,
-              error: 'Forbidden',
-              message: 'You do not have permission to access this resource.',
-            });
-          } else {
-            
-            setMessage(error.response.data);
-          }
-        })
+          setMessage(error.response ? error.response.data : 'An error occurred');
+        }
+      };
+  
+      fetchContent();
     }, []);
   
     useEffect(() => {
-        getCustomerInvoices();
+      getCustomerInvoices();
     }, []);
   
     function getCustomerInvoices() {
@@ -100,12 +103,12 @@ function CustomerInvoices() {
                 </div>
               </div>
             </div>
-            <div className="mb-5">
+            <div class="flex justify-center">
                 <img src="/invoices.svg" alt="invoice's Image" />
               </div>
           </div>) : (
           <div className="flex-1 text-center">
-            <NavBar />
+            <Navbar />
             {publicContent === false ? <h1 className='text-4xl'>{message.status} {message.error} </h1> : 'Error'}
             {message && (
               <>

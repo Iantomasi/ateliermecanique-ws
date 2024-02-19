@@ -48,15 +48,15 @@ function User() {
           <div className="flex flex-col">
             <div className="flex">
               <div className="flex-1 text-center">
-                <HomeOption src="/car.svg" label="vehicles" />
+                <HomeOption src="/car.svg" label="vehicles" dynamicPath={(user) => `/user/customers/${user.id}/vehicles`} />
               </div>
               <div className="flex-1 text-center">
-                <HomeOption src="appointments.svg" label="appointments" />
+                <HomeOption src="appointments.svg" label="appointments" dynamicPath={(user) => `/user/customers/${user.id}/appointments`}/>
               </div>
             </div>
             <div className="flex mt-10">
               <div className="flex-1 text-center">
-                <HomeOption src="invoices.svg" label="invoices" />
+                <HomeOption src="invoices.svg" label="invoices" dynamicPath={(user) => `/user/customers/${user.id}/invoices`} />
               </div>
               <div className="flex-1 text-center">
                 <HomeOption src="reviews.svg" label="reviews" />

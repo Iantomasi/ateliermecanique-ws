@@ -107,9 +107,10 @@ function Invoices() {
               </div>
             </div>
           </div>
-          <div className="mb-5">
-            <img src="/invoices.svg" alt="invoice's Image" />
+          <div class="flex justify-center">
+          <img src="/invoices.svg" alt="invoice's Image" />
           </div>
+
         </div>
       ) : (
         <div className="flex-1 text-center">

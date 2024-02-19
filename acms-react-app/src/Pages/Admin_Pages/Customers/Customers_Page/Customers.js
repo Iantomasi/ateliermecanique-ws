@@ -84,9 +84,10 @@ function Customers() {
               </table>
             </div>
           </div>
-          <div className="mb-5">
-            <img src="/customersImage.svg" alt="customer's Image" />
-          </div>
+          <div class="flex justify-center">
+          <img src="/customersImage.svg" alt="customer's Image" />
+        </div>
+
         </div>
       </div>
       ) : (

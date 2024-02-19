@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import NavBar from '../../../../Components/Navigation_Bars/Not_Logged_In/NavBar.js';
 import dayjs from 'dayjs';
 import Navbar from '../../../../Components/Navigation_Bars/Logged_In/NavBar.js';
 import Footer from '../../../../Components/Footer/Footer.js';
 import Sidebar from '../../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
 import CustomDateTimePicker from '../../../../Components/DateTimePicker/CustomDateTimePicker.js';
 import adminService from '../../../../Services/admin.service.js';
+import userService from '../../../../Services/user.service.js';
+import customerService from '../../../../Services/customer.service.js';
+
+
 
 function AppointmentDetails() {
-  const { appointmentId } = useParams();
+  const { customerId, appointmentId } = useParams();
   const [appointmentDetails, setAppointmentDetails] = useState({
       customerId: '',
       vehicleId: '',
@@ -27,7 +30,7 @@ function AppointmentDetails() {
   
 
   useEffect(() => {
-      adminService.getAppointmentById(appointmentId)
+      customerService.getCustomerAppointmentById(customerId, appointmentId)
           .then(res => {
               if (res.status === 200) {
                 setPublicContent(true);
@@ -62,11 +65,6 @@ function AppointmentDetails() {
     }));
 };
 
-  const handleBackButtonClick = () => {
-      navigate('/admin/appointments'); // Use navigate to navigate back to the list of all appointments page
-  };
-
-
   function confirmDelete() {
       setShowConfirmation(true);
     }
@@ -76,12 +74,12 @@ function AppointmentDetails() {
     }
   
     function executeDelete() {
-      adminService.deleteAppointment(appointmentId)
+      customerService.deleteCustomerAppointment(customerId, appointmentId)
         .then(res => {
           if (res.status === 204) {
             alert('Appointment has been deleted!');
             setShowConfirmation(false);
-            navigate(`/admin/customers/${appointmentDetails.customerId}/appointments`);
+            navigate(-1);
           }
         })
         .catch(err => {
@@ -116,11 +114,12 @@ function AppointmentDetails() {
       status: formData.get('status')
     };
   
-    adminService.updateAppointment(appointmentId, updatedAppointment)
+    customerService.updateCustomerAppointment(customerId, appointmentId, updatedAppointment)
     .then(res => {
       if (res.status === 200) {
         setAppointmentDetails(res.data);
         alert('Appointment has been updated!');
+        navigate(-1);
       }
     })
     .catch(err => {
@@ -135,9 +134,6 @@ function AppointmentDetails() {
           <div className="flex">
             <Sidebar appointmentId={appointmentId} />  
             <main className="flex-grow p-5">
-            <button className="mr-5 text-blue-500 hover:underline" onClick={handleBackButtonClick}>
-            Back
-            </button>
               <p className="text-4xl font-bold text-center">APPOINTMENT DETAILS</p>
             {appointmentDetails && (
             <div className="bg-gray-100 shadow-lg p-5 rounded-md mt-5 relative">
@@ -177,7 +173,7 @@ function AppointmentDetails() {
                           
                             
                   <label className='font-bold'>Comments</label>
-                  <input className="w-full p-4 rounded border border-gray-400 mb-5" name="comments" value={appointmentDetails.comments} onChange={handleInputChange} type="text" required />
+                  <input className="w-full p-4 rounded border border-gray-400 mb-5" name="comments" value={appointmentDetails.comments} onChange={handleInputChange} type="text" placeholder='No comments'/>
                           
                             
                   <label className="font-bold">Status</label>
@@ -224,7 +220,7 @@ function AppointmentDetails() {
           </div>
         ) : (
         <div className="flex-1 text-center">
-          <NavBar />
+          <Navbar />
           {publicContent === false ? <h1 className='text-4xl'>{message.status} {message.error} </h1> : 'Error'}
           {message && (
             <>

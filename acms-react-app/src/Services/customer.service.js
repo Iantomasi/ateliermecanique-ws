@@ -18,22 +18,23 @@ class customerService {
     addReview(review){
         return axios.post(API_REVIEWS_URL , review, { headers: authHeader() });
     }
-
-    // reviews (good practice but maybe redundant in this case?)
-
-    /*
-    getAllReviews(){
-        return axios.get(API_REVIEWS_URL, { headers: authHeader() });
+    getCustomerAppointmentById(customerId, appointmentId){
+        return axios.get(API_CUSTOMERS_URL + `/${customerId}/appointments/${appointmentId}`, { headers: authHeader() });
+    }
+    updateCustomerAppointmentStatus(customerId, appointmentId, isConfirmed) {
+        return axios.put(API_CUSTOMERS_URL + `/${customerId}/appointments/${appointmentId}/updateStatus?isConfirm=${isConfirmed}`,null,{ headers: authHeader() });
+    }
+    updateCustomerAppointment(customerId, appointmentId, appointment){
+        return axios.put(API_CUSTOMERS_URL + `/${customerId}/appointments/${appointmentId}`, appointment, { headers: authHeader() });
+    }
+    deleteCustomerAppointment(customerId, appointmentId){
+        return axios.delete(API_CUSTOMERS_URL + `/${customerId}/appointments/${appointmentId}`, { headers: authHeader() });
     }
 
-    getReviewById(id){
-        return axios.get(API_REVIEWS_URL + /${id}, { headers: authHeader() });
+    getCustomerInvoieById(customerId, invoiceId){
+        return axios.get(API_CUSTOMERS_URL + `/${customerId}/invoices/${invoiceId}`, { headers: authHeader() });
     }
-    deleteReviewById(id){
-        return axios.delete(API_REVIEWS_URL + /${id}, { headers: authHeader() });
-
-    }
-    */
+    
 
 }
 

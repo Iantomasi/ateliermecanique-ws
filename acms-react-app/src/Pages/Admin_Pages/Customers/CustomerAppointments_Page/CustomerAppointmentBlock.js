@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {useNavigate } from 'react-router-dom';
 import adminService from '../../../../Services/admin.service';
+import authService from '../../../../Services/auth.service';
+import customerService from '../../../../Services/customer.service';
 
-const CustomerAppointmentBlock = ({ appointment, refreshCustomerAppointments }) => {
+const CustomerAppointmentBlock = ({ appointment, customerId, refreshCustomerAppointments }) => {
   const navigate = useNavigate();
+  const [userRole, setUserRole] = useState(null);
+
+
   const handleStatusChange = (isConfirm) => {
-    adminService.updateAppointmentStatus(appointment.appointmentId, isConfirm)
+    customerService.updateCustomerAppointmentStatus(appointment.customerId, appointment.appointmentId, isConfirm)
       .then(response => {
         refreshCustomerAppointments();
       })
@@ -14,13 +19,26 @@ const CustomerAppointmentBlock = ({ appointment, refreshCustomerAppointments }) 
       });
   };
 
-  const handleCustomerAppointmentClick = () => {
-    navigate(`/admin/customers/${appointment.customerId}/appointments/${appointment.appointmentId}`);
-  };
+  useEffect(() => {
+    const currentUser = authService.getCurrentUser();
+    if (currentUser) {
+      setUserRole(currentUser.roles);
+    }
+  }, []);
+
+  function handleClick() {
+    if (userRole) {
+      let basePath = '/user'; // Default path for customers
+      if (userRole.includes('ROLE_ADMIN')) {
+        basePath = '/admin';
+      }
+      navigate(`${basePath}/customers/${appointment.customerId}/appointments/${appointment.appointmentId}`);
+    }
+  }
 
   return (
     <tr className='hover:bg-gray-200 hover:cursor-pointer h-10'>
-     <td className='hover:cursor-pointer' onClick={handleCustomerAppointmentClick}>
+     <td className='hover:cursor-pointer' onClick={handleClick}>
               {appointment.appointmentId}
       </td>
       <td>{appointment.appointmentDate}</td>

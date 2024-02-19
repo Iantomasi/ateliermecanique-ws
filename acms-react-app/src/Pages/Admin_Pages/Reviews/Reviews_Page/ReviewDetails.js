@@ -4,6 +4,10 @@ import adminService from '../../../../Services/admin.service.js';
 import Navbar from '../../../../Components/Navigation_Bars/Logged_In/NavBar.js';
 import authService from '../../../../Services/auth.service.js';
 import Footer from '../../../../Components/Footer/Footer.js';
+import UserDisplay from '../../../../Components/User_Components/UserDisplay.js';
+import MechanicDisplay from '../../../../Components/User_Components/MechanicDisplay.js';
+import CustomDateTimePicker from '../../../../Components/DateTimePicker/CustomDateTimePicker.js';
+import dayjs from 'dayjs';
 
 function ReviewDetails() {
     const { reviewId } = useParams();
@@ -61,7 +65,7 @@ function ReviewDetails() {
             .then(res => {
                 if (res.status === 200) {
                     alert('Review: ' + reviewId + ' has been updated!');
-                    //navigate('/admin/reviews');
+                    navigate(-1);
                 }
             })
             .catch(err => {
@@ -74,8 +78,7 @@ function ReviewDetails() {
             .then(res => {
                 if (res.status === 204) {
                     alert('Review has been deleted!');
-                   // navigate('/admin/reviews');
-                }
+                    navigate(-1);                }
             })
             .catch(err => {
                 alert('You can only delete your own reviews.');
@@ -91,7 +94,10 @@ function ReviewDetails() {
             {publicContent ? (
                 <div>
                     <Navbar />
-                    <div className="flex flex-col md:flex-row">
+                    <div className="flex">
+                    <div className="ml-5 mt-1">
+                        {userRole === 'admin' ? <MechanicDisplay /> : <UserDisplay />}
+                           </div>
                         <main className="flex-grow p-5">
                             <div className="text-4xl font-bold text-center">
                                 <p>REVIEW DETAILS</p>
@@ -114,7 +120,6 @@ function ReviewDetails() {
 
                                         <label className="font-bold">Date & Time</label>
                                         <input className="w-full p-4 rounded border border-gray-400 mb-5" name="reviewDate" value={reviewDetails.reviewDate}/>
-
                                         <label className="font-bold">Reply</label>
                                         <input className="w-full p-4 rounded border border-gray-400 mb-5" name="mechanicReply" value={reviewDetails.mechanicReply} type="text" onChange={handleInputChange} placeholder="No reply"/>
 
@@ -143,7 +148,10 @@ function ReviewDetails() {
                                         <input className="w-full p-4 rounded border border-gray-400 mb-5" name="rating" value={reviewDetails.rating} onChange={handleInputChange} type="text" required />
 
                                         <label className="font-bold">Date & Time</label>
-                                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="reviewDate" value={reviewDetails.reviewDate} onChange={handleInputChange} type="text" required />
+                                        <CustomDateTimePicker
+                                        value={reviewDetails.reviewDate}
+                                        onChange={(date) => setReviewDetails({ ...reviewDetails, reviewDate: date })}
+                                        />
                                         
                                         <label className="font-bold">Reply</label>
                                         <input className="w-full p-4 rounded border border-gray-400 mb-5" name="mechanicReply" value={reviewDetails.mechanicReply} type="text" placeholder="No reply"/>
