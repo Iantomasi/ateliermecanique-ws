@@ -4,6 +4,8 @@ import adminService from '../../../../Services/admin.service.js';
 import Navbar from '../../../../Components/Navigation_Bars/Logged_In/NavBar.js';
 import authService from '../../../../Services/auth.service.js';
 import Footer from '../../../../Components/Footer/Footer.js';
+import UserDisplay from '../../../../Components/User_Components/UserDisplay.js';
+import MechanicDisplay from '../../../../Components/User_Components/MechanicDisplay.js';
 
 function ReviewDetails() {
     const { reviewId } = useParams();
@@ -74,8 +76,7 @@ function ReviewDetails() {
             .then(res => {
                 if (res.status === 204) {
                     alert('Review has been deleted!');
-                   // navigate('/admin/reviews');
-                }
+                    navigate(-1);                }
             })
             .catch(err => {
                 alert('You can only delete your own reviews.');
@@ -91,7 +92,10 @@ function ReviewDetails() {
             {publicContent ? (
                 <div>
                     <Navbar />
-                    <div className="flex flex-col md:flex-row">
+                    <div className="flex">
+                    <div className="ml-5 mt-1">
+                        {userRole === 'admin' ? <MechanicDisplay /> : <UserDisplay />}
+                           </div>
                         <main className="flex-grow p-5">
                             <div className="text-4xl font-bold text-center">
                                 <p>REVIEW DETAILS</p>

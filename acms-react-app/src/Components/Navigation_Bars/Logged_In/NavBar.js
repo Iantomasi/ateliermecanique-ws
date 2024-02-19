@@ -1,15 +1,31 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import UserProfile from '../../User_Components/UserProfile';
 import { useNavigate } from 'react-router-dom';
+import authService from '../../../Services/auth.service';
 
 
 function Navbar() {
   const navigate = useNavigate();
+  const [userRole, setUserRole] = useState(null);
 
-  const handleLogoClick = () => {
-    navigate('/admin');
+
+  useEffect(() => {
+    const currentUser = authService.getCurrentUser();
+
+    if (currentUser) {
+      setUserRole(currentUser.roles.includes('ROLE_ADMIN') ? 'admin' : 'user');
+    }
+  }, []);
+
+    const handleLogoClick = () => {
+    if (userRole === 'admin') {
+      navigate('/admin');
+    } else if (userRole === 'user') {
+      navigate('/user');
+    }
   };
+
   return (
     <header className="bg-white">
       <nav className="flex justify-between items-center p-4">

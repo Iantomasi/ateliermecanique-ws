@@ -23,16 +23,12 @@ import InvoiceDetails from './Pages/Admin_Pages/Invoices/Invoices_Page/InvoiceDe
 import Contact from './Pages/Contact_Pages/Contact.js';
 import Reviews from './Pages/Admin_Pages/Reviews/Reviews_Page/Reviews.js';
 import ReviewDetails from './Pages/Admin_Pages/Reviews/Reviews_Page/ReviewDetails.js';
-
 import ResetPasswordRequest from './Pages/ResetPassword_Pages/ResetPasswordRequest.js';
 import ResetPassword from './Pages/ResetPassword_Pages/ResetPassword.js';
 import AddReview from './Pages/Admin_Pages/Customers/AddNewReview_Page/AddNewReview.js';
 import Services from './Pages/Services_Pages/Services.js';
-
-
-
 import About from './Pages/About_Pages/About.js';
-
+import CustomerInvoiceDetails from './Pages/Admin_Pages/Customers/CustomerInvoices_Page/CustomerInvoiceDetails.js';
 
 const router = createBrowserRouter([
   {
@@ -114,10 +110,6 @@ const router = createBrowserRouter([
         element: <CustomerCalendar />,
 
       },
-      { 
-        path:"/admin/customers/:customerId/appointments/:appointmentId",
-        element: <AppointmentDetails/>,
-      },
       {
         path:"/admin/invoices",
         element: <Invoices/>, 
@@ -148,6 +140,43 @@ const router = createBrowserRouter([
       {
         path: "/user",
         element: <User/>
+      },
+      {
+        path: "/user/customers/:customerId",
+        element: <CustomerDetails />,
+      },
+      {
+        path: "/user/customers/:customerId/vehicles",
+        element: <CustomerVehicles />,
+      },
+      {
+        path: "/user/customers/:customerId/vehicles/:vehicleId",
+        element: <CustomerVehicleDetails />,
+      },
+      {
+        path: "/user/customers/:customerId/vehicles/newVehicle",
+        element: <AddNewVehicle/>,
+      },
+      {
+        path: "/user/customers/:customerId/appointments",
+        element: <CustomerAppointments/>,
+      },
+      {
+        path: "/user/customers/:customerId/appointments/:appointmentId",
+        element: <CustomerAppointmentDetails/>,
+      },
+      {
+        path: "/user/customers/:customerId/appointments/newAppointment",
+        element: <CustomerCalendar />,
+
+      },
+      {
+        path: "/user/customers/:customerId/invoices",
+        element: <CustomerInvoices/>,
+      },
+      {
+        path: "/user/customers/:customerId/invoices/:invoiceId",
+        element: <CustomerInvoiceDetails/>,
       },
       {
         path: "/user/reviews",

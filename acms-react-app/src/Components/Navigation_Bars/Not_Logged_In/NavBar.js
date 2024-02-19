@@ -9,13 +9,16 @@ function Navbar() {
   const navigateToSignup = () => {
     navigate('/signup');
   };
+  const handleLogoClick = () => {
+    navigate('/');
+  };
 
   return (
     <header className="bg-white">
       <nav className="flex flex-col sm:flex-row justify-between items-center p-4 sm:h-20">
         {/* Left-aligned content */}
         <div className="flex items-center">
-          <img src="logo.svg" alt="app logo" className="mr-2" />
+          <img src="logo.svg" alt="app logo" className="mr-2" onClick={handleLogoClick} />
           <h1 className="text-4xl font-bold">Atelier Mecanique</h1>
         </div>
 

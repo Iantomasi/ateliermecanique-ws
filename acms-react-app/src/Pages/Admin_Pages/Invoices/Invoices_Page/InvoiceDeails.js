@@ -5,6 +5,7 @@ import Navbar from '../../../../Components/Navigation_Bars/Logged_In/NavBar.js';
 import NavBar from '../../../../Components/Navigation_Bars/Not_Logged_In/NavBar.js';
 import Footer from '../../../../Components/Footer/Footer.js';
 import Sidebar from '../../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
+import MechanicDisplay from '../../../../Components/User_Components/MechanicDisplay.js';
 
 function InvoiceDetails() {
     const { invoiceId } = useParams();
@@ -89,14 +90,15 @@ function InvoiceDetails() {
         <div className="flex flex-col min-h-screen">
             {publicContent ? (
                 <div>
-                    <Navbar />
-                    <div className="flex flex-col md:flex-row">
-                        <Sidebar />
+                    <Navbar/>
+                    <div className="flex">
+                    <div className="ml-5 mt-1">
+              <MechanicDisplay />
+        </div>
                         <main className="flex-grow p-5">
                             <div className="text-4xl font-bold text-center">
                                 <p>INVOICE DETAILS</p>
                             </div>
-                    {/* Rest of the component layout */}
                         <div className="bg-gray-100 shadow-lg p-5 rounded-md mt-5 relative">
                     <form className="customervehicle-user-details-form" onSubmit={updateInvoice}>
                         <label className="font-bold">Invoice Id</label>
@@ -112,7 +114,7 @@ function InvoiceDetails() {
                         <input className="w-full p-4 rounded border border-gray-400 mb-5" name="invoiceDate" value={invoiceDetails.invoiceDate} onChange={handleInputChange} type="text" required />
 
                         <label className="font-bold">Mechanic Notes</label>
-                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="mechanicNotes" value={invoiceDetails.mechanicNotes} onChange={handleInputChange} type="text" required />
+                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="mechanicNotes" value={invoiceDetails.mechanicNotes} onChange={handleInputChange} type="text" placeholder='No mechanic notes'/>
 
                         <label className="font-bold">Sum Of Service</label>
                         <input className="w-full p-4 rounded border border-gray-400 mb-5" name="sumOfServices" value={invoiceDetails.sumOfServices} onChange={handleInputChange} type="text" required />

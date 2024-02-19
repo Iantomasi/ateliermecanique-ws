@@ -6,6 +6,7 @@ import Footer from '../../../../Components/Footer/Footer.js';
 import Sidebar from '../../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
 import CustomDateTimePicker from '../../../../Components/DateTimePicker/CustomDateTimePicker.js';
 import adminService from '../../../../Services/admin.service.js';
+import MechanicDisplay from '../../../../Components/User_Components/MechanicDisplay.js';
 
 
 function AppointmentDetails() {
@@ -34,10 +35,6 @@ function AppointmentDetails() {
             });
     }, [appointmentId]);
 
-    const handleBackButtonClick = () => {
-        navigate('/admin/appointments'); // Use navigate to navigate back to the list of all appointments page
-    };
-
 
     function confirmDelete() {
         setShowConfirmation(true);
@@ -53,7 +50,7 @@ function AppointmentDetails() {
             if (res.status === 204) {
               alert('Appointment has been deleted!');
               setShowConfirmation(false);
-              navigate(`/admin/appointments`);
+              navigate(-1);
             }
           })
           .catch(err => {
@@ -116,11 +113,10 @@ function AppointmentDetails() {
       <div>
       <Navbar />
       <div className="flex">
-        <Sidebar appointmentId={appointmentId} />  
+      <div className="ml-5 mt-1">
+              <MechanicDisplay />
+        </div>
         <main className="flex-grow p-5">
-        <button className="mr-5 text-blue-500 hover:underline" onClick={handleBackButtonClick}>
-        Back
-        </button>
           <p className="text-4xl font-bold text-center">APPOINTMENT DETAILS</p>
         {appointmentDetails && (
         <div className="bg-gray-100 shadow-lg p-5 rounded-md mt-5 relative">
@@ -148,7 +144,7 @@ function AppointmentDetails() {
                        
                         
               <label className='font-bold'>Comments</label>
-              <input className="w-full p-4 rounded border border-gray-400 mb-5" name="comments" value={appointmentDetails.comments} onChange={handleInputChange} type="text" required />
+              <input className="w-full p-4 rounded border border-gray-400 mb-5" name="comments" value={appointmentDetails.comments} onChange={handleInputChange} type="text" placeholder='No comments' />
                        
                         
               <label className="font-bold">Status</label>

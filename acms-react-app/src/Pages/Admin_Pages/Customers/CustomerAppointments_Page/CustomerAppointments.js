@@ -1,42 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import adminService from '../../../../Services/admin.service.js';
 import { useParams } from 'react-router-dom';
-
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../../../Components/Navigation_Bars/Logged_In/NavBar.js';
-import NavBar from '../../../../Components/Navigation_Bars/Not_Logged_In/NavBar.js';
 import Footer from '../../../../Components/Footer/Footer.js';
 import Sidebar from '../../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
 import CustomerAppointmentBlock from './CustomerAppointmentBlock.js';
 import userService from '../../../../Services/user.service.js';
+import authService from '../../../../Services/auth.service.js';
 
 function CustomerAppointments() {
   const { customerId } = useParams();
-  const [appointments, setAppointments] = useState([]);
   const navigate = useNavigate();
+  const [appointments, setAppointments] = useState([]);
   const [publicContent, setPublicContent] = useState(null);
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    userService.getAdminContent().then(
-      (response) => {
-        setPublicContent(true);
-      })
-      .catch(error => {
+    const fetchContent = async () => {
+      try {
+        const currentUser = authService.getCurrentUser();
+        if (!currentUser) throw new Error("No user logged in");
+
+        const userRole = currentUser.roles.includes('ROLE_ADMIN') ? 'admin' : 'customer';
+
+        const response = userRole === 'admin' 
+          ? await userService.getAdminContent() 
+          : await userService.getUserBoard();
+
+        if (response.status === 200) {
+          setPublicContent(true);
+        }
+      } catch (error) {
         console.log(error);
         setPublicContent(false);
-        if (error.response && error.response.status === 403) {
-          
-          setMessage({
-            status: 403,
-            error: 'Forbidden',
-            message: 'You do not have permission to access this resource.',
-          });
-        } else {
-          
-          setMessage(error.response.data);
-        }
-      })
+        setMessage(error.response ? error.response.data : 'An error occurred');
+      }
+    };
+
+    fetchContent();
   }, []);
 
   useEffect(() => {
@@ -109,12 +111,12 @@ function CustomerAppointments() {
               </div>
             </div>
           </div>
-          <div className="mb-5">
+          <div class="flex justify-center">
               <img src="/appointments.svg" alt="appointment's Image" />
             </div>
         </div>) : (
         <div className="flex-1 text-center">
-          <NavBar />
+          <Navbar />
           {publicContent === false ? <h1 className='text-4xl'>{message.status} {message.error} </h1> : 'Error'}
           {message && (
             <>

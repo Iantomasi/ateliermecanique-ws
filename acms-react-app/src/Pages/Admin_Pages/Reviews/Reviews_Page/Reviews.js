@@ -3,10 +3,11 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import adminService from '../../../../Services/admin.service.js';
 import Navbar from '../../../../Components/Navigation_Bars/Logged_In/NavBar.js';
-import NavBar from '../../../../Components/Navigation_Bars/Not_Logged_In/NavBar.js';
 import Footer from '../../../../Components/Footer/Footer.js';
 import MechanicDisplay from '../../../../Components/User_Components/MechanicDisplay.js';
+import UserDisplay from '../../../../Components/User_Components/UserDisplay.js';
 import ReviewBlock from './ReviewsBlock.js';
+import authService from '../../../../Services/auth.service.js';
 
 function Reviews(){
     const navigate = useNavigate();
@@ -14,11 +15,20 @@ function Reviews(){
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [publicContent, setPublicContent] = useState(null);
     const [message, setMessage] = useState('');
+    const [userRole, setUserRole] = useState(null); // State to store the user role
+
+
     const handleCustomerClick = () => {
         navigate(`/reviews/newReview`);
       };
 
-    useEffect(() => {
+      useEffect(() => {
+        // Determine user role on component mount
+        const currentUser = authService.getCurrentUser();
+        if (currentUser && currentUser.roles) {
+            setUserRole(currentUser.roles.includes('ROLE_ADMIN') ? 'admin' : 'user');
+        }
+        
         getReviews();
     }, []);
 
@@ -45,8 +55,8 @@ function Reviews(){
                     <Navbar />
                     <div className="content">
                         <div className="ml-5 mt-1">
-                            <MechanicDisplay />
-                        </div>
+                        {userRole === 'admin' ? <MechanicDisplay /> : <UserDisplay />}
+                           </div>
 
                         <div className="w-4/5 rounded bg-gray-300 mx-auto mt-1 mb-5">
                             <div className="flex p-2 bg-gray-300 w-full">
@@ -93,13 +103,13 @@ function Reviews(){
                             </div>
                         </div>
                     </div>
-                    <div className="mb-5">
+                    <div class="flex justify-center">
                         <img src="/reviews.svg" alt="invoice's Image" />
                     </div>
                 </div>
             ) : (
                 <div className="flex-1 text-center">
-                    <NavBar />
+                    <Navbar />
                     {publicContent === false ? <h1 className='text-4xl'>{message.status} {message.error} </h1> : 'Error'}
                     {message && (
                         <>

@@ -130,9 +130,11 @@ function Appointments() {
               </div>
             </div>
           </div>
-          <div className="mb-5">
-            <img src="/appointments.svg" alt="appointment's Image" />
-          </div>
+          <div class="flex justify-center">
+  <img src="/appointments.svg" alt="appointment's Image" />
+</div>
+
+
         </div>
       ) : (
         <div className="flex-1 text-center">

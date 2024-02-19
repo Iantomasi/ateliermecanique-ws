@@ -86,8 +86,7 @@ function CustomerVehicleDetails() {
         if (res.status === 204) {
           alert('Customer Vehicle has been deleted!');
           setShowConfirmation(false);
-          navigate(`/admin/customers/${customerId}/vehicles`);
-        }
+          navigate(-1);        }
       })
       .catch(err => {
         console.error('Error deleting customer:', err);
