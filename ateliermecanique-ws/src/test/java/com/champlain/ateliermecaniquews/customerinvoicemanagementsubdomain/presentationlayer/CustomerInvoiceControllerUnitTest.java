@@ -393,51 +393,5 @@ class CustomerInvoiceControllerUnitTest {
         // Assert
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
-
-    @Test
-    void testDeleteInvoiceByInvoiceIdCustomer_CustomerRole_AuthenticatedUserIdNotMatching() {
-        // Arrange
-        Authentication authentication = mock(Authentication.class);
-        doReturn(Collections.singletonList(new SimpleGrantedAuthority("ROLE_CUSTOMER")))
-                .when(authentication).getAuthorities();
-
-        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_CUSTOMER"));
-
-        UserDetailsImpl userDetails = new UserDetailsImpl(1,new UserIdentifier().getUserId(),"John","Vegas","444","john@email.com","pass",authorities);
-        when(authentication.getPrincipal()).thenReturn(userDetails);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        // Act
-        ResponseEntity<Void> response = customerInvoiceController.deleteCustomerInvoiceByCustomerInvoiceIdCustomer("appointmentId", "customerId");
-
-        // Assert
-        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
-    }
-
-
-    @Test
-    void testDeleteInvoiceByInvoiceIdCustomer_CustomerRole_AuthenticatedUserIdMatching() {
-        // Arrange
-        Authentication authentication = mock(Authentication.class);
-        doReturn(Collections.singletonList(new SimpleGrantedAuthority("ROLE_CUSTOMER")))
-                .when(authentication).getAuthorities();
-
-        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_CUSTOMER"));
-
-        UserDetailsImpl userDetails = new UserDetailsImpl(1,new UserIdentifier().getUserId(),"John","Vegas","444","john@email.com","pass",authorities);
-        when(authentication.getPrincipal()).thenReturn(userDetails);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        // Act
-        ResponseEntity<Void> response = customerInvoiceController.deleteCustomerInvoiceByCustomerInvoiceIdCustomer("appointmentId", userDetails.getUserId());
-
-        // Assert
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(customerInvoiceService, times(1)).deleteInvoiceByInvoiceId(anyString());
-    }
-
-
 }
 

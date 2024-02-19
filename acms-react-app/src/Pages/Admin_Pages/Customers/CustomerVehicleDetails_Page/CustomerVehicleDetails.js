@@ -65,6 +65,7 @@ function CustomerVehicleDetails() {
         if (res.status === 200) {
           setVehicleDetails(res.data);
           alert('Customer Vehicle has been updated!');
+          navigate(-1)
         }
       })
       .catch(err => {

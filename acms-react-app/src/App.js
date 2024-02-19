@@ -28,7 +28,6 @@ import ResetPassword from './Pages/ResetPassword_Pages/ResetPassword.js';
 import AddReview from './Pages/Admin_Pages/Customers/AddNewReview_Page/AddNewReview.js';
 import Services from './Pages/Services_Pages/Services.js';
 import About from './Pages/About_Pages/About.js';
-import CustomerInvoiceDetails from './Pages/Admin_Pages/Customers/CustomerInvoices_Page/CustomerInvoiceDetails.js';
 
 const router = createBrowserRouter([
   {
@@ -138,6 +137,10 @@ const router = createBrowserRouter([
         element: <ReviewDetails/>
       },
       {
+        path: "/admin/customers/:customerId/invoices/:invoiceId",
+        element: <InvoiceDetails/>,
+      },
+      {
         path: "/user",
         element: <User/>
       },
@@ -176,7 +179,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/user/customers/:customerId/invoices/:invoiceId",
-        element: <CustomerInvoiceDetails/>,
+        element: <InvoiceDetails/>,
       },
       {
         path: "/user/reviews",

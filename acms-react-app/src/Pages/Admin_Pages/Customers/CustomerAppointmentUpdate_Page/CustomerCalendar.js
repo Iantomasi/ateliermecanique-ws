@@ -52,7 +52,7 @@ export default function CustomerCalendar() {
             .then(response => {
                 if (response.status === 200) {
                     alert("Appointment has been created!")
-                    navigate('/admin/appointments');
+                    navigate(-1);
                 }
             })
             .catch(error => {

@@ -6,9 +6,14 @@ import NavBar from '../../../../Components/Navigation_Bars/Not_Logged_In/NavBar.
 import Footer from '../../../../Components/Footer/Footer.js';
 import Sidebar from '../../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
 import MechanicDisplay from '../../../../Components/User_Components/MechanicDisplay.js';
+import UserDisplay from '../../../../Components/User_Components/UserDisplay.js';
+import authService from '../../../../Services/auth.service.js';
+import CustomDateTimePicker from '../../../../Components/DateTimePicker/CustomDateTimePicker.js';
+import dayjs from 'dayjs';
 
 function InvoiceDetails() {
     const { invoiceId } = useParams();
+    const [userRole, setUserRole] = useState('');
     const navigate = useNavigate();
     const [invoiceDetails, setInvoiceDetails] = useState({
         invoiceId: '',
@@ -23,7 +28,15 @@ function InvoiceDetails() {
     const [message, setMessage] = useState(''); // Define message and its setter
     const [showConfirmation, setShowConfirmation] = useState(false); // State to manage delete confirmation
 
+
     useEffect(() => {
+        const currentUser = authService.getCurrentUser();
+        if (currentUser && currentUser.roles) {
+            if (currentUser.roles.includes('ROLE_ADMIN')) {
+                setUserRole('admin');
+            } else if (currentUser.roles.includes('ROLE_CUSTOMER')) {
+                setUserRole('user');
+            }
         adminService.getInvoiceById(invoiceId)
             .then(res => {
                 if (res.status === 200) {
@@ -36,6 +49,7 @@ function InvoiceDetails() {
                 setMessage(error.response.data);
                 console.error('Error fetching invoice details', error);
             });
+        }
     }, [invoiceId]);
 
     function handleInputChange(event) {
@@ -46,6 +60,16 @@ function InvoiceDetails() {
         }));
     }
 
+     // Add a new handler for date changes
+     const handleDateTimeChange = (value) => {
+        const formattedDate = value ? dayjs(value).format("YYYY-MM-DDTHH:mm") : '';
+        setInvoiceDetails(prevState => ({
+            ...prevState,
+            invoiceDate: formattedDate
+        }));
+    }
+
+
     function updateInvoice(event) {
         event.preventDefault();
 
@@ -53,15 +77,15 @@ function InvoiceDetails() {
             .then(res => {
                 if (res.status === 200) {
                     alert('Invoice has been updated!');
-                    navigate(`/admin/invoices`);
+                    navigate(-1);
                 }
             })
             .catch(err => {
+                alert('Only administrators can modify or delete invoices!');
                 console.error('Error updating invoice:', err);
             });
 
     }
-
 
     function confirmDelete() {
         setShowConfirmation(true);
@@ -76,10 +100,11 @@ function InvoiceDetails() {
             .then(res => {
                 if (res.status === 204) {
                     alert('Invoice has been deleted!');
-                    navigate(`/admin/invoices`);
+                    navigate(-1);
                 }
             })
             .catch(err => {
+                alert('Only administrators can modify or delete invoices!');
                 console.error('Error deleting invoice:', err);
             });
         setShowConfirmation(false);
@@ -93,7 +118,7 @@ function InvoiceDetails() {
                     <Navbar/>
                     <div className="flex">
                     <div className="ml-5 mt-1">
-              <MechanicDisplay />
+                    {userRole === 'admin' ? <MechanicDisplay /> : <UserDisplay />}
         </div>
                         <main className="flex-grow p-5">
                             <div className="text-4xl font-bold text-center">
@@ -111,7 +136,7 @@ function InvoiceDetails() {
                         <input className="w-full p-4 rounded border border-gray-400 mb-5" name="appointment" value={invoiceDetails.appointmentId} onChange={handleInputChange} type="text" required />
 
                         <label className="font-bold">Invoice Date</label>
-                        <input className="w-full p-4 rounded border border-gray-400 mb-5" name="invoiceDate" value={invoiceDetails.invoiceDate} onChange={handleInputChange} type="text" required />
+                        <CustomDateTimePicker onChange={handleDateTimeChange} />
 
                         <label className="font-bold">Mechanic Notes</label>
                         <input className="w-full p-4 rounded border border-gray-400 mb-5" name="mechanicNotes" value={invoiceDetails.mechanicNotes} onChange={handleInputChange} type="text" placeholder='No mechanic notes'/>

@@ -28,7 +28,7 @@ public class CustomerAccountController {
     }
 
     @GetMapping("/{customerId}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
     public ResponseEntity<CustomerAccountResponseModel> getCustomerAccountByCustomerId(@PathVariable String customerId) {
         CustomerAccountResponseModel response = customerAccountService.getCustomerAccountByCustomerId(customerId);
         if (response == null) {
