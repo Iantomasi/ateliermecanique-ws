@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import adminService from '../../../../Services/admin.service.js';
 import Sidebar from '../../../../Components/Navigation_Bars/Sidebar/Sidebar.js';
+import authService from '../../../../Services/auth.service.js';
 
 
 
@@ -17,6 +18,9 @@ function CustomerDetails() {
     phoneNumber: ''
   });
 
+  const user = authService.getCurrentUser();
+  const role = user.roles;
+  
   const [publicContent, setPublicContent] = useState(null);
   const [message, setMessage] = useState('');
 
@@ -123,7 +127,7 @@ function CustomerDetails() {
   
                     <div className="flex justify-center space-x-10">
                       <button className="bg-yellow-400 border-none px-4 py-2 rounded font-bold transform transition duration-300 hover:scale-110" type="submit">Save</button>
-                      <button className="bg-red-500 border-none px-4 py-2 rounded font-bold transform transition duration-300 hover:scale-110" onClick={confirmDelete} type="button">Delete</button>
+                      {role.includes('ROLE_ADMIN')?<button className="bg-red-500 border-none px-4 py-2 rounded font-bold transform transition duration-300 hover:scale-110" onClick={confirmDelete} type="button">Delete</button> : null}
                     </div>
                     {showConfirmation && (
                       <div className=" fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 flex justify-center items-center z-50">
