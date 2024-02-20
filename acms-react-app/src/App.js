@@ -29,6 +29,8 @@ import AddReview from './Pages/Admin_Pages/Customers/AddNewReview_Page/AddNewRev
 import Services from './Pages/Services_Pages/Services.js';
 import About from './Pages/About_Pages/About.js';
 
+import CustomerNewAppointment from './Pages/Admin_Pages/Customers/CustomerAppointmentNew_Page/CustomerNewCalendar.js';
+
 const router = createBrowserRouter([
   {
     children  :[
@@ -170,7 +172,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/user/customers/:customerId/appointments/newAppointment",
-        element: <CustomerCalendar />,
+        element: <CustomerNewAppointment />,
 
       },
       {
@@ -201,6 +203,7 @@ const router = createBrowserRouter([
         path: "/reviews/newReview",
         element: <AddReview/>
       }
+
 
     ]
   }
