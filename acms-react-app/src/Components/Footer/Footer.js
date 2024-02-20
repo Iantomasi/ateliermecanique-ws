@@ -11,7 +11,7 @@ const Footer = () => {
             </nav>
             <div className="text-xs md:text-sm">
                 <p>Based in Montreal, Canada</p>
-                <p>&copy; 2023 All rights reserved. Powered by RichNHandsome, Inc. SPRINT4</p>
+                <p>&copy; 2023 All rights reserved. Powered by RichNHandsome, Inc.</p>
             </div>
         </footer>
     );

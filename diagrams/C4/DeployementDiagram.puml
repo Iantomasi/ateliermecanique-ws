@@ -1,0 +1,38 @@
+@startuml C4 Live Deployment Diagram
+
+!define API_BLUE #3572b0
+!define DB_GREEN #4caf50
+!define SERVER_ORANGE #ff9800
+
+node "Vultr VM\n(Server)" as server {
+    node "MySQL\nDatabase" as database <<Database>> {
+        component "MySQL" as mysql
+    }
+    node "Java Spring Boot\nBackend" as backend <<Spring Boot>> {
+        component "Java Mail" as javamail
+        component "Java Spring Boot" as springboot
+    }
+    node "React\nFrontend" as frontend <<React>> {
+        component "React Application" as react
+    }
+}
+
+node "Google\n" as google {
+    component "Google API" as google_api <<API>>
+}
+node "Facebook\n" as facebook {
+    component "Facebook API" as facebook_api <<API>>
+}
+node "Hostinger\n" as hostinger {
+    component "Hostinger DNS" as dns <<DNS>>
+}
+
+[springboot] -right-> mysql
+[springboot] <-right- mysql
+[springboot] <-left->[react]
+[springboot]-left->[javamail]
+frontend -up-> google
+frontend -down-> facebook
+hostinger -up-> server
+
+@enduml
