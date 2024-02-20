@@ -46,7 +46,6 @@ public class ReviewController {
         return ResponseEntity.ok(review);
     }
 
-    //todo get all appointments for a
 
     @PutMapping("/reviews/{reviewId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
