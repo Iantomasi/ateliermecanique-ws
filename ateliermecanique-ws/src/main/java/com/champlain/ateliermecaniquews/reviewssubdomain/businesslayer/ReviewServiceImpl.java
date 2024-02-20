@@ -38,6 +38,11 @@ public class ReviewServiceImpl implements ReviewService {
         return reviewResponseMapper.entityToResponseModel(reviewRepository.findReviewByReviewIdentifier_ReviewId(reviewId));
     }
 
+    @Override
+    public List<ReviewResponseModel> getReviewsByCustomerId(String customerId) {
+        return reviewResponseMapper.entityToResponseModelList(reviewRepository.findReviewsByCustomerId(customerId));
+    }
+
 
     @Override
     public ReviewResponseModel updateReview(String reviewId, ReviewRequestModel reviewResponseModel) {

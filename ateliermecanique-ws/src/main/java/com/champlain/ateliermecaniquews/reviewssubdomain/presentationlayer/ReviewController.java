@@ -26,7 +26,7 @@ public class ReviewController {
 
 
     @GetMapping("/reviews")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
+    //@PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
     public ResponseEntity<List<ReviewResponseModel>> getAllReviews() {
         List<ReviewResponseModel> reviews = reviewService.getAllReviews();
         if (reviews == null || reviews.isEmpty()) {
@@ -46,6 +46,8 @@ public class ReviewController {
         return ResponseEntity.ok(review);
     }
 
+    //todo get all appointments for a
+
     @PutMapping("/reviews/{reviewId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
     public ResponseEntity<ReviewResponseModel> updateReview(@PathVariable String reviewId, @RequestBody ReviewRequestModel reviewRequestModel) {
@@ -56,6 +58,17 @@ public class ReviewController {
         }
         return ResponseEntity.ok(review);
     }
+
+    //todo add get all reviews for a specific customer
+    @GetMapping("/reviews/customer/{customerId}")
+    public ResponseEntity<List<ReviewResponseModel>> getReviewsByCustomerId(@PathVariable String customerId) {
+        List<ReviewResponseModel> reviews = reviewService.getReviewsByCustomerId(customerId);
+        if (reviews == null || reviews.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(reviews);
+    }
+
 
     @DeleteMapping("/reviews/{reviewId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
@@ -114,6 +127,25 @@ public class ReviewController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
+    @PostMapping("/reviews/{reviewId}/newReview")
+    public ResponseEntity<ReviewResponseModel> addReview(@PathVariable String reviewId, @RequestBody ReviewRequestModel reviewRequestModel) {
+
+        // Add the review
+        ReviewResponseModel addedReview = reviewService.addReview(reviewRequestModel);
+
+        // Check if the review was successfully added
+        if (addedReview != null) {
+            // Return the review details with a 201 Created status
+            return ResponseEntity.status(HttpStatus.CREATED).body(addedReview);
+        } else {
+            // Handle the case where the review couldn't be added by the user
+            // This could be due to a validation error or an issue with the service
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
 
 
 

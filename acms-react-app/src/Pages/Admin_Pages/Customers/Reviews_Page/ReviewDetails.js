@@ -96,9 +96,9 @@ function ReviewDetails() {
                 <div>
                     <Navbar />
                     <div className="flex">
-                    <div className="ml-5 mt-1">
-                        {userRole === 'admin' ? <MechanicDisplay /> : <UserDisplay />}
-                           </div>
+                        <div className="ml-5 mt-1">
+                            {userRole === 'admin' ? <MechanicDisplay /> : <UserDisplay />}
+                        </div>
                         <main className="flex-grow p-5">
                             <div className="text-4xl font-bold text-center">
                                 <p>REVIEW DETAILS</p>
@@ -150,10 +150,10 @@ function ReviewDetails() {
 
                                         <label className="font-bold">Date & Time</label>
                                         <CustomDateTimePicker
-                                        value={reviewDetails.reviewDate}
-                                        onChange={(date) => setReviewDetails({ ...reviewDetails, reviewDate: date })}
+                                            value={reviewDetails.reviewDate}
+                                            onChange={(date) => setReviewDetails({ ...reviewDetails, reviewDate: date })}
                                         />
-                                        
+
                                         <label className="font-bold">Reply</label>
                                         <input className="w-full p-4 rounded border border-gray-400 mb-5" name="mechanicReply" value={reviewDetails.mechanicReply} type="text" placeholder="No reply"/>
 

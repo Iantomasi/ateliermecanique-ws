@@ -9,6 +9,7 @@ public interface ReviewService {
 
     List<ReviewResponseModel> getAllReviews();
     ReviewResponseModel getReviewByReviewId(String reviewId);
+    List<ReviewResponseModel> getReviewsByCustomerId(String customerId);
     ReviewResponseModel updateReview(String reviewId, ReviewRequestModel reviewResponseModel);
     ReviewResponseModel updateMechanicReply(String reviewId, String mechanicReply);
 
