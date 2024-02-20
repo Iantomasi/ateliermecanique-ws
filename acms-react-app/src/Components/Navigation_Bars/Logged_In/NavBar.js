@@ -30,7 +30,7 @@ function Navbar() {
         <header className="bg-white">
             <nav className="flex justify-between items-center p-4">
                 <div className="flex">
-                    <h1 className="text-4xl font-bold" onClick={handleLogoClick}>Atelier Mecanique</h1>
+                    <h1 className="text-4xl font-bold cursor-pointer" onClick={handleLogoClick}>Atelier Mecanique</h1>
                 </div>
 
                 <div className="flex items-center">
