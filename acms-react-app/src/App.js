@@ -29,6 +29,10 @@ import AddReview from './Pages/Admin_Pages/Customers/AddNewReview_Page/AddNewRev
 import Services from './Pages/Services_Pages/Services.js';
 import About from './Pages/About_Pages/About.js';
 
+import CustomerNewAppointment from './Pages/Admin_Pages/Customers/CustomerAppointmentNew_Page/CustomerNewCalendar.js';
+import CustomerReview from './Pages/Admin_Pages/Customers/Reviews_Page/Reviews.js';
+import NewCustomerReview from './Pages/Admin_Pages/Customers/Reviews_Page/AddNewReview.js';
+
 const router = createBrowserRouter([
   {
     children  :[
@@ -170,7 +174,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/user/customers/:customerId/appointments/newAppointment",
-        element: <CustomerCalendar />,
+        element: <CustomerNewAppointment />,
 
       },
       {
@@ -182,8 +186,8 @@ const router = createBrowserRouter([
         element: <InvoiceDetails/>,
       },
       {
-        path: "/user/reviews",
-        element: <Reviews/>
+        path: "/user/customers/:customerId/reviews",
+        element: <CustomerReview/>
       },
       {
         path: "/user/reviews/:reviewId",
@@ -198,9 +202,10 @@ const router = createBrowserRouter([
         element: <ResetPassword/>
       },
       {
-        path: "/reviews/newReview",
-        element: <AddReview/>
+        path: "/reviews/:customerId/newReview",
+        element: <NewCustomerReview/>
       }
+
 
     ]
   }

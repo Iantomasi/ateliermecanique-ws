@@ -74,14 +74,15 @@ function Appointments() {
               <MechanicDisplay />
             </div>
             <div className="w-4/5 rounded bg-gray-300 mx-auto mt-1 mb-5">
-              <div className="flex p-2 bg-gray-300 w-full">
-                <p className="text-2xl font-bold mx-auto">APPOINTMENTS</p>
-                <div className="flex items-center space-x-4">
+              <div className="flex p-2 bg-gray-300 w-full flex-wrap">
+                {/* Responsive font size for "APPOINTMENTS" text */}
+                <p className="text-xl sm:text-2xl font-bold mx-auto">APPOINTMENTS</p>
+                <div className="flex items-center space-x-4 flex-wrap">
                   <div className="relative flex">
                     <input
-                      className="w-full rounded border-gray-300 px-4 py-2 focus:outline-none focus:border-indigo-500"
-                      type="text"
-                      placeholder="Search..."
+                        className="w-full rounded border-gray-300 px-4 py-2 focus:outline-none focus:border-indigo-500"
+                        type="text"
+                        placeholder="Search..."
                     />
                     <span className="text-gray-400 cursor-pointer">&#128269;</span>
                   </div>
@@ -92,11 +93,11 @@ function Appointments() {
                     Add+
                   </button>
                   {hasCancelledAppointments && (
-                    <button
-                      className="bg-red-500 border-none px-4 py-2 rounded font-bold transform transition duration-300 hover:scale-110 ml-auto"
-                      onClick={confirmDelete}
-                      type="button"
-                    >
+                      <button
+                          className="bg-red-500 border-none px-2 sm:px-4 py-1 sm:py-2 rounded font-bold transform transition duration-300 hover:scale-110 ml-auto"
+                          onClick={confirmDelete}
+                          type="button"
+                      >
                       Delete All Cancelled
                     </button>
                   )}

@@ -59,7 +59,7 @@ function User() {
                 <HomeOption src="invoices.svg" label="invoices" dynamicPath={(user) => `/user/customers/${user.id}/invoices`} />
               </div>
               <div className="flex-1 text-center">
-                <HomeOption src="reviews.svg" label="reviews" />
+                <HomeOption src="reviews.svg" label="reviews" dynamicPath={(user) => `/user/customers/${user.id}/reviews`} />
               </div>
             </div>
           </div>

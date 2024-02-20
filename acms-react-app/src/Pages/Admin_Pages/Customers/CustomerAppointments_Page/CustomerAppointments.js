@@ -59,7 +59,8 @@ function CustomerAppointments() {
   }
 
   const handleAddAppointmentClick = () => {
-    navigate(`/admin/customers/${customerId}/appointments/newAppointment`, customerId);
+    navigate(`/user/customers/${customerId}/appointments/newAppointment`, customerId);
+
   };
 
 
@@ -79,7 +80,7 @@ function CustomerAppointments() {
                       <input className="w-full rounded border-gray-300 px-4 py-2 focus:outline-none focus:border-indigo-500" type="text" placeholder="Search..." />
                       <span className="text-gray-400 cursor-pointer">&#128269;</span>
                     </div>
-                    <button className="text-white border-none px-4 py-2 rounded font-bold transition duration-300 hover:scale-110 bg-black">
+                    <button className="text-white border-none px-4 py-2 rounded font-bold transition duration-300 hover:scale-110 bg-black" onClick={handleAddAppointmentClick}>
                     Add+
                   </button>
                   </div>

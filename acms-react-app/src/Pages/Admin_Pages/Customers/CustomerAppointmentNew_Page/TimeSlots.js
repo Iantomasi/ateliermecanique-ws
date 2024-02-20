@@ -25,7 +25,7 @@ function TimeSlots({ selectedDate, onTimeSelect }) {
 
     useEffect(() => {
         if (!selectedDate) {
-            return; // Exit the effect if selectedDate is not available
+            return;
         }
         setLoading(true);
         const formattedDate = selectedDate.format("YYYY-MM-DD");
