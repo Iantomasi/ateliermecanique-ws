@@ -18,7 +18,7 @@ const UserDisplay = () => {
   return (
     <div className="flex items-center">
       <div className="flex items-center">
-        <img src={userImage} alt="Profile" className="w-12 h-auto mr-2" onError={handleError}/>
+        <img src={userImage} alt="Profile" className="w-12 h-auto mr-2 rounded-full" onError={handleError}/>
         <div className="flex flex-col">
           <div className="font-bold">{user.firstName}</div>
           <div className="font-light">{user.lastName}</div>
