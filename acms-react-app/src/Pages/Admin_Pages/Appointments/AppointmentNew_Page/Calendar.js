@@ -151,14 +151,8 @@ export default function Calendar() {
                                             </div>
                                         ))}
                                     </div>
-                                </div>
-                                <div className="flex-1 min-w-0 sm:px-5">
-                                    <h1 className="font-semibold mb-4">Schedule for {selectDate.toDate().toDateString()}</h1>
-                                    <TimeSlots selectedDate={selectedDate} onTimeSelect={handleTimeSelect} />
-                                    <CommentBox setComments={setComments} />
-                                </div>
-                            </div>
-                            <div className="flex justify-center space-x-2 mt-4">
+                                    <br/>
+                                    <div className="flex justify-center space-x-2 mt-4">
                                 <button className="bg-gray-300 text-gray-700 hover:bg-gray-400 font-semibold py-2 px-4 rounded-l focus:outline-none focus:shadow-outline" type="button">
                                     Cancel
                                 </button>
@@ -166,6 +160,14 @@ export default function Calendar() {
                                     Confirm
                                 </button>
                             </div>
+                                </div>
+                                <div className="flex-1 min-w-0 sm:px-5">
+                                    <h1 className="font-semibold mb-4">Schedule for {selectDate.toDate().toDateString()}</h1>
+                                    <TimeSlots selectedDate={selectedDate} onTimeSelect={handleTimeSelect} />
+                                    <CommentBox setComments={setComments} />
+                                </div>
+                            </div>
+                            
                         </div>
             ) : (
                 <div className="text-center">

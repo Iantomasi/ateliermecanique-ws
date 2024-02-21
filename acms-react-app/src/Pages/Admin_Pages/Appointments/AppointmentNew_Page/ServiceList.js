@@ -5,8 +5,19 @@ function ServicesList({ onSelectService }) {
         "Air conditioning",
         "Muffler",
         "Car Inspection Before Purchase",
-        "End of Manufacturer's Warranty",
+        "End of Manufacturer’s Warranty",
         "Exhaust System",
+        "Preventive Maintenance",
+        "Engine and Transmission Installation",
+        "Steering & Suspension",
+        "Hydraulic Hoses Manufacturing",
+        "Injection",
+        "Precise & Detailed Evaluation",
+        "Regular Maintenance and Repair",
+        "Maintenance History",
+        "Alignment",
+        "Radiator replacement",
+        "Brakes",
         "Paint & body work"
     ];
 
