@@ -21,11 +21,8 @@ function Navbar() {
         {/* Left-aligned content */}
         <div className="flex items-center">
           <img src="logo.svg" alt="app logo" className="mr-2" onClick={handleLogoClick} />
-<<<<<<< HEAD
-          <h1 className="text-4xl font-bold cursor-pointer" onClick={handleLogoClick}>Atelier Mecanique</h1>
-=======
-          <h1 className="text-4xl font-bold">{t('navbar.title')}</h1>
->>>>>>> f47ea96 (finished localization)
+
+          <h1 className="text-4xl font-bold cursor-pointer" onClick={handleLogoClick}>{t('navbar.title')}</h1>
         </div>
 
         {/* Middle-aligned links */}
