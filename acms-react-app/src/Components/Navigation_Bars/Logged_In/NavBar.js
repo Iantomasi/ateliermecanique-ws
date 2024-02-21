@@ -3,11 +3,18 @@ import { Link } from 'react-router-dom';
 import UserProfile from '../../User_Components/UserProfile';
 import { useNavigate } from 'react-router-dom';
 import authService from '../../../Services/auth.service';
-
+import LanguageSwitcher from '../../Localization/LanguageSwitcher'; 
+import { useTranslation } from 'react-i18next'; 
 
 function Navbar() {
-    const navigate = useNavigate();
-    const [userRole, setUserRole] = useState(null);
+
+ 
+    
+
+  const { t } = useTranslation(); 
+  const navigate = useNavigate();
+  const [userRole, setUserRole] = useState(null);
+
 
 
     useEffect(() => {
@@ -26,24 +33,29 @@ function Navbar() {
         }
     };
 
-    return (
-        <header className="bg-white">
-            <nav className="flex justify-between items-center p-4">
-                <div className="flex">
-                    <h1 className="text-4xl font-bold cursor-pointer" onClick={handleLogoClick}>Atelier Mecanique</h1>
-                </div>
 
-                <div className="flex items-center">
-                    <div className="mr-0" onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
-                        <img src="/logo.svg" alt="app logo"/>
-                    </div>
+  return (
+    <header className="bg-white">
+      <nav className="flex justify-between items-center p-4">
+        <div className="flex">
+          <h1 className="text-4xl font-bold cursor-pointer" onClick={handleLogoClick}>{t('navbar.title')}</h1>
+        </div>
 
-                    <div className="flex items-center">
-                        <a href="/about" className="text-gray-700 hover:text-gray-900 px-4 py-1">About</a>
-                        <a href="/services" className="text-gray-700 hover:text-gray-900 px-4 py-1">Services</a>
-                        <a href="/contact" className="text-gray-700 hover:text-gray-900 px-4 py-1">Contact</a>
-                    </div>
-                </div>
+        <div className="flex items-center">
+        <div className="mr-0" onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
+        <img src="/logo.svg" alt="app logo"/>
+        </div>
+        
+          <div className="mr-4">
+            <LanguageSwitcher /> {/* Place LanguageSwitcher here */}
+          </div>
+          <div className="flex items-center">
+          <a href="/about" className="text-gray-700 hover:text-gray-900 px-4 py-1">{t('navbar.about')}</a>
+          <a href="/services" className="text-gray-700 hover:text-gray-900 px-4 py-1">{t('navbar.services')}</a>
+          <a href="/contact" className="text-gray-700 hover:text-gray-900 px-4 py-1">{t('navbar.contact')}</a>
+          </div>
+        </div>
+
 
                 <div className="flex items-center">
                     <UserProfile />

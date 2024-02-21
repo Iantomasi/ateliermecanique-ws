@@ -1,3 +1,4 @@
+import './Components/Localization/I18N';
 import React from 'react';
 import { RouterProvider, createBrowserRouter} from 'react-router-dom';
 import Login from './Pages/Login_Page/Login';
