@@ -11,6 +11,10 @@ function Services() {
   const [message, setMessage] = useState('');
   const [isLoggedIn, setBool] = useState(false);
   const { t } = useTranslation(); 
+
+  const servicesList = t('services.servicesList', { returnObjects: true });
+
+
   useEffect(() => {
     userService.getPulicContent()
       .then(response => {
@@ -53,11 +57,11 @@ function Services() {
               {/* Right-aligned elements (List of Services) */}
               <div className="lg:col-start-2 lg:col-end-3 lg:text-left lg:pl-24"> {/* Added left padding for larger screens */}
                 <h2 className="text-3xl font-bold mb-2">{t('services.listOfServicesTitle')}</h2>
-                <ol className=" text-2xl list-decimal mb-5">
-                {t('services.servicesList', { returnObjects: true }).map((service, index) => (
-                  <li key={index}>{service}</li>
-                     ))}
-                </ol>
+                <ol>
+        {Array.isArray(servicesList) && servicesList.map((service, index) => (
+          <li key={index}>{service}</li>
+        ))}
+      </ol>
               </div>
             </div>
           </section>
