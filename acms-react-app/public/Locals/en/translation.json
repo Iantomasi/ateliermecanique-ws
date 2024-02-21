@@ -1,0 +1,80 @@
+{
+    "about": {
+      "atelierMecaniqueCMS": "Atelier Mecanique CMS",
+      "aboutUs": "About Us",
+      "welcome": "Welcome to Atelier Mécanique, your trusted garage in Saint-Leonard.",
+      "moreThanJust": "Where we pride ourselves on being more than just a car service center.",
+      "carEnthusiasts": "We are a haven for car enthusiasts and a dedicated team of skilled mechanics.",
+      "mission": "Our mission is clear: to keep your vehicles running smoothly and ensure your road safety.",
+      "countOnUs": "Whether it's routine maintenance, repairs, or friendly advice, you can count on us for top-notch care.",
+      "trustedBy": "Trusted by"
+    },
+    "contact": {
+      "contactUs": "Contact Us",
+      "satisfactionPriority": "Your satisfaction is our priority. If you face any issues with your vehicle, contact us today, and we'll provide the solutions you need.",
+      "phone": "(514) 321-3502",
+      "businessHours": "Business Hours",
+      "sundayClosed": "Sunday: Closed",
+      "monday": "Monday: 8:00 - 12:00 & 13:00 - 17:00",
+      "tuesday": "Tuesday: 8:00 - 12:00 & 13:00 - 17:00",
+      "wednesday": "Wednesday: 8:00 - 12:00 & 13:00 - 17:00",
+      "thursday": "Thursday: 8:00 - 12:00 & 13:00 - 17:00",
+      "friday": "Friday: 8:00 - 12:00 & 13:00 - 17:00",
+      "saturday": "Saturday: Closed",
+      "email": "cmsautovalue@bellnet.ca",
+      "address": "9180 Boul Langelier, Saint-Léonard, QC H1P 2E1"
+    },
+    "services": {
+      "offeredServicesTitle": "Offered Services",
+      "offeredServicesDescription": "At our garage, we take pride in offering a one-stop solution for all your automotive needs, delivering quality and reliability every time.",
+      "listOfServicesTitle": "List of services:",
+      "servicesList": [
+        "Air conditioning",
+        "Muffler",
+        "Car Inspection Before Purchase",
+        "End of Manufacturer’s Warranty",
+        "Exhaust System",
+        "Preventive Maintenance",
+        "Engine and Transmission Installation",
+        "Steering & Suspension",
+        "Hydraulic Hoses Manufacturing",
+        "Injection",
+        "Precise & Detailed Evaluation",
+        "Regular Maintenance and Repair",
+        "Maintenance History",
+        "Alignment",
+        "Radiator replacement",
+        "Brakes",
+        "Paint & body work"
+      ],
+      "experienceDifference": "Experience the difference of exceptional service"
+    },
+    "home": {
+      "revitalizeRide": "Revitalize your ride with expert care.",
+      "bookNow": "Book now"
+    },
+    "navbar": {
+      "about": "About",
+      "services": "Services",
+      "contact": "Contact",
+      "login": "Login",
+      "signup": "Sign Up",
+      "title": "Atelier Mecanique"
+    },
+    "admin": {
+      "welcomeAdmin": "Welcome Admin!",
+      "customers": "Customers",
+      "appointments": "Appointments",
+      "invoices": "Invoices",
+      "reviews": "Reviews"
+    },
+    "user": {
+      "welcomeBack": "Welcome Back",
+      "vehicles": "Vehicles",
+      "appointments": "Appointments",
+      "invoices": "Invoices",
+      "reviews": "Reviews"
+    }
+    
+}
+  

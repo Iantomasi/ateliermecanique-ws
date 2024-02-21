@@ -3,11 +3,13 @@ import NavBar from '../../Components/Navigation_Bars/Not_Logged_In/NavBar.js';
 import Footer from '../../Components/Footer/Footer.js';
 import userService from '../../Services/user.service.js';
 import {  useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next'; 
 
 function Home() {
   const [publicContent, setPublicContent] = useState(null);
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
+  const { t } = useTranslation(); 
 
   const navigateToSignup = () => {
     navigate('/signup');
@@ -37,10 +39,10 @@ function Home() {
           <section className="flex flex-col md:flex-row hero bg-white p-4 md:p-8">
             <div className="flex flex-col justify-center md:w-1/2 lg:w-2/5">
               <h1 className="text-3xl md:text-4xl lg:text-5xl">
-                Revitalize your ride with expert care.
+                {t('home.revitalizeRide')}
               </h1>
               <button className="text-base md:text-lg bg-yellow-400 py-2 px-6 font-bold rounded mt-4 md:mt-6 lg:mt-8 transform transition duration-300 hover:scale-110" onClick={navigateToSignup}>
-                Book now
+                {t('home.bookNow')}
               </button>
             </div>
    

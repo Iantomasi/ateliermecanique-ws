@@ -5,10 +5,12 @@ import HomeOption from '../../Components/General_Components/HomeOption.js';
 import axios from 'axios';
 import UserForm from './UserFormForMissingFields.js';
 import AuthService from '../../Services/auth.service.js';
+import { useTranslation } from 'react-i18next'; 
 
 function User() {
   const [customer, setCustomer] = useState({});
   const [showUserForm, setShowUserForm] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchCustomer = async () => {
@@ -44,7 +46,7 @@ function User() {
           <div className="flex justify-center mt-5">
             <img src="waveHand.svg" alt="hand" className="max-w-full" />
           </div>
-          <h2 className="text-7xl mt-2 mb-5">Welcome Back {customer.firstName}!</h2>
+          <h2 className="text-7xl mt-2 mb-5">{t('user.welcomeBack')} {customer.firstName}!</h2>
           <div className="flex flex-col">
             <div className="flex">
               <div className="flex-1 text-center">

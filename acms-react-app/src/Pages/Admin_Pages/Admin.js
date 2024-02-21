@@ -5,10 +5,12 @@ import Sidebar from '../../Components/Navigation_Bars/Sidebar/Sidebar.js';
 import Footer from '../../Components/Footer/Footer.js';
 import HomeOption from '../../Components/General_Components/HomeOption.js';
 import userService from '../../Services/user.service.js';
+import { useTranslation } from 'react-i18next'; 
 function Admin() {
 
   const [publicContent, setPublicContent] = useState(null);
   const [message, setMessage] = useState('');
+  const { t } = useTranslation();
 
   useEffect(() => {
     userService.getAdminContent()
@@ -34,7 +36,7 @@ function Admin() {
               <img src="waveHand.svg" alt="hand" className="max-w-full" />
             </div>
     
-            <h2 className="text-7xl mt-2 mb-5">Welcome Admin!</h2>
+            <h2 className="text-7xl mt-2 mb-5">{t('admin.welcomeAdmin')}</h2>
     
             <div className="flex flex-col">
               <div className="flex">

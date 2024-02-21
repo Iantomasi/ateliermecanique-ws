@@ -1,0 +1,81 @@
+{
+    "about": {
+      "atelierMecaniqueCMS": "Atelier Mecanique CMS",
+      "aboutUs": "À propos de nous",
+      "welcome": "Bienvenue à l'Atelier Mécanique, votre garage de confiance à Saint-Leonard.",
+      "moreThanJust": "Nous sommes fiers d'être plus qu'un simple centre de service automobile.",
+      "carEnthusiasts": "Nous sommes un refuge pour les passionnés d'automobiles et une équipe dévouée de mécaniciens qualifiés.",
+      "mission": "Notre mission est claire : maintenir vos véhicules en bon état de fonctionnement et garantir votre sécurité routière.",
+      "countOnUs": "Que ce soit pour l'entretien courant, les réparations ou des conseils amicaux, vous pouvez compter sur nous pour des soins de qualité supérieure.",
+      "trustedBy": "Fait confiance par"
+    },
+    "contact": {
+        "contactUs": "Nous contacter",
+        "satisfactionPriority": "Votre satisfaction est notre priorité. Si vous rencontrez des problèmes avec votre véhicule, contactez-nous dès aujourd'hui, et nous vous apporterons les solutions dont vous avez besoin.",
+        "phone": "(514) 321-3502",
+        "businessHours": "Heures d'ouverture",
+        "sundayClosed": "Dimanche : Fermé",
+        "monday": "Lundi : 8h00 - 12h00 & 13h00 - 17h00",
+        "tuesday": "Mardi : 8h00 - 12h00 & 13h00 - 17h00",
+        "wednesday": "Mercredi : 8h00 - 12h00 & 13h00 - 17h00",
+        "thursday": "Jeudi : 8h00 - 12h00 & 13h00 - 17h00",
+        "friday": "Vendredi : 8h00 - 12h00 & 13h00 - 17h00",
+        "saturday": "Samedi : Fermé",
+        "email": "cmsautovalue@bellnet.ca",
+        "address": "9180 Boul Langelier, Saint-Léonard, QC H1P 2E1"
+    },
+    "services": {
+        "offeredServicesTitle": "Services Proposés",
+        "offeredServicesDescription": "Dans notre garage, nous sommes fiers d'offrir une solution complète pour tous vos besoins automobiles, en fournissant qualité et fiabilité à chaque fois.",
+        "listOfServicesTitle": "Liste des services :",
+        "servicesList": [
+          "Climatisation",
+          "Silencieux",
+          "Inspection de voiture avant achat",
+          "Fin de la garantie du constructeur",
+          "Système d'échappement",
+          "Maintenance préventive",
+          "Installation de moteur et de transmission",
+          "Direction & Suspension",
+          "Fabrication de tuyaux hydrauliques",
+          "Injection",
+          "Évaluation précise et détaillée",
+          "Maintenance et réparation régulières",
+          "Historique de maintenance",
+          "Alignement",
+          "Remplacement de radiateur",
+          "Freins",
+          "Travaux de peinture et de carrosserie"
+        ],
+        "experienceDifference": "Vivez la différence d'un service exceptionnel"
+      },
+      "home": {
+        "revitalizeRide": "Revitalisez votre véhicule avec des soins d'experts.",
+        "bookNow": "Réservez maintenant"
+      },
+      "navbar": {
+        "about": "À Propos",
+        "services": "Services",
+        "contact": "Contact",
+        "login": "Connexion",
+        "signup": "Inscription",
+        "title": "Atelier Mécanique"
+      },
+      "admin": {
+        "welcomeAdmin": "Bienvenue Admin!",
+        "customers": "Clients",
+        "appointments": "Rendez-vous",
+        "invoices": "Factures",
+        "reviews": "Avis"
+      },
+      "user": {
+        "welcomeBack": "Bienvenue",
+        "vehicles": "Véhicules",
+        "appointments": "Rendez-vous",
+        "invoices": "Factures",
+        "reviews": "Avis"
+      }
+      
+      
+  }
+  
