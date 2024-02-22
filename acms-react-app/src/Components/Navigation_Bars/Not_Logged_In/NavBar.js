@@ -20,7 +20,7 @@ function Navbar() {
       <nav className="flex flex-col sm:flex-row justify-between items-center p-4 sm:h-20">
         {/* Left-aligned content */}
         <div className="flex items-center">
-          <img src="logo.svg" alt="app logo" className="mr-2" onClick={handleLogoClick} />
+          <img src="logo.svg" alt="app logo" className="mr-2 cursor-pointer" onClick={handleLogoClick} />
 
           <h1 className="text-4xl font-bold cursor-pointer" onClick={handleLogoClick}>{t('navbar.title')}</h1>
         </div>
