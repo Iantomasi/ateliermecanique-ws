@@ -20,7 +20,6 @@ function Signup() {
     const [publicContent, setPublicContent] = useState(null);
     const [message, setMessage] = useState('');
     const googleButton = useRef(null);
-    const REDIRECT_URI = window.location.href;
     const google = window.google;
 
     useEffect(() => {

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import adminService from '../../../../Services/admin.service.js';
 import Navbar from '../../../../Components/Navigation_Bars/Logged_In/NavBar.js';
@@ -12,7 +11,6 @@ import authService from '../../../../Services/auth.service.js';
 function Reviews(){
     const navigate = useNavigate();
     const [reviews, setReviews] = useState([]);
-    const [showConfirmation, setShowConfirmation] = useState(false);
     const [publicContent, setPublicContent] = useState(null);
     const [message, setMessage] = useState('');
     const [userRole, setUserRole] = useState(null); // State to store the user role
