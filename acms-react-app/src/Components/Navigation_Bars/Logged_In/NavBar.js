@@ -42,7 +42,7 @@ function Navbar() {
         </div>
 
         <div className="flex items-center">
-        <div className="mr-0" onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
+        <div className="mr-0 cursor-pointer" onClick={handleLogoClick}>
         <img src="/logo.svg" alt="app logo"/>
         </div>
         
