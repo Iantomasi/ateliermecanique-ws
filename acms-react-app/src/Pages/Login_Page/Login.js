@@ -17,7 +17,6 @@ function Login() {
     const google = window.google;
     const navigate = useNavigate();
     const googleButton = useRef(null);
-    const REDIRECT_URI = window.location.href;
 
 
     const [publicContent, setPublicContent] = useState(null);
